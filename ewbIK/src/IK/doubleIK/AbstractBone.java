@@ -19,8 +19,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 package IK.doubleIK;
 import java.util.ArrayList;
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.Template;
-
 import IK.IKExceptions;
 import IK.IKExceptions.NullParentForBoneException;
 import IK.doubleIK.AbstractBone;

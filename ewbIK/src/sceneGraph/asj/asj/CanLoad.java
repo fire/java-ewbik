@@ -1,4 +1,4 @@
-package asj.asj;
+package asj;
 
 import asj.data.JSONObject;
 
