@@ -40,6 +40,6 @@ sourceSets {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(12)
+        languageVersion = JavaLanguageVersion.of(8)
     }    
 }
