@@ -5,10 +5,7 @@ import processing.event.MouseEvent;
 import processing.opengl.PShader;
 import ewbik.processing.doublePrecision.*;
 import ewbik.processing.doublePrecision.sceneGraph.*;
-import math.doubleV.Vec3d;
 import math.floatV.MathUtils;
-import math.floatV.Vec3f;
-
 import java.util.ArrayList;
 
 import data.EWBIKSaver;

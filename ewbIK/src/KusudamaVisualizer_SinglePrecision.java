@@ -1,16 +1,10 @@
 import processing.core.*;
 import processing.event.MouseEvent;
-import processing.opengl.PShader;
-import ewbik.processing.singlePrecision.*;
-import ewbik.processing.singlePrecision.sceneGraph.*;
 import ewbik.processing.singlePrecision.Armature;
 import ewbik.processing.singlePrecision.Bone;
 import ewbik.processing.singlePrecision.IKPin;
 import ewbik.processing.singlePrecision.Kusudama;
 import ewbik.processing.singlePrecision.sceneGraph.Axes;
-import math.doubleV.Vec3d;
-import math.floatV.Vec3f;
-
 import java.util.ArrayList;
 
 import data.EWBIKSaver;

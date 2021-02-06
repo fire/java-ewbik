@@ -2,18 +2,11 @@
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
-
-import data.EWBIKLoader;
 import ewbik.processing.EWBKIO;
-import ewbik.processing.doublePrecision.dIKPin;
-import ewbik.processing.doublePrecision.sceneGraph.DVector;
 import ewbik.processing.singlePrecision.Armature;
 import ewbik.processing.singlePrecision.Bone;
 import ewbik.processing.singlePrecision.IKPin;
 import ewbik.processing.singlePrecision.sceneGraph.Axes;
-import math.doubleV.SGVec_3d;
-import math.floatV.SGVec_3f;
 import processing.core.PApplet;
 import processing.core.PVector;
 import processing.event.MouseEvent;

@@ -4,8 +4,6 @@ import ewbik.processing.singlePrecision.*;
 import processing.core.PApplet;
 import processing.core.PVector;
 import processing.event.MouseEvent;
-import ewbik.processing.singlePrecision.*;
-import ewbik.processing.singlePrecision.sceneGraph.*;
 import math.floatV.SGVec_3f;
 
 import java.util.ArrayList;

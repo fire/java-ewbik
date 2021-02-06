@@ -1,15 +1,6 @@
 package ewbik.processing.doublePrecision.sceneGraph;
 
-import IK.doubleIK.AbstractArmature;
-import math.doubleV.AbstractAxes;
-import math.doubleV.AbstractBasis;
-import math.doubleV.CartesianAxes;
-import math.doubleV.Rot;
-import math.doubleV.SGVec_3d;
-import math.doubleV.Vec3d;
 import math.doubleV.sgRayd;
-import processing.core.PGraphics;
-import processing.core.PMatrix;
 
 /**
  * 

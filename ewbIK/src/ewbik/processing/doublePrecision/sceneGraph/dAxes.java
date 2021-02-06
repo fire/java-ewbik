@@ -18,12 +18,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 package ewbik.processing.doublePrecision.sceneGraph;
-import IK.doubleIK.AbstractArmature;
-import math.Vec;
 import math.doubleV.AbstractAxes;
 import math.doubleV.AbstractBasis;
 import math.doubleV.CartesianAxes;
-import math.doubleV.Rot;
 import math.doubleV.SGVec_3d;
 import math.doubleV.Vec3d;
 import math.doubleV.sgRayd;
@@ -129,14 +126,13 @@ public class dAxes extends CartesianAxes {
 	double[][] outMatGlobal = new double[4][4];
 
 	private void updateMatrix(AbstractBasis b, double[][] outputMatrix) {
-		Rot rotation = b.rotation;
 		b.refreshPrecomputed();
 
-		Vec3d x = b.getXHeading();
-		Vec3d y = b.getYHeading();
-		Vec3d z = b.getZHeading();
+		Vec3d<?> x = b.getXHeading();
+		Vec3d<?> y = b.getYHeading();
+		Vec3d<?> z = b.getZHeading();
 		
-		Vec3d origin = b.getOrigin();
+		Vec3d<?> origin = b.getOrigin();
 		
 		outputMatrix[0][0] = x.x;
 		outputMatrix[0][1] = x.y;

@@ -25,17 +25,12 @@ import java.util.ArrayList;
 import IK.IKExceptions.NullParentForBoneException;
 import IK.floatIK.AbstractArmature;
 import IK.floatIK.AbstractBone;
-import IK.floatIK.AbstractIKPin;
-import ewbik.processing.doublePrecision.sceneGraph.DVector;
-import ewbik.processing.singlePrecision.*;
 import ewbik.processing.singlePrecision.sceneGraph.*;
-import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
 import processing.core.PVector;
 import math.floatV.AbstractAxes;
-import math.floatV.Rot;
 import math.floatV.SGVec_3f;
 import math.floatV.Vec3f;
 

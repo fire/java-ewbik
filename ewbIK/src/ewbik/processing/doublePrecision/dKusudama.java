@@ -29,10 +29,8 @@ import math.doubleV.MRotation;
 import math.doubleV.Rot;
 import math.doubleV.SGVec_3d;
 import math.doubleV.Vec3d;
-import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
-import processing.core.PImage;
 import processing.core.PMatrix;
 import processing.core.PVector;
 import processing.opengl.PGraphicsOpenGL;
@@ -119,7 +117,7 @@ public class dKusudama extends AbstractKusudama {
 		float g = p.green(System.identityHashCode(this));
 		float b = p.blue(System.identityHashCode(this));
 		p.fill(p.color(r,g,b));//p.color(255, 0, 255, 100));
-		p.textureMode(p.NORMAL);
+		p.textureMode(PConstants.NORMAL);
 		p.shader(currentShader);
 		if(renderMode == 0) 
 			p.fill(p.color(r,g,b)); 

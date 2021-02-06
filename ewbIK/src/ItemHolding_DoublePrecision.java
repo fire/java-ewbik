@@ -2,10 +2,6 @@
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
-
-import data.EWBIKLoader;
-import data.EWBIKSaver;
 import ewbik.processing.EWBKIO;
 import ewbik.processing.doublePrecision.dArmature;
 import ewbik.processing.doublePrecision.dBone;
@@ -13,11 +9,8 @@ import ewbik.processing.doublePrecision.dIKPin;
 import ewbik.processing.doublePrecision.dKusudama;
 import ewbik.processing.doublePrecision.sceneGraph.DVector;
 import ewbik.processing.doublePrecision.sceneGraph.dAxes;
-import math.doubleV.SGVec_3d;
-import math.floatV.SGVec_3f;
 import processing.core.PApplet;
 import processing.core.PGraphics;
-import processing.core.PVector;
 import processing.event.MouseEvent;
 
 public class ItemHolding_DoublePrecision extends PApplet{

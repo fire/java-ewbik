@@ -20,9 +20,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 package ewbik.processing.singlePrecision;
 import IK.floatIK.AbstractArmature;
 import IK.floatIK.AbstractBone.frameType;
-import ewbik.processing.singlePrecision.*;
 import ewbik.processing.singlePrecision.sceneGraph.*;
-import math.floatV.SGVec_3f;
 import math.floatV.Vec3f;
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -47,8 +45,8 @@ public class Armature extends AbstractArmature{
 	@Override
 	protected  void initializeRootBone(
 			AbstractArmature armature,
-			Vec3f tipHeading,
-			Vec3f rollHeading,
+			Vec3f<?> tipHeading,
+			Vec3f<?> rollHeading,
 			String inputTag,
 			float boneHeight, 
 			frameType coordinateType) {

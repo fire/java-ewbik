@@ -19,12 +19,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package ewbik.processing.doublePrecision;
 import IK.doubleIK.AbstractArmature;
-import IK.doubleIK.AbstractBone;
 import IK.doubleIK.AbstractBone.frameType;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
-import ewbik.processing.doublePrecision.sceneGraph.DVector;
 import ewbik.processing.doublePrecision.sceneGraph.dAxes;
 import math.doubleV.AbstractAxes;
 import math.doubleV.Vec3d;

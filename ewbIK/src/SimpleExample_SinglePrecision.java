@@ -1,13 +1,7 @@
-import ewbik.processing.doublePrecision.dArmature;
-import ewbik.processing.doublePrecision.dBone;
-import ewbik.processing.doublePrecision.dIKPin;
-import ewbik.processing.doublePrecision.sceneGraph.DVector;
-import ewbik.processing.doublePrecision.sceneGraph.dAxes;
 import ewbik.processing.singlePrecision.Armature;
 import ewbik.processing.singlePrecision.Bone;
 import ewbik.processing.singlePrecision.IKPin;
 import ewbik.processing.singlePrecision.sceneGraph.Axes;
-import math.floatV.SGVec_3f;
 import processing.core.PApplet;
 import processing.core.PVector;
 import processing.event.MouseEvent;

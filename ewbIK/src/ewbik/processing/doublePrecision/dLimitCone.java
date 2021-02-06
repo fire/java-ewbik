@@ -21,8 +21,6 @@ package ewbik.processing.doublePrecision;
 
 import IK.doubleIK.AbstractKusudama;
 import IK.doubleIK.AbstractLimitCone;
-import asj.SaveManager;
-import ewbik.processing.doublePrecision.sceneGraph.*;
 import math.doubleV.Vec3d;
 
 public class dLimitCone extends AbstractLimitCone {

@@ -1,4 +1,3 @@
-import IK.doubleIK.AbstractBone;
 import ewbik.processing.doublePrecision.dArmature;
 import ewbik.processing.doublePrecision.dBone;
 import ewbik.processing.doublePrecision.dIKPin;
@@ -11,9 +10,8 @@ import ewbik.processing.singlePrecision.IKPin;
 import ewbik.processing.singlePrecision.Kusudama;
 import ewbik.processing.singlePrecision.sceneGraph.Axes;
 import math.doubleV.Vec3d;
-import math.floatV.SGVec_3f;
 import processing.core.PApplet;
-import processing.core.PFont;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import processing.opengl.PShader;
@@ -28,8 +26,8 @@ public class UI {
 		pa = p;
 		currentDrawSurface = pa.g; 
 		if(multipassAllowed) {
-			stencil = pa.createGraphics(p.width, p.height, pa.P3D);
-			display = pa.createGraphics(p.width, p.height, pa.P3D);
+			stencil = pa.createGraphics(p.width, p.height, PConstants.P3D);
+			display = pa.createGraphics(p.width, p.height, PConstants.P3D);
 			stencil.noSmooth();
 			display.smooth(8);
 			System.out.println(p.sketchPath());
@@ -55,7 +53,7 @@ public class UI {
 		String boneAngles = "";
 		try {
 			double[] angleArr = bone.getXYZAngle();
-			boneAngles += " D ( " + pa.degrees((float)angleArr[0]) + ",   " + pa.degrees((float)angleArr[1]) + ",   " + pa.degrees((float)angleArr[2]) + "  )";
+			boneAngles += " D ( " + PApplet.degrees((float)angleArr[0]) + ",   " + PApplet.degrees((float)angleArr[1]) + ",   " + PApplet.degrees((float)angleArr[2]) + "  )";
 			pg.fill(0);
 			pg.text(boneAngles, (-pa.width/2) +10,  (-pa.height/2) + (10*idx)); 
 		} catch (Exception e) {
@@ -72,7 +70,7 @@ public class UI {
 		String boneAngles = "";
 		try {
 			float[] angleArr = bone.getXYZAngle();
-			boneAngles += " D ( " + pa.degrees((float)angleArr[0]) + ",   " + pa.degrees((float)angleArr[1]) + ",   " + pa.degrees((float)angleArr[2]) + "  )";
+			boneAngles += " D ( " + PApplet.degrees((float)angleArr[0]) + ",   " + PApplet.degrees((float)angleArr[1]) + ",   " + PApplet.degrees((float)angleArr[2]) + "  )";
 			pg.fill(0);
 			pg.text(boneAngles, (-pa.width/2) +10,  (-pa.height/2) + (10*idx)); 
 		} catch (Exception e) {
@@ -288,7 +286,7 @@ public class UI {
 			currentDrawSurface = pa.g;
 			setCamera(pa.g, zoomScalar);
 			pa.background(80, 150, 190);
-			pa.imageMode(pa.CENTER);
+			pa.imageMode(PConstants.CENTER);
 			pa.image(display, 0, 0, orthoWidth, orthoHeight);			
 			pa.resetMatrix();
 			drawPins(pa.g, activePin, zoomScalar, drawSize, cubeEnabled, cubeAxes);
@@ -338,7 +336,7 @@ public class UI {
 			currentDrawSurface = pa.g;
 			setCamera(pa.g, zoomScalar);
 			pa.background(80, 150, 190);
-			pa.imageMode(pa.CENTER);
+			pa.imageMode(PConstants.CENTER);
 			pa.image(display, 0, 0, orthoWidth, orthoHeight);			
 			pa.resetMatrix();
 			drawPins(pa.g, activePin, zoomScalar, drawSize, cubeEnabled, cubeAxes);
@@ -371,8 +369,8 @@ public class UI {
 	public void toggleMultipass() {
 		multipass = !multipass;
 		if(stencil == null && multipass) {
-			stencil = pa.createGraphics(1200, 900, pa.P3D);
-			display = pa.createGraphics(1200, 900, pa.P3D);
+			stencil = pa.createGraphics(1200, 900, PConstants.P3D);
+			display = pa.createGraphics(1200, 900, PConstants.P3D);
 			stencil.noSmooth();
 			display.smooth(8);
 			blurshader = pa.loadShader( "src/ewbik/processing/blur-sep.glsl");

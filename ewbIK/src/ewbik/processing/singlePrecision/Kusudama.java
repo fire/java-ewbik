@@ -21,11 +21,8 @@ package ewbik.processing.singlePrecision;
 
 import java.util.ArrayList;
 
-import IK.floatIK.AbstractArmature;
-import IK.floatIK.AbstractBone;
 import IK.floatIK.AbstractKusudama;
 import IK.floatIK.AbstractLimitCone;
-import ewbik.processing.singlePrecision.*;
 import ewbik.processing.singlePrecision.sceneGraph.Axes;
 import math.floatV.MRotation;
 import math.floatV.Rot;
@@ -77,7 +74,7 @@ public class Kusudama extends AbstractKusudama {
 	 * {@inheritDoc}
 	 **/
 	@Override
-	public AbstractLimitCone createLimitConeForIndex(int insertAt, Vec3f newPoint, float radius) {
+	public AbstractLimitCone createLimitConeForIndex(int insertAt, Vec3f<?> newPoint, float radius) {
 		return new LimitCone(Axes.toPVector(newPoint), radius, this);		
 	}
 	
@@ -130,7 +127,7 @@ public class Kusudama extends AbstractKusudama {
 		float g = p.green(System.identityHashCode(this));
 		float b = p.blue(System.identityHashCode(this));
 		p.fill(p.color(r,g,b));//p.color(255, 0, 255, 100));
-		p.textureMode(p.NORMAL);
+		p.textureMode(PConstants.NORMAL);
 		p.shader(currentShader);
 		if(renderMode == 0) 
 			p.fill(p.color(r,g,b)); 

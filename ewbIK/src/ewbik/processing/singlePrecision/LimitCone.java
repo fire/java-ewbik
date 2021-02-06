@@ -21,8 +21,6 @@ package ewbik.processing.singlePrecision;
 
 import IK.floatIK.AbstractKusudama;
 import IK.floatIK.AbstractLimitCone;
-import asj.SaveManager;
-import ewbik.processing.singlePrecision.*;
 import ewbik.processing.singlePrecision.sceneGraph.Axes;
 import processing.core.PVector;
 

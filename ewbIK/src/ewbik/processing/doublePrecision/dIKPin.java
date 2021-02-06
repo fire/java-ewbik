@@ -1,8 +1,6 @@
 package ewbik.processing.doublePrecision;
 
 import IK.doubleIK.AbstractIKPin;
-import asj.SaveManager;
-import IK.doubleIK.AbstractBone;
 import  ewbik.processing.doublePrecision.sceneGraph.*;
 
 

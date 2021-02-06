@@ -107,11 +107,11 @@ public class Axes extends CartesianAxes {
 	* framework's native vector and ray representations.
 	*/
 	//////////////////////////////////////////////////////////////////////////////////////////////
-	public static PVector toPVector(Vec3f sv) {
+	public static PVector toPVector(Vec3f<?> sv) {
 		return new PVector(sv.x, sv.y, sv.z);
 	}
 	
-	public static void toDVector(Vec3f sv, PVector storeIn) {
+	public static void toDVector(Vec3f<?> sv, PVector storeIn) {
 		storeIn.x = sv.x;
 		storeIn.y = sv.y;
 		storeIn.z = sv.z;
@@ -243,14 +243,13 @@ public class Axes extends CartesianAxes {
 	float[][] outMatGlobal = new float[4][4];
 	
 	private void updateMatrix(AbstractBasis b, float[][] outputMatrix) {
-		Rot rotation = b.rotation;
 		b.refreshPrecomputed();
 
-		Vec3f x = b.getXHeading();
-		Vec3f y = b.getYHeading();
-		Vec3f z = b.getZHeading();
+		Vec3f<?> x = b.getXHeading();
+		Vec3f<?> y = b.getYHeading();
+		Vec3f<?> z = b.getZHeading();
 		
-		Vec3f origin = b.getOrigin();
+		Vec3f<?> origin = b.getOrigin();
 		
 		outputMatrix[0][0] = x.x;
 		outputMatrix[0][1] = x.y;

@@ -2,18 +2,12 @@
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
-
-import data.EWBIKLoader;
-import data.EWBIKSaver;
 import ewbik.processing.EWBKIO;
 import ewbik.processing.singlePrecision.Armature;
 import ewbik.processing.singlePrecision.Bone;
 import ewbik.processing.singlePrecision.IKPin;
 import ewbik.processing.singlePrecision.Kusudama;
 import ewbik.processing.singlePrecision.sceneGraph.Axes;
-import math.doubleV.SGVec_3d;
-import math.floatV.SGVec_3f;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
