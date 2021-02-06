@@ -25,6 +25,7 @@ public final class EWBKIO {
 	public static Armature LoadArmature_singlePrecision(String path) {
 		EWBIKLoader newLoader = new EWBIKLoader(); 
 		newLoader.setMode(EWBIKLoader.SINGLE);
+		@SuppressWarnings("unchecked")
 		Collection<Armature> ArmatureList =
 				(Collection<Armature>)newLoader.importSinglePrecisionArmatures(path, 
 				Axes.class, Bone.class, Armature.class, Kusudama.class, LimitCone.class, IKPin.class);
@@ -42,6 +43,7 @@ public final class EWBKIO {
 	public static dArmature LoadArmature_doublePrecision(String path) {
 		EWBIKLoader newLoader = new EWBIKLoader(); 
 		newLoader.setMode(EWBIKLoader.DOUBLE);
+		@SuppressWarnings("unchecked")
 		Collection<dArmature> dArmatureList =
 				(Collection<dArmature>)newLoader.importDoublePrecisionArmatures(	path, 
 				dAxes.class, dBone.class, dArmature.class, dKusudama.class, dLimitCone.class, dIKPin.class);

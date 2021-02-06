@@ -252,10 +252,12 @@ public class dBone extends AbstractBone {
 	 * constraint Axes)
 	 * @return
 	 */	
+	@SuppressWarnings("unchecked")
 	public dAxes getMajorRotationAxes() {
 		return (dAxes)this.majorRotationAxes;
 	}
 
+	@SuppressWarnings("unchecked")
 	public ArrayList<dBone> getChildren() {
 		return (ArrayList<dBone>)super.getChildren();
 	}

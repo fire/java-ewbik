@@ -82,6 +82,7 @@ public class dKusudama extends AbstractKusudama {
 	/**
 	 * @return the limitingAxes of this KusudamaExample (these are just its parentBone's majorRotationAxes)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public dAxes limitingAxes() {
 		//if(inverted) return inverseLimitingAxes; 
@@ -191,6 +192,7 @@ public class dKusudama extends AbstractKusudama {
 		updateShaderTexture();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public ArrayList<dLimitCone> getLimitCones() {
 		return (ArrayList<dLimitCone>)super.getLimitCones();

@@ -135,6 +135,7 @@ public class SimpleExample_DoublePrecision extends PApplet{
 	}
 
 	public void recursivelyAddToPinnedList(ArrayList<dIKPin> pins, dBone descendedFrom) {
+		@SuppressWarnings("unchecked")
 		ArrayList<dBone> pinnedChildren = (ArrayList<dBone>) descendedFrom.getMostImmediatelyPinnedDescendants(); 
 		for(dBone b : pinnedChildren) {
 			pins.add(b.getIKPin());

@@ -196,6 +196,7 @@ public class Kusudama extends AbstractKusudama {
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public Axes limitingAxes() {
 		return (Axes)super.limitingAxes();
@@ -207,6 +208,7 @@ public class Kusudama extends AbstractKusudama {
 		updateShaderTexture();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public ArrayList<LimitCone> getLimitCones() {
 		return (ArrayList<LimitCone>)super.getLimitCones();

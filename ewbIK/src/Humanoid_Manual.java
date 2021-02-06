@@ -273,6 +273,7 @@ public class Humanoid_Manual extends PApplet{
 	}
 
 	public void recursivelyAddToPinnedList(ArrayList<dIKPin> pins, dBone descendedFrom) {
+		@SuppressWarnings("unchecked")
 		ArrayList<dBone> pinnedChildren = (ArrayList<dBone>) descendedFrom.getMostImmediatelyPinnedDescendants(); 
 		for(dBone b : pinnedChildren) {
 			pins.add((dIKPin)b.getIKPin());

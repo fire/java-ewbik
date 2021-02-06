@@ -194,6 +194,7 @@ public class ConstraintExample_SinglePrecision extends PApplet{
 	}
 	
 	public void recursivelyAddToPinnedList(ArrayList<IKPin> pins, Bone descendedFrom) {
+		@SuppressWarnings("unchecked")
 		ArrayList<Bone> pinnedChildren = (ArrayList<Bone>) descendedFrom.getMostImmediatelyPinnedDescendants(); 
 		for(Bone b : pinnedChildren) {
 			pins.add(b.getIKPin());
