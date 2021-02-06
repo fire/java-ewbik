@@ -6,7 +6,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="ewbIK/library/ewbIK.jar" sourcepath="/Everything-WIll-Be-IK/ewbIK/src"/>
 	<classpathentry kind="lib" path="/Processing/core.jar"/>
 	<classpathentry kind="lib" path="/Processing/gluegen-rt.jar"/>
 	<classpathentry kind="lib" path="/Processing/gluegen-rt-natives-linux-aarch64.jar"/>
@@ -24,5 +23,6 @@
 	<classpathentry kind="lib" path="/Processing/jogl-all-natives-macosx-universal.jar"/>
 	<classpathentry kind="lib" path="/Processing/jogl-all-natives-windows-amd64.jar"/>
 	<classpathentry kind="lib" path="/Processing/jogl-all-natives-windows-i586.jar"/>
+	<classpathentry kind="lib" path="/Everything-WIll-Be-IK/ewbIK/bin"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
