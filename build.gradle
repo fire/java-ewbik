@@ -1,0 +1,45 @@
+plugins {
+    // Apply the java-library plugin to add support for Java Library
+    id 'java-library'  
+    id 'application'
+    id "com.github.johnrengelman.shadow" version "5.0.0"
+}
+
+repositories {
+    // Use jcenter for resolving dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+    jcenter()
+}
+
+dependencies {    
+    // https://mvnrepository.com/artifact/org.processing/core
+    implementation 'org.processing:core:3.3.7'
+}
+
+version = '0.0.1'
+
+application {
+    mainClassName = 'Humanoid_Manual'
+}
+sourceSets {
+    main {
+        java {
+            srcDirs = [
+                'Everything-Will-Be-IK-Processing/ewbIK/src',
+                'Everything-Will-Be-IK/ewbIK/src/sceneGraph',
+                'Everything-Will-Be-IK/ewbIK/src/IK/',
+                'Everything-Will-Be-IK/ewbIK/src/data',
+                'Everything-Will-Be-IK/ewbIK/src/sceneGraph/asj',
+            ]
+        }
+        resources {
+            srcDirs = ['Everything-Will-Be-IK-Processing']
+        }
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(12)
+    }    
+}
