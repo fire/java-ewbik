@@ -35,7 +35,7 @@ public class VRMExample_SinglePrecision extends PApplet {
 	public void setup() {
 		ui = new UI(this, false);
 		worldAxes = new Axes();
-		simpleArmature = new Armature("example");
+		simpleArmature = new Armature("VRMArmatureExample");
 		// attach the armature to the world axes (not necessary, just convenient)
 		simpleArmature.localAxes().setParent(worldAxes);
 
