@@ -1,0 +1,520 @@
+{
+  "armatures": [{
+    "localAxes": "armature-axes",
+    "rootBone": "rightHand",
+    "identityHash": "armature",
+    "defaultIterations": 10,
+    "tag": "example",
+    "dampening": 0.029999999329447746
+  }],
+  "kusudamas": [
+  ],
+  "bones": [
+    {
+      "localAxes": "leftHand-axes",
+      "identityHash": "leftHand",
+      "majorRotationAxes": "leftHand-major_rotation_axes",
+      "children": [],
+      "parentArmature": "armature",
+      "boneHeight": 98,
+      "stiffness": 0,
+    },
+    {
+      "localAxes": "leftHandBow-axes",
+      "identityHash": "leftHandBow",
+      "majorRotationAxes": "leftHandBow-major_rotation_axes",
+      "children": ["leftHand"],
+      "parentArmature": "armature",
+      "boneHeight": 86,
+      "stiffness": 0,
+    },
+    {
+      "localAxes": "rightHandBow-axes",
+      "identityHash": "rightHandBow",
+      "majorRotationAxes": "rightHandBow-major_rotation_axes",
+      "children": ["leftHandBow"],
+      "parentArmature": "armature",
+      "boneHeight": 74,
+      "stiffness": 0,
+    },
+    {
+      "localAxes": "rightHand-axes",
+      "identityHash": "rightHand",
+      "majorRotationAxes": "rightHand-major_rotation_axes",
+      "children": ["rightHandBow"],
+      "parentArmature": "armature",
+      "boneHeight": 100,
+      "stiffness": 0
+    }
+  ],
+  "limitCones": [
+  ],
+  "axes": [
+    {
+      "parent": "636255141-Axes",
+      "identityHash": "780959650-Axes",
+      "rotation": [
+        1,
+        -8.271807111606408E-25,
+        -1.3877789462175682E-17,
+        1.705346204961683E-13
+      ],
+      "translation": [
+        2.637534635141492E-11,
+        86,
+        -1.1920928955078125E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "-1",
+      "identityHash": "948987896-Axes",
+      "rotation": [
+        -4.371138828673793E-8,
+        0,
+        0,
+        -1
+      ],
+      "translation": [
+        0,
+        150,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "-1",
+      "identityHash": "648311855-Axes",
+      "rotation": [
+        -4.371138828673793E-8,
+        0,
+        0,
+        -1
+      ],
+      "translation": [
+        0,
+        150,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "-1",
+      "identityHash": "1724896853-Axes",
+      "rotation": [
+        -4.371138828673793E-8,
+        0,
+        0,
+        -1
+      ],
+      "translation": [
+        0,
+        150,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "rightHand-axes",
+      "identityHash": "rightHandBow-axes",
+      "rotation": [
+        -0.9999876022338867,
+        0.0049999793991446495,
+        -4.3711206876295705E-10,
+        0
+      ],
+      "translation": [
+        0,
+        20,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "rightHandBow-axes",
+      "identityHash": "leftHandBow-major_rotation_axes",
+      "rotation": [
+        -1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        -1.3642420526593924E-12,
+        74,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "armature-axes",
+      "identityHash": "rightHand-major_rotation_axes",
+      "rotation": [
+        -1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "-1",
+      "identityHash": "1621190418-Axes",
+      "rotation": [
+        -4.371138828673793E-8,
+        0,
+        0,
+        -1
+      ],
+      "translation": [
+        0,
+        150,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "1567670121-Axes",
+      "identityHash": "armature-axes",
+      "rotation": [
+        -4.371138828673793E-8,
+        0,
+        0,
+        -1
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "armature-axes",
+      "identityHash": "1987028761-Axes",
+      "rotation": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "-1",
+      "identityHash": "940602587-Axes",
+      "rotation": [
+        -4.371138828673793E-8,
+        0,
+        0,
+        -1
+      ],
+      "translation": [
+        0,
+        150,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "-1",
+      "identityHash": "68436603-Axes",
+      "rotation": [
+        -4.371138828673793E-8,
+        0,
+        0,
+        -1
+      ],
+      "translation": [
+        0,
+        150,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "-1",
+      "identityHash": "1460899410-Axes",
+      "rotation": [
+        -4.371138828673793E-8,
+        0,
+        0,
+        -1
+      ],
+      "translation": [
+        0,
+        150,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "-1",
+      "identityHash": "440426552-Axes",
+      "rotation": [
+        -4.371138828673793E-8,
+        0,
+        0,
+        -1
+      ],
+      "translation": [
+        0,
+        150,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "leftHandBow-axes",
+      "identityHash": "leftHand-major_rotation_axes",
+      "rotation": [
+        -1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        2.8194335754960775E-11,
+        86,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "rightHand-axes",
+      "identityHash": "rightHandBow-major_rotation_axes",
+      "rotation": [
+        -1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        20,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "-1",
+      "identityHash": "770026661-Axes",
+      "rotation": [
+        -4.371138828673793E-8,
+        0,
+        0,
+        -1
+      ],
+      "translation": [
+        0,
+        150,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "-1",
+      "identityHash": "1289379342-Axes",
+      "rotation": [
+        -4.371138828673793E-8,
+        0,
+        0,
+        -1
+      ],
+      "translation": [
+        0,
+        150,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "636841724-Axes",
+      "identityHash": "511205429-Axes",
+      "rotation": [
+        -0.9999876022338867,
+        0.0049999793991446495,
+        -4.3711206876295705E-10,
+        0
+      ],
+      "translation": [
+        0,
+        20,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "-1",
+      "identityHash": "1567670121-Axes",
+      "rotation": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        150,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "rightHandBow-axes",
+      "identityHash": "leftHandBow-axes",
+      "rotation": [
+        1,
+        0,
+        0,
+        -7.105427357601002E-15
+      ],
+      "translation": [
+        -1.3642420526593924E-12,
+        74,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "armature-axes",
+      "identityHash": "636841724-Axes",
+      "rotation": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "636841724-Axes",
+      "identityHash": "1003732654-Axes",
+      "rotation": [
+        -1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        20,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "511205429-Axes",
+      "identityHash": "2099561468-Axes",
+      "rotation": [
+        -1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        -9.094947017729282E-13,
+        74,
+        1.7881393432617188E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "leftHandBow-axes",
+      "identityHash": "leftHand-axes",
+      "rotation": [
+        1,
+        0,
+        0,
+        1.7053025658242404E-13
+      ],
+      "translation": [
+        2.8194335754960775E-11,
+        86,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "armature-axes",
+      "identityHash": "rightHand-axes",
+      "rotation": [
+        -1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "511205429-Axes",
+      "identityHash": "636255141-Axes",
+      "rotation": [
+        1,
+        8.271804153378014E-25,
+        1.3877784499092007E-17,
+        -7.105534083752356E-15
+      ],
+      "translation": [
+        -9.094947017729282E-13,
+        74,
+        1.7881393432617188E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "-1",
+      "identityHash": "1434629414-Axes",
+      "rotation": [
+        -4.371138828673793E-8,
+        0,
+        0,
+        -1
+      ],
+      "translation": [
+        0,
+        150,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "parent": "-1",
+      "identityHash": "847647396-Axes",
+      "rotation": [
+        -4.371138828673793E-8,
+        0,
+        0,
+        -1
+      ],
+      "translation": [
+        0,
+        150,
+        0
+      ],
+      "slipType": 0
+    }
+  ],
+  "IKPins": [
+  ]
+}
