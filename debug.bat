@@ -1,1 +1,0 @@
-build\install\EWBIK-Workspace-shadow\bin\EWBIK-Workspace.bat
