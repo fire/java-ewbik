@@ -18,7 +18,6 @@ import asj.TypeIdentifier;
 import asj.data.JSONArray;
 import asj.data.JSONObject;
 import asj.data.StringFuncs;
-import math.doubleV.SGVec_3d;
 import math.floatV.AbstractAxes;
 import math.floatV.MRotation;
 import math.floatV.SGVec_3f;
@@ -189,17 +188,10 @@ public final class FloatBackedLoader extends LoadManager {
 				boolean javaClass = keyClass.getName().startsWith("java.lang");
 				Object keyObject = javaClass ? parsePrimitive(keyClass, jk) : getObjectFromClassMaps(keyClass, jk);
 				Object valueObject = null;
-				if (valueClass == SGVec_3d.class) {
-					valueObject = new SGVec_3d();
-					((SGVec_3d) valueObject).populateSelfFromJSON(json);
-					result.put((T) keyObject, (V) valueObject);
-				} else {
-					Object obj = json.get(jk);
-					valueObject = valueClass.getName().startsWith("java.lang") ? parsePrimitive(valueClass, "" + obj)
-							: getObjectFromClassMaps(valueClass, json.getString(jk));
-					result.put((T) keyObject, (V) valueObject);
-				}
-
+				Object obj = json.get(jk);
+				valueObject = valueClass.getName().startsWith("java.lang") ? parsePrimitive(valueClass, "" + obj)
+						: getObjectFromClassMaps(valueClass, json.getString(jk));
+				result.put((T) keyObject, (V) valueObject);
 			}
 			return result;
 		}
@@ -240,15 +232,9 @@ public final class FloatBackedLoader extends LoadManager {
 				boolean javaClass = keyClass.getName().startsWith("java.lang");
 				Object keyObject = javaClass ? parsePrimitive(keyClass, jk) : getObjectFromClassMaps(keyClass, jk);
 				Object valueObject = null;
-				if (valueClass == SGVec_3d.class) {
-					valueObject = new SGVec_3d();
-					((SGVec_3d) valueObject).populateSelfFromJSON(json);
-					result.put((T) keyObject, (V) valueObject);
-				} else {
-					String hash = json.getString(jk);
-					valueObject = getObjectFromClassMaps(valueClass, hash);
-					result.put((T) keyObject, (V) valueObject);
-				}
+				String hash = json.getString(jk);
+				valueObject = getObjectFromClassMaps(valueClass, hash);
+				result.put((T) keyObject, (V) valueObject);
 			}
 			return result;
 		}
@@ -331,9 +317,7 @@ public final class FloatBackedLoader extends LoadManager {
 		for (int i = 0; i < jsonArray.size(); i++) {
 			Object item = jsonArray.get(i);
 
-			if (c == SGVec_3d.class)
-				list.add((T) new SGVec_3d(jsonArray.getJSONArray(i)));
-			else if (c == SGVec_3f.class)
+			if (c == SGVec_3f.class)
 				list.add((T) new SGVec_3f(jsonArray.getJSONArray(i)));
 			else if (c == Rot.class)
 				list.add((T) new Rot(jsonArray.getJSONArray(i)));
