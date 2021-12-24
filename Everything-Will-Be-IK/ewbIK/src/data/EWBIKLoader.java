@@ -27,11 +27,7 @@ import asj.data.StringFuncs;
 import math.floatV.SGVec_3f;
 
 public class EWBIKLoader {
-	FloatBackedLoader floatBackedLoader;
-
-	public void setMode(int mode) {
-		floatBackedLoader = new FloatBackedLoader();
-	}
+	FloatBackedLoader floatBackedLoader = new FloatBackedLoader();
 
 	/**
 	 * NOTE: in order to load custom (extended classes), those classes MUST have a
