@@ -4,14 +4,21 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "runJar",
+            "label": "Run",
             "type": "shell",
-            "command": "gradle installShadowDist",
+            "command": "${workspaceFolder}/build/install/ewbik-workspace/bin/ewbik-workspace",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
                 "isDefault": true
-            }
-        }
+            },
+            "dependsOn": ["Build"],
+        },
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "gradle installDist",
+            "problemMatcher": [],
+        },
     ]
-}
+} 
