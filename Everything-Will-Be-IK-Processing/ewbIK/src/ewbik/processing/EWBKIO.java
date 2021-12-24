@@ -19,7 +19,6 @@ public final class EWBKIO {
 	 */
 	public static Armature LoadArmature_singlePrecision(String path) {
 		EWBIKLoader newLoader = new EWBIKLoader();
-		newLoader.setMode(EWBIKLoader.SINGLE);
 		@SuppressWarnings("unchecked")
 		Collection<Armature> ArmatureList = (Collection<Armature>) newLoader.importSinglePrecisionArmatures(path,
 				Axes.class, Bone.class, Armature.class, Kusudama.class, LimitCone.class, IKPin.class);
