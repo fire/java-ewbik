@@ -35,8 +35,7 @@ public class ItemHolding_DoublePrecision extends PApplet{
 	
 	public void setup() {
 		ui =new UI(this, true);
-		String path = sketchPath()+File.separator;
-		loadedArmature = EWBKIO.LoadArmature_doublePrecision(path+"Humanoid_Holding_Item.arm");
+		loadedArmature = EWBKIO.LoadArmature_doublePrecision("Humanoid_Holding_Item.arm");
 		worldAxes = (dAxes) loadedArmature.localAxes().getParentAxes(); 
 		if(worldAxes == null) { 
 			worldAxes = new dAxes();
