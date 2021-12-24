@@ -18,6 +18,8 @@ application {
 	mainClassName = 'ItemHolding_SinglePrecision'
 }
 
+version = '0.0.1'
+
 sourceSets {
     main {
         java {
