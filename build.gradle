@@ -30,6 +30,7 @@ sourceSets {
                 'Everything-Will-Be-IK/ewbIK/src/sceneGraph',
                 'Everything-Will-Be-IK/ewbIK/src/IK/',
                 'Everything-Will-Be-IK/ewbIK/src/data',
+                'Everything-Will-Be-IK/ewbIK/src/examples',
                 'Everything-Will-Be-IK/ewbIK/src/sceneGraph/asj',
             ]
         }
