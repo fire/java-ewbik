@@ -15,7 +15,7 @@ dependencies {
 }
 
 application {
-	mainClassName = 'ItemHolding_SinglePrecision'
+	mainClassName = 'SimpleExample_SinglePrecision'
 }
 
 version = '0.0.1'
