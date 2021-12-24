@@ -44,7 +44,7 @@ public class ItemHolding_DoublePrecision extends PApplet{
 		updatePinList();   	    
 		cubeAxes = new dAxes(); 		
 		
-		activePin = pins.get(pins.size()-1);
+		// activePin = pins.get(pins.size()-1);
 		
 		loadedArmature.setPerformanceMonitor(true); //print performance stats
 		
@@ -65,10 +65,8 @@ public class ItemHolding_DoublePrecision extends PApplet{
 		 * should be computed relative to the axes of the cube we're drawing, 
 		 * Thereby, any time we transform the parent cube's axes, the pins will follow.
 		 */
-		loadedArmature.getBoneTagged("left hand").getIKPin().getAxes().setParent(cubeAxes);
-		loadedArmature.getBoneTagged("right hand").getIKPin().getAxes().setParent(cubeAxes);
-		
-		
+		// loadedArmature.getBoneTagged("left hand").getIKPin().getAxes().setParent(cubeAxes);
+		// loadedArmature.getBoneTagged("right hand").getIKPin().getAxes().setParent(cubeAxes);
 	}
 
 
@@ -86,7 +84,7 @@ public class ItemHolding_DoublePrecision extends PApplet{
 		}    
 		String additionalInstructions = "Hit the 'C' key to select or deselect the cube";  
 		//decrease the numerator to increase the zoom. 
-		zoomScalar = 200f/height;        
+		zoomScalar = 500f/height;        
 		ui.drawScene(zoomScalar, 10f, ()->drawHoldCube(), loadedArmature, additionalInstructions, activePin, cubeAxes, cubeMode);
 	}
 
