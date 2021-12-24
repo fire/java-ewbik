@@ -12,13 +12,15 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "dependsOn": ["Build"],
+            "dependsOn": [
+                "Build"
+            ]
         },
         {
             "label": "Build",
             "type": "shell",
             "command": "gradle installDist",
-            "problemMatcher": [],
-        },
+            "problemMatcher": []
+        }
     ]
 } 
