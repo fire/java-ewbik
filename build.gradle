@@ -15,7 +15,7 @@ dependencies {
 }
 
 application {
-	mainClassName = 'SimpleExample_SinglePrecision'
+	mainClassName = 'VRMExample_SinglePrecision'
 }
 
 version = '0.0.1'
