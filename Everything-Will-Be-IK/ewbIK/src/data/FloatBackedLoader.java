@@ -6,12 +6,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import IK.floatIK.AbstractArmature;
-import IK.floatIK.AbstractBone;
-import IK.floatIK.AbstractIKPin;
-import IK.floatIK.AbstractKusudama;
-import IK.floatIK.AbstractLimitCone;
-import IK.floatIK.Constraint;
+import IK.AbstractArmature;
+import IK.AbstractBone;
+import IK.AbstractIKPin;
+import IK.AbstractKusudama;
+import IK.AbstractLimitCone;
+import IK.Constraint;
 import asj.LoadManager;
 import asj.Saveable;
 import asj.TypeIdentifier;

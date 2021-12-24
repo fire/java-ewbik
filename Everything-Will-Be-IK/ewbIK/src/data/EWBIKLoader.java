@@ -54,13 +54,13 @@ public class EWBIKLoader {
 	 * @return a list of all instantiated armatures specified by the input file.
 	 */
 
-	public Collection<? extends IK.floatIK.AbstractArmature> importSinglePrecisionArmatures(String filepath,
+	public Collection<? extends IK.AbstractArmature> importSinglePrecisionArmatures(String filepath,
 			Class<? extends math.floatV.AbstractAxes> AxesClass,
-			Class<? extends IK.floatIK.AbstractBone> BoneClass,
-			Class<? extends IK.floatIK.AbstractArmature> ArmatureClass,
-			Class<? extends IK.floatIK.Constraint> KusudamaClass,
-			Class<? extends IK.floatIK.AbstractLimitCone> LimitConeClass,
-			Class<? extends IK.floatIK.AbstractIKPin> IKPinClass) {
+			Class<? extends IK.AbstractBone> BoneClass,
+			Class<? extends IK.AbstractArmature> ArmatureClass,
+			Class<? extends IK.Constraint> KusudamaClass,
+			Class<? extends IK.AbstractLimitCone> LimitConeClass,
+			Class<? extends IK.AbstractIKPin> IKPinClass) {
 		File selection = new File(filepath);
 		JSONObject loadFile = StringFuncs.loadJSONObject(selection);
 		clearCurrentLoadObjects();

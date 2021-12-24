@@ -18,8 +18,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 package ewbik.processing.singlePrecision;
-import IK.floatIK.AbstractArmature;
-import IK.floatIK.AbstractBone.frameType;
+
+import IK.AbstractArmature;
+import IK.AbstractBone.frameType;
 import ewbik.processing.singlePrecision.sceneGraph.*;
 import math.floatV.Vec3f;
 import processing.core.PApplet;
@@ -28,60 +29,60 @@ import processing.core.PMatrix;
 import processing.core.PVector;
 
 /**
- * Note, this class is a concrete implementation of the abstract class AbstractArmature. Please refer to the {@link AbstractArmature AbstractArmature docs.} 
- */	
-public class Armature extends AbstractArmature{
-	
-	//default constructor required for file loading to work
-	public Armature() {}
-	
-	
-	public Armature(String name) {		
-		super(new Axes(
-				new PVector(0,0,0), new PVector(1,0,0), new PVector(0,1,0), new PVector(0,0,1), null), name);
+ * Note, this class is a concrete implementation of the abstract class
+ * AbstractArmature. Please refer to the {@link AbstractArmature
+ * AbstractArmature docs.}
+ */
+public class Armature extends AbstractArmature {
+
+	// default constructor required for file loading to work
+	public Armature() {
 	}
 
+	public Armature(String name) {
+		super(new Axes(
+				new PVector(0, 0, 0), new PVector(1, 0, 0), new PVector(0, 1, 0), new PVector(0, 0, 1), null), name);
+	}
 
 	@Override
-	protected  void initializeRootBone(
+	protected void initializeRootBone(
 			AbstractArmature armature,
 			Vec3f<?> tipHeading,
 			Vec3f<?> rollHeading,
 			String inputTag,
-			float boneHeight, 
+			float boneHeight,
 			frameType coordinateType) {
-		this.rootBone = new Bone(armature, 
-				new PVector(tipHeading.x, tipHeading.y, tipHeading.z), 
-				new PVector(rollHeading.x, rollHeading.y, rollHeading.z), 
-				inputTag, 
-				boneHeight, 
-				coordinateType);	
+		this.rootBone = new Bone(armature,
+				new PVector(tipHeading.x, tipHeading.y, tipHeading.z),
+				new PVector(rollHeading.x, rollHeading.y, rollHeading.z),
+				inputTag,
+				boneHeight,
+				coordinateType);
 	}
 
-	
-	public void drawMe(PApplet p, int color,  float pinSize) {
+	public void drawMe(PApplet p, int color, float pinSize) {
 		drawMe(p.g, color, pinSize);
 	}
-	
-	public void drawMe(PGraphics pg, int color,  float pinSize) {
+
+	public void drawMe(PGraphics pg, int color, float pinSize) {
 		PMatrix localMat = localAxes().getGlobalPMatrix();
 		pg.applyMatrix(localMat);
-		pg.pushMatrix(); 
-			getRootBone().drawMeAndChildren(pg, color,  pinSize);
-			pg.popMatrix();
+		pg.pushMatrix();
+		getRootBone().drawMeAndChildren(pg, color, pinSize);
+		pg.popMatrix();
 	}
-	
-	@Override 
+
+	@Override
 	public Bone getRootBone() {
-		return (Bone)rootBone;
+		return (Bone) rootBone;
 	}
-	
+
 	@Override
 	public Bone getBoneTagged(String tag) {
-		return (Bone)tagBoneMap.get(tag);	
+		return (Bone) tagBoneMap.get(tag);
 	}
-	
-	@Override 
+
+	@Override
 	public Axes localAxes() {
 		return (Axes) super.localAxes();
 	}

@@ -24,9 +24,9 @@ public class EWBIKSaver extends SaveManager {
 	public static String currentFilePath;
 	public static String tempDir;
 
-	public void saveArmature(IK.floatIK.AbstractArmature toSave, String path) {
+	public void saveArmature(IK.AbstractArmature toSave, String path) {
 		clearSaveState();
-		((IK.floatIK.AbstractArmature) toSave).notifyOfSaveIntent(this);
+		((IK.AbstractArmature) toSave).notifyOfSaveIntent(this);
 		saveAs(path);
 		notifyCurrentSaveablesOfSaveCompletion();
 	}
@@ -69,15 +69,15 @@ public class EWBIKSaver extends SaveManager {
 			if (jsonObj != null) {
 				if (math.floatV.AbstractAxes.class.isAssignableFrom(s.getClass()))
 					axesJSON.append(jsonObj);
-				if (IK.floatIK.AbstractArmature.class.isAssignableFrom(s.getClass()))
+				if (IK.AbstractArmature.class.isAssignableFrom(s.getClass()))
 					armaturesJSON.append(jsonObj);
-				if (IK.floatIK.AbstractBone.class.isAssignableFrom(s.getClass()))
+				if (IK.AbstractBone.class.isAssignableFrom(s.getClass()))
 					bonesJSON.append(jsonObj);
-				if (IK.floatIK.AbstractKusudama.class.isAssignableFrom(s.getClass()))
+				if (IK.AbstractKusudama.class.isAssignableFrom(s.getClass()))
 					kusudamaJSON.append(jsonObj);
-				if (IK.floatIK.AbstractLimitCone.class.isAssignableFrom(s.getClass()))
+				if (IK.AbstractLimitCone.class.isAssignableFrom(s.getClass()))
 					limitConeJSON.append(jsonObj);
-				if (IK.floatIK.AbstractIKPin.class.isAssignableFrom(s.getClass()))
+				if (IK.AbstractIKPin.class.isAssignableFrom(s.getClass()))
 					IKPinsJSON.append(jsonObj);
 			}
 		}

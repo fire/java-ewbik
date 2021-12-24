@@ -5,4 +5,4 @@
  * @author Eron Gjoni
  *
  */
-package IK.floatIK;
+package IK;

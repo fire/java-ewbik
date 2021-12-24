@@ -19,19 +19,19 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package ewbik.processing.singlePrecision;
 
-import IK.floatIK.AbstractKusudama;
-import IK.floatIK.AbstractLimitCone;
+import IK.AbstractKusudama;
+import IK.AbstractLimitCone;
 import ewbik.processing.singlePrecision.sceneGraph.Axes;
 import processing.core.PVector;
 
 public class LimitCone extends AbstractLimitCone {
-	
-	//default constructor required for file loading to work
-	public LimitCone() {}
+
+	// default constructor required for file loading to work
+	public LimitCone() {
+	}
 
 	public LimitCone(PVector location, float rad, AbstractKusudama attachedTo) {
 		super(Axes.toSGVec(location), rad, attachedTo);
 	}
-
 
 }
