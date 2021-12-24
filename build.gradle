@@ -19,7 +19,7 @@ dependencies {
 version = '0.0.1'
 
 application {
-    mainClassName = 'Humanoid_Manual'
+    mainClassName = 'ItemHolding_DoublePrecision'
 }
 sourceSets {
     main {
