@@ -19,7 +19,7 @@ dependencies {
 version = '0.0.1'
 
 application {
-    mainClassName = 'ItemHolding_DoublePrecision'
+    mainClassName = 'ItemHolding_SinglePrecision'
 }
 sourceSets {
     main {
