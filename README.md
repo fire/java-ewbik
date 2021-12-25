@@ -9,16 +9,16 @@ EWBIK-Workspace
 1. `.\build\install\ewbik-workspace\bin\ewbik-workspace.bat`
 
 ## Script
-    # Be in edit mode
-    ob = bpy.context.object
-    if ob.type == 'ARMATURE':
-    armature = ob.data
-    for bone in armature.edit_bones:
-        parent_name = ""
-        if bone.parent:        
-        parent_name = bone.parent.name
-        r = bone.matrix.to_quaternion()
-        r_string = f"{r.x}, {r.y}, {r.z}, {r.w}"
-        l = bone.matrix.translation
-        l_string = f"{l.x}, {l.y}, {l.z}"
-        print(f"addBone(\"{bone.name}\", \"{parent_name}\", {bone.length}, {r_string}, {l_string});")
+        # Be in edit mode
+        ob = bpy.context.object
+        if ob.type == 'ARMATURE':
+        armature = ob.data
+        for bone in armature.edit_bones:
+            parent_name = ""
+            if bone.parent:
+                parent_name = bone.parent.name
+            heading = bone.y_axis
+            heading_string = f"{heading.x}, {heading.y}, {heading.z}"
+            roll_heading = bone.x_axis
+            roll_string = f"{roll.x}, {roll.y}, {roll.z}"
+            print(f"addBone(\"{bone.name}\", \"{parent_name}\", {heading_string}, {roll_string}, {bone.length});")
