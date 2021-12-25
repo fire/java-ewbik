@@ -125,7 +125,7 @@ public class VRMExample_SinglePrecision extends PApplet {
 				rollHeading,
 				name,
 				(float) (meter_length * 100.0f),
-				IK.AbstractBone.frameType.GLOBAL);
+				IK.AbstractBone.frameType.RELATIVE);
 		boneMap.put(name, bone);
 	}
 
@@ -272,13 +272,21 @@ public class VRMExample_SinglePrecision extends PApplet {
 		addBone("RightToesBone", "RightFootBone", 0.08666664361953735, 0.7071068286895752, 2.5121476791422227e-15,
 				-0.7071067094802856, 4.214686555314984e-08, -0.05312500149011612, -0.1733333170413971,
 				-2.2351741790771484e-08);
+		Bone rootBone = boneMap.get("");
+		rootBone.enablePin();
 		Bone hipsBone = boneMap.get("HipsBone");
 		hipsBone.enablePin();
 		Bone rightFootBone = boneMap.get("RightFootBone");
 		rightFootBone.enablePin();
 		Bone leftFootBone = boneMap.get("LeftFootBone");
 		leftFootBone.enablePin();
-		activePin = leftFootBone.getIKPin();
+		Bone rightHandBone = boneMap.get("RightHandBone");
+		rightHandBone.enablePin();
+		Bone leftHandBone = boneMap.get("LeftHandBone");
+		leftHandBone.enablePin();
+		Bone headBone = boneMap.get("HeadBone");
+		headBone.enablePin();
+		activePin = rootBone.getIKPin();
 	}
 
 	public void updatePinList() {
