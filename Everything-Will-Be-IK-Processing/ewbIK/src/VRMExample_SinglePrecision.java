@@ -118,7 +118,7 @@ public class VRMExample_SinglePrecision extends PApplet {
 		Rot rot = new Rot(new math.floatV.MRotation((float) qX, (float) qY, (float) qZ, (float) qW));
 		bone.rotateBy(rot);
 		IKPin pin = bone.getIKPin();
-		pin.translateTo(new PVector((float) x, (float) z, (float) y));
+		pin.translateTo(new PVector((float) (x* 100.0f), (float)( z* 100.0f), (float) (y* 100.0f)));
 		pin.solveIKForThisAndChildren();
 	}
 
