@@ -1,10 +1,9 @@
-
+import ewbik.math.SGVec_3f;
 import ewbik.processing.Armature;
 import ewbik.processing.singlePrecision.*;
 import processing.core.PApplet;
 import processing.core.PVector;
 import processing.event.MouseEvent;
-import ewbik.math.SGVec_3f;
 
 import java.util.ArrayList;
 

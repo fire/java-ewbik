@@ -7,6 +7,7 @@
  * to the format this library uses internally.
  *
  * @author Eron Gjoni
+ * @author Eron Gjoni
  */
 /**
  * @author Eron Gjoni

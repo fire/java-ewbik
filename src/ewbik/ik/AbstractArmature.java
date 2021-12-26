@@ -16,18 +16,14 @@
  */
 package ewbik.ik;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import ewbik.asj.LoadManager;
 import ewbik.asj.SaveManager;
 import ewbik.asj.Saveable;
 import ewbik.asj.data.JSONObject;
-import ewbik.math.AbstractAxes;
-import ewbik.math.MathUtils;
-import ewbik.math.Rot;
-import ewbik.math.SGVec_3f;
-import ewbik.math.Vec3f;
+import ewbik.math.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * An Armature is a hierarchical collection of Bones.
@@ -128,7 +124,7 @@ public abstract class AbstractArmature implements Saveable {
      * The lower this value, the more natural the pose results. However, this will
      * the number of iterations
      * the solver requires to converge.
-     *
+     * <p>
      * !!THIS IS AN EXPENSIVE OPERATION.
      * This updates the entire armature's cache of precomputed quadrance angles.
      * The cache makes things faster in general, but if you need to dynamically
@@ -205,7 +201,6 @@ public abstract class AbstractArmature implements Saveable {
     }
 
     /**
-     *
      * @param tag the tag of the bone object you wish to retrieve
      * @return the bone object corresponding to this tag
      */
@@ -215,7 +210,6 @@ public abstract class AbstractArmature implements Saveable {
     }
 
     /**
-     *
      * @return the user specified tag String for this armature.
      */
     public String getTag() {
@@ -248,7 +242,7 @@ public abstract class AbstractArmature implements Saveable {
     /**
      * this method should be called whenever a bone
      * in this armature has been pinned or unpinned.
-     *
+     * <p>
      * for the most part, the abstract classes call this when necessary.
      * But if you are extending classes more than you would reasonably expect
      * this library to reasonably expect and getting weird results, you might try
@@ -292,7 +286,7 @@ public abstract class AbstractArmature implements Saveable {
     /**
      * automatically solves the IK system of this armature from the
      * given bone using the armature's default IK parameters.
-     *
+     * <p>
      * You can specify these using the setDefaultIterations() setDefaultIKType() and
      * setDefaultDampening() methods.
      * The library comes with some defaults already set, so you can more or less use
@@ -330,13 +324,13 @@ public abstract class AbstractArmature implements Saveable {
      * orientation constraints), the solution might fail to stabilize, resulting in
      * an undulating
      * motion.
-     *
+     * <p>
      * Setting this parameter to "1" will prevent such undulations, with a
      * negligible cost to performance. Setting this parameter to a value higher than
      * 1 will offer minor
      * benefits in pose quality in situations that would otherwise be prone to
      * instability, however, it will do so at a significant performance cost.
-     *
+     * <p>
      * You're encourage to experiment with this parameter as per your use case, but
      * you may find the following guiding principles helpful:
      * <ul>
@@ -366,7 +360,6 @@ public abstract class AbstractArmature implements Saveable {
     }
 
     /**
-     *
      * @return a reference to the Axes serving as this Armature's coordinate system.
      */
     public AbstractAxes localAxes() {

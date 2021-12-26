@@ -1,16 +1,14 @@
+import ewbik.data.EWBIKSaver;
 import ewbik.processing.Armature;
 import ewbik.processing.sceneGraph.Axes;
-import processing.core.*;
-import processing.event.MouseEvent;
-import ewbik.processing.Armature;
 import ewbik.processing.singlePrecision.Bone;
 import ewbik.processing.singlePrecision.IKPin;
 import ewbik.processing.singlePrecision.Kusudama;
-import ewbik.processing.sceneGraph.Axes;
+import processing.core.PApplet;
+import processing.core.PVector;
+import processing.event.MouseEvent;
 
 import java.util.ArrayList;
-
-import ewbik.data.EWBIKSaver;
 
 public class KusudamaVisualizer_SinglePrecision extends PApplet {
     public static void main(String[] args) {

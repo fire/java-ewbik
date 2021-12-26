@@ -1,21 +1,20 @@
 package ewbik.data;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-
-import ewbik.ik.*;
-import ewbik.math.AbstractAxes;
-import ewbik.math.Rot;
-import ewbik.math.MRotation;
-
 import ewbik.asj.Saveable;
 import ewbik.asj.TypeIdentifier;
 import ewbik.asj.data.JSONArray;
 import ewbik.asj.data.JSONObject;
 import ewbik.asj.data.StringFuncs;
+import ewbik.ik.*;
+import ewbik.math.AbstractAxes;
+import ewbik.math.MRotation;
+import ewbik.math.Rot;
 import ewbik.math.SGVec_3f;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 
 public class EWBIKLoader {
     FloatBackedLoader floatBackedLoader = new FloatBackedLoader();

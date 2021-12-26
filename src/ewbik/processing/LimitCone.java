@@ -22,7 +22,6 @@ package ewbik.processing.singlePrecision;
 import ewbik.ik.AbstractKusudama;
 import ewbik.ik.AbstractLimitCone;
 import ewbik.processing.sceneGraph.Axes;
-import ewbik.processing.sceneGraph.Axes;
 import processing.core.PVector;
 
 public class LimitCone extends AbstractLimitCone {

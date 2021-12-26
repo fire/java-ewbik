@@ -1,16 +1,8 @@
 package ewbik.asj;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.WeakHashMap;
+import ewbik.asj.data.*;
 
-import ewbik.asj.data.FloatList;
-import ewbik.asj.data.IntList;
-import ewbik.asj.data.JSONArray;
-import ewbik.asj.data.JSONObject;
-import ewbik.asj.data.StringList;
+import java.util.*;
 
 
 public abstract class SaveManager {

@@ -19,15 +19,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package ewbik.ik;
 
-import ewbik.math.MathUtils;
-import ewbik.math.Rot;
-import ewbik.math.SGVec_3f;
-import ewbik.math.Vec3f;
-import ewbik.math.sgRayf;
 import ewbik.asj.LoadManager;
 import ewbik.asj.SaveManager;
 import ewbik.asj.Saveable;
 import ewbik.asj.data.JSONObject;
+import ewbik.math.*;
 
 public abstract class AbstractLimitCone implements Saveable {
 

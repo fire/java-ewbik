@@ -19,22 +19,21 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package ewbik.processing.singlePrecision;
 
-import java.util.ArrayList;
-
 import ewbik.ik.AbstractKusudama;
 import ewbik.ik.AbstractLimitCone;
-import ewbik.processing.sceneGraph.Axes;
-import ewbik.processing.sceneGraph.Axes;
 import ewbik.math.MRotation;
 import ewbik.math.Rot;
 import ewbik.math.SGVec_3f;
 import ewbik.math.Vec3f;
+import ewbik.processing.sceneGraph.Axes;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
 import processing.core.PVector;
 import processing.opengl.PGraphicsOpenGL;
 import processing.opengl.PShader;
+
+import java.util.ArrayList;
 
 /**
  * Note, this class is a concrete implementation of the abstract class

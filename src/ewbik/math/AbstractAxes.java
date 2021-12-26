@@ -1,15 +1,15 @@
 package ewbik.math;
 
+import ewbik.asj.LoadManager;
+import ewbik.asj.SaveManager;
+import ewbik.asj.Saveable;
+import ewbik.asj.data.JSONObject;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.function.Consumer;
-
-import ewbik.asj.LoadManager;
-import ewbik.asj.SaveManager;
-import ewbik.asj.Saveable;
-import ewbik.asj.data.JSONObject;
 
 /**
  * @author Eron Gjoni

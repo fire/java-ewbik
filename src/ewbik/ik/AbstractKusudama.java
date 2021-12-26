@@ -3,19 +3,14 @@
  */
 package ewbik.ik;
 
-import java.util.ArrayList;
-
-import ewbik.ik.SegmentedArmature.WorkingBone;
-import ewbik.math.AbstractAxes;
-import ewbik.math.MathUtils;
-import ewbik.math.Rot;
-import ewbik.math.SGVec_3f;
-import ewbik.math.Vec3f;
-import ewbik.math.sgRayf;
 import ewbik.asj.LoadManager;
 import ewbik.asj.SaveManager;
 import ewbik.asj.Saveable;
 import ewbik.asj.data.JSONObject;
+import ewbik.ik.SegmentedArmature.WorkingBone;
+import ewbik.math.*;
+
+import java.util.ArrayList;
 
 /**
  * @author Eron

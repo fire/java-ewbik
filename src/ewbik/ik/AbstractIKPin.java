@@ -1,13 +1,13 @@
 package ewbik.ik;
 
-import java.util.ArrayList;
-
-import ewbik.math.AbstractAxes;
-import ewbik.math.Vec3f;
 import ewbik.asj.LoadManager;
 import ewbik.asj.SaveManager;
 import ewbik.asj.Saveable;
 import ewbik.asj.data.JSONObject;
+import ewbik.math.AbstractAxes;
+import ewbik.math.Vec3f;
+
+import java.util.ArrayList;
 
 public abstract class AbstractIKPin implements Saveable {
 

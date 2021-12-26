@@ -1,12 +1,12 @@
 package ewbik.asj;
 
+import ewbik.asj.data.JSONArray;
+import ewbik.asj.data.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import ewbik.asj.data.JSONArray;
-import ewbik.asj.data.JSONObject;
 
 public abstract class LoadManager {
 

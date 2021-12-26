@@ -1,8 +1,5 @@
 package ewbik.math;
 
-import ewbik.math.*;
-
-
 /**
  * Minimal implementation of basis transformations.
  * Supports only righthanded orthonormal bases (no scaling, now skewing, no reflections).

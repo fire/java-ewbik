@@ -31,13 +31,15 @@ package ewbik.asj.data;
 */
 
 import java.io.*;
-import java.lang.reflect.*;
+import java.lang.reflect.Array;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
-import java.text.*;
+import java.text.NumberFormat;
 import java.util.*;
-import java.util.regex.*;
-import java.util.zip.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 
 public class StringFuncs implements Constants {

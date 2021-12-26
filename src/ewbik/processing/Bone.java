@@ -19,20 +19,20 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package ewbik.processing.singlePrecision;
 
-import java.util.ArrayList;
-
-import ewbik.ik.IKExceptions.NullParentForBoneException;
 import ewbik.ik.AbstractArmature;
 import ewbik.ik.AbstractBone;
+import ewbik.ik.IKExceptions.NullParentForBoneException;
+import ewbik.math.AbstractAxes;
+import ewbik.math.SGVec_3f;
+import ewbik.math.Vec3f;
 import ewbik.processing.sceneGraph.Axes;
 import ewbik.processing.singlePrecision.sceneGraph.*;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
 import processing.core.PVector;
-import ewbik.math.AbstractAxes;
-import ewbik.math.SGVec_3f;
-import ewbik.math.Vec3f;
+
+import java.util.ArrayList;
 
 /**
  * Note, this class is a concrete implementation of the abstract class

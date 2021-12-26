@@ -18,16 +18,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package ewbik.ik;
 
+import ewbik.math.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import ewbik.math.AbstractAxes;
-import ewbik.math.MathUtils;
-import ewbik.math.QCP;
-import ewbik.math.Rot;
-import ewbik.math.SGVec_3f;
-import ewbik.math.Vec3f;
-import ewbik.math.sgRayf;
 
 /**
  * @author Eron Gjoni

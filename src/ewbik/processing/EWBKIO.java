@@ -1,12 +1,10 @@
 package ewbik.processing;
 
-import ewbik.processing.*;
+import ewbik.data.EWBIKLoader;
+import ewbik.data.EWBIKSaver;
 import ewbik.processing.sceneGraph.Axes;
 
 import java.util.Collection;
-
-import ewbik.data.EWBIKLoader;
-import ewbik.data.EWBIKSaver;
 
 public final class EWBKIO {
 
