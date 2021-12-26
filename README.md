@@ -29,6 +29,8 @@ Please let me know if you find bugs you can't fix. Please commit back changes fo
 1. `.\build\install\ewbik-workspace\bin\ewbik-workspace.bat`
 
 ## GDScript
+
+```gdscript
 extends Skeleton3D
 
 func _ready():	
@@ -53,3 +55,4 @@ func _ready():
 		var origin = bone_armature_pose.origin
 		file.store_line("addPin(\"%s\", %s, %s, %s, %s, %s, %s, %s);" % [bone_name, origin.x, origin.y, origin.z, quaternion.x, quaternion.y ,quaternion.z, quaternion.w])
 	file.close()
+```
