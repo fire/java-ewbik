@@ -2,4 +2,4 @@
  * @author Eron Gjoni
  *
  */
-package exceptions;
+package ewbik.exceptions;

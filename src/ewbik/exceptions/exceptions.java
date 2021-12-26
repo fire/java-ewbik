@@ -1,4 +1,4 @@
-package exceptions;
+package ewbik.exceptions;
 
 
 public class exceptions {

@@ -8,7 +8,7 @@ import processing.event.MouseEvent;
 
 import java.util.ArrayList;
 
-public class SimpleExample_SinglePrecision extends PApplet {
+public class SimpleExample extends PApplet {
     public static void main(String[] args) {
 
         PApplet.main("SimpleExample_SinglePrecision");
