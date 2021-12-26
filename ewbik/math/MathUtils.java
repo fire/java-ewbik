@@ -73,62 +73,13 @@ public final class MathUtils {
      */
     static public float sin(float radians) {
         return (float) Math.sin((double) radians);
-		/*float rawIndex = (radians * radToIndex);
-		int index = (int) rawIndex; 
-		float remainder = rawIndex - index; 
-		float result1 = Sin.table[index & SIN_MASK];
-		float result2 = Sin.table[index+1 & SIN_MASK]; 
-		float lerped =  G.lerp(result1, result2, remainder);
-		//System.out.println("delta:  " + ((float)Math.sin(radians) - lerped));
-		return lerped;*/
     }
-
-
-    /*
-     * intended for higher accuracy per megabyte (at the cost of some speed)
-     * @param radians
-     * @return
-     */
-	/*static public double iSin(double tx) {
-		boolean negate = false;
-		double x = tx;
-		if(tx<0) {
-			negate = true; 
-			x = -tx;
-		}  
-		if( x >= PI2) {
-			x = x%PI2;
-		}
-				
-		double result = 0d;
-		//System.out.println(x);
-		if(x< HALF_PI) {
-		   result = piSin(x);
-		} else if(x < PI) {
-		   result = piSin(HALF_PI - (x-HALF_PI));
-		} else if(x < THREEHALF_PI) {
-			x = x%PI;
-		   result =-piSin(x); 
-		} else {
-			x = x%PI;
-		   result = -piSin(HALF_PI - (x-HALF_PI));
-		}
-		
-		if(negate) {
-			return -result;
-		} else {
-			return result;
-		}
-	}
-	}*/
-
 
     /**
      * Returns the cosine in radians from a lookup table.
      */
     static public float cos(float radians) {
-        //System.out.println("delta : " + ((float)Math.cos(radians) -Math.sin(radians + HALF_PI)));
-        return (float) Math.cos(radians);//sin(radians - 11f);
+        return (float) Math.cos(radians);
     }
 
 
