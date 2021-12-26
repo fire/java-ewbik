@@ -25,15 +25,15 @@ public class UI {
 			stencil.noSmooth();
 			display.smooth(8);
 			System.out.println(p.sketchPath());
-			blurshader = pa.loadShader("ewbIK/src/ewbik/processing/blur-sep.glsl");
+			blurshader = pa.loadShader("src/ewbik/processing/blur-sep.glsl");
 			blurshader.set("blurSize", 20);
 			blurshader.set("sigma", 9f);
 			multipass = true;
 		}
-		Kusudama.kusudamaShader = pa.loadShader("ewbIK/src/ewbik/processing/kusudama.glsl",
-				"ewbIK/src/ewbik/processing/kusudama_vert.glsl");
-		Kusudama.kusudamaStencil = pa.loadShader("ewbIK/src/ewbik/processing/kusudama_stencil.glsl",
-				"ewbIK/src/ewbik/processing/kusudama_vert.glsl");
+		Kusudama.kusudamaShader = pa.loadShader("src/ewbik/processing/kusudama.glsl",
+				"src/ewbik/processing/kusudama_vert.glsl");
+		Kusudama.kusudamaStencil = pa.loadShader("src/ewbik/processing/kusudama_stencil.glsl",
+				"src/ewbik/processing/kusudama_vert.glsl");
 		Kusudama.kusudamaShader = Kusudama.kusudamaShader;
 		Kusudama.kusudamaStencil = Kusudama.kusudamaStencil;
 

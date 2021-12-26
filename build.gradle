@@ -24,7 +24,7 @@ sourceSets {
     main {
         java {
             srcDirs = [
-                'Everything-Will-Be-IK-Processing/ewbIK/src',
+                'src',
                 'Everything-Will-Be-IK/ewbIK/src/sceneGraph',
                 'Everything-Will-Be-IK/ewbIK/src/IK/',
                 'Everything-Will-Be-IK/ewbIK/src/data',
@@ -33,7 +33,7 @@ sourceSets {
             ]
         }
         resources {
-            srcDirs = ['Everything-Will-Be-IK-Processing']
+            srcDirs = ['ewbIK']
         }
     }
 }
