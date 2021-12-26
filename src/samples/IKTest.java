@@ -1,3 +1,5 @@
+package samples;
+
 import ewbik.math.SGVec_3f;
 import ewbik.processing.Armature;
 import ewbik.processing.singlePrecision.*;
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 
 public class IKTest extends PApplet {
     public static void main(String[] args) {
-        PApplet.main("iktest.IKTest_SinglePrecision");
+        PApplet.main("samples.IKTest");
     }
 
     public void settings() {

@@ -1,3 +1,5 @@
+package samples;
+
 import ewbik.processing.Armature;
 import ewbik.processing.sceneGraph.Axes;
 import processing.core.PApplet;
@@ -8,7 +10,7 @@ import java.util.ArrayList;
 
 public class ConstraintExample extends PApplet {
     public static void main(String[] args) {
-        PApplet.main("ConstraintExample_SinglePrecision");
+        PApplet.main("samples.ConstraintExample");
     }
 
     public void settings() {

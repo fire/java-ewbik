@@ -1,3 +1,5 @@
+package samples;
+
 import ewbik.processing.Armature;
 import ewbik.processing.sceneGraph.Axes;
 import ewbik.processing.singlePrecision.Bone;

@@ -1,3 +1,5 @@
+package samples;
+
 import ewbik.processing.Armature;
 import ewbik.processing.EWBKIO;
 import ewbik.processing.sceneGraph.Axes;
@@ -13,7 +15,7 @@ import java.util.ArrayList;
 public class ArmatureLoaderTest extends PApplet {
 
     public static void main(String[] args) {
-        PApplet.main("ArmatureLoaderTest_SinglePrecision");
+        PApplet.main("samples.ArmatureLoaderTest");
     }
 
     public void settings() {

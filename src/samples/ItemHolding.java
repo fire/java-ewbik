@@ -1,3 +1,5 @@
+package samples;
+
 import ewbik.processing.Armature;
 import ewbik.processing.EWBKIO;
 import ewbik.processing.sceneGraph.Axes;
@@ -14,7 +16,7 @@ import java.util.ArrayList;
 public class ItemHolding extends PApplet {
 
     public static void main(String[] args) {
-        PApplet.main("ItemHolding_SinglePrecision");
+        PApplet.main("samples.ItemHolding");
     }
 
     public void settings() {

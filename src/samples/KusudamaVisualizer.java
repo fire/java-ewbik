@@ -1,3 +1,5 @@
+package samples;
+
 import ewbik.data.EWBIKSaver;
 import ewbik.processing.Armature;
 import ewbik.processing.sceneGraph.Axes;
@@ -12,7 +14,7 @@ import java.util.ArrayList;
 
 public class KusudamaVisualizer extends PApplet {
     public static void main(String[] args) {
-        PApplet.main("KusudamaVisualizer_SinglePrecision");
+        PApplet.main("samples.KusudamaVisualizer");
     }
 
     public void settings() {

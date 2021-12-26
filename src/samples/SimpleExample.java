@@ -1,3 +1,5 @@
+package samples;
+
 import ewbik.processing.Armature;
 import ewbik.processing.sceneGraph.Axes;
 import ewbik.processing.singlePrecision.Bone;
@@ -11,7 +13,7 @@ import java.util.ArrayList;
 public class SimpleExample extends PApplet {
     public static void main(String[] args) {
 
-        PApplet.main("SimpleExample_SinglePrecision");
+        PApplet.main("samples.SimpleExample");
     }
 
     public void settings() {
