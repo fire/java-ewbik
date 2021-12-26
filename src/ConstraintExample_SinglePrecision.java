@@ -1,5 +1,6 @@
-import ewbik.processing.singlePrecision.*;
-import ewbik.processing.singlePrecision.sceneGraph.Axes;
+import ewbik.processing.Armature;
+import ewbik.processing.sceneGraph.Axes;
+import ewbik.processing.*;
 import processing.core.PApplet;
 import processing.core.PVector;
 import processing.event.MouseEvent;
@@ -16,7 +17,7 @@ public class ConstraintExample_SinglePrecision extends PApplet {
     }
 
     Armature simpleArmature;
-    Bone rootBone, initialBone,
+    ewbik.processing.singlePrecision.Bone rootBone, initialBone,
             secondBone, thirdBone,
             fourthBone, fifthBone,
             bFourthBone, bFifthBone,
@@ -24,10 +25,10 @@ public class ConstraintExample_SinglePrecision extends PApplet {
 
     UI ui;
 
-    ArrayList<IKPin> pins = new ArrayList<>();
+    ArrayList<ewbik.processing.singlePrecision.IKPin> pins = new ArrayList<>();
     Axes worldAxes;
 
-    IKPin activePin;
+    ewbik.processing.singlePrecision.IKPin activePin;
 
     public void setup() {
         ui = new UI(this, false);
@@ -65,7 +66,7 @@ public class ConstraintExample_SinglePrecision extends PApplet {
         activePin = bSixthBone.getIKPin();
 
         //Tell the Bone class that all bones should draw their kusudamas.
-        Bone.setDrawKusudamas(true);
+        ewbik.processing.singlePrecision.Bone.setDrawKusudamas(true);
 
         //specify that the armature should avoid degenerate results when facing impossible
         //situations. This comes at the
@@ -118,15 +119,15 @@ public class ConstraintExample_SinglePrecision extends PApplet {
         rootBone = simpleArmature.getRootBone();
         rootBone.localAxes().markDirty();
         rootBone.localAxes().updateGlobal();
-        initialBone = new Bone(rootBone, "initial", 74f);
-        secondBone = new Bone(initialBone, "nextBone", 86f);
-        thirdBone = new Bone(secondBone, "anotherBone", 98f);
-        fourthBone = new Bone(thirdBone, "oneMoreBone", 70f);
-        fifthBone = new Bone(fourthBone, "fifthBone", 80f);
+        initialBone = new ewbik.processing.singlePrecision.Bone(rootBone, "initial", 74f);
+        secondBone = new ewbik.processing.singlePrecision.Bone(initialBone, "nextBone", 86f);
+        thirdBone = new ewbik.processing.singlePrecision.Bone(secondBone, "anotherBone", 98f);
+        fourthBone = new ewbik.processing.singlePrecision.Bone(thirdBone, "oneMoreBone", 70f);
+        fifthBone = new ewbik.processing.singlePrecision.Bone(fourthBone, "fifthBone", 80f);
 
-        bFourthBone = new Bone(thirdBone, "branchBone", 80f);
-        bFifthBone = new Bone(bFourthBone, "nextBranch", 70f);
-        bSixthBone = new Bone(bFifthBone, "leaf", 80f);
+        bFourthBone = new ewbik.processing.singlePrecision.Bone(thirdBone, "branchBone", 80f);
+        bFifthBone = new ewbik.processing.singlePrecision.Bone(bFourthBone, "nextBranch", 70f);
+        bSixthBone = new ewbik.processing.singlePrecision.Bone(bFifthBone, "leaf", 80f);
 
         secondBone.rotAboutFrameZ(.4f);
         thirdBone.rotAboutFrameZ(.4f);
@@ -139,53 +140,54 @@ public class ConstraintExample_SinglePrecision extends PApplet {
 
     public void setBoneConstraints() {
 
-        Kusudama firstConstraint = new Kusudama(initialBone);
+        ewbik.processing.singlePrecision.Kusudama firstConstraint = new ewbik.processing.singlePrecision.Kusudama(initialBone);
         firstConstraint.addLimitConeAtIndex(0, new PVector(.5f, 1f, 0f), 1f);
         firstConstraint.addLimitConeAtIndex(1, new PVector(-.5f, 1f, 0f), 1f);
         firstConstraint.setAxialLimits(0.1f, 0.3f);
         firstConstraint.enable();
         initialBone.addConstraint(firstConstraint);
 
-        Kusudama secondConstraint = new Kusudama(secondBone);
+        ewbik.processing.singlePrecision.Kusudama secondConstraint = new ewbik.processing.singlePrecision.Kusudama(secondBone);
         secondConstraint.addLimitConeAtIndex(0, new PVector(.5f, 1f, 0f), 1f);
         secondConstraint.addLimitConeAtIndex(1, new PVector(-.5f, 1f, 0f), 1f);
         secondConstraint.setAxialLimits(0.1f, 0.3f);
         secondConstraint.enable();
         secondBone.addConstraint(secondConstraint);
 
-        Kusudama thirdConstraint = new Kusudama(thirdBone);
+        ewbik.processing.singlePrecision.Kusudama thirdConstraint = new ewbik.processing.singlePrecision.Kusudama(thirdBone);
         thirdConstraint.addLimitConeAtIndex(0, new PVector(.5f, 1f, 0f), 1f);
         thirdConstraint.addLimitConeAtIndex(1, new PVector(-.5f, 1f, 0f), 1f);
         thirdConstraint.setAxialLimits(0.1f, 0.3f);
         thirdConstraint.enable();
         thirdBone.addConstraint(thirdConstraint);
 
-        Kusudama fourthConstraint = new Kusudama(fourthBone);
+        ewbik.processing.singlePrecision.Kusudama fourthConstraint;
+        fourthConstraint = new ewbik.processing.singlePrecision.Kusudama(fourthBone);
         fourthConstraint.addLimitConeAtIndex(0, new PVector(.5f, 1f, 0f), 1f);
         fourthConstraint.addLimitConeAtIndex(1, new PVector(-.5f, 1f, 0f), 1f);
         fourthConstraint.setAxialLimits(0.1f, 0.3f);
         fourthConstraint.enable();
         fourthBone.addConstraint(fourthConstraint);
 
-        Kusudama fifthConstraint = new Kusudama(fifthBone);
+        ewbik.processing.singlePrecision.Kusudama fifthConstraint = new ewbik.processing.singlePrecision.Kusudama(fifthBone);
         fifthConstraint.addLimitConeAtIndex(0, new PVector(.5f, 1f, 0f), 0.5f);
         fifthConstraint.addLimitConeAtIndex(1, new PVector(-.5f, 1f, 0f), 1f);
         fifthConstraint.setAxialLimits(0.1f, 0.3f);
         fifthConstraint.enable();
         fifthBone.addConstraint(fifthConstraint);
 
-        Kusudama bFourthConstraint = new Kusudama(bFourthBone);
+        ewbik.processing.singlePrecision.Kusudama bFourthConstraint = new ewbik.processing.singlePrecision.Kusudama(bFourthBone);
         bFourthConstraint.addLimitConeAtIndex(0, new PVector(.5f, 1f, 0f), 0.7f);
         bFourthConstraint.setAxialLimits(0.1f, 0.3f);
         bFourthConstraint.enable();
         bFourthBone.addConstraint(bFourthConstraint);
 
-        Kusudama bSixthContstaint = new Kusudama(bSixthBone);
-        bSixthContstaint.addLimitConeAtIndex(0, new PVector(.5f, 1f, 0f), 0.5f);
-        bSixthContstaint.addLimitConeAtIndex(1, new PVector(-.5f, 1f, 0f), 1f);
-        bSixthContstaint.setAxialLimits(0.1f, 0.3f);
-        bSixthContstaint.enable();
-        bSixthBone.addConstraint(bSixthContstaint);
+        ewbik.processing.singlePrecision.Kusudama bSixthConstraint = new ewbik.processing.singlePrecision.Kusudama(bSixthBone);
+        bSixthConstraint.addLimitConeAtIndex(0, new PVector(.5f, 1f, 0f), 0.5f);
+        bSixthConstraint.addLimitConeAtIndex(1, new PVector(-.5f, 1f, 0f), 1f);
+        bSixthConstraint.setAxialLimits(0.1f, 0.3f);
+        bSixthConstraint.enable();
+        bSixthBone.addConstraint(bSixthConstraint);
     }
 
     public void updatePinList() {
@@ -193,15 +195,15 @@ public class ConstraintExample_SinglePrecision extends PApplet {
         recursivelyAddToPinnedList(pins, simpleArmature.getRootBone());
     }
 
-    public void recursivelyAddToPinnedList(ArrayList<IKPin> pins, Bone descendedFrom) {
+    public void recursivelyAddToPinnedList(ArrayList<ewbik.processing.singlePrecision.IKPin> pins, ewbik.processing.singlePrecision.Bone descendedFrom) {
         @SuppressWarnings("unchecked")
-        ArrayList<Bone> pinnedChildren = (ArrayList<Bone>) descendedFrom.getMostImmediatelyPinnedDescendants();
-        for (Bone b : pinnedChildren) {
+        ArrayList<ewbik.processing.singlePrecision.Bone> pinnedChildren = (ArrayList<ewbik.processing.singlePrecision.Bone>) descendedFrom.getMostImmediatelyPinnedDescendants();
+        for (ewbik.processing.singlePrecision.Bone b : pinnedChildren) {
             pins.add(b.getIKPin());
         }
-        for (Bone b : pinnedChildren) {
-            ArrayList<Bone> children = b.getChildren();
-            for (Bone b2 : children) {
+        for (ewbik.processing.singlePrecision.Bone b : pinnedChildren) {
+            ArrayList<ewbik.processing.singlePrecision.Bone> children = b.getChildren();
+            for (ewbik.processing.singlePrecision.Bone b2 : children) {
                 recursivelyAddToPinnedList(pins, b2);
             }
         }

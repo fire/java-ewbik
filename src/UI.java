@@ -1,9 +1,8 @@
-import ewbik.processing.singlePrecision.Armature;
+import ewbik.processing.Armature;
+import ewbik.processing.sceneGraph.Axes;
 import ewbik.processing.singlePrecision.Bone;
 import ewbik.processing.singlePrecision.IKPin;
 import ewbik.processing.singlePrecision.Kusudama;
-import ewbik.processing.singlePrecision.sceneGraph.Axes;
-import math.floatV.Vec3f;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;

@@ -21,17 +21,18 @@ package ewbik.processing.singlePrecision;
 
 import java.util.ArrayList;
 
-import IK.IKExceptions.NullParentForBoneException;
-import IK.AbstractArmature;
-import IK.AbstractBone;
+import ewbik.ik.IKExceptions.NullParentForBoneException;
+import ewbik.ik.AbstractArmature;
+import ewbik.ik.AbstractBone;
+import ewbik.processing.sceneGraph.Axes;
 import ewbik.processing.singlePrecision.sceneGraph.*;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
 import processing.core.PVector;
-import math.floatV.AbstractAxes;
-import math.floatV.SGVec_3f;
-import math.floatV.Vec3f;
+import ewbik.math.AbstractAxes;
+import ewbik.math.SGVec_3f;
+import ewbik.math.Vec3f;
 
 /**
  * Note, this class is a concrete implementation of the abstract class

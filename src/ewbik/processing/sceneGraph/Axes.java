@@ -17,14 +17,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
  */
 
-package ewbik.processing.singlePrecision.sceneGraph;
+package ewbik.processing.sceneGraph;
 
-import math.floatV.*;
-import math.floatV.AbstractAxes;
-import math.floatV.CartesianAxes;
-import math.floatV.SGVec_3f;
-import math.floatV.Vec3f;
-import math.floatV.sgRayf;
+import ewbik.math.*;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
 import processing.core.PMatrix3D;
@@ -123,7 +118,7 @@ public class Axes extends CartesianAxes {
         return new SGVec_3f(ev.x, ev.y, ev.z);
     }
 
-    public static sgRayf toSgRay(Ray er) {
+    public static sgRayf toSgRay(ewbik.processing.singlePrecision.sceneGraph.Ray er) {
         return new sgRayf(
                 toSGVec(er.p1),
                 toSGVec(er.p2)

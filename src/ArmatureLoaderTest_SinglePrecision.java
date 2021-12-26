@@ -4,10 +4,10 @@ import java.io.File;
 import java.util.ArrayList;
 
 import ewbik.processing.EWBKIO;
-import ewbik.processing.singlePrecision.Armature;
+import ewbik.processing.Armature;
 import ewbik.processing.singlePrecision.Bone;
 import ewbik.processing.singlePrecision.IKPin;
-import ewbik.processing.singlePrecision.sceneGraph.Axes;
+import ewbik.processing.sceneGraph.Axes;
 import processing.core.PApplet;
 import processing.core.PVector;
 import processing.event.MouseEvent;
@@ -53,7 +53,7 @@ public class ArmatureLoaderTest_SinglePrecision extends PApplet {
     public void draw() {
         zoomScalar = 200f / height;
         if (mousePressed) {
-            ui.mouse.z = (float) activePin.getAxes().origin_().z;
+            ui.mouse.z = activePin.getAxes().origin_().z;
             activePin.translateTo(new PVector(ui.mouse.x, ui.mouse.y, activePin.getLocation_().z));
             loadedArmature.IKSolver(loadedArmature.getRootBone());
         } else {
@@ -96,7 +96,7 @@ public class ArmatureLoaderTest_SinglePrecision extends PApplet {
         @SuppressWarnings("unchecked")
         ArrayList<Bone> pinnedChildren = (ArrayList<Bone>) descendedFrom.getMostImmediatelyPinnedDescendants();
         for (Bone b : pinnedChildren) {
-            IKPin pin = (IKPin) b.getIKPin();
+            IKPin pin = b.getIKPin();
             pins.add(pin);
         }
         for (Bone b : pinnedChildren) {

@@ -17,12 +17,12 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
 
-package ewbik.processing.singlePrecision;
+package ewbik.processing;
 
-import IK.AbstractArmature;
-import IK.AbstractBone.frameType;
-import ewbik.processing.singlePrecision.sceneGraph.*;
-import math.floatV.Vec3f;
+import ewbik.ik.AbstractArmature;
+import ewbik.ik.AbstractBone.frameType;
+import ewbik.math.Vec3f;
+import ewbik.processing.sceneGraph.Axes;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
@@ -52,7 +52,7 @@ public class Armature extends AbstractArmature {
             String inputTag,
             float boneHeight,
             frameType coordinateType) {
-        this.rootBone = new Bone(armature,
+        this.rootBone = new ewbik.processing.singlePrecision.Bone(armature,
                 new PVector(tipHeading.x, tipHeading.y, tipHeading.z),
                 new PVector(rollHeading.x, rollHeading.y, rollHeading.z),
                 inputTag,
@@ -73,13 +73,13 @@ public class Armature extends AbstractArmature {
     }
 
     @Override
-    public Bone getRootBone() {
-        return (Bone) rootBone;
+    public ewbik.processing.singlePrecision.Bone getRootBone() {
+        return (ewbik.processing.singlePrecision.Bone) rootBone;
     }
 
     @Override
-    public Bone getBoneTagged(String tag) {
-        return (Bone) tagBoneMap.get(tag);
+    public ewbik.processing.singlePrecision.Bone getBoneTagged(String tag) {
+        return (ewbik.processing.singlePrecision.Bone) tagBoneMap.get(tag);
     }
 
     @Override

@@ -21,13 +21,14 @@ package ewbik.processing.singlePrecision;
 
 import java.util.ArrayList;
 
-import IK.AbstractKusudama;
-import IK.AbstractLimitCone;
-import ewbik.processing.singlePrecision.sceneGraph.Axes;
-import math.floatV.MRotation;
-import math.floatV.Rot;
-import math.floatV.SGVec_3f;
-import math.floatV.Vec3f;
+import ewbik.ik.AbstractKusudama;
+import ewbik.ik.AbstractLimitCone;
+import ewbik.processing.sceneGraph.Axes;
+import ewbik.processing.sceneGraph.Axes;
+import ewbik.math.MRotation;
+import ewbik.math.Rot;
+import ewbik.math.SGVec_3f;
+import ewbik.math.Vec3f;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
@@ -97,7 +98,7 @@ public class Kusudama extends AbstractKusudama {
      *
      * @param insertAt the intended index for this LimitCone in the sequence of
      *                 LimitCones from which the Kusudama will infer a path. @see
-     *                 IK.AbstractKusudama.limitCones limitCones array.
+     *                 ewbik.ik.AbstractKusudama.limitCones limitCones array.
      * @param newPoint where on the Kusudama to add the LimitCone (in Kusudama's
      *                 local coordinate frame defined by its bone's
      *                 majorRotationAxes))
