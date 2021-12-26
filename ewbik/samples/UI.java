@@ -31,9 +31,9 @@ public class UI {
             blurshader.set("sigma", 9f);
             multipass = true;
         }
-        Kusudama.kusudamaShader = pa.loadShader("src/ewbik/processing/kusudama.glsl",
+        Kusudama.kusudamaShader = pa.loadShader("ewbik/processing/kusudama.glsl",
                 "ewbik/processing/kusudama_vert.glsl");
-        Kusudama.kusudamaStencil = pa.loadShader("src/ewbik/processing/kusudama_stencil.glsl",
+        Kusudama.kusudamaStencil = pa.loadShader("ewbik/processing/kusudama_stencil.glsl",
                 "ewbik/processing/kusudama_vert.glsl");
         Kusudama.kusudamaShader = Kusudama.kusudamaShader;
         Kusudama.kusudamaStencil = Kusudama.kusudamaStencil;
