@@ -10,7 +10,7 @@ import processing.event.MouseEvent;
 
 import java.util.ArrayList;
 
-public class KusudamaVisualizer_SinglePrecision extends PApplet {
+public class KusudamaVisualizer extends PApplet {
     public static void main(String[] args) {
         PApplet.main("KusudamaVisualizer_SinglePrecision");
     }

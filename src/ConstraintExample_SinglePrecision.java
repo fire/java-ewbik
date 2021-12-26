@@ -6,7 +6,7 @@ import processing.event.MouseEvent;
 
 import java.util.ArrayList;
 
-public class ConstraintExample_SinglePrecision extends PApplet {
+public class ConstraintExample extends PApplet {
     public static void main(String[] args) {
         PApplet.main("ConstraintExample_SinglePrecision");
     }

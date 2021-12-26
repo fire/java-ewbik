@@ -11,7 +11,7 @@ import processing.event.MouseEvent;
 
 import java.util.ArrayList;
 
-public class ItemHolding_SinglePrecision extends PApplet {
+public class ItemHolding extends PApplet {
 
     public static void main(String[] args) {
         PApplet.main("ItemHolding_SinglePrecision");

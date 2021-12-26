@@ -10,7 +10,7 @@ import processing.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 
-public class ArmatureLoaderTest_SinglePrecision extends PApplet {
+public class ArmatureLoaderTest extends PApplet {
 
     public static void main(String[] args) {
         PApplet.main("ArmatureLoaderTest_SinglePrecision");

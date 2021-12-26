@@ -7,7 +7,7 @@ import processing.event.MouseEvent;
 
 import java.util.ArrayList;
 
-public class IKTest_SinglePrecision extends PApplet {
+public class IKTest extends PApplet {
     public static void main(String[] args) {
         PApplet.main("iktest.IKTest_SinglePrecision");
     }
