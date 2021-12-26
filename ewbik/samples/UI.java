@@ -26,15 +26,15 @@ public class UI {
             stencil.noSmooth();
             display.smooth(8);
             System.out.println(p.sketchPath());
-            blurshader = pa.loadShader("src/ewbik/processing/blur-sep.glsl");
+            blurshader = pa.loadShader("ewbik/processing/blur-sep.glsl");
             blurshader.set("blurSize", 20);
             blurshader.set("sigma", 9f);
             multipass = true;
         }
         Kusudama.kusudamaShader = pa.loadShader("src/ewbik/processing/kusudama.glsl",
-                "src/ewbik/processing/kusudama_vert.glsl");
+                "ewbik/processing/kusudama_vert.glsl");
         Kusudama.kusudamaStencil = pa.loadShader("src/ewbik/processing/kusudama_stencil.glsl",
-                "src/ewbik/processing/kusudama_vert.glsl");
+                "ewbik/processing/kusudama_vert.glsl");
         Kusudama.kusudamaShader = Kusudama.kusudamaShader;
         Kusudama.kusudamaStencil = Kusudama.kusudamaStencil;
 
@@ -102,7 +102,8 @@ public class UI {
                          boolean cubeMode, Axes cubeAxes) {
 
         if (activePin != null) {
-            Axes ellipseAx = cubeMode ? cubeAxes : (Axes) activePin.getAxes();
+            Axes ellipseAx;
+            ellipseAx = cubeMode ? cubeAxes : activePin.getAxes();
             PVector pinLoc = screenOf(pg, ellipseAx.origin(), zoomScalar);
             PVector pinX = screenOf(pg, Axes.toPVector(ellipseAx.x_().getScaledTo(drawSize)), zoomScalar);
             PVector pinY = screenOf(pg, Axes.toPVector(ellipseAx.y_().getScaledTo(drawSize)), zoomScalar);

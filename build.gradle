@@ -24,12 +24,7 @@ sourceSets {
     main {
         java {
             srcDirs = [
-                'src',
-                'src/ewbik/data',
-                'src/ewbik/scenegraph',
-                'src/ewbik/ik',
-                'src/ewbik/data',
-                'src/ewbik/asj',
+                'ewbik',
             ]
         }
         resources {

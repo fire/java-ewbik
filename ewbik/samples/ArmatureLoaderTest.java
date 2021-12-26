@@ -32,7 +32,7 @@ public class ArmatureLoaderTest extends PApplet {
     float zoomScalar = 300f / height;
 
     public void setup() {
-        ui = new UI(this, true);
+        ui = new samples.UI(this, true);
 
         String path = sketchPath() + File.separator;
         loadedArmature = EWBKIO.LoadArmature_singlePrecision(path + "Humanoid.arm");
