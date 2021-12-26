@@ -35,56 +35,56 @@ import processing.core.PVector;
  */
 public class Armature extends AbstractArmature {
 
-	// default constructor required for file loading to work
-	public Armature() {
-	}
+    // default constructor required for file loading to work
+    public Armature() {
+    }
 
-	public Armature(String name) {
-		super(new Axes(
-				new PVector(0, 0, 0), new PVector(1, 0, 0), new PVector(0, 1, 0), new PVector(0, 0, 1), null), name);
-	}
+    public Armature(String name) {
+        super(new Axes(
+                new PVector(0, 0, 0), new PVector(1, 0, 0), new PVector(0, 1, 0), new PVector(0, 0, 1), null), name);
+    }
 
-	@Override
-	protected void initializeRootBone(
-			AbstractArmature armature,
-			Vec3f<?> tipHeading,
-			Vec3f<?> rollHeading,
-			String inputTag,
-			float boneHeight,
-			frameType coordinateType) {
-		this.rootBone = new Bone(armature,
-				new PVector(tipHeading.x, tipHeading.y, tipHeading.z),
-				new PVector(rollHeading.x, rollHeading.y, rollHeading.z),
-				inputTag,
-				boneHeight,
-				coordinateType);
-	}
+    @Override
+    protected void initializeRootBone(
+            AbstractArmature armature,
+            Vec3f<?> tipHeading,
+            Vec3f<?> rollHeading,
+            String inputTag,
+            float boneHeight,
+            frameType coordinateType) {
+        this.rootBone = new Bone(armature,
+                new PVector(tipHeading.x, tipHeading.y, tipHeading.z),
+                new PVector(rollHeading.x, rollHeading.y, rollHeading.z),
+                inputTag,
+                boneHeight,
+                coordinateType);
+    }
 
-	public void drawMe(PApplet p, int color, float pinSize) {
-		drawMe(p.g, color, pinSize);
-	}
+    public void drawMe(PApplet p, int color, float pinSize) {
+        drawMe(p.g, color, pinSize);
+    }
 
-	public void drawMe(PGraphics pg, int color, float pinSize) {
-		PMatrix localMat = localAxes().getGlobalPMatrix();
-		pg.applyMatrix(localMat);
-		pg.pushMatrix();
-		getRootBone().drawMeAndChildren(pg, color, pinSize);
-		pg.popMatrix();
-	}
+    public void drawMe(PGraphics pg, int color, float pinSize) {
+        PMatrix localMat = localAxes().getGlobalPMatrix();
+        pg.applyMatrix(localMat);
+        pg.pushMatrix();
+        getRootBone().drawMeAndChildren(pg, color, pinSize);
+        pg.popMatrix();
+    }
 
-	@Override
-	public Bone getRootBone() {
-		return (Bone) rootBone;
-	}
+    @Override
+    public Bone getRootBone() {
+        return (Bone) rootBone;
+    }
 
-	@Override
-	public Bone getBoneTagged(String tag) {
-		return (Bone) tagBoneMap.get(tag);
-	}
+    @Override
+    public Bone getBoneTagged(String tag) {
+        return (Bone) tagBoneMap.get(tag);
+    }
 
-	@Override
-	public Axes localAxes() {
-		return (Axes) super.localAxes();
-	}
+    @Override
+    public Axes localAxes() {
+        return (Axes) super.localAxes();
+    }
 
 }

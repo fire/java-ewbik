@@ -1,10 +1,12 @@
 /**
- * This package contains single and double precision 
- * example extensions for this library. 
- * 
- * This package takes a "wrapper" approach to dealing with foreign vector classes. It relies on user 
+ * This package contains single and double precision
+ * example extensions for this library.
+ * <p>
+ * This package takes a "wrapper" approach to dealing with foreign vector classes. It relies on user
  * defined conversion functions in the "Axes" class to convert from the user's preferred vector format
- * to the format this library uses internally. 
+ * to the format this library uses internally.
+ *
+ * @author Eron Gjoni
  */
 /**
  * @author Eron Gjoni

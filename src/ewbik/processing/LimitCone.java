@@ -26,12 +26,12 @@ import processing.core.PVector;
 
 public class LimitCone extends AbstractLimitCone {
 
-	// default constructor required for file loading to work
-	public LimitCone() {
-	}
+    // default constructor required for file loading to work
+    public LimitCone() {
+    }
 
-	public LimitCone(PVector location, float rad, AbstractKusudama attachedTo) {
-		super(Axes.toSGVec(location), rad, attachedTo);
-	}
+    public LimitCone(PVector location, float rad, AbstractKusudama attachedTo) {
+        super(Axes.toSGVec(location), rad, attachedTo);
+    }
 
 }

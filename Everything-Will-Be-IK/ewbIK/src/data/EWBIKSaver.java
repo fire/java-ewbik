@@ -19,90 +19,90 @@ import asj.SaveManager;
 
 public class EWBIKSaver extends SaveManager {
 
-	WeakHashMap<Saveable, Boolean> saveables = new WeakHashMap<Saveable, Boolean>();
+    WeakHashMap<Saveable, Boolean> saveables = new WeakHashMap<Saveable, Boolean>();
 
-	public static String currentFilePath;
-	public static String tempDir;
+    public static String currentFilePath;
+    public static String tempDir;
 
-	public void saveArmature(IK.AbstractArmature toSave, String path) {
-		clearSaveState();
-		((IK.AbstractArmature) toSave).notifyOfSaveIntent(this);
-		saveAs(path);
-		notifyCurrentSaveablesOfSaveCompletion();
-	}
+    public void saveArmature(IK.AbstractArmature toSave, String path) {
+        clearSaveState();
+        ((IK.AbstractArmature) toSave).notifyOfSaveIntent(this);
+        saveAs(path);
+        notifyCurrentSaveablesOfSaveCompletion();
+    }
 
-	public void addToSaveState(Saveable saveObj) {
-		saveables.put(saveObj, true);
-	}
+    public void addToSaveState(Saveable saveObj) {
+        saveables.put(saveObj, true);
+    }
 
-	public void removeFromSaveState(Saveable saveObj) {
-		saveables.remove(saveObj);
-	}
+    public void removeFromSaveState(Saveable saveObj) {
+        saveables.remove(saveObj);
+    }
 
-	public void clearSaveState() {
-		saveables.clear();
-	}
+    public void clearSaveState() {
+        saveables.clear();
+    }
 
-	public void notifyCurrentSaveablesOfSaveCompletion() {
-		ArrayList<Saveable> sarr = new ArrayList<>(saveables.keySet());
-		for (Saveable s : sarr) {
-			s.notifyOfSaveCompletion(this);
-		}
-		clearSaveState();
-	}
+    public void notifyCurrentSaveablesOfSaveCompletion() {
+        ArrayList<Saveable> sarr = new ArrayList<>(saveables.keySet());
+        for (Saveable s : sarr) {
+            s.notifyOfSaveCompletion(this);
+        }
+        clearSaveState();
+    }
 
-	public JSONObject getSaveObject() {
+    public JSONObject getSaveObject() {
 
-		JSONArray axesJSON = new JSONArray();
-		JSONArray armaturesJSON = new JSONArray();
-		JSONArray bonesJSON = new JSONArray();
-		JSONArray kusudamaJSON = new JSONArray();
-		JSONArray limitConeJSON = new JSONArray();
-		JSONArray IKPinsJSON = new JSONArray();
+        JSONArray axesJSON = new JSONArray();
+        JSONArray armaturesJSON = new JSONArray();
+        JSONArray bonesJSON = new JSONArray();
+        JSONArray kusudamaJSON = new JSONArray();
+        JSONArray limitConeJSON = new JSONArray();
+        JSONArray IKPinsJSON = new JSONArray();
 
-		Collection<Saveable> sk = saveables.keySet();
+        Collection<Saveable> sk = saveables.keySet();
 
-		JSONObject saveObject = new JSONObject();
+        JSONObject saveObject = new JSONObject();
 
-		for (Saveable s : sk) {
-			JSONObject jsonObj = s.getSaveJSON(this);
-			if (jsonObj != null) {
-				if (math.floatV.AbstractAxes.class.isAssignableFrom(s.getClass()))
-					axesJSON.append(jsonObj);
-				if (IK.AbstractArmature.class.isAssignableFrom(s.getClass()))
-					armaturesJSON.append(jsonObj);
-				if (IK.AbstractBone.class.isAssignableFrom(s.getClass()))
-					bonesJSON.append(jsonObj);
-				if (IK.AbstractKusudama.class.isAssignableFrom(s.getClass()))
-					kusudamaJSON.append(jsonObj);
-				if (IK.AbstractLimitCone.class.isAssignableFrom(s.getClass()))
-					limitConeJSON.append(jsonObj);
-				if (IK.AbstractIKPin.class.isAssignableFrom(s.getClass()))
-					IKPinsJSON.append(jsonObj);
-			}
-		}
+        for (Saveable s : sk) {
+            JSONObject jsonObj = s.getSaveJSON(this);
+            if (jsonObj != null) {
+                if (math.floatV.AbstractAxes.class.isAssignableFrom(s.getClass()))
+                    axesJSON.append(jsonObj);
+                if (IK.AbstractArmature.class.isAssignableFrom(s.getClass()))
+                    armaturesJSON.append(jsonObj);
+                if (IK.AbstractBone.class.isAssignableFrom(s.getClass()))
+                    bonesJSON.append(jsonObj);
+                if (IK.AbstractKusudama.class.isAssignableFrom(s.getClass()))
+                    kusudamaJSON.append(jsonObj);
+                if (IK.AbstractLimitCone.class.isAssignableFrom(s.getClass()))
+                    limitConeJSON.append(jsonObj);
+                if (IK.AbstractIKPin.class.isAssignableFrom(s.getClass()))
+                    IKPinsJSON.append(jsonObj);
+            }
+        }
 
-		saveObject.setJSONArray("axes", axesJSON);
-		saveObject.setJSONArray("armatures", armaturesJSON);
-		saveObject.setJSONArray("bones", bonesJSON);
-		saveObject.setJSONArray("kusudamas", kusudamaJSON);
-		saveObject.setJSONArray("limitCones", limitConeJSON);
-		saveObject.setJSONArray("IKPins", IKPinsJSON);
-		return saveObject;
-	}
+        saveObject.setJSONArray("axes", axesJSON);
+        saveObject.setJSONArray("armatures", armaturesJSON);
+        saveObject.setJSONArray("bones", bonesJSON);
+        saveObject.setJSONArray("kusudamas", kusudamaJSON);
+        saveObject.setJSONArray("limitCones", limitConeJSON);
+        saveObject.setJSONArray("IKPins", IKPinsJSON);
+        return saveObject;
+    }
 
-	public String getSaveString() {
-		String resultString = getSaveObject().toString();
-		return resultString;
-	}
+    public String getSaveString() {
+        String resultString = getSaveObject().toString();
+        return resultString;
+    }
 
-	private void saveAs(String savePath) {
-		save(savePath);
-	}
+    private void saveAs(String savePath) {
+        save(savePath);
+    }
 
-	public void save(String savePath) {
-		JSONObject fileContent = getSaveObject();
-		StringFuncs.saveJSONObject(fileContent, savePath);
-	}
+    public void save(String savePath) {
+        JSONObject fileContent = getSaveObject();
+        StringFuncs.saveJSONObject(fileContent, savePath);
+    }
 
 }

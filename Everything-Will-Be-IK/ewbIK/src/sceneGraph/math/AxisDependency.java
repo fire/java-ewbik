@@ -21,14 +21,41 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 package math.floatV;
 
 
-
 public interface AxisDependency {
-	default void emancipate() {};
-	default void axisSlipWarning(AbstractAxes globalPriorToSlipping, AbstractAxes globalAfterSlipping, AbstractAxes thisAxis) {};
-	default void axisSlipCompletionNotice(AbstractAxes globalPriorToSlipping, AbstractAxes globalAfterSlipping, AbstractAxes thisAxis) {};
-	default void  parentChangeWarning(AbstractAxes warningBy, AbstractAxes oldParent, AbstractAxes intendedParent, Object requestedBy) {};
-	default void parentChangeCompletionNotice(AbstractAxes warningBy, AbstractAxes oldParent, AbstractAxes intendedParent, Object requestedBy) {}; 
-	default void markDirty() {};
-	default void markDependentsDirty() {};
-	public AbstractAxes getParentAxes();
+    default void emancipate() {
+    }
+
+    ;
+
+    default void axisSlipWarning(AbstractAxes globalPriorToSlipping, AbstractAxes globalAfterSlipping, AbstractAxes thisAxis) {
+    }
+
+    ;
+
+    default void axisSlipCompletionNotice(AbstractAxes globalPriorToSlipping, AbstractAxes globalAfterSlipping, AbstractAxes thisAxis) {
+    }
+
+    ;
+
+    default void parentChangeWarning(AbstractAxes warningBy, AbstractAxes oldParent, AbstractAxes intendedParent, Object requestedBy) {
+    }
+
+    ;
+
+    default void parentChangeCompletionNotice(AbstractAxes warningBy, AbstractAxes oldParent, AbstractAxes intendedParent, Object requestedBy) {
+    }
+
+    ;
+
+    default void markDirty() {
+    }
+
+    ;
+
+    default void markDependentsDirty() {
+    }
+
+    ;
+
+    public AbstractAxes getParentAxes();
 }

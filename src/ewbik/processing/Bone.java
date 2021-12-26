@@ -38,238 +38,237 @@ import math.floatV.Vec3f;
  * AbstractBone. Please refer to the {@link AbstractBone AbstractBone docs.}
  */
 public class Bone extends AbstractBone {
-	public static int renderMode = 1;
-	public static boolean drawKusudamas = false;
+    public static int renderMode = 1;
+    public static boolean drawKusudamas = false;
 
-	// default constructor required for file loader to work.
-	public Bone() {
-	};
+    // default constructor required for file loader to work.
+    public Bone() {
+    }
 
-	/**
-	 * 
-	 * @param par             the parent bone for this bone
-	 * @param tipHeading      the orienational heading of this bone (global vs
-	 *                        relative coords specified in coordinateType)
-	 * @param rollHeading     axial rotation heading of the bone (it's z-axis)
-	 * @param inputTag        some user specified name for the bone, if desired
-	 * @param inputBoneHeight bone length
-	 * @param coordinateType
-	 * @throws NullParentForBoneException
-	 */
-	public Bone(Bone par, // parent bone
-			PVector tipHeading, // the orienational heading of this bone (global vs relative coords specified in
-								// coordinateType)
-			PVector rollHeading, // axial rotation heading of the bone (it's z-axis)
-			String inputTag, // some user specified name for the bone, if desired
-			float inputBoneHeight, // bone length
-			frameType coordinateType) throws NullParentForBoneException {
-		super(
-				par,
-				Axes.toSGVec(tipHeading),
-				Axes.toSGVec(rollHeading),
-				inputTag,
-				inputBoneHeight,
-				coordinateType);
-	}
+    ;
 
-	/**
-	 * 
-	 * @param armature       the parent armature for this bone
-	 * @param tipHeading     the orienational heading of this bone (global vs
-	 *                       relative coords specified in coordinateType)
-	 * @param rollHeading    axial rotation heading of the bone (it's z-axis)
-	 * @param inputTag       some user specified name for the bone, if desired
-	 * @param boneHeight     bone length
-	 * @param coordinateType
-	 * @throws NullParentForBoneException
-	 */
-	public Bone(
-			AbstractArmature armature,
-			PVector tipHeading,
-			PVector rollHeading,
-			String inputTag,
-			float boneHeight,
-			frameType coordinateType) {
-		super(
-				armature,
-				Axes.toSGVec(tipHeading),
-				Axes.toSGVec(rollHeading),
-				inputTag,
-				boneHeight,
-				coordinateType);
-	}
+    /**
+     * @param par             the parent bone for this bone
+     * @param tipHeading      the orienational heading of this bone (global vs
+     *                        relative coords specified in coordinateType)
+     * @param rollHeading     axial rotation heading of the bone (it's z-axis)
+     * @param inputTag        some user specified name for the bone, if desired
+     * @param inputBoneHeight bone length
+     * @param coordinateType
+     * @throws NullParentForBoneException
+     */
+    public Bone(Bone par, // parent bone
+                PVector tipHeading, // the orienational heading of this bone (global vs relative coords specified in
+                // coordinateType)
+                PVector rollHeading, // axial rotation heading of the bone (it's z-axis)
+                String inputTag, // some user specified name for the bone, if desired
+                float inputBoneHeight, // bone length
+                frameType coordinateType) throws NullParentForBoneException {
+        super(
+                par,
+                Axes.toSGVec(tipHeading),
+                Axes.toSGVec(rollHeading),
+                inputTag,
+                inputBoneHeight,
+                coordinateType);
+    }
 
-	/**
-	 * Creates a new bone of specified length emerging from the parentBone.
-	 * The new bone extends in the same exact direction as the parentBone.
-	 * You can then manipulate its orientation using something like
-	 * rotAboutFrameX(), rotAboutFrameY(), or rotAboutFrameZ().
-	 * You can also change its frame of rotation using setFrameOfRotation(Axes
-	 * rotationFrame);
-	 * 
-	 * @param par             the parent bone to which this bone is attached.
-	 * @param inputTag        some user specified name for the bone, if desired
-	 * @param inputBoneHeight bone length
-	 */
+    /**
+     * @param armature       the parent armature for this bone
+     * @param tipHeading     the orienational heading of this bone (global vs
+     *                       relative coords specified in coordinateType)
+     * @param rollHeading    axial rotation heading of the bone (it's z-axis)
+     * @param inputTag       some user specified name for the bone, if desired
+     * @param boneHeight     bone length
+     * @param coordinateType
+     * @throws NullParentForBoneException
+     */
+    public Bone(
+            AbstractArmature armature,
+            PVector tipHeading,
+            PVector rollHeading,
+            String inputTag,
+            float boneHeight,
+            frameType coordinateType) {
+        super(
+                armature,
+                Axes.toSGVec(tipHeading),
+                Axes.toSGVec(rollHeading),
+                inputTag,
+                boneHeight,
+                coordinateType);
+    }
 
-	public Bone(AbstractBone par, // parent bone
-			String inputTag, // some user specified name for the bone, if desired
-			float inputBoneHeight // bone length
-	) {
-		super(par, 0, 0, 0, inputTag, inputBoneHeight);
-	}
+    /**
+     * Creates a new bone of specified length emerging from the parentBone.
+     * The new bone extends in the same exact direction as the parentBone.
+     * You can then manipulate its orientation using something like
+     * rotAboutFrameX(), rotAboutFrameY(), or rotAboutFrameZ().
+     * You can also change its frame of rotation using setFrameOfRotation(Axes
+     * rotationFrame);
+     *
+     * @param par             the parent bone to which this bone is attached.
+     * @param inputTag        some user specified name for the bone, if desired
+     * @param inputBoneHeight bone length
+     */
 
-	/**
-	 * 
-	 * @param par             the parent bone to which this bone is attached.
-	 * @param xAngle          how much the bone should be pitched relative to its
-	 *                        parent bone
-	 * @param yAngle          how much the bone should be rolled relative to its
-	 *                        parent bone
-	 * @param zAngle          how much the bone should be yawed relative to its
-	 *                        parent bone
-	 * @param inputTag        some user specified name for the bone, if desired
-	 * @param inputBoneHeight bone length
-	 */
-	public Bone(AbstractBone par, // parent bone
-			float xAngle, // how much the bone should be pitched relative to its parent bone
-			float yAngle, // how much the bone should be rolled relative to its parent bone
-			float zAngle, // how much the bone should be yawed relative to its parent bone
-			String inputTag, // some user specified name for the bone, if desired
-			float inputBoneHeight // bone length
-	) {
-		super(par, xAngle, yAngle, zAngle, inputTag, inputBoneHeight);
-	}
+    public Bone(AbstractBone par, // parent bone
+                String inputTag, // some user specified name for the bone, if desired
+                float inputBoneHeight // bone length
+    ) {
+        super(par, 0, 0, 0, inputTag, inputBoneHeight);
+    }
 
-	@Override
-	protected void generateAxes(Vec3f<?> origin, Vec3f<?> x, Vec3f<?> y, Vec3f<?> z) {
-		this.localAxes = new Axes(origin, x, y, z);
-	}
+    /**
+     * @param par             the parent bone to which this bone is attached.
+     * @param xAngle          how much the bone should be pitched relative to its
+     *                        parent bone
+     * @param yAngle          how much the bone should be rolled relative to its
+     *                        parent bone
+     * @param zAngle          how much the bone should be yawed relative to its
+     *                        parent bone
+     * @param inputTag        some user specified name for the bone, if desired
+     * @param inputBoneHeight bone length
+     */
+    public Bone(AbstractBone par, // parent bone
+                float xAngle, // how much the bone should be pitched relative to its parent bone
+                float yAngle, // how much the bone should be rolled relative to its parent bone
+                float zAngle, // how much the bone should be yawed relative to its parent bone
+                String inputTag, // some user specified name for the bone, if desired
+                float inputBoneHeight // bone length
+    ) {
+        super(par, xAngle, yAngle, zAngle, inputTag, inputBoneHeight);
+    }
 
-	public PVector getBase() {
-		SGVec_3f base = (SGVec_3f) super.getBase_();
-		return new PVector(base.x, base.y, base.z);
-	}
+    @Override
+    protected void generateAxes(Vec3f<?> origin, Vec3f<?> x, Vec3f<?> y, Vec3f<?> z) {
+        this.localAxes = new Axes(origin, x, y, z);
+    }
 
-	public PVector getTip() {
-		SGVec_3f tip = (SGVec_3f) super.getTip_();
-		return new PVector(tip.x, tip.y, tip.z);
-	}
+    public PVector getBase() {
+        SGVec_3f base = (SGVec_3f) super.getBase_();
+        return new PVector(base.x, base.y, base.z);
+    }
 
-	@Override
-	protected IKPin createAndReturnPinOnAxes(AbstractAxes on) {
-		return new IKPin(
-				(Axes) on,
-				true,
-				this);
-	}
+    public PVector getTip() {
+        SGVec_3f tip = (SGVec_3f) super.getTip_();
+        return new PVector(tip.x, tip.y, tip.z);
+    }
 
-	public void enablePin(PVector pin) {
-		super.enablePin_(new SGVec_3f(pin.x, pin.y, pin.z));
-	}
+    @Override
+    protected IKPin createAndReturnPinOnAxes(AbstractAxes on) {
+        return new IKPin(
+                (Axes) on,
+                true,
+                this);
+    }
 
-	public void setPin(PVector pin) {
-		super.setPin_(new SGVec_3f(pin.x, pin.y, pin.z));
-	}
+    public void enablePin(PVector pin) {
+        super.enablePin_(new SGVec_3f(pin.x, pin.y, pin.z));
+    }
 
-	/**
-	 * @return In the case of this out-of-the-box class, getPin() returns a IKVector
-	 *         indicating
-	 *         the spatial target of the pin.
-	 */
-	public PVector getPinLocation() {
-		if (pin == null)
-			return null;
-		else {
-			SGVec_3f loc = (SGVec_3f) pin.getLocation_();
-			return new PVector(loc.x, loc.y, loc.z);
-		}
-	}
+    public void setPin(PVector pin) {
+        super.setPin_(new SGVec_3f(pin.x, pin.y, pin.z));
+    }
 
-	public void drawMeAndChildren(PGraphics pg, int boneCol, float pinSize) {
+    /**
+     * @return In the case of this out-of-the-box class, getPin() returns a IKVector
+     * indicating
+     * the spatial target of the pin.
+     */
+    public PVector getPinLocation() {
+        if (pin == null)
+            return null;
+        else {
+            SGVec_3f loc = (SGVec_3f) pin.getLocation_();
+            return new PVector(loc.x, loc.y, loc.z);
+        }
+    }
 
-		if (this.constraints != null && drawKusudamas) {
-			pg.pushMatrix();
-			((Kusudama) constraints).drawMe(pg, boneCol, pinSize);
-			pg.popMatrix();
-		}
+    public void drawMeAndChildren(PGraphics pg, int boneCol, float pinSize) {
 
-		PMatrix localMat = localAxes().getLocalPMatrix();
-		pg.applyMatrix(localMat);
+        if (this.constraints != null && drawKusudamas) {
+            pg.pushMatrix();
+            ((Kusudama) constraints).drawMe(pg, boneCol, pinSize);
+            pg.popMatrix();
+        }
 
-		pg.beginShape(PConstants.TRIANGLE_FAN);
-		if (renderMode == 1) {
-			pg.fill(pg.color(0, 255 - boneCol, boneCol));
-		} else {
-			pg.fill(pg.color(0, 0, 0));
-		}
-		// pg.stroke(lineColor);
-		float circumference = (float) (boneHeight / 8f);
-		pg.noStroke();
-		pg.vertex(0, (float) boneHeight, 0);
-		pg.vertex(circumference, circumference, 0);
-		pg.vertex(0, circumference, circumference);
-		pg.vertex(-circumference, circumference, 0);
-		pg.vertex(0, circumference, -circumference);
-		pg.vertex(circumference, circumference, 0);
-		pg.endShape();
-		pg.beginShape(PConstants.TRIANGLE_FAN);
-		pg.vertex(0, 0, 0);
-		pg.vertex(0, circumference, -circumference);
-		pg.vertex(circumference, circumference, 0);
-		pg.vertex(0, circumference, circumference);
-		pg.vertex(-circumference, circumference, 0);
-		pg.vertex(0, circumference, -circumference);
-		pg.endShape();
-		pg.emissive(0, 0, 0);
+        PMatrix localMat = localAxes().getLocalPMatrix();
+        pg.applyMatrix(localMat);
 
-		for (Bone b : getChildren()) {
-			pg.pushMatrix();
-			b.drawMeAndChildren(pg, boneCol + 10, pinSize);
-			pg.popMatrix();
-		}
+        pg.beginShape(PConstants.TRIANGLE_FAN);
+        if (renderMode == 1) {
+            pg.fill(pg.color(0, 255 - boneCol, boneCol));
+        } else {
+            pg.fill(pg.color(0, 0, 0));
+        }
+        // pg.stroke(lineColor);
+        float circumference = (float) (boneHeight / 8f);
+        pg.noStroke();
+        pg.vertex(0, (float) boneHeight, 0);
+        pg.vertex(circumference, circumference, 0);
+        pg.vertex(0, circumference, circumference);
+        pg.vertex(-circumference, circumference, 0);
+        pg.vertex(0, circumference, -circumference);
+        pg.vertex(circumference, circumference, 0);
+        pg.endShape();
+        pg.beginShape(PConstants.TRIANGLE_FAN);
+        pg.vertex(0, 0, 0);
+        pg.vertex(0, circumference, -circumference);
+        pg.vertex(circumference, circumference, 0);
+        pg.vertex(0, circumference, circumference);
+        pg.vertex(-circumference, circumference, 0);
+        pg.vertex(0, circumference, -circumference);
+        pg.endShape();
+        pg.emissive(0, 0, 0);
 
-		pg.strokeWeight(4f);
-		if (this.isPinned()) {
-			((Axes) this.getIKPin().getAxes()).drawMe(pg, pinSize);
-		}
+        for (Bone b : getChildren()) {
+            pg.pushMatrix();
+            b.drawMeAndChildren(pg, boneCol + 10, pinSize);
+            pg.popMatrix();
+        }
 
-		if (this.isPinned()) {
-			pg.strokeWeight(2f);
-			localAxes().drawMe(pg, pinSize);
-		}
-	}
+        pg.strokeWeight(4f);
+        if (this.isPinned()) {
+            ((Axes) this.getIKPin().getAxes()).drawMe(pg, pinSize);
+        }
 
-	public IKPin getIKPin() {
-		return (IKPin) this.pin;
-	}
+        if (this.isPinned()) {
+            pg.strokeWeight(2f);
+            localAxes().drawMe(pg, pinSize);
+        }
+    }
 
-	/**
-	 * Get the Axes associated with this bone.
-	 */
-	public Axes localAxes() {
-		return (Axes) this.localAxes;
-	}
+    public IKPin getIKPin() {
+        return (IKPin) this.pin;
+    }
 
-	/**
-	 * Get the Axes relative to which this bone's rotations are defined. (If the
-	 * bone has constraints, this will be the
-	 * constraint Axes)
-	 * 
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public Axes getMajorRotationAxes() {
-		return (Axes) this.majorRotationAxes;
-	}
+    /**
+     * Get the Axes associated with this bone.
+     */
+    public Axes localAxes() {
+        return (Axes) this.localAxes;
+    }
 
-	@SuppressWarnings("unchecked")
-	public ArrayList<Bone> getChildren() {
-		return (ArrayList<Bone>) super.getChildren();
-	}
+    /**
+     * Get the Axes relative to which this bone's rotations are defined. (If the
+     * bone has constraints, this will be the
+     * constraint Axes)
+     *
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public Axes getMajorRotationAxes() {
+        return (Axes) this.majorRotationAxes;
+    }
 
-	public static void setDrawKusudamas(boolean draw) {
-		drawKusudamas = draw;
-	}
+    @SuppressWarnings("unchecked")
+    public ArrayList<Bone> getChildren() {
+        return (ArrayList<Bone>) super.getChildren();
+    }
+
+    public static void setDrawKusudamas(boolean draw) {
+        drawKusudamas = draw;
+    }
 
 }
