@@ -9,9 +9,9 @@ import processing.event.MouseEvent;
 
 import java.util.ArrayList;
 
-public class IKTest extends PApplet {
+public class IK extends PApplet {
     public static void main(String[] args) {
-        PApplet.main("samples.IKTest");
+        PApplet.main("samples.IK");
     }
 
     public void settings() {
