@@ -15,7 +15,7 @@ dependencies {
 }
 
 application {
-	mainClassName = 'ItemHolding_SinglePrecision'
+	mainClassName = 'samples.ItemHolding'
 }
 
 version = '0.0.1'
