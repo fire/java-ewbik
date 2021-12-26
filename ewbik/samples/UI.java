@@ -15,7 +15,6 @@ public class UI {
     PApplet pa;
     PGraphics display, stencil;
     PShader blurshader;
-    public boolean multipass = false;
 
     public UI(PApplet p, boolean multipassAllowed) {
         pa = p;
@@ -29,7 +28,6 @@ public class UI {
             blurshader = pa.loadShader("ewbik/processing/blur-sep.glsl");
             blurshader.set("blurSize", 20);
             blurshader.set("sigma", 9f);
-            multipass = true;
         }
         Kusudama.kusudamaShader = pa.loadShader("ewbik/processing/kusudama.glsl",
                 "ewbik/processing/kusudama_vert.glsl");
@@ -180,7 +178,6 @@ public class UI {
                           Armature armature,
                           String usageInstructions,
                           IKPin activePin, Axes cubeAxes, boolean cubeEnabled) {
-        if (multipass) {
             Kusudama.enableMultiPass(true);
             currentDrawSurface = stencil;
 
@@ -214,20 +211,7 @@ public class UI {
             drawInstructions(pa.g, usageInstructions, zoomScalar);
             drawPins(pa.g, activePin, drawSize, zoomScalar, cubeEnabled, cubeAxes);
             drawInstructions(pa.g, usageInstructions, zoomScalar);
-        } else {
-            Kusudama.enableMultiPass(false);
-            currentDrawSurface = pa.g;
-            setSceneAndCamera(pa.g, zoomScalar);
-            pa.background(80, 150, 190);
-            drawPass(1, drawSize, additionalDraw, pa.g, armature);
-            pa.resetMatrix();
-            drawPins(pa.g, activePin, zoomScalar, drawSize, cubeEnabled, cubeAxes);
-            pa.resetMatrix();
-            float cx = pa.width;
-            float cy = pa.height;
-            pa.ortho(-cx / 2f, cx / 2f, -cy / 2f, cy / 2f, -1000, 1000);
-            drawInstructions(pa.g, usageInstructions, zoomScalar);
-        }
+
     }
 
     PVector mouse = new PVector(0, 0, 0);
@@ -236,8 +220,7 @@ public class UI {
     PVector up = new PVector(0, 1, 0);
 
     public void toggleMultipass() {
-        multipass = !multipass;
-        if (stencil == null && multipass) {
+        if (stencil == null) {
             stencil = pa.createGraphics(1200, 900, PConstants.P3D);
             display = pa.createGraphics(1200, 900, PConstants.P3D);
             stencil.noSmooth();
