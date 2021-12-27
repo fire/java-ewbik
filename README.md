@@ -26,3 +26,7 @@ Please let me know if you find bugs you can't fix. Please commit back changes fo
 1. Add the openjdk bin folder to path.
 1. `gradle installDist`
 1. `.\build\install\java-ewbik\bin\java-ewbik.bat`
+
+## See also
+
+https://github.com/godot-extended-libraries/ewbik
