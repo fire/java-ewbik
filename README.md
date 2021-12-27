@@ -1,4 +1,4 @@
-# JAVA EWBIK is a robust Inverse Kinematics library.  
+# EWBIK is a robust Inverse Kinematics library.  
   
 See here for a demo: https://youtu.be/y_o34kOx_FA It relies on a novel (I'm still writing an explainer) highly stable generalization of CCD.  
   
