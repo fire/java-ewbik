@@ -18,7 +18,7 @@ application {
 	mainClassName = 'samples.ItemHolding'
 }
 
-version = '0.0.1'
+version = '0.0.1-' + new Date().format("yyyyMMdd'T'HHmmss'Z'", TimeZone.getTimeZone("UTC")) 
 
 sourceSets {
     main {
