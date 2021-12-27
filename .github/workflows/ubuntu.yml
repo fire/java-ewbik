@@ -22,11 +22,11 @@ jobs:
         arguments: build installDist
     - name: Copy licenses
       run: |
-        cp LICENSE build/install/ewbik-workspace/
+        cp LICENSE build/install/java-ewbik
       shell: bash
     - uses: papeloto/action-zip@v1
       with:
-        files: build/install/ewbik-workspace
+        files: build/install/java-ewbik
         recursive: false
         dest: fbx2gltf-linux.zip
     - uses: "marvinpinto/action-automatic-releases@latest"

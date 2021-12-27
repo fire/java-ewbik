@@ -16,18 +16,18 @@ jobs:
       with:
         java-version: '11'
         distribution: 'adopt'
-        
+
     - name: Build with Gradle
       uses: gradle/gradle-build-action@4137be6a8bf7d7133955359dbd952c0ca73b1021
       with:
         arguments: build installDist
     - name: Copy licenses
       run: |
-        cp LICENSE build/install/ewbik-workspace/
+        cp LICENSE build/install/java-ewbik
       shell: bash
     - uses: papeloto/action-zip@v1
       with:
-        files: build/install/ewbik-workspace
+        files: build/install/java-ewbik
         recursive: false
         dest: fbx2gltf-windows.zip
     - uses: "marvinpinto/action-automatic-releases@latest"
