@@ -1,0 +1,41 @@
+name: "Build EWBIK"
+on: 
+  push:
+    branches:
+      - 'master'
+
+concurrency:
+  group: ci-${{github.actor}}-${{github.head_ref || github.run_number}}-${{github.ref}}-build
+  cancel-in-progress: true
+
+jobs:
+  build-win-10:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Conan build
+        run: |
+          gradle distZip
+        shell: cmd
+
+      - name: Copy licenses
+        run: |
+          cp LICENSE build/install/ewbik-workspace/
+        shell: bash
+
+      - uses: papeloto/action-zip@v1
+        with:
+          files: build/install/ewbik-workspace
+          recursive: false
+          dest: fbx2gltf-windows.zip
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: latest-windows
+          prerelease: true
+          title: EWBIK Windows 11
+          files: |
+            ewbik-windows.zip
