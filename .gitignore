@@ -2,3 +2,7 @@
 .gradle/
 build/
 bin/
+
+blur-sep.glsl
+
+kusudama.glsl
