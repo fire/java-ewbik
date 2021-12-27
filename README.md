@@ -1,6 +1,6 @@
 # Everything-WIll-Be-IK 'Everything Will Be IK' is a robust Inverse Kinematics library.  
   
-See here for a demo: https://youtu.be/y\_o34kOx\_FA It relies on a novel (I'm still writing an explainer) highly stable generalization of CCD.  
+See here for a demo: https://youtu.be/y_o34kOx_FA It relies on a novel (I'm still writing an explainer) highly stable generalization of CCD.  
   
 **Features:**
 
@@ -26,10 +26,4 @@ Please let me know if you find bugs you can't fix. Please commit back changes fo
 1. Install openjdk. `scoop install openjdk gradle`
 1. Add the openjdk bin folder to path.
 1. `gradle installDist`
-1. `.\build\install\ewbik-workspace\bin\ewbik-workspace.bat`
-
-## Other platform support
-
-I was unable to launch this from PopOS 21.10.
-
-No version of Java JDK worked.
+1. `.\build\install\java-ewbik\bin\java-ewbik.bat`
