@@ -20,7 +20,7 @@ Please let me know if you find bugs you can't fix. Please commit back changes fo
   
 **DISCLAIMER: This code was intended primarily for graphics applications and has not been thoroughly tested for use in robotics. Until this disclaimer disappears (or you have independently verified it is suitable for your purposes) please do not use this code to command any servos that can put out enough torque to cause damage to people, property, or other components in your build.**
 
-## How to use on Win10
+## How to use on Microsoft Windows 11
 
 1. Install openjdk. `scoop bucket add java`
 1. Install openjdk. `scoop install openjdk gradle`
