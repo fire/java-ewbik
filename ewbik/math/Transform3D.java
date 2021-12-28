@@ -3,15 +3,15 @@ package ewbik.math;
 import ewbik.asj.LoadManager;
 import ewbik.asj.data.JSONObject;
 
-public class CartesianAxes extends AbstractAxes {
+public class Transform3D extends AbstractAxes {
 
 
-    public CartesianAxes(AbstractBasis globalBasis, AbstractAxes parent) {
+    public Transform3D(AbstractBasis globalBasis, AbstractAxes parent) {
         super(globalBasis, parent);
     }
 
-    public CartesianAxes(Vec3f<?> origin, Vec3f<?> inX, Vec3f<?> inY, Vec3f<?> inZ,
-                         AbstractAxes parent) {
+    public Transform3D(Vec3f<?> origin, Vec3f<?> inX, Vec3f<?> inY, Vec3f<?> inZ,
+                       AbstractAxes parent) {
         super(origin, inX, inY, inZ, parent, true);
         createTempVars(origin);
 
@@ -62,8 +62,8 @@ public class CartesianAxes extends AbstractAxes {
     }
 
     @Override
-    public CartesianAxes getGlobalCopy() {
-        return new CartesianAxes(getGlobalMBasis(), this.getParentAxes());
+    public ewbik.math.Transform3D getGlobalCopy() {
+        return new ewbik.math.Transform3D(getGlobalMBasis(), this.getParentAxes());
     }
 
 
@@ -82,7 +82,7 @@ public class CartesianAxes extends AbstractAxes {
     @Override
     public AbstractAxes freeCopy() {
         AbstractAxes freeCopy =
-                new CartesianAxes(this.getLocalMBasis(),
+                new ewbik.math.Transform3D(this.getLocalMBasis(),
                         null);
         freeCopy.getLocalMBasis().adoptValues(this.localMBasis);
         freeCopy.markDirty();
@@ -102,9 +102,9 @@ public class CartesianAxes extends AbstractAxes {
      * @return
      */
     @Override
-    public CartesianAxes attachedCopy(boolean slipAware) {
+    public ewbik.math.Transform3D attachedCopy(boolean slipAware) {
         this.updateGlobal();
-        CartesianAxes copy = new CartesianAxes(getGlobalMBasis(),
+        ewbik.math.Transform3D copy = new ewbik.math.Transform3D(getGlobalMBasis(),
                 this.getParentAxes());
         if (!slipAware) copy.setSlipType(IGNORE);
         copy.getLocalMBasis().adoptValues(this.localMBasis);

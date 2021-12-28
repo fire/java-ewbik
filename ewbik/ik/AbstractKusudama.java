@@ -300,7 +300,7 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
         constraintUpdateNotification();
     }
 
-    // protected CartesianAxes limitLocalAxes;
+    // protected Transform3D limitLocalAxes;
 
     /**
      *

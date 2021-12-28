@@ -25,27 +25,7 @@ import processing.core.PMatrix;
 import processing.core.PMatrix3D;
 import processing.core.PVector;
 
-
-/*
- * This class is a reference implementation showing how to extend AbstractAxes.
- * You can use it as-is if you don't mind working with the Vector representations
- * used by this library. But if you are dropping this library into an existing framework,
- * it is recommended that you extend AbstractAxes to behave as a wrapper
- * that takes your framework's Vector instances as input, and converts them to this
- * library's native implementation before processing, then back into your preferred implementation
- * before returning.
- *
- * If you can think of a better way to handle this that increases extensibility without
- * sacrificing speed, please let me know or contribute a better solution.
- *
- */
-
-/**
- * Note, this class is a concrete implementation of the abstract class AbstractArmature. Please refer to the {@link AbstractAxes AbstractAxes docs.}
- *
- * @param name A label for this armature.
- */
-public class Axes extends CartesianAxes {
+public class Axes extends Transform3D {
     public static int renderMode = 1;
 
 
@@ -239,7 +219,7 @@ public class Axes extends CartesianAxes {
         );
     }
 
-    ////////////////////////?End of wrapper functions
+    //////////////////////// End of wrapper functions
 
     float[][] outMatLocal = new float[4][4];
     float[][] outMatGlobal = new float[4][4];
@@ -316,7 +296,6 @@ public class Axes extends CartesianAxes {
         pg.translate(0, size / 2f, 0);
         pg.box(size / 10f, size, size / 10f);
         pg.popMatrix();
-        //drawRay(pg, y_().getRayScaledTo(size));
         if (renderMode == 1) pg.fill(0, 0, 255);
         else pg.fill(0, 0, 0, 255);
         pg.pushMatrix();
@@ -324,7 +303,6 @@ public class Axes extends CartesianAxes {
         pg.box(size / 10f, size / 10f, size);
         pg.popMatrix();
         pg.popMatrix();
-        //pg.applyMatrix(previous);
     }
 
     public static void drawRay(PGraphics p, Ray3 r) {
