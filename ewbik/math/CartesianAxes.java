@@ -34,18 +34,18 @@ public class CartesianAxes extends AbstractAxes {
         this.updateGlobal();
     }
 
-    public sgRayf x_() {
+    public Ray3 x_() {
         this.updateGlobal();
         return this.getGlobalMBasis().getXRay();
     }
 
 
-    public sgRayf y_() {
+    public Ray3 y_() {
         this.updateGlobal();
         return this.getGlobalMBasis().getYRay();
     }
 
-    public sgRayf z_() {
+    public Ray3 z_() {
         this.updateGlobal();
         return this.getGlobalMBasis().getZRay();
     }

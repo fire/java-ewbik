@@ -23,7 +23,6 @@ import ewbik.ik.AbstractKusudama;
 import ewbik.ik.AbstractLimitCone;
 import ewbik.math.MRotation;
 import ewbik.math.Quaternion;
-import ewbik.math.SGVec_3f;
 import ewbik.math.Vec3f;
 import ewbik.processing.sceneGraph.Axes;
 import processing.core.PConstants;
@@ -119,11 +118,11 @@ public class Kusudama extends AbstractKusudama {
         PMatrix localMat = limitingAxes().getLocalPMatrix();
         p.applyMatrix(localMat);
         float circumference = (float) (attachedTo().getBoneHeight() / 2.5f);
-        SGVec_3f min = new SGVec_3f(0f, 0f, circumference);
-        SGVec_3f current = new SGVec_3f(0f, 0f, circumference);
-        Quaternion minRot = new Quaternion(new SGVec_3f(0, 1, 0), minAxialAngle());
+        ewbik.math.Vector3 min = new ewbik.math.Vector3(0f, 0f, circumference);
+        ewbik.math.Vector3 current = new ewbik.math.Vector3(0f, 0f, circumference);
+        Quaternion minRot = new Quaternion(new ewbik.math.Vector3(0, 1, 0), minAxialAngle());
         float absAngle = minAxialAngle + range;
-        Quaternion maxRot = new Quaternion(new SGVec_3f(0, 1, 0), absAngle);
+        Quaternion maxRot = new Quaternion(new ewbik.math.Vector3(0, 1, 0), absAngle);
 
         float pieces = 20f;
         float granularity = 1f / pieces;
@@ -157,10 +156,10 @@ public class Kusudama extends AbstractKusudama {
         Quaternion alignRot = limitingAxes.getGlobalMBasis().getInverseRotation()
                 .applyTo(attachedTo().localAxes().getGlobalMBasis().rotation);
 
-        Quaternion[] decomposition = alignRot.getSwingTwist(new SGVec_3f(0, 1, 0));
+        Quaternion[] decomposition = alignRot.getSwingTwist(new ewbik.math.Vector3(0, 1, 0));
         float angle = decomposition[1].getAngle() * decomposition[1].getAxis().y;
-        Quaternion zRot = new Quaternion(new SGVec_3f(0, 1, 0), angle);
-        SGVec_3f yaw = new SGVec_3f(0, 0, circumference);
+        Quaternion zRot = new Quaternion(new ewbik.math.Vector3(0, 1, 0), angle);
+        ewbik.math.Vector3 yaw = new ewbik.math.Vector3(0, 0, circumference);
         yaw = zRot.applyToCopy(yaw);
         p.stroke(25, 25, 195);
         p.strokeWeight(4);

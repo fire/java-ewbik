@@ -9,7 +9,6 @@ import ewbik.ik.*;
 import ewbik.math.AbstractAxes;
 import ewbik.math.MRotation;
 import ewbik.math.Quaternion;
-import ewbik.math.SGVec_3f;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -154,8 +153,8 @@ public class EWBIKLoader {
     public <T extends Object> void arrayListFromJSONArray(JSONArray jsonArray, ArrayList<T> list, Class c) {
         for (int i = 0; i < jsonArray.size(); i++) {
             Object item = jsonArray.get(i);
-            if (c == SGVec_3f.class)
-                list.add((T) new SGVec_3f(jsonArray.getJSONArray(i)));
+            if (c == ewbik.math.Vector3.class)
+                list.add((T) new ewbik.math.Vector3(jsonArray.getJSONArray(i)));
             else if (c == Quaternion.class)
                 list.add((T) new Quaternion(jsonArray.getJSONArray(i)));
             else if (c == MRotation.class)

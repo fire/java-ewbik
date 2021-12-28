@@ -18,7 +18,7 @@ package ewbik.math;
 
 /**
  * Encapsulates a general vector. Allows chaining operations by returning a reference to itself in all modification methods. See
- * {@link SGVec_2f} and {@link SGVec_3f} for specific imlementations.
+ * {@link SGVec_2f} and {@link Vector3} for specific imlementations.
  *
  * @author Xoppa
  */

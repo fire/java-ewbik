@@ -23,7 +23,6 @@ import ewbik.ik.AbstractArmature;
 import ewbik.ik.AbstractBone;
 import ewbik.ik.IKExceptions.NullParentForBoneException;
 import ewbik.math.AbstractAxes;
-import ewbik.math.SGVec_3f;
 import ewbik.math.Vec3f;
 import ewbik.processing.sceneGraph.Axes;
 import ewbik.processing.singlePrecision.sceneGraph.*;
@@ -147,12 +146,12 @@ public class Bone extends AbstractBone {
     }
 
     public PVector getBase() {
-        SGVec_3f base = (SGVec_3f) super.getBase_();
+        ewbik.math.Vector3 base = (ewbik.math.Vector3) super.getBase_();
         return new PVector(base.x, base.y, base.z);
     }
 
     public PVector getTip() {
-        SGVec_3f tip = (SGVec_3f) super.getTip_();
+        ewbik.math.Vector3 tip = (ewbik.math.Vector3) super.getTip_();
         return new PVector(tip.x, tip.y, tip.z);
     }
 
@@ -165,11 +164,11 @@ public class Bone extends AbstractBone {
     }
 
     public void enablePin(PVector pin) {
-        super.enablePin_(new SGVec_3f(pin.x, pin.y, pin.z));
+        super.enablePin_(new ewbik.math.Vector3(pin.x, pin.y, pin.z));
     }
 
     public void setPin(PVector pin) {
-        super.setPin_(new SGVec_3f(pin.x, pin.y, pin.z));
+        super.setPin_(new ewbik.math.Vector3(pin.x, pin.y, pin.z));
     }
 
     /**
@@ -181,7 +180,7 @@ public class Bone extends AbstractBone {
         if (pin == null)
             return null;
         else {
-            SGVec_3f loc = (SGVec_3f) pin.getLocation_();
+            ewbik.math.Vector3 loc = (ewbik.math.Vector3) pin.getLocation_();
             return new PVector(loc.x, loc.y, loc.z);
         }
     }

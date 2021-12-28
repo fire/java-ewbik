@@ -698,7 +698,7 @@ public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
         return result;
     }
 
-    public static float dot(SGVec_3f u, SGVec_3f v) {
+    public static float dot(Vector3 u, Vector3 v) {
         return u.dot(v);
     }
 
@@ -724,7 +724,7 @@ public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
     /**
      * Subtract one vector from another and store in another vector
      *
-     * @param target SGVec_3f in which to store the result
+     * @param target Vector3 in which to store the result
      */
     static public <V extends Vec3f<?>> V sub(V v1, V v2) {
         return sub(v1, v2, (V) null);
@@ -758,7 +758,7 @@ public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
     /**
      * Subtract v3 from v1 and store in target
      *
-     * @param target SGVec_3f in which to store the result
+     * @param target Vector3 in which to store the result
      * @return
      */
     static public <V extends Vec3f<?>> V sub(V v1, V v2, V target) {
@@ -773,9 +773,9 @@ public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
     }
 
     /**
-     * @param v1     any variable of type SGVec_3f
-     * @param v2     any variable of type SGVec_3f
-     * @param target SGVec_3f to store the result
+     * @param v1     any variable of type Vector3
+     * @param v2     any variable of type Vector3
+     * @param target Vector3 to store the result
      */
     public static <V extends Vec3f<?>> V cross(V v1, V v2, V target) {
         float crossX = v1.y * v2.z - v2.y * v1.z;
@@ -791,7 +791,7 @@ public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
     }
 
     /**
-     * Linear interpolate between two vectors (returns a new SGVec_3f object)
+     * Linear interpolate between two vectors (returns a new Vector3 object)
      *
      * @param v1 the vector to start from
      * @param v2 the vector to lerp to
@@ -809,9 +809,9 @@ public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
      * <p>
      * ( end auto-generated )
      *
-     * @param v1 the x, y, and z components of a SGVec_3f
-     * @param v2 the x, y, and z components of a SGVec_3f
-     * @webref SGVec_3f:method
+     * @param v1 the x, y, and z components of a Vector3
+     * @param v2 the x, y, and z components of a Vector3
+     * @webref Vector3:method
      * @usage web_application
      * @brief Calculate and return the angle between two vectors
      */

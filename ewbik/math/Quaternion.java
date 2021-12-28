@@ -182,24 +182,24 @@ public class Quaternion {
         return new Quaternion(new MRotation(r.getQ0(), r.getQ1(), r.getQ2(), r.getQ3(), true));
     }
 
-    public sgRayf applyToCopy(sgRayf rIn) {
+    public Ray3 applyToCopy(Ray3 rIn) {
         workingInput[0] = rIn.p2().x - rIn.p1().x;
         workingInput[1] = rIn.p2().y - rIn.p1().y;
         workingInput[2] = rIn.p2().z - rIn.p1().z;
 
         this.rotation.applyTo(workingInput, workingOutput);
-        sgRayf result = rIn.copy();
+        Ray3 result = rIn.copy();
         result.heading(workingOutput);
         return result;
     }
 
-    public sgRayf applyInverseTo(sgRayf rIn) {
+    public Ray3 applyInverseTo(Ray3 rIn) {
         workingInput[0] = rIn.p2().x - rIn.p1().x;
         workingInput[1] = rIn.p2().y - rIn.p1().y;
         workingInput[2] = rIn.p2().z - rIn.p1().z;
 
         this.rotation.applyInverseTo(workingInput, workingOutput);
-        sgRayf result = rIn.copy();
+        Ray3 result = rIn.copy();
         result.p2().add(workingOutput);
         return result;
     }
@@ -254,8 +254,8 @@ public class Quaternion {
         return (float) rotation.getAngle();
     }
 
-    public SGVec_3f getAxis() {
-        SGVec_3f result = new SGVec_3f();
+    public Vector3 getAxis() {
+        Vector3 result = new Vector3();
         getAxis(result);
         return result;
     }
@@ -305,9 +305,9 @@ public class Quaternion {
      * @see <a href=
      * "http://www.euclideanspace.com/maths/geometry/rotations/for/decomposition">calculation</a>
      */
-    public Quaternion[] getSwingTwist(SGVec_3f axis) {
+    public Quaternion[] getSwingTwist(Vector3 axis) {
         Quaternion twistRot = new Quaternion(new MRotation(rotation.getQ0(), rotation.getQ1(), rotation.getQ2(), rotation.getQ3()));
-        final float d = SGVec_3f.dot(twistRot.rotation.getQ1(), twistRot.rotation.getQ2(), twistRot.rotation.getQ3(),
+        final float d = Vector3.dot(twistRot.rotation.getQ1(), twistRot.rotation.getQ2(), twistRot.rotation.getQ3(),
                 axis.x, axis.y, axis.z);
         twistRot.rotation.set(rotation.getQ0(), axis.x * d, axis.y * d, axis.z * d, true);
         if (d < 0)
@@ -444,7 +444,7 @@ public class Quaternion {
      * returns null.
      */
     public static Quaternion instantaneousAvg(Quaternion[] rots, float[] weights) {
-        SGVec_3f accumulatedAxisAngle = new SGVec_3f();
+        Vector3 accumulatedAxisAngle = new Vector3();
         float totalWeight = rots.length;
         if (weights != null) {
             totalWeight = 0f;
@@ -458,7 +458,7 @@ public class Quaternion {
         }
 
         for (int i = 0; i < rots.length; i++) {
-            SGVec_3f axis = rots[i].getAxis();
+            Vector3 axis = rots[i].getAxis();
             float angle = rots[i].getAngle();
             angle /= totalWeight;
             if (weights != null) {

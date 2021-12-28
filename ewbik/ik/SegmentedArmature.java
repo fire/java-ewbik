@@ -51,8 +51,8 @@ public class SegmentedArmature {
     public AbstractAxes debugTipAxes;
     public AbstractAxes debugTargetAxes;
 
-    SGVec_3f[] localizedTargetHeadings;
-    SGVec_3f[] localizedTipHeadings;
+    Vector3[] localizedTargetHeadings;
+    Vector3[] localizedTipHeadings;
     float[] weights;
 
     public SegmentedArmature(AbstractBone rootBone) {
@@ -141,15 +141,15 @@ public class SegmentedArmature {
         for (int i = 0; i < pinSequence.size(); i++) {
             pinnedBones[i] = pinSequence.get(i);
         }
-        localizedTargetHeadings = new SGVec_3f[totalHeadings];
-        localizedTipHeadings = new SGVec_3f[totalHeadings];
+        localizedTargetHeadings = new Vector3[totalHeadings];
+        localizedTipHeadings = new Vector3[totalHeadings];
         weights = new float[totalHeadings];
         int currentHeading = 0;
         for (ArrayList<Float> a : penaltyArray) {
             for (Float ad : a) {
                 weights[currentHeading] = ad;
-                localizedTargetHeadings[currentHeading] = new SGVec_3f();
-                localizedTipHeadings[currentHeading] = new SGVec_3f();
+                localizedTargetHeadings[currentHeading] = new Vector3();
+                localizedTipHeadings[currentHeading] = new Vector3();
                 currentHeading++;
             }
         }
@@ -301,7 +301,7 @@ public class SegmentedArmature {
         return innerPinnedChains;
     }
 
-    public float getManualMSD(SGVec_3f[] locTips, SGVec_3f[] locTargets, float[] weights) {
+    public float getManualMSD(Vector3[] locTips, Vector3[] locTargets, float[] weights) {
         float manualRMSD = 0f;
         float wsum = 0f;
         for (int i = 0; i < locTargets.length; i++) {
@@ -425,8 +425,8 @@ public class SegmentedArmature {
             WorkingBone sb,
             float dampening,
             boolean translate,
-            SGVec_3f[] localizedTipHeadings,
-            SGVec_3f[] localizedTargetHeadings,
+            Vector3[] localizedTipHeadings,
+            Vector3[] localizedTargetHeadings,
             float[] weights,
             QCP qcpOrientationAligner,
             int iteration,
@@ -436,7 +436,7 @@ public class SegmentedArmature {
         Quaternion qcpRot = qcpOrientationAligner.weightedSuperpose(localizedTipHeadings, localizedTargetHeadings, weights,
                 translate);
 
-        SGVec_3f translateBy = qcpOrientationAligner.getTranslation();
+        Vector3 translateBy = qcpOrientationAligner.getTranslation();
         float boneDamp = sb.cosHalfDampen;
 
         if (dampening != -1) {
@@ -469,19 +469,19 @@ public class SegmentedArmature {
             hdx++;
 
             if ((modeCode & AbstractIKPin.XDir) != 0) {
-                sgRayf xTarget = targetAxes.x_().getRayScaledBy(weights[hdx]);
+                Ray3 xTarget = targetAxes.x_().getRayScaledBy(weights[hdx]);
                 localizedTargetHeadings[hdx].set(xTarget.p2()).sub(origin);
                 xTarget.setToInvertedTip(localizedTargetHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
             if ((modeCode & AbstractIKPin.YDir) != 0) {
-                sgRayf yTarget = targetAxes.y_().getRayScaledBy(weights[hdx]);
+                Ray3 yTarget = targetAxes.y_().getRayScaledBy(weights[hdx]);
                 localizedTargetHeadings[hdx] = Vec3f.sub(yTarget.p2(), origin);
                 yTarget.setToInvertedTip(localizedTargetHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
             if ((modeCode & AbstractIKPin.ZDir) != 0) {
-                sgRayf zTarget = targetAxes.z_().getRayScaledBy(weights[hdx]);
+                Ray3 zTarget = targetAxes.z_().getRayScaledBy(weights[hdx]);
                 localizedTargetHeadings[hdx] = Vec3f.sub(zTarget.p2(), origin);
                 zTarget.setToInvertedTip(localizedTargetHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
@@ -507,19 +507,19 @@ public class SegmentedArmature {
             hdx++;
 
             if ((modeCode & AbstractIKPin.XDir) != 0) {
-                sgRayf xTip = tipAxes.x_().getRayScaledBy(scaleBy);
+                Ray3 xTip = tipAxes.x_().getRayScaledBy(scaleBy);
                 localizedTipHeadings[hdx].set(xTip.p2()).sub(origin);
                 xTip.setToInvertedTip(localizedTipHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
             if ((modeCode & AbstractIKPin.YDir) != 0) {
-                sgRayf yTip = tipAxes.y_().getRayScaledBy(scaleBy);
+                Ray3 yTip = tipAxes.y_().getRayScaledBy(scaleBy);
                 localizedTipHeadings[hdx].set(yTip.p2()).sub(origin);
                 yTip.setToInvertedTip(localizedTipHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
             if ((modeCode & AbstractIKPin.ZDir) != 0) {
-                sgRayf zTip = tipAxes.z_().getRayScaledBy(scaleBy);
+                Ray3 zTip = tipAxes.z_().getRayScaledBy(scaleBy);
                 localizedTipHeadings[hdx].set(zTip.p2()).sub(origin);
                 zTip.setToInvertedTip(localizedTipHeadings[hdx + 1]).sub(origin);
                 ;

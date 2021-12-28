@@ -86,10 +86,10 @@ public class Axes extends CartesianAxes {
 
     public Axes() {
         super(
-                new SGVec_3f(0, 0, 0),
-                new SGVec_3f(1, 0, 0),
-                new SGVec_3f(0, 1, 0),
-                new SGVec_3f(0, 0, 1),
+                new Vector3(0, 0, 0),
+                new Vector3(1, 0, 0),
+                new Vector3(0, 1, 0),
+                new Vector3(0, 0, 1),
                 (AbstractAxes) null
         );
     }
@@ -114,12 +114,12 @@ public class Axes extends CartesianAxes {
     }
 
 
-    public static SGVec_3f toSGVec(PVector ev) {
-        return new SGVec_3f(ev.x, ev.y, ev.z);
+    public static Vector3 toSGVec(PVector ev) {
+        return new Vector3(ev.x, ev.y, ev.z);
     }
 
-    public static sgRayf toSgRay(ewbik.processing.singlePrecision.sceneGraph.Ray er) {
-        return new sgRayf(
+    public static Ray3 toSgRay(ewbik.processing.singlePrecision.sceneGraph.Ray er) {
+        return new Ray3(
                 toSGVec(er.p1),
                 toSGVec(er.p2)
         );
@@ -228,7 +228,7 @@ public class Axes extends CartesianAxes {
     }
 
     public void setToLocalOf(PVector global_input, PVector local_output) {
-        SGVec_3f tempVec = new SGVec_3f();
+        Vector3 tempVec = new Vector3();
         super.setToLocalOf(
                 toSGVec(global_input),
                 tempVec
@@ -327,11 +327,11 @@ public class Axes extends CartesianAxes {
         //pg.applyMatrix(previous);
     }
 
-    public static void drawRay(PGraphics p, sgRayf r) {
+    public static void drawRay(PGraphics p, Ray3 r) {
         p.line(r.p1().x, r.p1().y, r.p1().z, r.p2().x, r.p2().y, r.p2().z);
     }
 
-    public static void drawPoint(PGraphics p, SGVec_3f pt) {
+    public static void drawPoint(PGraphics p, Vector3 pt) {
         p.point(pt.x, pt.y, pt.z);
     }
 

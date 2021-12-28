@@ -507,7 +507,7 @@ public abstract class AbstractArmature implements Saveable {
     // debug code -- use to set a minimum distance an effector must move
     // in order to trigger a chain iteration
     float debugMag = 5f;
-    SGVec_3f lastTargetPos = new SGVec_3f();
+    Vector3 lastTargetPos = new Vector3();
 
     /**
      * currently unused

@@ -25,13 +25,13 @@ public abstract class AbstractBasis {
     public Vec3f<?> translate;
 
 
-    protected Vec3f<?> xBase; //= new SGVec_3f(1,0,0);
-    protected Vec3f<?> yBase; //= new SGVec_3f(0,1,0);
-    protected Vec3f<?> zBase;// = new SGVec_3f(0,0,1);
+    protected Vec3f<?> xBase; //= new Vector3(1,0,0);
+    protected Vec3f<?> yBase; //= new Vector3(0,1,0);
+    protected Vec3f<?> zBase;// = new Vector3(0,0,1);
 
-    protected sgRayf xRay;// = new sgRayf(new SGVec_3f(0,0,0), new SGVec_3f(1,0,0));
-    protected sgRayf yRay;// = new sgRayf(new SGVec_3f(0,0,0), new SGVec_3f(0,1,0));
-    protected sgRayf zRay;// = new sgRayf(new SGVec_3f(0,0,0), new SGVec_3f(0,0,1));
+    protected Ray3 xRay;// = new Ray3(new Vector3(0,0,0), new Vector3(1,0,0));
+    protected Ray3 yRay;// = new Ray3(new Vector3(0,0,0), new Vector3(0,1,0));
+    protected Ray3 zRay;// = new Ray3(new Vector3(0,0,0), new Vector3(0,0,1));
 
 
     /**
@@ -49,9 +49,9 @@ public abstract class AbstractBasis {
         zBase.set(0, 0, 1);
         Vec3f<?> zero = origin.copy();
         zero.set(0, 0, 0);
-        xRay = new sgRayf(zero.copy(), xBase.copy());
-        yRay = new sgRayf(zero.copy(), yBase.copy());
-        zRay = new sgRayf(zero.copy(), zBase.copy());
+        xRay = new Ray3(zero.copy(), xBase.copy());
+        yRay = new Ray3(zero.copy(), yBase.copy());
+        zRay = new Ray3(zero.copy(), zBase.copy());
         refreshPrecomputed();
     }
 
@@ -65,9 +65,9 @@ public abstract class AbstractBasis {
         zBase.set(0, 0, 1);
         Vec3f<?> zero = translate.copy();
         zero.set(0, 0, 0);
-        xRay = new sgRayf(zero.copy(), xBase.copy());
-        yRay = new sgRayf(zero.copy(), yBase.copy());
-        zRay = new sgRayf(zero.copy(), zBase.copy());
+        xRay = new Ray3(zero.copy(), xBase.copy());
+        yRay = new Ray3(zero.copy(), yBase.copy());
+        zRay = new Ray3(zero.copy(), zBase.copy());
         this.adoptValues(input);
 
     }
@@ -91,9 +91,9 @@ public abstract class AbstractBasis {
      */
     public <V extends Vec3f<?>> AbstractBasis(V origin, V x, V y, V z) {
         this.translate = origin.copy();
-        xRay = new sgRayf(origin.copy(), origin.copy());
-        yRay = new sgRayf(origin.copy(), origin.copy());
-        zRay = new sgRayf(origin.copy(), origin.copy());
+        xRay = new Ray3(origin.copy(), origin.copy());
+        yRay = new Ray3(origin.copy(), origin.copy());
+        zRay = new Ray3(origin.copy(), origin.copy());
         this.set(x.copy(), y.copy(), z.copy());
     }
 
@@ -113,7 +113,7 @@ public abstract class AbstractBasis {
      * @param y basis Ray
      * @param z basis Ray
      */
-    public <R extends sgRayf> AbstractBasis(R x, R y, R z) {
+    public <R extends Ray3> AbstractBasis(R x, R y, R z) {
         this.translate = x.p1().copy();
         xRay = x.copy();
         yRay = y.copy();
@@ -311,15 +311,15 @@ public abstract class AbstractBasis {
         updateRays();
     }
 
-    public sgRayf getXRay() {
+    public Ray3 getXRay() {
         return xRay;
     }
 
-    public sgRayf getYRay() {
+    public Ray3 getYRay() {
         return yRay;
     }
 
-    public sgRayf getZRay() {
+    public Ray3 getZRay() {
         return zRay;
     }
 

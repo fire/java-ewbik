@@ -89,8 +89,8 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
                 this.tag = inputTag;
             this.boneHeight = inputBoneHeight;
 
-            sgRayf tipHeadingRay = new sgRayf(par.getTip_(), tipHeading);
-            sgRayf rollHeadingRay = new sgRayf(par.getTip_(), rollHeading);
+            Ray3 tipHeadingRay = new Ray3(par.getTip_(), tipHeading);
+            Ray3 rollHeadingRay = new Ray3(par.getTip_(), rollHeading);
             Vec3f<?> tempTip = tipHeading.copy();
             tempTip.set(0, 0, 0);
             Vec3f<?> tempRoll = rollHeading.copy();
@@ -236,11 +236,11 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
             } else
                 this.tag = inputTag;
 
-            sgRayf tipHeadingRay = new sgRayf(par.getTip_(), tipHeading);
-            sgRayf rollHeadingRay = new sgRayf(par.getTip_(), rollHeading);
+            Ray3 tipHeadingRay = new Ray3(par.getTip_(), tipHeading);
+            Ray3 rollHeadingRay = new Ray3(par.getTip_(), rollHeading);
             Vec3f<?> tempTip = tipHeading.copy();
             Vec3f<?> tempRoll = rollHeading.copy();
-            Vec3f<?> tempX = new SGVec_3f();
+            Vec3f<?> tempX = new Vector3();
 
             if (coordinateType == frameType.GLOBAL) {
                 tempTip = tipHeadingRay.heading();
@@ -303,9 +303,9 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
             } else
                 this.tag = inputTag;
 
-            sgRayf tipHeadingRay = new sgRayf(parArma.localAxes.origin_(), tipHeading);
+            Ray3 tipHeadingRay = new Ray3(parArma.localAxes.origin_(), tipHeading);
             tipHeadingRay.getRayScaledTo(inputBoneHeight);
-            sgRayf rollHeadingRay = new sgRayf(parArma.localAxes.origin_(), rollHeading);
+            Ray3 rollHeadingRay = new Ray3(parArma.localAxes.origin_(), rollHeading);
             Vec3f<?> tempTip = tipHeading.copy();
             Vec3f<?> tempRoll = rollHeading.copy();
             Vec3f<?> tempX = tempTip.copy();
@@ -365,8 +365,8 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
             } else
                 this.tag = inputTag;
 
-            sgRayf tipHeadingRay = new sgRayf(parArma.localAxes.origin_(), tipHeading);
-            sgRayf rollHeadingRay = new sgRayf(parArma.localAxes.origin_(), rollHeading);
+            Ray3 tipHeadingRay = new Ray3(parArma.localAxes.origin_(), tipHeading);
+            Ray3 rollHeadingRay = new Ray3(parArma.localAxes.origin_(), rollHeading);
             Vec3f<?> tempTip = tipHeading.copy();
             Vec3f<?> tempRoll = rollHeading.copy();
             Vec3f<?> tempX = rollHeading.copy();
@@ -484,7 +484,7 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
         }
     }
 
-    public void setPin_(SGVec_3f pin) {
+    public void setPin_(Vector3 pin) {
         if (this.pin == null) {
             this.enablePin_(pin);
         } else {

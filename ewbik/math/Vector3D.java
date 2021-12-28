@@ -29,19 +29,19 @@ import ewbik.asj.data.JSONObject;
  *
  * @author badlogicgames@gmail.com
  */
-public class SGVec_3f extends Vec3f<SGVec_3f> implements CanLoad {
+public class Vector3 extends Vec3f<ewbik.math.Vector3> implements CanLoad {
 
-    public <V extends Vec3f<?>> SGVec_3f(V v) {
+    public <V extends Vec3f<?>> Vector3(V v) {
         this.x = v.x;
         this.y = v.y;
         this.z = v.z;
     }
 
-    public SGVec_3f() {
+    public Vector3() {
         super();
     }
 
-    public SGVec_3f(float i, float j, float k) {
+    public Vector3(float i, float j, float k) {
         super(i, j, k);
     }
 
@@ -54,27 +54,27 @@ public class SGVec_3f extends Vec3f<SGVec_3f> implements CanLoad {
         return this;
     }
 
-    public SGVec_3f(JSONObject j) {
+    public Vector3(JSONObject j) {
         JSONArray components = j.getJSONArray("vec");
         this.x = components.getFloat(0);
         this.y = components.getFloat(1);
         this.z = components.getFloat(2);
     }
 
-    public SGVec_3f(JSONArray j) {
+    public Vector3(JSONArray j) {
         this.x = j.getFloat(0);
         this.y = j.getFloat(1);
         this.z = j.getFloat(2);
     }
 
     @Override
-    public SGVec_3f copy() {
-        return new SGVec_3f(this);
+    public ewbik.math.Vector3 copy() {
+        return new ewbik.math.Vector3(this);
     }
 
     @Override
-    public SGVec_3f toVec3f() {
-        return new SGVec_3f((float) x, (float) y, (float) z);
+    public ewbik.math.Vector3 toVec3f() {
+        return new ewbik.math.Vector3((float) x, (float) y, (float) z);
     }
 
     public JSONArray toJSONArray() {

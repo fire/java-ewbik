@@ -58,8 +58,8 @@ public abstract class AbstractLimitCone implements Saveable {
      * are the points at which the tangent circle intersects this limitCone and the
      * next limitCone
      */
-    public Vec3f<?>[] firstTriangleNext = new SGVec_3f[3];
-    public Vec3f<?>[] secondTriangleNext = new SGVec_3f[3];
+    public Vec3f<?>[] firstTriangleNext = new Vector3[3];
+    public Vec3f<?>[] secondTriangleNext = new Vector3[3];
 
     public AbstractLimitCone() {
     }
@@ -67,7 +67,7 @@ public abstract class AbstractLimitCone implements Saveable {
     public AbstractLimitCone(Vec3f<?> location, float rad, AbstractKusudama attachedTo) {
         setControlPoint(location);
         tangentCircleCenterNext1 = location.getOrthogonal();
-        tangentCircleCenterNext2 = SGVec_3f.mult(tangentCircleCenterNext1, -1);
+        tangentCircleCenterNext2 = Vector3.mult(tangentCircleCenterNext1, -1);
         this.setRadius(rad);
         parentKusudama = attachedTo;
     }
@@ -214,9 +214,9 @@ public abstract class AbstractLimitCone implements Saveable {
             Vec3f c1xt1 = controlPoint.crossCopy(tangentCircleCenterNext1);
             Vec3f t1xc2 = tangentCircleCenterNext1.crossCopy(next.controlPoint);
             if (input.dot(c1xt1) > 0 && input.dot(t1xc2) > 0) {
-                sgRayf tan1ToInput = new sgRayf(tangentCircleCenterNext1, input);
-                SGVec_3f result = new SGVec_3f();
-                tan1ToInput.intersectsPlane(new SGVec_3f(0, 0, 0), controlPoint, next.controlPoint, result);
+                Ray3 tan1ToInput = new Ray3(tangentCircleCenterNext1, input);
+                Vector3 result = new Vector3();
+                tan1ToInput.intersectsPlane(new Vector3(0, 0, 0), controlPoint, next.controlPoint, result);
                 return result.normalize();
             } else {
                 return null;
@@ -225,9 +225,9 @@ public abstract class AbstractLimitCone implements Saveable {
             Vec3f t2xc1 = tangentCircleCenterNext2.crossCopy(controlPoint);
             Vec3f c2xt2 = next.controlPoint.crossCopy(tangentCircleCenterNext2);
             if (input.dot(t2xc1) > 0 && input.dot(c2xt2) > 0) {
-                sgRayf tan2ToInput = new sgRayf(tangentCircleCenterNext2, input);
-                SGVec_3f result = new SGVec_3f();
-                tan2ToInput.intersectsPlane(new SGVec_3f(0, 0, 0), controlPoint, next.controlPoint, result);
+                Ray3 tan2ToInput = new Ray3(tangentCircleCenterNext2, input);
+                Vector3 result = new Vector3();
+                tan2ToInput.intersectsPlane(new Vector3(0, 0, 0), controlPoint, next.controlPoint, result);
                 return result.normalize();
             } else {
                 return null;
@@ -369,7 +369,7 @@ public abstract class AbstractLimitCone implements Saveable {
 
             // the axis of this cone, scaled to minimize its distance to the tangent contact
             // points.
-            Vec3f<?> scaledAxisA = SGVec_3f.mult(A, MathUtils.cos(boundaryPlusTangentRadiusA));
+            Vec3f<?> scaledAxisA = Vector3.mult(A, MathUtils.cos(boundaryPlusTangentRadiusA));
             // a point on the plane running through the tangent contact points
             Vec3f<?> planeDir1A = new Quaternion(arcNormal, boundaryPlusTangentRadiusA).applyToCopy(A);
             // another poiint on the same plane
@@ -383,8 +383,8 @@ public abstract class AbstractLimitCone implements Saveable {
 
             // ray from scaled center of next cone to half way point between the
             // circumference of this cone and the next cone.
-            sgRayf r1B = new sgRayf(planeDir1B, scaledAxisB);
-            sgRayf r2B = new sgRayf(planeDir1B, planeDir2B);
+            Ray3 r1B = new Ray3(planeDir1B, scaledAxisB);
+            Ray3 r2B = new Ray3(planeDir1B, planeDir2B);
 
             r1B.elongate(99);
             r2B.elongate(99);
@@ -392,12 +392,12 @@ public abstract class AbstractLimitCone implements Saveable {
             Vec3f<?> intersection1 = r1B.intersectsPlane(scaledAxisA, planeDir1A, planeDir2A);
             Vec3f<?> intersection2 = r2B.intersectsPlane(scaledAxisA, planeDir1A, planeDir2A);
 
-            sgRayf intersectionRay = new sgRayf(intersection1, intersection2);
+            Ray3 intersectionRay = new Ray3(intersection1, intersection2);
             intersectionRay.elongate(99);
 
-            Vec3f<?> sphereIntersect1 = new SGVec_3f();
-            Vec3f<?> sphereIntersect2 = new SGVec_3f();
-            Vec3f<?> sphereCenter = new SGVec_3f();
+            Vec3f<?> sphereIntersect1 = new Vector3();
+            Vec3f<?> sphereIntersect2 = new Vector3();
+            Vec3f<?> sphereCenter = new Vector3();
             intersectionRay.intersectsSphere(sphereCenter, 1f, sphereIntersect1, sphereIntersect2);
 
             this.tangentCircleCenterNext1 = sphereIntersect1;
@@ -415,7 +415,7 @@ public abstract class AbstractLimitCone implements Saveable {
         if (tangentCircleCenterNext1 == null)
             tangentCircleCenterNext1 = controlPoint.getOrthogonal().normalize();
         if (tangentCircleCenterNext2 == null)
-            tangentCircleCenterNext2 = SGVec_3f.mult(tangentCircleCenterNext1, -1).normalize();
+            tangentCircleCenterNext2 = Vector3.mult(tangentCircleCenterNext1, -1).normalize();
         if (next != null)
             computeTriangles(next);
     }
@@ -478,11 +478,11 @@ public abstract class AbstractLimitCone implements Saveable {
     public void loadFromJSONObject(JSONObject j, LoadManager l) {
         this.parentKusudama = (AbstractKusudama) l.getObjectFromClassMaps(AbstractKusudama.class,
                 j.getString("parentKusudama"));
-        SGVec_3f controlPointJ = null;
+        Vector3 controlPointJ = null;
         try {
-            controlPointJ = new SGVec_3f(j.getJSONObject("controlPoint"));
+            controlPointJ = new Vector3(j.getJSONObject("controlPoint"));
         } catch (Exception e) {
-            controlPointJ = new SGVec_3f(j.getJSONArray("controlPoint"));
+            controlPointJ = new Vector3(j.getJSONArray("controlPoint"));
         }
 
         controlPointJ.normalize();

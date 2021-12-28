@@ -105,7 +105,7 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
             }
         }
 
-        Vec3f<?> newY = new SGVec_3f();
+        Vec3f<?> newY = new Vector3();
         for (Vec3f<?> dv : directions) {
             newY.add(dv);
         }
@@ -114,10 +114,10 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
         if (newY.mag() != 0 && !Float.isNaN(newY.y)) {
             newY.normalize();
         } else {
-            newY = new SGVec_3f(0, 1f, 0);
+            newY = new Vector3(0, 1f, 0);
         }
 
-        sgRayf newYRay = new sgRayf(new SGVec_3f(0, 0, 0), newY);
+        Ray3 newYRay = new Ray3(new Vector3(0, 0, 0), newY);
 
         Quaternion oldYtoNewY = new Quaternion(limitingAxes.y_().heading(), originalLimitingAxes.getGlobalOf(newYRay).heading());
         limitingAxes.rotateBy(oldYtoNewY);
@@ -139,8 +139,8 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
         }
     }
 
-    sgRayf boneRay = new sgRayf(new SGVec_3f(), new SGVec_3f());
-    sgRayf constrainedRay = new sgRayf(new SGVec_3f(), new SGVec_3f());
+    Ray3 boneRay = new Ray3(new Vector3(), new Vector3());
+    Ray3 constrainedRay = new Ray3(new Vector3(), new Vector3());
 
     /**
      * Snaps the bone this Kusudama is constraining to be within the Kusudama's
@@ -315,7 +315,7 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
             return 0f;
 
         Quaternion alignRot = limitingAxes.getGlobalMBasis().getInverseRotation().applyTo(toSet.getGlobalMBasis().rotation);
-        Quaternion[] decomposition = alignRot.getSwingTwist(new SGVec_3f(0, 1, 0));
+        Quaternion[] decomposition = alignRot.getSwingTwist(new Vector3(0, 1, 0));
         float angleDelta2 = decomposition[1].getAngle() * decomposition[1].getAxis().y * -1f;
         angleDelta2 = toTau(angleDelta2);
         float fromMinToAngleDelta = toTau(signedAngleDifference(angleDelta2, TAU - this.minAxialAngle()));
@@ -347,7 +347,7 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
             return 0f;
 
         Quaternion alignRot = limitingAxes.getGlobalMBasis().getInverseRotation().applyTo(toSet.getGlobalMBasis().rotation);
-        Quaternion[] decomposition = alignRot.getSwingTwist(new SGVec_3f(0, 1, 0));
+        Quaternion[] decomposition = alignRot.getSwingTwist(new Vector3(0, 1, 0));
         float angleDelta2 = decomposition[1].getAngle() * decomposition[1].getAxis().y * -1f;
         angleDelta2 = toTau(angleDelta2);
 
@@ -360,7 +360,7 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
 
         limitingAxes.updateGlobal();
         Quaternion alignRot = limitingAxes.getGlobalMBasis().getInverseRotation().applyTo(boneAxes.globalMBasis.rotation);
-        Quaternion[] decomposition = alignRot.getSwingTwist(new SGVec_3f(0, 1, 0));
+        Quaternion[] decomposition = alignRot.getSwingTwist(new Vector3(0, 1, 0));
 
         float angleDelta = decomposition[1].getAngle() * decomposition[1].getAxis().y * -1;
         // uncomment the next line for reflectable axis support (removed for performance
@@ -507,7 +507,7 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
      *                 LimitCone is not supposed to be between two existing
      *                 LimitCones)
      */
-    public void addLimitCone(SGVec_3f newPoint, float radius, AbstractLimitCone previous, AbstractLimitCone next) {
+    public void addLimitCone(Vector3 newPoint, float radius, AbstractLimitCone previous, AbstractLimitCone next) {
         int insertAt = 0;
 
         if (next == null || limitCones.size() == 0) {
@@ -544,7 +544,7 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
      *                 majorRotationAxes))
      * @param radius   the radius of the limitCone
      */
-    public void addLimitConeAtIndex(int insertAt, SGVec_3f newPoint, float radius) {
+    public void addLimitConeAtIndex(int insertAt, Vector3 newPoint, float radius) {
         AbstractLimitCone newCone = createLimitConeForIndex(insertAt, newPoint, radius);
         if (insertAt == -1) {
             limitCones.add(newCone);

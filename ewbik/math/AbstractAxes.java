@@ -300,14 +300,14 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
      *
      * @param in
      */
-    public void setToGlobalOf(sgRayf input, sgRayf output) {
+    public void setToGlobalOf(Ray3 input, Ray3 output) {
         this.updateGlobal();
         this.setToGlobalOf(input.p1(), output.p1());
         this.setToGlobalOf(input.p2(), output.p2());
     }
 
-    public sgRayf getGlobalOf(sgRayf in) {
-        return new sgRayf(this.getGlobalOf(in.p1()), this.getGlobalOf(in.p2()));
+    public Ray3 getGlobalOf(Ray3 in) {
+        return new Ray3(this.getGlobalOf(in.p1()), this.getGlobalOf(in.p2()));
     }
 
 
@@ -358,7 +358,7 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
      * @param in
      */
 
-    public void setToLocalOf(sgRayf in, sgRayf out) {
+    public void setToLocalOf(Ray3 in, Ray3 out) {
         this.setToLocalOf(in.p1(), out.p1());
         this.setToLocalOf(in.p2(), out.p2());
     }
@@ -368,7 +368,7 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
         this.getGlobalMBasis().setToLocalOf(input, output);
     }
 
-    public <R extends sgRayf> R getLocalOf(R in) {
+    public <R extends Ray3> R getLocalOf(R in) {
         R result = (R) in.copy();
         result.p1.set(this.getLocalOf(in.p1()));
         result.p2.set(this.getLocalOf(in.p2()));
@@ -438,7 +438,7 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
      *
      * @return a ray / segment representing this Axes global x basis position and direction and magnitude
      */
-    public abstract sgRayf x_();
+    public abstract Ray3 x_();
 
 
     /**
@@ -446,14 +446,14 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
      *
      * @return a ray / segment representing this Axes global y basis position and direction and magnitude
      */
-    public abstract sgRayf y_();
+    public abstract Ray3 y_();
 
     /**
      * return a ray / segment representing this Axes global z basis position and direction and magnitude
      *
      * @return a ray / segment representing this Axes global z basis position and direction and magnitude
      */
-    public abstract sgRayf z_();
+    public abstract Ray3 z_();
 
     /**
      * Creates an exact copy of this Axes object. Attached to the same parent as this Axes object
@@ -708,9 +708,9 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
         this.updateGlobal();
         JSONObject thisAxes = new JSONObject();
         JSONObject shearScale = new JSONObject();
-        SGVec_3f xShear = new SGVec_3f();
-        SGVec_3f yShear = new SGVec_3f();
-        SGVec_3f zShear = new SGVec_3f();
+        Vector3 xShear = new Vector3();
+        Vector3 yShear = new Vector3();
+        Vector3 zShear = new Vector3();
 
         this.getLocalMBasis().setToShearXBase(xShear);
         this.getLocalMBasis().setToShearYBase(yShear);
@@ -720,7 +720,7 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
         shearScale.setJSONArray("y", yShear.toJSONArray());
         shearScale.setJSONArray("z", zShear.toJSONArray());
 
-        thisAxes.setJSONArray("translation", (new SGVec_3f(getLocalMBasis().translate)).toJSONArray());
+        thisAxes.setJSONArray("translation", (new Vector3(getLocalMBasis().translate)).toJSONArray());
         thisAxes.setJSONArray("rotation", getLocalMBasis().rotation.toJsonArray());
         thisAxes.setJSONObject("bases", shearScale);
 
@@ -735,7 +735,7 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
 
     @Override
     public void loadFromJSONObject(JSONObject j, LoadManager l) {
-        SGVec_3f origin = new SGVec_3f(j.getJSONArray("translation"));
+        Vector3 origin = new Vector3(j.getJSONArray("translation"));
         Quaternion rotation = new Quaternion(j.getJSONArray("rotation"));
         this.getLocalMBasis().translate = origin;
         this.getLocalMBasis().rotation = rotation;

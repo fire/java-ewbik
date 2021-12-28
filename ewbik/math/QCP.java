@@ -8,12 +8,12 @@ public class QCP {
      * <p>
      * Usage:
      * <p>
-     * The input consists of 2 SGVec_3f arrays of equal length. The input coordinates
+     * The input consists of 2 Vector3 arrays of equal length. The input coordinates
      * are not changed.
      *
      * <pre>
-     *    SGVec_3f[] x = ...
-     *    SGVec_3f[] y = ...
+     *    Vector3[] x = ...
+     *    Vector3[] y = ...
      *    SuperPositionQCP qcp = new SuperPositionQCP();
      *    qcp.set(x, y);
      * </pre>
@@ -42,7 +42,7 @@ public class QCP {
      * C. Get transformated points (y superposed onto the reference x)
      *
      * <pre>
-     * SGVec_3f[] ySuperposed = qcp.getTransformedCoordinates();
+     * Vector3[] ySuperposed = qcp.getTransformedCoordinates();
      * </pre>
      * <p>
      * Citations:
@@ -93,8 +93,8 @@ public class QCP {
     private float[] weight;
     private float wsum;
 
-    private SGVec_3f targetCenter = new SGVec_3f();
-    private SGVec_3f movedCenter = new SGVec_3f();
+    private Vector3 targetCenter = new Vector3();
+    private Vector3 movedCenter = new Vector3();
 
     private float e0;
     //private Matrix3f rotmat = new Matrix3f();
@@ -142,7 +142,7 @@ public class QCP {
      * @param x 3f points of reference coordinate set
      * @param y 3f points of coordinate set for superposition
      */
-    private void set(SGVec_3f[] target, SGVec_3f[] moved) {
+    private void set(Vector3[] target, Vector3[] moved) {
         this.moved = target;
         this.target = moved;
         rmsdCalculated = false;
@@ -250,7 +250,7 @@ public class QCP {
     /**
      * Calculates the inner product between two coordinate sets x and y
      * (optionally weighted, if weights set through
-     * {@link #set(SGVec_3f[], SGVec_3f[], float[])}). It also calculates an
+     * {@link #set(Vector3[], Vector3[], float[])}). It also calculates an
      * upper bound of the most positive root of the key matrix.
      * http://theobald.brandeis.edu/qcp/qcprot.c
      *
@@ -473,7 +473,7 @@ public class QCP {
         }
     }
 
-    public float getRmsd(SGVec_3f[] fixed, SGVec_3f[] moved) {
+    public float getRmsd(Vector3[] fixed, Vector3[] moved) {
         set(moved, fixed);
         return getRmsd();
     }
@@ -505,7 +505,7 @@ public class QCP {
         return center;
     }
 
-    public SGVec_3f getTranslation() {
+    public Vector3 getTranslation() {
         return targetCenter.subCopy(movedCenter);
     }
 

@@ -130,7 +130,7 @@ public class MRotation {
      * @param angle
      * @throws Exception
      */
-    public <T extends SGVec_3f> void setAxis(T newAxis) throws Exception {
+    public <T extends Vector3> void setAxis(T newAxis) throws Exception {
 
         float angle = this.getAngle();
         float norm = newAxis.mag();
@@ -413,7 +413,7 @@ public class MRotation {
         float v1x = coeff * v1.x;
         float v1y = coeff * v1.y;
         float v1z = coeff * v1.z;
-        SGVec_3f va1 = new SGVec_3f(v1x, v1y, v1z);
+        Vector3 va1 = new Vector3(v1x, v1y, v1z);
 
         // adjust v2 in order to have (u1|u2) = (v1|v2) and (v2'|v2') = (u2|u2)
         float u1u2 = u1.dot(u2);
@@ -429,7 +429,7 @@ public class MRotation {
         va2.set(v2x, v2y, v2z);
 
         // preliminary computation (we use explicit formulation instead
-        // of relying on the Vector3D class in order to avoid building lots
+        // of relying on the Vector3 class in order to avoid building lots
         // of temporary objects)
         V uRef = u1;
         V vRef = (V) va1;
@@ -439,7 +439,7 @@ public class MRotation {
         float dx2 = v2x - u2.x;
         float dy2 = v2y - u2.y;
         float dz2 = v2z - u2.z;
-        SGVec_3f k = new SGVec_3f(dy1 * dz2 - dz1 * dy2,
+        Vector3 k = new Vector3(dy1 * dz2 - dz1 * dy2,
                 dz1 * dx2 - dx1 * dz2,
                 dx1 * dy2 - dy1 * dx2);
         float c = k.x * (u1y * u2z - u1z * u2y) +
@@ -450,7 +450,7 @@ public class MRotation {
             // the (q1, q2, q3) vector is in the (u1, u2) plane
             // we try other vectors
             V u3 = (V) u1.crossCopy(u2);
-            SGVec_3f v3 = va1.crossCopy(va2);
+            Vector3 v3 = va1.crossCopy(va2);
             float u3x = u3.x;
             float u3y = u3.y;
             float u3z = u3.z;
@@ -461,7 +461,7 @@ public class MRotation {
             float dx3 = v3x - u3x;
             float dy3 = v3y - u3y;
             float dz3 = v3z - u3z;
-            k = new SGVec_3f(dy1 * dz3 - dz1 * dy3,
+            k = new Vector3(dy1 * dz3 - dz1 * dy3,
                     dz1 * dx3 - dx1 * dz3,
                     dx1 * dy3 - dy1 * dx3);
             c = k.x * (u1y * u3z - u1z * u3y) +
@@ -471,7 +471,7 @@ public class MRotation {
             if (MathUtils.abs(c) <= MathUtils.DOUBLE_ROUNDING_ERROR) {
                 // the (q1, q2, q3) vector is aligned with u1:
                 // we try (u2, u3) and (v2, v3)
-                k = new SGVec_3f(dy2 * dz3 - dz2 * dy3,
+                k = new Vector3(dy2 * dz3 - dz2 * dy3,
                         dz2 * dx3 - dx2 * dz3,
                         dx2 * dy3 - dy2 * dx3);
                 c = k.x * (u2y * u3z - u2z * u3y) +
@@ -504,7 +504,7 @@ public class MRotation {
         q3 = inv * k.z;
 
         // compute the scalar part
-        k = new SGVec_3f(uRef.y * q3 - uRef.z * q2,
+        k = new Vector3(uRef.y * q3 - uRef.z * q2,
                 uRef.z * q1 - uRef.x * q3,
                 uRef.x * q2 - uRef.y * q1);
         c = k.dot(k);
@@ -512,13 +512,13 @@ public class MRotation {
 
 		/*// build orthonormalized base from u1, u2
 		// this fails when vectors are null or colinear, which is forbidden to define a rotation
-		final SGVec_3f u3 = u1.crossCopy(u2).normalize();
+		final Vector3 u3 = u1.crossCopy(u2).normalize();
 		u2 = u3.crossCopy(u1).normalize();
 		u1 = u1.normalize();
 
 		// build an orthonormalized base from v1, v2
 		// this fails when vectors are null or colinear, which is forbidden to define a rotation
-		final SGVec_3f v3 = v1.crossCopy(v2).normalize();
+		final Vector3 v3 = v1.crossCopy(v2).normalize();
 		v2 = v3.crossCopy(v1).normalize();
 		v1 = v1.normalize();
 
@@ -775,16 +775,16 @@ public class MRotation {
      * @return normalized axis of the rotation
      * @see #Rotation(T, float)
      */
-    public SGVec_3f getAxis() {
+    public Vector3 getAxis() {
         float squaredSine = q1 * q1 + q2 * q2 + q3 * q3;
         if (squaredSine == 0) {
-            return new SGVec_3f(1, 0, 0);
+            return new Vector3(1, 0, 0);
         } else if (q0 < 0) {
             float inverse = 1 / MathUtils.sqrt(squaredSine);
-            return new SGVec_3f(q1 * inverse, q2 * inverse, q3 * inverse);
+            return new Vector3(q1 * inverse, q2 * inverse, q3 * inverse);
         }
         float inverse = -1 / MathUtils.sqrt(squaredSine);
-        return new SGVec_3f(q1 * inverse, q2 * inverse, q3 * inverse);
+        return new Vector3(q1 * inverse, q2 * inverse, q3 * inverse);
     }
 
     /**
@@ -883,8 +883,8 @@ public class MRotation {
             // (-r) (T .plusI) coordinates are :
             // cos (psi) cos (theta), -sin (psi) cos (theta), sin (theta)
             // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
-            SGVec_3f v1 = applyTo(RotationOrder.Z);
-            SGVec_3f v2 = applyInverseTo(RotationOrder.X);
+            Vector3 v1 = applyTo(RotationOrder.Z);
+            Vector3 v2 = applyInverseTo(RotationOrder.X);
             if ((v2.z < -0.9999999999) || (v2.z > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -906,8 +906,8 @@ public class MRotation {
             // (-r) (T .plusI) coordinates are :
             // cos (theta) cos (psi), -sin (psi), sin (theta) cos (psi)
             // and we can choose to have psi in the interval [-PI/2 ; +PI/2]
-            SGVec_3f v1 = applyTo(RotationOrder.X);
-            SGVec_3f v2 = applyInverseTo(RotationOrder.Y);
+            Vector3 v1 = applyTo(RotationOrder.X);
+            Vector3 v2 = applyInverseTo(RotationOrder.Y);
             if ((v2.y < -0.9999999999) || (v2.y > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -928,8 +928,8 @@ public class MRotation {
             // (-r) (T .plusJ) coordinates are :
             // sin (psi) cos (phi), cos (psi) cos (phi), -sin (phi)
             // and we can choose to have phi in the interval [-PI/2 ; +PI/2]
-            SGVec_3f v1 = applyTo(RotationOrder.Z);
-            SGVec_3f v2 = applyInverseTo(RotationOrder.Y);
+            Vector3 v1 = applyTo(RotationOrder.Z);
+            Vector3 v2 = applyInverseTo(RotationOrder.Y);
             if ((v2.z < -0.9999999999) || (v2.z > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -950,8 +950,8 @@ public class MRotation {
             // (-r) (T .plusJ) coordinates are :
             // sin (psi), cos (phi) cos (psi), -sin (phi) cos (psi)
             // and we can choose to have psi in the interval [-PI/2 ; +PI/2]
-            SGVec_3f v1 = applyTo(RotationOrder.X);
-            SGVec_3f v2 = applyInverseTo(RotationOrder.Y);
+            Vector3 v1 = applyTo(RotationOrder.X);
+            Vector3 v2 = applyInverseTo(RotationOrder.Y);
             if ((v2.x < -0.9999999999) || (v2.x > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -972,8 +972,8 @@ public class MRotation {
             // (-r) (T .plusK) coordinates are :
             // -sin (theta) cos (phi), sin (phi), cos (theta) cos (phi)
             // and we can choose to have phi in the interval [-PI/2 ; +PI/2]
-            SGVec_3f v1 = applyTo(RotationOrder.Y);
-            SGVec_3f v2 = applyInverseTo(RotationOrder.Z);
+            Vector3 v1 = applyTo(RotationOrder.Y);
+            Vector3 v2 = applyInverseTo(RotationOrder.Z);
             if ((v2.y < -0.9999999999) || (v2.y > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -994,8 +994,8 @@ public class MRotation {
             // (-r) (T .plusK) coordinates are :
             // -sin (theta), sin (phi) cos (theta), cos (phi) cos (theta)
             // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
-            SGVec_3f v1 = applyTo(RotationOrder.X);
-            SGVec_3f v2 = applyInverseTo(RotationOrder.Z);
+            Vector3 v1 = applyTo(RotationOrder.X);
+            Vector3 v2 = applyInverseTo(RotationOrder.Z);
             if ((v2.x < -0.9999999999) || (v2.x > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -1016,8 +1016,8 @@ public class MRotation {
             // (-r) (T .plusI) coordinates are :
             // cos (theta), sin (theta) sin (phi2), sin (theta) cos (phi2)
             // and we can choose to have theta in the interval [0 ; PI]
-            SGVec_3f v1 = applyTo(RotationOrder.X);
-            SGVec_3f v2 = applyInverseTo(RotationOrder.X);
+            Vector3 v1 = applyTo(RotationOrder.X);
+            Vector3 v2 = applyInverseTo(RotationOrder.X);
             if ((v2.x < -0.9999999999) || (v2.x > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -1038,8 +1038,8 @@ public class MRotation {
             // (-r) (T .plusI) coordinates are :
             // cos (psi), -sin (psi) cos (phi2), sin (psi) sin (phi2)
             // and we can choose to have psi in the interval [0 ; PI]
-            SGVec_3f v1 = applyTo(RotationOrder.X);
-            SGVec_3f v2 = applyInverseTo(RotationOrder.X);
+            Vector3 v1 = applyTo(RotationOrder.X);
+            Vector3 v2 = applyInverseTo(RotationOrder.X);
             if ((v2.x < -0.9999999999) || (v2.x > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -1060,8 +1060,8 @@ public class MRotation {
             // (-r) (T .plusJ) coordinates are :
             // sin (phi) sin (theta2), cos (phi), -sin (phi) cos (theta2)
             // and we can choose to have phi in the interval [0 ; PI]
-            SGVec_3f v1 = applyTo(RotationOrder.Y);
-            SGVec_3f v2 = applyInverseTo(RotationOrder.Y);
+            Vector3 v1 = applyTo(RotationOrder.Y);
+            Vector3 v2 = applyInverseTo(RotationOrder.Y);
             if ((v2.y < -0.9999999999) || (v2.y > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -1082,8 +1082,8 @@ public class MRotation {
             // (-r) (T .plusJ) coordinates are :
             // sin (psi) cos (theta2), cos (psi), sin (psi) sin (theta2)
             // and we can choose to have psi in the interval [0 ; PI]
-            SGVec_3f v1 = applyTo(RotationOrder.Y);
-            SGVec_3f v2 = applyInverseTo(RotationOrder.Y);
+            Vector3 v1 = applyTo(RotationOrder.Y);
+            Vector3 v2 = applyInverseTo(RotationOrder.Y);
             if ((v2.y < -0.9999999999) || (v2.y > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -1104,8 +1104,8 @@ public class MRotation {
             // (-r) (T .plusK) coordinates are :
             // sin (phi) sin (psi2), sin (phi) cos (psi2), cos (phi)
             // and we can choose to have phi in the interval [0 ; PI]
-            SGVec_3f v1 = applyTo(RotationOrder.Z);
-            SGVec_3f v2 = applyInverseTo(RotationOrder.Z);
+            Vector3 v1 = applyTo(RotationOrder.Z);
+            Vector3 v2 = applyInverseTo(RotationOrder.Z);
             if ((v2.z < -0.9999999999) || (v2.z > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -1126,8 +1126,8 @@ public class MRotation {
             // (-r) (T .plusK) coordinates are :
             // -sin (theta) cos (psi2), sin (theta) sin (psi2), cos (theta)
             // and we can choose to have theta in the interval [0 ; PI]
-            SGVec_3f v1 = applyTo(RotationOrder.Z);
-            SGVec_3f v2 = applyInverseTo(RotationOrder.Z);
+            Vector3 v1 = applyTo(RotationOrder.Z);
+            Vector3 v2 = applyInverseTo(RotationOrder.Z);
             if ((v2.z < -0.9999999999) || (v2.z > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -1274,7 +1274,7 @@ public class MRotation {
      * @param u vector to apply the rotation to
      * @return a new vector which is the image of u by the rotation
      */
-    public <T extends SGVec_3f> T applyTo(T u) {
+    public <T extends Vector3> T applyTo(T u) {
 
         float x = u.x;
         float y = u.y;
@@ -1388,7 +1388,7 @@ public class MRotation {
      * @param u vector to apply the inverse of the rotation to
      * @return a new vector which such that u is its image by the rotation
      */
-    public <T extends SGVec_3f> T applyInverseTo(T u) {
+    public <T extends Vector3> T applyInverseTo(T u) {
 
         float x = u.x;
         float y = u.y;

@@ -26,22 +26,22 @@ import ewbik.asj.data.JSONObject;
 /**
  * @author Eron Gjoni
  */
-public class sgRayf implements CanLoad {
+public class Ray3 implements CanLoad {
     public static final int X = 0, Y = 1, Z = 2;
     protected Vec3f<?> p1;
     protected Vec3f<?> p2;
 
-    public sgRayf() {
-        workingVector = new SGVec_3f();
-        //this.p1 = new SGVec_3f();
+    public Ray3() {
+        workingVector = new Vector3();
+        //this.p1 = new Vector3();
     }
 
-    public sgRayf(Vec3f<?> origin) {
+    public Ray3(Vec3f<?> origin) {
         this.workingVector = origin.copy();
         this.p1 = origin.copy();
     }
 
-    public sgRayf(Vec3f<?> p1, Vec3f<?> p2) {
+    public Ray3(Vec3f<?> p1, Vec3f<?> p2) {
         this.workingVector = p1.copy();
         this.p1 = p1.copy();
         if (p2 != null)
@@ -88,7 +88,7 @@ public class sgRayf implements CanLoad {
      * @param r
      * @return
      */
-    public float distTo(sgRayf r) {
+    public float distTo(ewbik.math.Ray3 r) {
         Vec3f<?> closestOnThis = this.closestPointToRay3D(r);
         return r.distTo(closestOnThis);
     }
@@ -96,7 +96,7 @@ public class sgRayf implements CanLoad {
     /**
      * returns the distance between this ray as a line segment, and the input ray treated as a line segment
      */
-    public float distToStrict(sgRayf r) {
+    public float distToStrict(ewbik.math.Ray3 r) {
         Vec3f<?> closestOnThis = this.closestPointToSegment3D(r);
         return closestOnThis.dist(r.closestPointToStrict(closestOnThis));
     }
@@ -138,7 +138,7 @@ public class sgRayf implements CanLoad {
 
     public Vec3f<?> heading() {
         if (this.p2 == null) {
-            if (p1 == null) p1 = new SGVec_3f();
+            if (p1 == null) p1 = new Vector3();
             p2 = p1.copy();
             p2.set(0f, 0f, 0f);
             return p2;
@@ -156,7 +156,7 @@ public class sgRayf implements CanLoad {
      *
      * @param target
      */
-    public void alignTo(sgRayf target) {
+    public void alignTo(ewbik.math.Ray3 target) {
         p1.set(target.p1);
         p2.set(target.p2);
     }
@@ -173,7 +173,7 @@ public class sgRayf implements CanLoad {
         p2.add(newHead);
     }
 
-    public void heading(SGVec_3f newHead) {
+    public void heading(Vector3 newHead) {
         if (p2 == null) p2 = p1.copy();
         p2.set(p1);
         p2.add(newHead);
@@ -185,7 +185,7 @@ public class sgRayf implements CanLoad {
      *
      * @param setTo
      */
-    public void getHeading(SGVec_3f setTo) {
+    public void getHeading(Vector3 setTo) {
         setTo.set(p2);
         setTo.sub(this.p1);
     }
@@ -194,8 +194,8 @@ public class sgRayf implements CanLoad {
     /**
      * @return a copy of this ray with its z-component set to 0;
      */
-    public sgRayf get2DCopy() {
-        return this.get2DCopy(sgRayf.Z);
+    public ewbik.math.Ray3 get2DCopy() {
+        return this.get2DCopy(ewbik.math.Ray3.Z);
     }
 
     /**
@@ -205,17 +205,17 @@ public class sgRayf implements CanLoad {
      * @param collapseOnAxis the axis on which to collapse the ray.
      * @return
      */
-    public sgRayf get2DCopy(int collapseOnAxis) {
-        sgRayf result = this.copy();
-        if (collapseOnAxis == sgRayf.X) {
+    public ewbik.math.Ray3 get2DCopy(int collapseOnAxis) {
+        ewbik.math.Ray3 result = this.copy();
+        if (collapseOnAxis == ewbik.math.Ray3.X) {
             result.p1.setX_(0);
             result.p2.setX_(0);
         }
-        if (collapseOnAxis == sgRayf.Y) {
+        if (collapseOnAxis == ewbik.math.Ray3.Y) {
             result.p1.setY_(0);
             result.p2.setY_(0);
         }
-        if (collapseOnAxis == sgRayf.Z) {
+        if (collapseOnAxis == ewbik.math.Ray3.Z) {
             result.p1.setZ_(0);
             result.p2.setZ_(0);
         }
@@ -261,7 +261,7 @@ public class sgRayf implements CanLoad {
      *
      * @param input a vector to project onto this ray
      */
-    public float scaledProjection(SGVec_3f input) {
+    public float scaledProjection(Vector3 input) {
         workingVector.set(input);
         workingVector.sub(this.p1);
         Vec3f<?> heading = this.heading();
@@ -306,7 +306,7 @@ public class sgRayf implements CanLoad {
 
 
     /**
-     * Returns a SGVec_3f representing where the tip
+     * Returns a Vector3 representing where the tip
      * of this ray would be if mult() was called on the ray
      * with scalar as the parameter.
      *
@@ -322,7 +322,7 @@ public class sgRayf implements CanLoad {
 
 
     /**
-     * Returns a SGVec_3f representing where the tip
+     * Returns a Vector3 representing where the tip
      * of this ray would be if div() was called on the ray
      * with scalar as the parameter.
      *
@@ -338,7 +338,7 @@ public class sgRayf implements CanLoad {
 
 
     /**
-     * Returns a SGVec_3f representing where the tip
+     * Returns a Vector3 representing where the tip
      * of this ray would be if mag(scale) was called on the ray
      * with scalar as the parameter.
      *
@@ -369,8 +369,8 @@ public class sgRayf implements CanLoad {
     }
 
 
-    public sgRayf copy() {
-        return new sgRayf(this.p1, this.p2);
+    public ewbik.math.Ray3 copy() {
+        return new ewbik.math.Ray3(this.p1, this.p2);
     }
 
     public void reverse() {
@@ -379,12 +379,12 @@ public class sgRayf implements CanLoad {
         this.p2 = temp;
     }
 
-    public sgRayf getReversed() {
-        return new sgRayf(this.p2, this.p1);
+    public ewbik.math.Ray3 getReversed() {
+        return new ewbik.math.Ray3(this.p2, this.p1);
     }
 
-    public sgRayf getRayScaledTo(float scalar) {
-        return new sgRayf(p1, this.getScaledTo(scalar));
+    public ewbik.math.Ray3 getRayScaledTo(float scalar) {
+        return new ewbik.math.Ray3(p1, this.getScaledTo(scalar));
     }
 
     /*
@@ -392,16 +392,16 @@ public class sgRayf implements CanLoad {
      * has a positive dot product with the heading of r
      * if dot product is already positive, does nothing.
      */
-    public void pointWith(sgRayf r) {
+    public void pointWith(ewbik.math.Ray3 r) {
         if (this.heading().dot(r.heading()) < 0) this.reverse();
     }
 
-    public void pointWith(SGVec_3f heading) {
+    public void pointWith(Vector3 heading) {
         if (this.heading().dot(heading) < 0) this.reverse();
     }
 
-    public sgRayf getRayScaledBy(float scalar) {
-        return new sgRayf(p1, this.getMultipledBy(scalar));
+    public ewbik.math.Ray3 getRayScaledBy(float scalar) {
+        return new ewbik.math.Ray3(p1, this.getMultipledBy(scalar));
     }
 
     /**
@@ -423,11 +423,11 @@ public class sgRayf implements CanLoad {
         //is the percent % of its current length;
         float halfPercent = 1 - ((1 - percent) / 2f);
 
-        p1 = p1.lerp(p2, halfPercent);//)new SGVec_3f(p1Tempx, p1Tempy, p1Tempz);
-        p2 = p2.lerp(p1, halfPercent);//new SGVec_3f(p2Tempx, p2Tempy, p2Tempz);
+        p1 = p1.lerp(p2, halfPercent);//)new Vector3(p1Tempx, p1Tempy, p1Tempz);
+        p2 = p2.lerp(p1, halfPercent);//new Vector3(p2Tempx, p2Tempy, p2Tempz);
     }
 
-    public void translateTo(SGVec_3f newLocation) {
+    public void translateTo(Vector3 newLocation) {
 
         workingVector.set(p2);
         workingVector.sub(p1);
@@ -436,7 +436,7 @@ public class sgRayf implements CanLoad {
         p1.set(newLocation);
     }
 
-    public void translateTipTo(SGVec_3f newLocation) {
+    public void translateTipTo(Vector3 newLocation) {
         workingVector.set(newLocation);
         Vec3f<?> transBy = workingVector.sub(p2);
         this.translateBy(transBy);
@@ -452,7 +452,7 @@ public class sgRayf implements CanLoad {
         this.mag(1);
     }
 
-    public Vec3f<?> intercepts2D(sgRayf r) {
+    public Vec3f<?> intercepts2D(ewbik.math.Ray3 r) {
         Vec3f<?> result = p1.copy();
 
         float p0_x = this.p1.x;
@@ -483,7 +483,7 @@ public class sgRayf implements CanLoad {
     }
 
 	/*public Vec3f<?> intercepts2D(sgRay r) {
-		SGVec_3f result = new SGVec_3f();
+		Vector3 result = new Vector3();
 
 		float a1 = p2.y - p1.y;
 		float b1 = p1.x - p2.x;
@@ -513,7 +513,7 @@ public class sgRayf implements CanLoad {
      * @param r
      * @return
      */
-    public Vec3f<?> closestPointToSegment3D(sgRayf r) {
+    public Vec3f<?> closestPointToSegment3D(ewbik.math.Ray3 r) {
         Vec3f<?> closestToThis = r.closestPointToRay3DStrict(this);
         return this.closestPointTo(closestToThis);
     }
@@ -529,7 +529,7 @@ public class sgRayf implements CanLoad {
      * @return
      */
 
-    public Vec3f<?> closestPointToRay3D(sgRayf r) {
+    public Vec3f<?> closestPointToRay3D(ewbik.math.Ray3 r) {
         Vec3f<?> result = null;
 
         workingVector.set(p2);
@@ -559,7 +559,7 @@ public class sgRayf implements CanLoad {
         return result;
     }
 
-    public Vec3f<?> closestPointToRay3DStrict(sgRayf r) {
+    public Vec3f<?> closestPointToRay3DStrict(ewbik.math.Ray3 r) {
         Vec3f<?> result = null;
 
         workingVector.set(p2);
@@ -600,7 +600,7 @@ public class sgRayf implements CanLoad {
      * @param r
      * @return
      */
-    public Vec3f<?> closestPointToRay3DBounded(sgRayf r) {
+    public Vec3f<?> closestPointToRay3DBounded(ewbik.math.Ray3 r) {
         Vec3f<?> result = null;
 
         workingVector.set(p2);
@@ -634,13 +634,13 @@ public class sgRayf implements CanLoad {
     }
 
     //returns a ray perpendicular to this ray on the XY plane;
-    public sgRayf getPerpendicular2D() {
+    public ewbik.math.Ray3 getPerpendicular2D() {
         Vec3f<?> heading = this.heading();
         workingVector.set(heading.x - 1f, heading.x, 0f);
-        return new sgRayf(this.p1, workingVector.add(this.p1));
+        return new ewbik.math.Ray3(this.p1, workingVector.add(this.p1));
     }
 
-    public Vec3f<?> intercepts2DStrict(sgRayf r) {
+    public Vec3f<?> intercepts2DStrict(ewbik.math.Ray3 r) {
         //will also return null if the intersection does not occur on the
         //line segment specified by the ray.
         Vec3f<?> result = p1.copy();
@@ -682,10 +682,10 @@ public class sgRayf implements CanLoad {
      * @param b3 the third vertex od a triangle on the second plane
      * @return a sgRay along the line of intersection of these two planes, or null if inputs are coplanar
      */
-    public static <V extends Vec3f<?>> sgRayf planePlaneIntersect(V a1, V a2, V a3, V b1, V b2, V b3) {
-        sgRayf a1a2 = new sgRayf(a1, a2);
-        sgRayf a1a3 = new sgRayf(a1, a3);
-        sgRayf a2a3 = new sgRayf(a2, a3);
+    public static <V extends Vec3f<?>> ewbik.math.Ray3 planePlaneIntersect(V a1, V a2, V a3, V b1, V b2, V b3) {
+        ewbik.math.Ray3 a1a2 = new ewbik.math.Ray3(a1, a2);
+        ewbik.math.Ray3 a1a3 = new ewbik.math.Ray3(a1, a3);
+        ewbik.math.Ray3 a2a3 = new ewbik.math.Ray3(a2, a3);
 
         Vec3f<?> interceptsa1a2 = a1a2.intersectsPlane(b1, b2, b3);
         Vec3f<?> interceptsa1a3 = a1a3.intersectsPlane(b1, b2, b3);
@@ -706,7 +706,7 @@ public class sgRayf implements CanLoad {
             }
         }
         if (notNull1 != null && notNull2 != null)
-            return new sgRayf(notNull1, notNull2);
+            return new ewbik.math.Ray3(notNull1, notNull2);
         else
             return null;
     }
@@ -791,7 +791,7 @@ public class sgRayf implements CanLoad {
             dir.set(this.heading());
             w0.set(0, 0, 0);
         }
-        //SGVec_3f w = new SGVec_3f();
+        //Vector3 w = new Vector3();
         float r, a, b;
         u.sub(ta);
         v.sub(ta);
@@ -813,7 +813,7 @@ public class sgRayf implements CanLoad {
 
 
     /* Find where this ray intersects a sphere
-     * @param SGVec_3f the center of the sphere to test against.
+     * @param Vector3 the center of the sphere to test against.
      * @param radius radius of the sphere
      * @param S1 reference to variable in which the first intersection will be placed
      * @param S2 reference to variable in which the second intersection will be placed
@@ -890,7 +890,7 @@ public class sgRayf implements CanLoad {
             pt.set(p);
         }
 
-        m = new SGVec_3f(((SGVec_3f) bc.subCopy(ct)).crossCopy((SGVec_3f) ca.subCopy(at)));
+        m = new Vector3(((Vector3) bc.subCopy(ct)).crossCopy((Vector3) ca.subCopy(at)));
 
         float nu;
         float nv;
@@ -950,7 +950,7 @@ public class sgRayf implements CanLoad {
         return p2;
     }
 
-    public <R extends sgRayf> void set(R r) {
+    public <R extends ewbik.math.Ray3> void set(R r) {
         this.p1.set(r.p1);
         this.p2.set(r.p2);
     }
@@ -973,15 +973,15 @@ public class sgRayf implements CanLoad {
         if (this.p2 != null) this.p1 = this.p2.copy();
 
         if (this.p1 == null)
-            this.p1 = new SGVec_3f(j.getJSONObject("p1"));
+            this.p1 = new Vector3(j.getJSONObject("p1"));
         else {
-            this.p1.set(new SGVec_3f(j.getJSONObject("p1")));
+            this.p1.set(new Vector3(j.getJSONObject("p1")));
         }
 
         if (this.p2 == null)
-            this.p2 = new SGVec_3f(j.getJSONObject("p2"));
+            this.p2 = new Vector3(j.getJSONObject("p2"));
         else
-            this.p2.set(new SGVec_3f(j.getJSONObject("p2")));
+            this.p2.set(new Vector3(j.getJSONObject("p2")));
 
         return this;
     }
