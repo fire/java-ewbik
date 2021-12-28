@@ -93,9 +93,10 @@ public class ItemHolding extends PApplet {
             worlAxes.rotateAboutY(PI / 500f, true);
         }
         String additionalInstructions = "Hit the 'C' key to select or deselect the cube";
+		additionalInstructions +=  "\n HIT THE S KEY TO SAVE AND HIT THE L KEY TO LOAD THE CURRENT ARMATURE CONFIGURATION.";
         // decrease the numerator to increase the zoom.
         zoomScalar = 200f / height;
-        ui.drawScene(zoomScalar, 10f, () -> drawHoldCube(), loadedArmature, additionalInstructions, activePin, cubeAxes,
+        ui.drawScene(zoomScalar, 12f, () -> drawHoldCube(), loadedArmature, additionalInstructions, activePin, cubeAxes,
                 cubeMode);
     }
 
@@ -143,7 +144,17 @@ public class ItemHolding extends PApplet {
             }
         } else if (key == 'c') {
             cubeMode = !cubeMode;
-        }
+        } else if(key == 's') {
+			println("Saving");
+			ewbik.data.EWBIKSaver newSaver = new ewbik.data.EWBIKSaver();
+			newSaver.saveArmature(loadedArmature, "Humanoid_Holding_Item.arm");			
+	    } else if(key == 'l') {
+			loadedArmature = ewbik.processing.IO.LoadArmature_singlePrecision("Humanoid_Holding_Item.arm");
+			loadedArmature.updateArmatureSegments();
+			loadedArmature.IKSolver(loadedArmature.getRootBone(), 0.5f, 20, 1);
+	
+			Bone.setDrawKusudamas(true);
+		}
     }
 
     public void updatePinList() {
