@@ -652,14 +652,6 @@ public class SegmentedArmature {
             } else {
                 b.localAxes().alignLocalsTo(simulatedLocalAxes);
             }
-            /*
-             * if(b.getParent() == null) {
-             * b.localAxes().alignGlobalsTo(simulatedLocalAxes);
-             * } else {
-             * b.localAxes().localMBasis.rotateTo(simulatedLocalAxes.localMBasis.rotation);
-             * b.localAxes().markDirty(); b.localAxes().updateGlobal();
-             * }
-             */
             for (AbstractBone bc : b.getChildren()) {
                 recursivelyAlignBonesToSimAxesFrom(bc);
             }
