@@ -14,7 +14,7 @@ application {
 }
 
 dependencies {
-    implementation 'com.github.micycle1:processing3:3.5.4'
+    implementation 'com.github.micycle1:processing-core-4:4.0.3'
 }
 
 version = '0.0.1-' + new Date().format("yyyyMMdd'T'HHmmss'Z'", TimeZone.getTimeZone("UTC")) 
@@ -34,6 +34,6 @@ sourceSets {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(8)
+        languageVersion = JavaLanguageVersion.of(11)
     }    
 }
