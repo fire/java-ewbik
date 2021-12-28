@@ -38,7 +38,7 @@ public class KusudamaVisualizer extends PApplet {
     public boolean multipassAllowed = true;
 
     public void setup() {
-        ui = new UI(this, multipassAllowed);
+        ui = new UI(this);
 
         //Create global axes so we can easily manipulate the whole scene. (not necessary, just convenient)
         worldAxes = new Axes();
