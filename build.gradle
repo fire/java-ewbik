@@ -11,7 +11,7 @@ repositories {
 }
 
 application {
-    mainClass = 'samples.itemHolding'
+    mainClass = 'samples.ItemHolding'
 }
 
 dependencies {
@@ -28,7 +28,7 @@ sourceSets {
             ]
         }
         resources {
-            srcDirs = ['ewbIK']
+            srcDirs = ['ewbik']
         }
     }
 }
