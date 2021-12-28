@@ -3,8 +3,6 @@ name: Build Windows
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 jobs:
   build-linux:
     runs-on: linux-latest
