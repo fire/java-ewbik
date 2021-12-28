@@ -28,7 +28,7 @@ jobs:
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: latest-linux
+        automatic_release_tag: latest-${{ matrix.app }}-linux
         prerelease: true
         title: EWBIK Linux
         files: |
@@ -55,7 +55,7 @@ jobs:
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: latest-windows
+        automatic_release_tag: latest-${{ matrix.app }}-windows
         prerelease: true
         title: EWBIK Windows
         files: |
