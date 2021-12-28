@@ -1,6 +1,5 @@
 package samples;
 
-import ewbik.processing.EWBKIO;
 import ewbik.processing.sceneGraph.Axes;
 import ewbik.processing.singlePrecision.Bone;
 import ewbik.processing.singlePrecision.IKPin;
@@ -45,7 +44,7 @@ public class ItemHolding extends PApplet {
             System.out.println("Can't write file.");
             e.printStackTrace();
         }
-        loadedArmature = EWBKIO.LoadArmature_singlePrecision("Humanoid_Holding_Item.arm");
+        loadedArmature = ewbik.processing.IO.LoadArmature_singlePrecision("Humanoid_Holding_Item.arm");
         worlAxes = (Axes) loadedArmature.localAxes().getParentAxes();
         if (worlAxes == null) {
             worlAxes = new Axes();

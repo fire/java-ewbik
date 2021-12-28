@@ -6,7 +6,7 @@ import ewbik.processing.sceneGraph.Axes;
 
 import java.util.Collection;
 
-public final class EWBKIO {
+public final class IO {
 
     /**
      * Return a single precision (float) version of the armature in stored in the
