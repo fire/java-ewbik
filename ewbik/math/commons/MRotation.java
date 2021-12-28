@@ -605,8 +605,8 @@ public class MRotation {
     }
 
     /**
-     * Build a rotation from three Cardan or Euler elementary rotations.
-     * <p>Cardan rotations are three successive rotations around the
+     * Build a rotation from three Cartesian or Euler elementary rotations.
+     * <p>Cartesian rotations are three successive rotations around the
      * canonical axes X, Y and Z, each axis being used once. There are
      * 6 such sets of rotations (XYZ, XZY, YXZ, YZX, ZXY and ZYX). Euler
      * rotations are three successive rotations around the canonical
@@ -614,7 +614,7 @@ public class MRotation {
      * same axis. There are 6 such sets of rotations (XYX, XZX, YXY,
      * YZY, ZXZ and ZYZ), the most popular one being ZXZ.</p>
      * <p>Beware that many people routinely use the term Euler angles even
-     * for what really are Cardan angles (this confusion is especially
+     * for what really are Cartesian angles (this confusion is especially
      * widespread in the aerospace business where Roll, Pitch and Yaw angles
      * are often wrongly tagged as Euler angles).</p>
      *
@@ -841,29 +841,29 @@ public class MRotation {
     }
 
     /**
-     * Get the Cardan or Euler angles corresponding to the instance.
+     * Get the Cartesian or Euler angles corresponding to the instance.
      * <p>The equations show that each rotation can be defined by two
-     * different values of the Cardan or Euler angles set. For example
-     * if Cardan angles are used, the rotation defined by the angles
+     * different values of the Cartesian or Euler angles set. For example
+     * if Cartesian angles are used, the rotation defined by the angles
      * a<sub>1</sub>, a<sub>2</sub> and a<sub>3</sub> is the same as
      * the rotation defined by the angles &pi; + a<sub>1</sub>, &pi;
      * - a<sub>2</sub> and &pi; + a<sub>3</sub>. This method implements
      * the following arbitrary choices:</p>
      * <ul>
-     *   <li>for Cardan angles, the chosen set is the one for which the
+     *   <li>for Cartesian angles, the chosen set is the one for which the
      *   second angle is between -&pi;/2 and &pi;/2 (i.e its cosine is
      *   positive),</li>
      *   <li>for Euler angles, the chosen set is the one for which the
      *   second angle is between 0 and &pi; (i.e its sine is positive).</li>
      * </ul>
-     * <p>Cardan and Euler angle have a very disappointing drawback: all
+     * <p>Cartesian and Euler angle have a very disappointing drawback: all
      * of them have singularities. This means that if the instance is
      * too close to the singularities corresponding to the given
      * rotation order, it will be impossible to retrieve the angles. For
-     * Cardan angles, this is often called gimbal lock. There is
+     * Cartesian angles, this is often called gimbal lock. There is
      * <em>nothing</em> to do to prevent this, it is an intrinsic problem
-     * with Cardan and Euler representation (but not a problem with the
-     * rotation itself, which is perfectly well defined). For Cardan
+     * with Cartesian and Euler representation (but not a problem with the
+     * rotation itself, which is perfectly well defined). For Cartesian
      * angles, singularities occur when the second angle is close to
      * -&pi;/2 or +&pi;/2, for Euler angle singularities occur when the
      * second angle is close to 0 or &pi;, this implies that the identity

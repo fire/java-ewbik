@@ -227,7 +227,7 @@ public final class Precision {
         public static String CANNOT_SET_AT_NEGATIVE_INDEX = "cannot set an element at a negative index {0}";
         public static String CANNOT_SUBSTITUTE_ELEMENT_FROM_EMPTY_ARRAY = "cannot substitute an element from an empty array";
         public static String CANNOT_TRANSFORM_TO_DOUBLE = "Conversion Exception in Transformation: {0}";
-        public static String CARDAN_ANGLES_SINGULARITY = "Cardan angles singularity";
+        public static String CARDAN_ANGLES_SINGULARITY = "Cartesian angles singularity";
         public static String CLASS_DOESNT_IMPLEMENT_COMPARABLE = "class  = {0}) does not implement Comparable";
         public static String CLOSEST_ORTHOGONAL_MATRIX_HAS_NEGATIVE_DETERMINANT = "the closest orthogonal matrix has a negative determinant {0}";
         public static String COLUMN_INDEX_OUT_OF_RANGE = "column index {0} out of allowed range [{1}, {2}]";

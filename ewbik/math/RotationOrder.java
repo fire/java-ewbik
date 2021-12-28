@@ -7,7 +7,7 @@ public final class RotationOrder {
     public static final Vector3 Z = new Vector3(0, 0, 1);
 
     /**
-     * Set of Cardan angles.
+     * Set of Cartesian angles.
      * this ordered set of rotations is around X, then around Y, then
      * around Z
      */
@@ -15,7 +15,7 @@ public final class RotationOrder {
             new RotationOrder("XYZ", X, Y, Z);
 
     /**
-     * Set of Cardan angles.
+     * Set of Cartesian angles.
      * this ordered set of rotations is around X, then around Z, then
      * around Y
      */
@@ -23,7 +23,7 @@ public final class RotationOrder {
             new RotationOrder("XZY", X, Z, Y);
 
     /**
-     * Set of Cardan angles.
+     * Set of Cartesian angles.
      * this ordered set of rotations is around Y, then around X, then
      * around Z
      */
@@ -31,7 +31,7 @@ public final class RotationOrder {
             new RotationOrder("YXZ", Y, X, Z);
 
     /**
-     * Set of Cardan angles.
+     * Set of Cartesian angles.
      * this ordered set of rotations is around Y, then around Z, then
      * around X
      */
@@ -39,7 +39,7 @@ public final class RotationOrder {
             new RotationOrder("YZX", Y, Z, X);
 
     /**
-     * Set of Cardan angles.
+     * Set of Cartesian angles.
      * this ordered set of rotations is around Z, then around X, then
      * around Y
      */
@@ -47,7 +47,7 @@ public final class RotationOrder {
             new RotationOrder("ZXY", Z, X, Y);
 
     /**
-     * Set of Cardan angles.
+     * Set of Cartesian angles.
      * this ordered set of rotations is around Z, then around Y, then
      * around X
      */
