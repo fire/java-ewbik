@@ -8,9 +8,6 @@ on:
 jobs:
   build-linux:
     runs-on: linux-latest
-    defaults:
-      run:
-        working-directory: ./itemHolder
     strategy:
       matrix:
         app: [itemHolder]
@@ -35,9 +32,6 @@ jobs:
           ewbik-linux.zip
   build-windows:
     runs-on: windows-latest
-    defaults:
-      run:
-        working-directory: ./itemHolder
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 8

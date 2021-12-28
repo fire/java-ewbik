@@ -24,11 +24,11 @@ sourceSets {
     main {
         java {
             srcDirs = [
-                '../ewbik',
+                'ewbik',
             ]
         }
         resources {
-            srcDirs = ['../ewbIK']
+            srcDirs = ['ewbIK']
         }
     }
 }
