@@ -74,8 +74,8 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
      */
     public AbstractAxes(Vec3f<?> origin, Vec3f<?> inX, Vec3f<?> inY, Vec3f<?> inZ, AbstractAxes parent, boolean customBases) {
         if (!customBases) {
-            globalMBasis = parent != null ? parent.getGlobalMBasis().copy() : new CartesianBasis(origin);
-            localMBasis = parent != null ? parent.getLocalMBasis().copy() : new CartesianBasis(origin);
+            globalMBasis = parent != null ? parent.getGlobalMBasis().copy() : new Basis(origin);
+            localMBasis = parent != null ? parent.getLocalMBasis().copy() : new Basis(origin);
             globalMBasis.setIdentity();
             localMBasis.setIdentity();
         }

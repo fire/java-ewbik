@@ -17,8 +17,8 @@ public class CartesianAxes extends AbstractAxes {
 
         areGlobal = true;
 
-        localMBasis = new CartesianBasis(origin, inX, inY, inZ);
-        globalMBasis = new CartesianBasis(origin, inX, inY, inZ);
+        localMBasis = new Basis(origin, inX, inY, inZ);
+        globalMBasis = new Basis(origin, inX, inY, inZ);
 
         Vec3f<?> o = origin.copy();
         o.set(0, 0, 0);
@@ -114,7 +114,7 @@ public class CartesianAxes extends AbstractAxes {
 
     @Override
     public <B extends AbstractBasis> B getLocalOf(B input) {
-        CartesianBasis newBasis = new CartesianBasis((CartesianBasis) input);
+        Basis newBasis = new Basis((Basis) input);
         getGlobalMBasis().setToLocalOf(input, newBasis);
         return (B) newBasis;
     }
