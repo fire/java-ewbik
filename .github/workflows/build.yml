@@ -1,8 +1,5 @@
 name: Build Windows
 
-strategy:
-  matrix:
-    os: [windows, linux]
 on:
   push:
     branches: [ main ]
@@ -15,6 +12,9 @@ jobs:
     defaults:
       run:
         working-directory: ./itemHolder
+    strategy:
+      matrix:
+        os: [windows, linux]
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 8
@@ -40,6 +40,9 @@ jobs:
     defaults:
       run:
         working-directory: ./kusudamaSample
+    strategy:
+      matrix:
+        os: [windows, linux]
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 8
