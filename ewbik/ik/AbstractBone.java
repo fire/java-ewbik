@@ -34,12 +34,9 @@ import java.util.ArrayList;
  */
 public abstract class AbstractBone implements Saveable, Comparable<AbstractBone> {
 
-    public static enum frameType {
+    public enum frameType {
         GLOBAL, RELATIVE
     }
-
-    ;
-
     public AbstractSkeleton3D parentArmature;
     protected String tag;
 
@@ -74,7 +71,7 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
 
     public <V extends Vec3f<?>> AbstractBone(
             AbstractBone par, // parent bone
-            V tipHeading, // the orienational heading of this bone (global vs relative coords specified in
+            V tipHeading, // the orientation heading of this bone (global vs relative coords specified in
             // coordinateType)
             V rollHeading, // axial rotation heading of the bone (it's z-axis)
             String inputTag, // some user specified name for the bone, if desired
@@ -191,7 +188,6 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
             this.parent.addFreeChild(this);
             this.parent.addChild(this);
             this.updateAncestorCount();
-            // this.updateSegmentedArmature();
         } else {
             throw IKExceptions.NullParentForBoneException();
         }
@@ -279,7 +275,6 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
             this.parent.addChild(this);
             this.parent.addFreeChild(this);
             this.updateAncestorCount();
-            // this.updateSegmentedArmature();
         } else {
             throw new NullParentForBoneException();
         }
@@ -334,7 +329,6 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
             parentArmature.addToBoneList(this);
 
             generateAxes(parentArmature.localAxes.origin_(), tempX, tempTip, tempRoll);
-            // this.localAxes.orthoNormalize(true);
             localAxes.setParent(parentArmature.localAxes);
             previousOrientation = localAxes.attachedCopy(true);
 
@@ -343,8 +337,6 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
 
             this.boneHeight = inputBoneHeight;
             this.updateAncestorCount();
-            // this.updateSegmentedArmature();
-
         } else {
             throw new NullParentForBoneException();
         }
@@ -395,7 +387,6 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
             this.parentArmature = parArma;
 
             generateAxes(parentArmature.localAxes.origin_(), tempX, tempTip, tempRoll);
-            // this.localAxes.orthoNormalize(true);
             localAxes.setParent(parentArmature.localAxes);
             previousOrientation = localAxes.attachedCopy(true);
 
@@ -415,22 +406,6 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
     public AbstractBone() {
         this.lastRotation = new Quaternion(MRotation.IDENTITY);
     }
-
-    /*
-     * public AbstractBone(AbstractSkeleton3D parArma, JSONObject boneJSON,
-     * AbstractAxes attachedAxes) {
-     * this.lastRotation = new Quaternion(MRotation.IDENTITY);
-     * this.localAxes = attachedAxes;
-     * previousOrientation = localAxes.attachedCopy(true);
-     * this.boneHeight = boneJSON.getFloat("boneHeight");
-     * this.tag = boneJSON.getString("tag");
-     *
-     *
-     * this.parentArmature = parArma;
-     * parentArmature.addToBoneList(this);
-     * }
-     */
-
     public AbstractBone getParent() {
         return this.parent;
     }
@@ -490,7 +465,6 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
         } else {
             this.pin.translateTo_(pin);
         }
-        // parentArmature.updateArmatureSegments();
     }
 
     /**
