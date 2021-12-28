@@ -30,7 +30,6 @@ public class SegmentedArmature {
     public AbstractBone segmentRoot;
     public AbstractBone segmentTip;
 
-    // private int subTargetCounts = 0;
     public ArrayList<SegmentedArmature> childSegments = new ArrayList<SegmentedArmature>();
     public ArrayList<SegmentedArmature> pinnedDescendants = new ArrayList<SegmentedArmature>();
     WorkingBone[] pinnedBones;
@@ -110,17 +109,6 @@ public class SegmentedArmature {
      * calculates the total number of bases the immediate effectors emanating from
      * this
      * segment reach for (based on modecode set in the IKPin)
-     */
-    /*
-     * private void updateTotalSubTargets() {
-     * subTargetCounts = 0;
-     * for(int i=0; i< pinnedDescendants.size(); i++) {
-     * SegmentedArmature s = pinnedDescendants.get(i);
-     * AbstractIKPin pin = s.segmentTip.getIKPin();
-     * int pinTargets = pin.getSubtargetCount();
-     * subTargetCounts += pinTargets;
-     * }
-     * }
      */
     static void recursivelyCreateHeadingArraysFor(SegmentedArmature s) {
         s.createHeadingArrays();
@@ -261,8 +249,6 @@ public class SegmentedArmature {
             currentBone = currentBone.getParent();
 
         }
-
-        // strandsBoneList.addAll(boneRotationMap.keySet());
     }
 
     public ArrayList<AbstractBone> getStrandFromTip(AbstractBone pinnedBone) {
@@ -402,25 +388,17 @@ public class SegmentedArmature {
                     }
                     bestOrientation.set(thisBoneAxes.getGlobalMBasis().rotation.rotation);
                     bestRMSD = newRMSD;
-
-                    // if(i>0)
-                    // System.out.println("inner retired after " + i + " attempts.");
                     break;
                 }
             } else {
-                // System.out.println("retired after " + i + " attempts.");
                 break;
             }
         }
         if (stabilizationPasses > 0) {
-            // System.out.println("retried " + (int)(((tryDampen -1f) /4f)));
             thisBoneAxes.setGlobalOrientationTo(bestOrientation);
             thisBoneAxes.markDirty();
         }
     }
-
-    // AbstractAxes tempAxes = null;
-
     private void updateOptimalRotationToPinnedDescendants(
             WorkingBone sb,
             float dampening,
@@ -577,14 +555,14 @@ public class SegmentedArmature {
     public SegmentedArmature getPinnedRootChainFromHere() {
 
         SegmentedArmature currentChain = this;
-        while (true && currentChain != null) {
+        while (currentChain != null) {
             if (currentChain.isBasePinned())
                 return currentChain;
             else
                 currentChain = currentChain.getParentSegment();
         }
 
-        return currentChain;
+        return null;
 
     }
 
