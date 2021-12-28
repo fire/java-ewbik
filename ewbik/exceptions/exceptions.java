@@ -29,11 +29,4 @@ public class exceptions {
 
     public class NoDataException extends Exception {
     }
-	/*public class NoDataException extends Exception {}
-	public class  extends Exception {}
-	public class  extends Exception {}
-	public class  extends Exception {}
-	public class  extends Exception {}
-	public class  extends Exception {}
-	public class  extends Exception {}*/
 }
