@@ -57,8 +57,6 @@ public class ItemHolding extends PApplet {
 
         // Tell the Bone class that all bones should draw their kusudamas.
         Bone.setDrawKusudamas(true);
-        // Enable fancy multipass shading for translucent kusudamas.
-        Kusudama.enableMultiPass(true);
 
         /**
          * The armature we're loading is already posed such that its hands touch

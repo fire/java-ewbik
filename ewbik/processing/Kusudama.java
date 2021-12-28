@@ -44,7 +44,6 @@ public class Kusudama extends AbstractKusudama {
     public static PShader kusudamaShader;
     public static PShader kusudamaStencil;
     public static int renderMode = 1;
-    protected static boolean multiPass = false;
     public static PShader currentShader;
 
     float[] coneSequence;
@@ -228,12 +227,4 @@ public class Kusudama extends AbstractKusudama {
     public ArrayList<LimitCone> getLimitCones() {
         return (ArrayList<LimitCone>) super.getLimitCones();
     }
-
-    public static void enableMultiPass(boolean multipass) {
-        if (multipass != multiPass) {
-            multiPass = multipass;
-            kusudamaShader.set("multiPass", multiPass);
-        }
-    }
-
 }

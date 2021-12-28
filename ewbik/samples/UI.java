@@ -170,7 +170,6 @@ public class UI {
                           ewbik.processing.Skeleton3D armature,
                           String usageInstructions,
                           IKPin activePin, Axes cubeAxes, boolean cubeEnabled) {
-        Kusudama.enableMultiPass(true);
         currentDrawSurface = stencil;
 
         stencil.beginDraw();
