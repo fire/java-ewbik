@@ -636,37 +636,6 @@ public class SegmentedArmature {
         }
     }
 
-    public void recursivelyAlignSimAxesRootwardFrom(AbstractBone b) {
-        if (b != null) {
-            SegmentedArmature bChain = b.parentArmature.boneSegmentMap.get(b); // getChainFor(b);
-            AbstractBone parent = b.getParent();
-            WorkingBone sb = bChain.simulatedBones.get(b);
-            AbstractAxes bAxes = sb.simLocalAxes;
-            AbstractAxes cAxes = sb.simConstraintAxes;
-            bChain.simAligned = true;
-            bAxes.alignGlobalsTo(b.localAxes());
-            bAxes.markDirty();
-            bAxes.updateGlobal();
-            cAxes.alignGlobalsTo(b.getMajorRotationAxes());
-            cAxes.markDirty();
-            cAxes.updateGlobal();
-            if (parent != null) {
-                SegmentedArmature bParentChain = b.parentArmature.boneSegmentMap.get(parent);// getChainFor(parent);
-                if (bParentChain != bChain && bParentChain.simAligned) {
-                    return; // the parent chain doesn't need aligning, it is safe to just update these
-                    // simAxes
-                }
-                recursivelyAlignSimAxesRootwardFrom(parent);
-            }
-            if (bAxes == null) {
-                int debug = 0;
-            }
-            if (Float.isNaN(bAxes.globalMBasis.rotation.getAngle())) {
-                int debug = 0;
-            }
-        }
-    }
-
     /**
      * aligns this bone and all relevant childBones to their coresponding
      * simulatedAxes (if any) in the SegmentedArmature
@@ -705,7 +674,7 @@ public class SegmentedArmature {
     /**
      * populates the given arraylist with the rootmost unprocessed chains of this
      * segmented armature
-     * and its descenedants up until their pinned tips.
+     * and its descendants up until their pinned tips.
      *
      * @param segments
      */
