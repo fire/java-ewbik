@@ -195,8 +195,6 @@ public abstract class AbstractIKPin implements Saveable {
      */
     public void alignToAxes(AbstractAxes inAxes) {
         this.axes.alignGlobalsTo(inAxes);
-        // Quaternion rotation = new Quaternion(axes.x().heading(), axes.y().heading(),
-        // inAxes.x().heading(), inAxes.y().heading());
     }
 
     /**
@@ -217,10 +215,12 @@ public abstract class AbstractIKPin implements Saveable {
      */
     public void translateToArmatureLocal_(Vec3f<?> location) {
         AbstractAxes armAxes = this.forBone().parentArmature.localAxes().getParentAxes();
-        if (armAxes == null)
+        if (armAxes == null) {
             this.axes.translateTo(location);
-        else
+        }
+        else {
             this.axes.translateTo(armAxes.getLocalOf(location));
+        }
     }
 
     /**
@@ -250,8 +250,9 @@ public abstract class AbstractIKPin implements Saveable {
      * to just being disabled)
      */
     public void removalNotification() {
-        for (AbstractIKPin cp : childPins)
+        for (AbstractIKPin cp : childPins) {
             cp.setParentPin(getParentPin());
+        }
     }
 
     public void setParentPin(AbstractIKPin parent) {
