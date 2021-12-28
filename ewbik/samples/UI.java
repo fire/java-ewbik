@@ -48,13 +48,7 @@ public class UI {
                 + "-Hold shift while using the mouse wheel to rotate the pin about its (blue) Z axis.\n"
                 + "-Hold ctrl while using the mouse wheel to rotate the pin about its (green) X axis. \n"
                 + appended;
-        // pg.textMode(pa.MODEL);
-        if (pg.textFont == null)
-            pg.textSize(12);
-        else {
-            pg.textSize(12);
-        }
-        // PFont instructionFont = pa.createFont(pg.textFont.getName(), 42);
+        pg.textSize(12);
         pg.fill(0, 0, 0, 90);
         float boxW = pg.textWidth(instructionText);
         float boxH = (pg.textAscent() + pg.textDescent()) * (instructionText.split("\n").length);
