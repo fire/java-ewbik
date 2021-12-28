@@ -18,20 +18,16 @@ public class IKPin extends AbstractIKPin {
         super(inAxes, bone);
     }
 
-    /// WRAPPER FUNCTIONS. Basically just ctrl+f and replace these with the
-    /// appropriate class names and
-    // any conversion functions you modified in AxesExample and you should be good
-    /// to go.
     public PVector getLocation() {
         return Axes.toPVector(super.getLocation_());
     }
 
     public void translateTo(PVector v) {
-        super.translateTo_(Axes.toSGVec(v));
+        super.translateTo_(Axes.toVector3(v));
     }
 
     public void translateBy(PVector v) {
-        super.translateBy_(Axes.toSGVec(v));
+        super.translateBy_(Axes.toVector3(v));
     }
 
     /**

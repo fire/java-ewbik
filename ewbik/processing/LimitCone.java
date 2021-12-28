@@ -31,7 +31,7 @@ public class LimitCone extends AbstractLimitCone {
     }
 
     public LimitCone(PVector location, float rad, AbstractKusudama attachedTo) {
-        super(Axes.toSGVec(location), rad, attachedTo);
+        super(Axes.toVector3(location), rad, attachedTo);
     }
 
 }

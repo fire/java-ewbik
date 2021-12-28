@@ -65,8 +65,8 @@ public class Bone extends AbstractBone {
                 frameType coordinateType) throws NullParentForBoneException {
         super(
                 par,
-                Axes.toSGVec(tipHeading),
-                Axes.toSGVec(rollHeading),
+                Axes.toVector3(tipHeading),
+                Axes.toVector3(rollHeading),
                 inputTag,
                 inputBoneHeight,
                 coordinateType);
@@ -91,8 +91,8 @@ public class Bone extends AbstractBone {
             frameType coordinateType) {
         super(
                 armature,
-                Axes.toSGVec(tipHeading),
-                Axes.toSGVec(rollHeading),
+                Axes.toVector3(tipHeading),
+                Axes.toVector3(rollHeading),
                 inputTag,
                 boneHeight,
                 coordinateType);

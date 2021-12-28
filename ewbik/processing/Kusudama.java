@@ -103,12 +103,12 @@ public class Kusudama extends AbstractKusudama {
      * @param radius   the radius of the limitCone
      */
     public void addLimitConeAtIndex(int insertAt, PVector newPoint, float radius) {
-        super.addLimitConeAtIndex(insertAt, Axes.toSGVec(newPoint), radius);
+        super.addLimitConeAtIndex(insertAt, Axes.toVector3(newPoint), radius);
     }
 
     public boolean isInLimits(PVector inPoint) {
         return super.isInLimits_(
-                Axes.toSGVec(inPoint));
+                Axes.toVector3(inPoint));
     }
 
     public void drawMe(PGraphics p, int boneCol, float pinSize) {

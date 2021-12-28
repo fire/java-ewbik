@@ -48,10 +48,10 @@ public class Axes extends Transform3D {
                 AbstractAxes parent) {
 
         super(
-                toSGVec(origin),
-                toSGVec(inX),
-                toSGVec(inY),
-                toSGVec(inZ),
+                toVector3(origin),
+                toVector3(inX),
+                toVector3(inY),
+                toVector3(inZ),
                 parent
         );
     }
@@ -94,14 +94,14 @@ public class Axes extends Transform3D {
     }
 
 
-    public static Vector3 toSGVec(PVector ev) {
+    public static Vector3 toVector3(PVector ev) {
         return new Vector3(ev.x, ev.y, ev.z);
     }
 
     public static Ray3 toSgRay(ewbik.processing.singlePrecision.sceneGraph.Ray er) {
         return new Ray3(
-                toSGVec(er.p1),
-                toSGVec(er.p2)
+                toVector3(er.p1),
+                toVector3(er.p2)
         );
     }
 
@@ -126,14 +126,14 @@ public class Axes extends Transform3D {
     public PVector getGlobalOf(PVector local_input) {
         return toPVector(
                 super.getGlobalOf(
-                        toSGVec(local_input))
+                        toVector3(local_input))
         );
     }
 
     public PVector setToGlobalOf(PVector local_input) {
         return toPVector(
                 super.setToGlobalOf(
-                        toSGVec(local_input)
+                        toVector3(local_input)
                 )
         );
     }
@@ -141,7 +141,7 @@ public class Axes extends Transform3D {
     public void setToGlobalOf(PVector local_input, PVector global_output) {
         toDVector(
                 super.setToGlobalOf(
-                        toSGVec(local_input)
+                        toVector3(local_input)
                 ),
                 global_output
         );
@@ -149,19 +149,19 @@ public class Axes extends Transform3D {
 
     public void translateByLocal(PVector translate) {
         super.translateByLocal(
-                toSGVec(translate)
+                toVector3(translate)
         );
     }
 
     public void translateByGlobal(PVector translate) {
         super.translateByGlobal(
-                toSGVec(translate)
+                toVector3(translate)
         );
     }
 
     public void translateTo(PVector translate, boolean slip) {
         super.translateTo(
-                toSGVec(translate),
+                toVector3(translate),
                 false
         );
 
@@ -169,7 +169,7 @@ public class Axes extends Transform3D {
 
     public void translateTo(PVector translate) {
         super.translateTo(
-                toSGVec(translate)
+                toVector3(translate)
         );
     }
 
@@ -192,7 +192,7 @@ public class Axes extends Transform3D {
     public PVector getLocalOf(PVector global_input) {
         return toPVector(
                 super.getLocalOf(
-                        toSGVec(global_input)
+                        toVector3(global_input)
                 )
         );
     }
@@ -200,7 +200,7 @@ public class Axes extends Transform3D {
     public PVector setToLocalOf(PVector global_input) {
         toDVector(
                 super.setToLocalOf(
-                        toSGVec(global_input)
+                        toVector3(global_input)
                 ),
                 global_input
         );
@@ -210,7 +210,7 @@ public class Axes extends Transform3D {
     public void setToLocalOf(PVector global_input, PVector local_output) {
         Vector3 tempVec = new Vector3();
         super.setToLocalOf(
-                toSGVec(global_input),
+                toVector3(global_input),
                 tempVec
         );
         toDVector(
