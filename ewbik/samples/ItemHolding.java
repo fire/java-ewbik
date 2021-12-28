@@ -19,7 +19,7 @@ public class ItemHolding extends PApplet {
     ArrayList<IKPin> pins = new ArrayList<>();
     UI ui;
     IKPin activePin;
-    Axes worlAxes, cubeAxes;
+    Axes worldAxes, cubeAxes;
     float zoomScalar = 200f / height;
     boolean cubeMode = true;
 
@@ -43,10 +43,10 @@ public class ItemHolding extends PApplet {
             e.printStackTrace();
         }
         loadedArmature = ewbik.processing.IO.LoadArmature_singlePrecision("Humanoid_Holding_Item.arm");
-        worlAxes = (Axes) loadedArmature.localAxes().getParentAxes();
-        if (worlAxes == null) {
-            worlAxes = new Axes();
-            loadedArmature.localAxes().setParent(worlAxes);
+        worldAxes = (Axes) loadedArmature.localAxes().getParentAxes();
+        if (worldAxes == null) {
+            worldAxes = new Axes();
+            loadedArmature.localAxes().setParent(worldAxes);
         }
         updatePinList();
         cubeAxes = new Axes();
@@ -64,7 +64,7 @@ public class ItemHolding extends PApplet {
          * move our box into the appropriate postion
          */
         cubeAxes.translateTo(new PVector(-13, -27, 32));
-        cubeAxes.setRelativeToParent(worlAxes);
+        cubeAxes.setRelativeToParent(worldAxes);
         /**
          * and then specify that the transformations of the left hand and right hand
          * pins
@@ -86,7 +86,7 @@ public class ItemHolding extends PApplet {
             }
             loadedArmature.IKSolver(loadedArmature.getRootBone());
         } else {
-            worlAxes.rotateAboutY(PI / 500f, true);
+            worldAxes.rotateAboutY(PI / 500f, true);
         }
         String additionalInstructions = "Hit the 'C' key to select or deselect the cube";
         additionalInstructions += "\n HIT THE S KEY TO SAVE AND HIT THE L KEY TO LOAD THE CURRENT ARMATURE CONFIGURATION.";
