@@ -41,10 +41,8 @@ public abstract class AbstractSkeleton3D implements Saveable {
     protected HashMap<AbstractBone, SegmentedArmature> boneSegmentMap = new HashMap<AbstractBone, SegmentedArmature>();
     protected AbstractBone rootBone;
     public SegmentedArmature segmentedArmature;
-    // public StrandedArmature strandedArmature;
     protected String tag;
 
-    // protected int IKType = ORIENTATIONAWARE;
     protected int IKIterations = 15;
     protected float dampening = MathUtils.toRadians(5f);
     private boolean abilityBiasing = false;
@@ -223,22 +221,6 @@ public abstract class AbstractSkeleton3D implements Saveable {
         this.tag = newTag;
     }
 
-    /*
-     * @param inverseWeighted if true, will apply an additional rotation penalty on
-     * the
-     * peripheral bones near a target so as to result in more natural poses with
-     * less need for dampening.
-     */
-    /*
-     * public void setInverseWeighted(boolean inverseWeighted) {
-     * this.inverseWeighted = inverseWeighted;
-     * }
-     *
-     * public boolean isInverseWeighted() {
-     * return this.inverseWeighted;
-     * }
-     */
-
     /**
      * this method should be called whenever a bone
      * in this armature has been pinned or unpinned.
@@ -390,15 +372,12 @@ public abstract class AbstractSkeleton3D implements Saveable {
             armature = pinnedRootChain == null ? armature.getAncestorSegmentContaining(rootBone) : pinnedRootChain;
             if (armature != null && armature.pinnedDescendants.size() > 0) {
                 armature.alignSimulationAxesToBones();
-
                 iterations = iterations == -1 ? IKIterations : iterations;
                 float totalIterations = iterations;
-                // dampening = dampening == -1? this.dampening : dampening;
                 stabilizationPasses = stabilizationPasses == -1 ? this.defaultStabilizingPassCount
                         : stabilizationPasses;
                 for (int i = 0; i < iterations; i++) {
                     if (!armature.isBasePinned()) {
-                        // alignSegmentTipOrientationsFor(armature, dampening);
                         armature.updateOptimalRotationToPinnedDescendants(armature.segmentRoot, MathUtils.PI, true,
                                 stabilizationPasses, i, totalIterations);
                         armature.setProcessed(false);
@@ -408,9 +387,6 @@ public abstract class AbstractSkeleton3D implements Saveable {
                     } else {
                         groupedRecursiveSegmentSolver(armature, dampening, stabilizationPasses, i, totalIterations);
                     }
-                    // outwardRecursiveSegmentSolver(armature, dampening);
-                    // alignSegmentTipOrientationsFor(armature, dampening);
-
                 }
                 armature.recursivelyAlignBonesToSimAxesFrom(armature.segmentRoot);
                 recursivelyNotifyBonesOfCompletedIKSolution(armature);
@@ -424,11 +400,9 @@ public abstract class AbstractSkeleton3D implements Saveable {
         recursiveSegmentSolver(startFrom, dampening, stabilizationPasses, iteration, totalIterations);
         for (SegmentedArmature a : startFrom.pinnedDescendants) {
             for (SegmentedArmature c : a.childSegments) {
-                // alignSegmentTipOrientationsFor(startFrom, dampening);
                 groupedRecursiveSegmentSolver(c, dampening, stabilizationPasses, iteration, totalIterations);
             }
         }
-        // alignSegmentTipOrientationsFor(startFrom, dampening);
     }
 
     /**
@@ -462,22 +436,13 @@ public abstract class AbstractSkeleton3D implements Saveable {
             float totalIterations) {
 
         debug = false;
-
-        // lastDebugBone = null;
         AbstractBone startFrom = debug && lastDebugBone != null ? lastDebugBone : chain.segmentTip;
         AbstractBone stopAfter = chain.segmentRoot;
 
         AbstractBone currentBone = startFrom;
 
         if (debug && chain.simulatedBones.size() < 2) {
-
         } else {
-            /*
-             * if(chain.isTipPinned() && chain.segmentTip.getIKPin().getDepthFalloff() ==
-             * 0f)
-             * alignSegmentTipOrientationsFor(chain, dampening);
-             */
-            // System.out.print("---------");
             while (currentBone != null) {
                 if (!currentBone.getIKOrientationLock()) {
                     chain.updateOptimalRotationToPinnedDescendants(currentBone, dampening, false, stabilizationPasses,
@@ -572,7 +537,6 @@ public abstract class AbstractSkeleton3D implements Saveable {
         public void solveFinished(int iterations) {
             if (monitorPerformance) {
                 totalSolutionTime += System.nanoTime() - startTime;
-                // averageSolutionTime *= solutionCount;
                 solutionCount++;
                 iterationCount += iterations;
 
@@ -659,14 +623,11 @@ public abstract class AbstractSkeleton3D implements Saveable {
 
     @Override
     public boolean isLoading() {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public void setLoading(boolean loading) {
-        // TODO Auto-generated method stub
-
     }
 
 }
