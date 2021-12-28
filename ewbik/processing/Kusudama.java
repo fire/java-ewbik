@@ -42,7 +42,6 @@ import java.util.ArrayList;
 public class Kusudama extends AbstractKusudama {
 
     public static PShader kusudamaShader;
-    public static PShader kusudamaStencil;
     public static int renderMode = 1;
     public static PShader currentShader;
 
@@ -203,11 +202,7 @@ public class Kusudama extends AbstractKusudama {
             idx += 4;
         }
 
-        if (renderMode == 0)
-            currentShader = kusudamaStencil;
-        else
-            currentShader = kusudamaShader;
-
+        currentShader = kusudamaShader;
     }
 
     @SuppressWarnings("unchecked")
