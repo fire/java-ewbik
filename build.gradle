@@ -7,11 +7,11 @@ plugins {
 
 repositories {
     mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 
-dependencies {    
-    // https://mvnrepository.com/artifact/org.processing/core
-    implementation 'org.processing:core:3.3.7'
+dependencies {
+    implementation 'com.github.micycle1:processing3:3.5.4'
 }
 
 application {
