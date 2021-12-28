@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ main ]
 jobs:
-  build-windows:
+  build-linux:
     runs-on: linux-latest
     defaults:
       run:
@@ -33,7 +33,6 @@ jobs:
         title: EWBIK Linux
         files: |
           ewbik-linux.zip
-
   build-windows:
     runs-on: windows-latest
     defaults:
