@@ -114,55 +114,9 @@ public final class MathUtils {
 
     // ---
 
-    static public Random random = new RandomXS128();
-
     public static float lerp(float a, float b, float t) {
         return (1 - t) * a + t * b;
     }
-
-    /**
-     * Returns a random number between 0 (inclusive) and the specified value (inclusive).
-     */
-    static public int random(int range) {
-        return random.nextInt(range + 1);
-    }
-
-    /**
-     * Returns a random number between start (inclusive) and end (inclusive).
-     */
-    static public int random(int start, int end) {
-        return start + random.nextInt(end - start + 1);
-    }
-
-    /**
-     * Returns a random number between 0 (inclusive) and the specified value (inclusive).
-     */
-    static public long random(long range) {
-        return (long) (random.nextDouble() * range);
-    }
-
-    /**
-     * Returns a random number between start (inclusive) and end (inclusive).
-     */
-    static public long random(long start, long end) {
-        return start + (long) (random.nextDouble() * (end - start));
-    }
-
-    /**
-     * Returns a random boolean value.
-     */
-    static public boolean randomBoolean() {
-        return random.nextBoolean();
-    }
-
-
-    /**
-     * Returns -1 or 1, randomly.
-     */
-    static public int randomSign() {
-        return 1 | (random.nextInt() >> 31);
-    }
-
 
     // ---
 
