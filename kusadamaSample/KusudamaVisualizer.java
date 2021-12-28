@@ -23,24 +23,21 @@ public class KusudamaVisualizer extends PApplet {
     }
 
     float zoomScalar = 7f / height;
-    float orthoHeight = height;
-    float orthoWidth = width;
 
     Armature simpleArmature;
     Bone rootBone, initialBone,
-            seconBone, thirBone;
+            secondBone, thirdBone;
 
     UI ui;
 
     Axes worldAxes;
     ArrayList<IKPin> pins = new ArrayList<>();
     public static IKPin activePin;
-    public boolean multipassAllowed = true;
 
     public void setup() {
         ui = new UI(this);
 
-        //Create global axes so we can easily manipulate the whole scene. (not necessary, just convenient)
+        //Create global axes, so we can easily manipulate the whole scene. (not necessary, just convenient)
         worldAxes = new Axes();
 
         //Create an armature
@@ -80,8 +77,8 @@ public class KusudamaVisualizer extends PApplet {
         rootBone = simpleArmature.getRootBone();
         rootBone.setBoneHeight(20f);
         initialBone = new Bone(rootBone, "initial", 74f);
-        seconBone = new Bone(initialBone, "seconBone", 86f);
-        thirBone = new Bone(seconBone, "thirBone", 98f);
+        secondBone = new Bone(initialBone, "seconBone", 86f);
+        thirdBone = new Bone(secondBone, "thirBone", 98f);
 
         initialBone.rotAboutFrameX(.01f);
 
@@ -89,14 +86,14 @@ public class KusudamaVisualizer extends PApplet {
         rootBone.enablePin();
 
         //intermediary pin a few bones up the chain.
-        thirBone.enablePin();
+        thirdBone.enablePin();
 
         //determine how much precedence each of this pin's axes get
         //in relation to other axes on other pins being considered by the solver.
         //this line state that the solver should care about this bone's X and Y headings
         //aligning with its targets about 5 times as much as it cares about the X and Y headings of any other bones.
         //it also tells the solver to ignore the z heading entirely.
-        thirBone.getIKPin().setTargetPriorities(5f, 5f, 0f);
+        thirdBone.getIKPin().setTargetPriorities(5f, 5f, 0f);
     }
 
     public void setBoneConstraints() {
@@ -108,19 +105,19 @@ public class KusudamaVisualizer extends PApplet {
         firstConstraint.enable();
         initialBone.addConstraint(firstConstraint);
 
-        Kusudama secondConstraint = new Kusudama(seconBone);
+        Kusudama secondConstraint = new Kusudama(secondBone);
         secondConstraint.addLimitConeAtIndex(0, new PVector(.5f, 1f, 0f), 0.6f);
         secondConstraint.addLimitConeAtIndex(1, new PVector(-1f, 1f, 0f), 0.2f);
         secondConstraint.setAxialLimits(0.1f, 0.9f);
         secondConstraint.enable();
-        seconBone.addConstraint(secondConstraint);
+        secondBone.addConstraint(secondConstraint);
 
-        Kusudama thirdConstraint = new Kusudama(thirBone);
+        Kusudama thirdConstraint = new Kusudama(thirdBone);
         thirdConstraint.addLimitConeAtIndex(0, new PVector(.5f, 1f, 0f), 0.8f);
         thirdConstraint.addLimitConeAtIndex(1, new PVector(-.5f, 1f, 0f), 0.8f);
         thirdConstraint.setAxialLimits(0.1f, 0.3f);
         thirdConstraint.enable();
-        thirBone.addConstraint(thirdConstraint);
+        thirdBone.addConstraint(thirdConstraint);
     }
 
     public void draw() {

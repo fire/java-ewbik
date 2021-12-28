@@ -10,12 +10,12 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 
-dependencies {
-    implementation 'com.github.micycle1:processing3:3.5.4'
+application {
+    mainClass = 'samples.itemHolding'
 }
 
-application {
-	mainClassName = 'samples.ItemHolding'
+dependencies {
+    implementation 'com.github.micycle1:processing3:3.5.4'
 }
 
 version = '0.0.1-' + new Date().format("yyyyMMdd'T'HHmmss'Z'", TimeZone.getTimeZone("UTC")) 
@@ -24,11 +24,11 @@ sourceSets {
     main {
         java {
             srcDirs = [
-                'ewbik',
+                '../ewbik',
             ]
         }
         resources {
-            srcDirs = ['ewbIK']
+            srcDirs = ['../ewbIK']
         }
     }
 }

@@ -244,7 +244,7 @@ public class UI {
     /**
      * @return the draw surface this class is currently operating on.
      * This is used as kind of hack, so I don't have to bother writing
-     * interfaces just to render a box when using multipass.
+     * interfaces just to render a box when using multi-pass.
      */
     public PGraphics getCurrentDrawSurface() {
         return currentDrawSurface;

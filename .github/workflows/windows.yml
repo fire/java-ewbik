@@ -1,4 +1,4 @@
-name: Build Windows
+name: Build Linux
 
 on:
   push:
@@ -16,18 +16,26 @@ jobs:
       with:
         java-version: '8'
         distribution: 'adopt'
-
     - name: Build with Gradle
+      working-directory: ./itemHolder
+      uses: gradle/gradle-build-action@4137be6a8bf7d7133955359dbd952c0ca73b1021
+      with:
+        arguments: build installDist
+    - name: Build with Gradle
+      working-directory: ./kusadamaSample
       uses: gradle/gradle-build-action@4137be6a8bf7d7133955359dbd952c0ca73b1021
       with:
         arguments: build installDist
     - name: Copy licenses
       run: |
-        cp LICENSE build/install/
+        cp LICENSE ./itemHolder/build/install/
+        cp LICENSE ./kusadamaSample/build/install/
       shell: bash
     - uses: papeloto/action-zip@v1
       with:
-        files: build/install/
+        files: 
+        - ./itemHolder/build/install/
+        - ./kusadamaSample/build/install/
         recursive: false
         dest: ewbik-windows.zip
     - uses: "marvinpinto/action-automatic-releases@latest"
@@ -35,6 +43,6 @@ jobs:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         automatic_release_tag: latest-windows
         prerelease: true
-        title: EWBIK Windows 11
+        title: EWBIK Windows
         files: |
           ewbik-windows.zip
