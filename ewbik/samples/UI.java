@@ -16,14 +16,10 @@ import java.io.IOException;
 public class UI {
     PApplet pa;
     PGraphics display;
-    PShader blurshader;
 
     public UI(PApplet p) {
         try {
-            FileWriter writer = new FileWriter("blur-sep.glsl");
-            writer.write("// Adapted from:\r\n// http://callumhay.blogspot.com/2010/09/gaussian-blur-shader-glsl.html\r\n// Original shader available as part of the processing library under the \"SepBlur\" demo.\r\n// Modifications made by Eron Gjoni for proper handling of gamma (see: https://www.youtube.com/watch?v=LKnqECcg6Gw)\r\n// and (rudimentary) stencil masking suppor. \r\n\r\n\r\n#ifdef GL_ES\r\nprecision mediump float;\r\nprecision mediump int;\r\n#endif\r\n\r\n#define PROCESSING_TEXTURE_SHADER\r\n\r\nuniform sampler2D texture;\r\nuniform sampler2D mask;\r\n\r\n// The inverse of the texture dimensions along X and Y\r\nuniform vec2 texOffset;\r\n\r\nvarying vec4 vertColor;\r\nvarying vec4 vertTexCoord;\r\n\r\nuniform int blurSize;       \r\nuniform int horizontalPass; // 0 or 1 to indicate vertical or horizontal pass\r\nuniform float sigma;        // The sigma value for the gaussian function: higher value means more blur\r\n                            // A good value for 9x9 is around 3 to 5\r\n                            // A good value for 7x7 is around 2.5 to 4\r\n                            // A good value for 5x5 is around 2 to 3.5\r\n                            // ... play around with this based on what you need :)\r\n\r\nconst float pi = 3.14159265;\r\n\r\nbool isZero(in vec3 v) {\r\n\treturn v.x+v.y+v.z == 0.0; \r\n}\r\n\r\nbool isZero(in vec4 v) {\r\n\treturn v.w+v.x+v.y+v.z == 0.0; \r\n}\r\n\r\nbool isWorthy(vec4 center, vec4 contender) {\r\n\treturn center == contender;\r\n}\r\n\r\nvoid main() {  \r\n\r\n    float numBlurPixelsPerSide = float(blurSize / 2); \r\n    vec2 blurMultiplyVec = 0 < horizontalPass ? vec2(1.0, 0.0) : vec2(0.0, 1.0);\r\n\r\n    // Incremental Gaussian Coefficent Calculation (See GPU Gems 3 pp. 877 - 889)\r\n    vec3 incrementalGaussian;\r\n    incrementalGaussian.x = 1.0 / (sqrt(2.0 * pi) * sigma);\r\n    incrementalGaussian.y = exp(-0.5 / (sigma * sigma));\r\n    incrementalGaussian.z = incrementalGaussian.y * incrementalGaussian.y;\r\n\r\n    vec4 avgValue = vec4(0.0, 0.0, 0.0, 0.0);\r\n    float coefficientSum = 0.0;\r\n\r\n    // Take the central sample first...\r\n    avgValue = texture2D(texture, vertTexCoord.st);\r\n    vec4 baseMask = texture2D(mask, vertTexCoord.st);\r\n    if(!isZero(baseMask.rgb)) {\r\n        avgValue *= avgValue;\r\n        avgValue = avgValue * incrementalGaussian.x;\r\n        coefficientSum += incrementalGaussian.x;\r\n        incrementalGaussian.xy *= incrementalGaussian.yz;\r\n\r\n        // Go through the remaining 8 vertical samples (4 on each side of the center)\r\n        for (float i = 1.0; i <= numBlurPixelsPerSide; i++) { \r\n        \tvec4 maskL = texture2D(mask, vertTexCoord.st - i * texOffset *  blurMultiplyVec); \r\n                                    \r\n            if(isWorthy(baseMask, maskL) && !isZero(maskL.rgb)) {\r\n            \r\n            \tvec4 left = texture2D(texture, vertTexCoord.st - i * texOffset * \r\n                                    blurMultiplyVec, 0);\r\n                left *= left;\r\n                left = left * incrementalGaussian.x;\r\n                avgValue += left;  \r\n                coefficientSum += incrementalGaussian.x;\r\n            } else {\r\n            \t//discard;\r\n            }            \r\n            \r\n            vec4 maskR = texture2D(mask, vertTexCoord.st + i * texOffset * \r\n                                    blurMultiplyVec);\r\n            \r\n            if(isWorthy(baseMask, maskR) && !isZero(maskR.rgb)) {\r\n            \r\n            \tvec4 right = texture2D(texture, vertTexCoord.st + i * texOffset * \r\n                                    blurMultiplyVec);\r\n                right *= right;\r\n                right = right * incrementalGaussian.x; \r\n                avgValue +=  right;\r\n                coefficientSum += incrementalGaussian.x;\r\n            } else {\r\n            \t//discard;\r\n            }\r\n            \r\n            \r\n            incrementalGaussian.xy *= incrementalGaussian.yz;\r\n        }\r\n    \r\n        avgValue /= coefficientSum;\r\n        avgValue = sqrt(avgValue); \r\n    }\r\n\r\n  gl_FragColor = avgValue;\r\n}");
-            writer.close();
-            writer = new FileWriter("kusudama_vert.glsl");
+            FileWriter writer = new FileWriter("kusudama_vert.glsl");
             writer.write("uniform mat4 transform;\r\n            uniform mat4 modelviewMatrix;\r\n            uniform mat4 modelMatrix;\r\n            uniform mat3 normalMatrix;\r\n            uniform vec3 lightNormal;\r\n            uniform mat4 modelViewInv; \r\n            \r\n            \r\n            attribute vec4 position;\r\n            attribute vec4 color;\r\n            attribute vec3 normal;\r\n            \r\n            varying vec4 vertColor;\r\n            varying vec3 vertNormal;\r\n            varying vec3 vertLightDir;\r\n            varying vec3 vertWorldNormal;\r\n            varying vec4 vertWorldPos; \r\n            varying vec4 posN;\r\n            \r\n            void main() {\r\n              gl_Position = transform * position;\r\n              vec4 f_normal = vec4(normal.x, normal.y, normal.z, 1.0); // vec4(normalize(normalMatrix * normal), 1.0);//\r\n              f_normal = position * modelViewInv;\r\n              //posN =  \r\n              vertColor = color;\r\n              vertNormal = f_normal.xyz;\r\n              vertLightDir = normal;\r\n              vertWorldNormal  = normalMatrix * normal;\r\n              vertWorldPos = transform * position;\r\n            }");
             writer.close();
             writer = new FileWriter("kusudama.glsl");
@@ -38,9 +34,6 @@ public class UI {
         display = pa.createGraphics(p.width, p.height, PConstants.P3D);
         display.smooth(8);
         System.out.println(p.sketchPath());
-        blurshader = pa.loadShader("blur-sep.glsl");
-        blurshader.set("blurSize", 20);
-        blurshader.set("sigma", 9f);
         Kusudama.kusudamaShader = pa.loadShader("kusudama.glsl",
                 "kusudama_vert.glsl");
 
@@ -167,10 +160,6 @@ public class UI {
         display.beginDraw();
         setSceneAndCamera(display, zoomScalar);
         drawPass(1, drawSize, additionalDraw, display, armature);
-        blurshader.set("horizontalPass", 0);
-        display.filter(blurshader);
-        blurshader.set("horizontalPass", 1);
-        display.filter(blurshader);
         display.endDraw();
 
         currentDrawSurface = pa.g;
