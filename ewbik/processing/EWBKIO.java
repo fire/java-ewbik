@@ -15,12 +15,12 @@ public final class EWBKIO {
      * @param path
      * @return the Armature, or null if the file does not specify an armature
      */
-    public static ewbik.processing.Armature LoadArmature_singlePrecision(String path) {
+    public static ewbik.processing.Skeleton3D LoadArmature_singlePrecision(String path) {
         EWBIKLoader newLoader = new EWBIKLoader();
         @SuppressWarnings("unchecked")
-        Collection<ewbik.processing.Armature> ArmatureList = (Collection<ewbik.processing.Armature>) newLoader.importSinglePrecisionArmatures(path,
-                Axes.class, ewbik.processing.singlePrecision.Bone.class, ewbik.processing.Armature.class, ewbik.processing.singlePrecision.Kusudama.class, ewbik.processing.singlePrecision.LimitCone.class, ewbik.processing.singlePrecision.IKPin.class);
-        for (ewbik.processing.Armature a : ArmatureList) {
+        Collection<ewbik.processing.Skeleton3D> ArmatureList = (Collection<ewbik.processing.Skeleton3D>) newLoader.importSinglePrecisionArmatures(path,
+                Axes.class, ewbik.processing.singlePrecision.Bone.class, ewbik.processing.Skeleton3D.class, ewbik.processing.singlePrecision.Kusudama.class, ewbik.processing.singlePrecision.LimitCone.class, ewbik.processing.singlePrecision.IKPin.class);
+        for (ewbik.processing.Skeleton3D a : ArmatureList) {
             return a;
         }
         return null;
@@ -32,7 +32,7 @@ public final class EWBKIO {
      * @param path
      * @param loadInto
      */
-    public static void SaveArmature(String path, Armature toSave) {
+    public static void SaveArmature(String path, Skeleton3D toSave) {
         EWBIKSaver newSaver = new EWBIKSaver();
         newSaver.saveArmature(toSave, path);
     }

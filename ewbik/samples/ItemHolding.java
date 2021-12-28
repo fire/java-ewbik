@@ -1,6 +1,5 @@
 package samples;
 
-import ewbik.processing.Armature;
 import ewbik.processing.EWBKIO;
 import ewbik.processing.sceneGraph.Axes;
 import ewbik.processing.singlePrecision.Bone;
@@ -25,7 +24,7 @@ public class ItemHolding extends PApplet {
         size(1200, 900, P3D);
     }
 
-    Armature loadedArmature;
+    ewbik.processing.Skeleton3D loadedArmature;
     ArrayList<IKPin> pins = new ArrayList<>();
     UI ui;
 

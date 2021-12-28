@@ -1,6 +1,5 @@
 package samples;
 
-import ewbik.processing.Armature;
 import ewbik.processing.sceneGraph.Axes;
 import ewbik.processing.singlePrecision.Bone;
 import ewbik.processing.singlePrecision.IKPin;
@@ -149,7 +148,7 @@ public class UI {
 
     }
 
-    public void drawPass(int mode, float drawSize, Runnable preArmatureDraw, PGraphics buffer, Armature armature) {
+    public void drawPass(int mode, float drawSize, Runnable preArmatureDraw, PGraphics buffer, ewbik.processing.Skeleton3D armature) {
         Kusudama.renderMode = mode;
         Bone.renderMode = mode;
         Axes.renderMode = mode;
@@ -168,7 +167,7 @@ public class UI {
 
     public void drawScene(float zoomScalar, float drawSize,
                           Runnable additionalDraw,
-                          Armature armature,
+                          ewbik.processing.Skeleton3D armature,
                           String usageInstructions,
                           IKPin activePin, Axes cubeAxes, boolean cubeEnabled) {
         Kusudama.enableMultiPass(true);

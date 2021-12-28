@@ -33,13 +33,13 @@ import processing.core.PVector;
  * AbstractArmature. Please refer to the {@link AbstractArmature
  * AbstractArmature docs.}
  */
-public class Armature extends AbstractArmature {
+public class Skeleton3D extends AbstractArmature {
 
     // default constructor required for file loading to work
-    public Armature() {
+    public Skeleton3D() {
     }
 
-    public Armature(String name) {
+    public Skeleton3D(String name) {
         super(new Axes(
                 new PVector(0, 0, 0), new PVector(1, 0, 0), new PVector(0, 1, 0), new PVector(0, 0, 1), null), name);
     }
