@@ -28,7 +28,7 @@ public class EWBIKLoader {
      * @param BoneClass      the class object you've used to extend the AbstractBone
      *                       class. If null, AbstractBone will be used.
      * @param ArmatureClass  the class object you've used to extend the
-     *                       AbstractArmature class. If null, AbstractArmature will
+     *                       AbstractSkeleton3D class. If null, AbstractSkeleton3D will
      *                       be used.
      * @param KusudamaClass  the class object you've used to extend the
      *                       AbstractKusudama class. If null, AbstractKusudama will
@@ -42,10 +42,10 @@ public class EWBIKLoader {
      * @return a list of all instantiated armatures specified by the input file.
      */
 
-    public Collection<? extends AbstractArmature> importSinglePrecisionArmatures(String filepath,
+    public Collection<? extends AbstractSkeleton3D> importSinglePrecisionArmatures(String filepath,
                                                                                  Class<? extends AbstractAxes> AxesClass,
                                                                                  Class<? extends AbstractBone> BoneClass,
-                                                                                 Class<? extends AbstractArmature> ArmatureClass,
+                                                                                 Class<? extends AbstractSkeleton3D> ArmatureClass,
                                                                                  Class<? extends Constraint> KusudamaClass,
                                                                                  Class<? extends AbstractLimitCone> LimitConeClass,
                                                                                  Class<? extends AbstractIKPin> IKPinClass) {

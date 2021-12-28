@@ -40,7 +40,7 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
 
     ;
 
-    public AbstractArmature parentArmature;
+    public AbstractSkeleton3D parentArmature;
     protected String tag;
 
     protected Quaternion lastRotation;
@@ -288,7 +288,7 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
     protected abstract void generateAxes(Vec3f<?> origin, Vec3f<?> x, Vec3f<?> y, Vec3f<?> z);
 
     public AbstractBone(
-            AbstractArmature parArma,
+            AbstractSkeleton3D parArma,
             Vec3f<?> tipHeading,
             Vec3f<?> rollHeading,
             String inputTag,
@@ -351,7 +351,7 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
 
     }
 
-    public AbstractBone(AbstractArmature parArma,
+    public AbstractBone(AbstractSkeleton3D parArma,
                         Vec3f<?> tipHeading,
                         Vec3f<?> rollHeading,
                         String inputTag,
@@ -417,7 +417,7 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
     }
 
     /*
-     * public AbstractBone(AbstractArmature parArma, JSONObject boneJSON,
+     * public AbstractBone(AbstractSkeleton3D parArma, JSONObject boneJSON,
      * AbstractAxes attachedAxes) {
      * this.lastRotation = new Quaternion(MRotation.IDENTITY);
      * this.localAxes = attachedAxes;
@@ -1116,7 +1116,7 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
         this.localAxes = (AbstractAxes) l.getObjectFromClassMaps(AbstractAxes.class, j.getString("localAxes"));
         this.majorRotationAxes = (AbstractAxes) l.getObjectFromClassMaps(AbstractAxes.class,
                 j.getString("majorRotationAxes"));
-        this.parentArmature = (AbstractArmature) l.getObjectFromClassMaps(AbstractArmature.class,
+        this.parentArmature = (AbstractSkeleton3D) l.getObjectFromClassMaps(AbstractSkeleton3D.class,
                 j.getString("parentArmature"));
         l.arrayListFromJSONArray(j.getJSONArray("children"), this.children, this.getClass());
         this.boneHeight = j.getFloat("boneHeight");

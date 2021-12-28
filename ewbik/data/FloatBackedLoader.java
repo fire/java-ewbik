@@ -24,7 +24,7 @@ public final class FloatBackedLoader extends LoadManager {
     public HashMap<String, AbstractAxes> axesLoadObjects = new HashMap<>();
 
     public HashMap<String, JSONObject> armatureJSONObjects = new HashMap<>();
-    public HashMap<String, AbstractArmature> armatureLoadObjects = new HashMap<>();
+    public HashMap<String, AbstractSkeleton3D> armatureLoadObjects = new HashMap<>();
 
     public HashMap<String, JSONObject> boneJSONObjects = new HashMap<>();
     public HashMap<String, AbstractBone> boneLoadObjects = new HashMap<>();
@@ -48,10 +48,10 @@ public final class FloatBackedLoader extends LoadManager {
 
     }
 
-    public Collection<? extends AbstractArmature> importFile(File selection,
+    public Collection<? extends AbstractSkeleton3D> importFile(File selection,
                                                              Class<? extends AbstractAxes> AxesClass,
                                                              Class<? extends AbstractBone> BoneClass,
-                                                             Class<? extends AbstractArmature> ArmatureClass,
+                                                             Class<? extends AbstractSkeleton3D> ArmatureClass,
                                                              Class<? extends Constraint> KusudamaClass,
                                                              Class<? extends AbstractLimitCone> LimitConeClass,
                                                              Class<? extends AbstractIKPin> IKPinClass,
@@ -67,10 +67,10 @@ public final class FloatBackedLoader extends LoadManager {
                 IKPinClass);
     }
 
-    public Collection<? extends AbstractArmature> loadJSON(JSONObject loadFile,
+    public Collection<? extends AbstractSkeleton3D> loadJSON(JSONObject loadFile,
                                                            Class<? extends AbstractAxes> AxesClass,
                                                            Class<? extends AbstractBone> BoneClass,
-                                                           Class<? extends AbstractArmature> ArmatureClass,
+                                                           Class<? extends AbstractSkeleton3D> ArmatureClass,
                                                            Class<? extends Constraint> KusudamaClass,
                                                            Class<? extends AbstractLimitCone> LimitConeClass,
                                                            Class<? extends AbstractIKPin> IKPinClass) {
@@ -78,7 +78,7 @@ public final class FloatBackedLoader extends LoadManager {
 
         AxesClass = AxesClass == null ? AbstractAxes.class : AxesClass;
         BoneClass = BoneClass == null ? AbstractBone.class : BoneClass;
-        ArmatureClass = ArmatureClass == null ? AbstractArmature.class : ArmatureClass;
+        ArmatureClass = ArmatureClass == null ? AbstractSkeleton3D.class : ArmatureClass;
         KusudamaClass = KusudamaClass == null ? Constraint.class : KusudamaClass;
         LimitConeClass = LimitConeClass == null ? AbstractLimitCone.class : LimitConeClass;
         IKPinClass = IKPinClass == null ? AbstractIKPin.class : IKPinClass;
@@ -111,8 +111,8 @@ public final class FloatBackedLoader extends LoadManager {
     }
 
     public void updateArmatureSegments() {
-        Collection<AbstractArmature> armatures = armatureLoadObjects.values();
-        for (AbstractArmature a : armatures) {
+        Collection<AbstractSkeleton3D> armatures = armatureLoadObjects.values();
+        for (AbstractSkeleton3D a : armatures) {
             a.refreshArmaturePins();
         }
     }
@@ -280,7 +280,7 @@ public final class FloatBackedLoader extends LoadManager {
 
         if (AbstractAxes.class.isAssignableFrom(keyClass))
             result = (Saveable) axesLoadObjects.get(identityHash);
-        else if (AbstractArmature.class.isAssignableFrom(keyClass))
+        else if (AbstractSkeleton3D.class.isAssignableFrom(keyClass))
             result = (Saveable) armatureLoadObjects.get(identityHash);
         else if (AbstractBone.class.isAssignableFrom(keyClass))
             result = (Saveable) boneLoadObjects.get(identityHash);

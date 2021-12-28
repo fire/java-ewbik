@@ -25,7 +25,7 @@ public class FloatBackedSaver extends SaveManager {
 
     }
 
-    public void saveArmature(AbstractArmature toSave, String absolutePath) {
+    public void saveArmature(AbstractSkeleton3D toSave, String absolutePath) {
         try {
             File tempFile = File.createTempFile("GiftedApprentice", ".tmp");
             System.out.println(tempFile.getParent());
@@ -76,7 +76,7 @@ public class FloatBackedSaver extends SaveManager {
             if (jsonObj != null) {
                 if (AbstractAxes.class.isAssignableFrom(s.getClass()))
                     axesJSON.append(jsonObj);
-                if (AbstractArmature.class.isAssignableFrom(s.getClass()))
+                if (AbstractSkeleton3D.class.isAssignableFrom(s.getClass()))
                     armaturesJSON.append(jsonObj);
                 if (AbstractBone.class.isAssignableFrom(s.getClass()))
                     bonesJSON.append(jsonObj);

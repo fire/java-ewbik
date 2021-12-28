@@ -19,7 +19,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package ewbik.processing.singlePrecision;
 
-import ewbik.ik.AbstractArmature;
 import ewbik.ik.AbstractBone;
 import ewbik.ik.IKExceptions.NullParentForBoneException;
 import ewbik.math.AbstractAxes;
@@ -84,7 +83,7 @@ public class Bone extends AbstractBone {
      * @throws NullParentForBoneException
      */
     public Bone(
-            AbstractArmature armature,
+            ewbik.ik.AbstractSkeleton3D armature,
             PVector tipHeading,
             PVector rollHeading,
             String inputTag,

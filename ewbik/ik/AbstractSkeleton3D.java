@@ -32,7 +32,7 @@ import java.util.HashMap;
  *
  * @author Eron Gjoni
  */
-public abstract class AbstractArmature implements Saveable {
+public abstract class AbstractSkeleton3D implements Saveable {
 
     protected AbstractAxes localAxes;
     protected AbstractAxes tempWorkingAxes;
@@ -56,7 +56,7 @@ public abstract class AbstractArmature implements Saveable {
 
     AbstractAxes fauxParent;
 
-    public AbstractArmature() {
+    public AbstractSkeleton3D() {
     }
 
     /**
@@ -66,7 +66,7 @@ public abstract class AbstractArmature implements Saveable {
      * @param inputOrigin Desired location and orientation of the rootBone.
      * @param name        A human readable name for this armature
      */
-    public AbstractArmature(AbstractAxes inputOrigin, String name) {
+    public AbstractSkeleton3D(AbstractAxes inputOrigin, String name) {
 
         this.localAxes = (AbstractAxes) inputOrigin;
         this.tempWorkingAxes = localAxes.getGlobalCopy();
@@ -98,7 +98,7 @@ public abstract class AbstractArmature implements Saveable {
         return rootBone;
     }
 
-    protected abstract void initializeRootBone(AbstractArmature armature,
+    protected abstract void initializeRootBone(ewbik.ik.AbstractSkeleton3D armature,
                                                Vec3f<?> tipHeading, Vec3f<?> rollHeading,
                                                String inputTag,
                                                float boneHeight,

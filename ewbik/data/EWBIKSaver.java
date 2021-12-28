@@ -19,9 +19,9 @@ public class EWBIKSaver extends SaveManager {
     public static String currentFilePath;
     public static String tempDir;
 
-    public void saveArmature(AbstractArmature toSave, String path) {
+    public void saveArmature(AbstractSkeleton3D toSave, String path) {
         clearSaveState();
-        ((AbstractArmature) toSave).notifyOfSaveIntent(this);
+        ((AbstractSkeleton3D) toSave).notifyOfSaveIntent(this);
         saveAs(path);
         notifyCurrentSaveablesOfSaveCompletion();
     }
@@ -64,7 +64,7 @@ public class EWBIKSaver extends SaveManager {
             if (jsonObj != null) {
                 if (AbstractAxes.class.isAssignableFrom(s.getClass()))
                     axesJSON.append(jsonObj);
-                if (AbstractArmature.class.isAssignableFrom(s.getClass()))
+                if (AbstractSkeleton3D.class.isAssignableFrom(s.getClass()))
                     armaturesJSON.append(jsonObj);
                 if (AbstractBone.class.isAssignableFrom(s.getClass()))
                     bonesJSON.append(jsonObj);
