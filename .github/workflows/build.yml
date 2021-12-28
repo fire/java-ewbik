@@ -10,10 +10,10 @@ jobs:
     runs-on: linux-latest
     defaults:
       run:
-        working-directory: ./${{ matrix.app }}
+        working-directory: ./itemHolder
     strategy:
       matrix:
-        app: [kusudamaSample, itemHolder]
+        app: [itemHolder]
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 8
@@ -28,7 +28,7 @@ jobs:
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: latest-${{ matrix.app }}-linux
+        automatic_release_tag: latest-linux
         prerelease: true
         title: EWBIK Linux
         files: |
@@ -37,10 +37,7 @@ jobs:
     runs-on: windows-latest
     defaults:
       run:
-        working-directory: ./${{ matrix.app }}
-    strategy:
-      matrix:
-        app: [kusudamaSample, itemHolder]
+        working-directory: ./itemHolder
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 8
@@ -55,7 +52,7 @@ jobs:
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: latest-${{ matrix.app }}-windows
+        automatic_release_tag: latest-windows
         prerelease: true
         title: EWBIK Windows
         files: |
