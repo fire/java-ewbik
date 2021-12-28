@@ -195,7 +195,7 @@ public abstract class AbstractIKPin implements Saveable {
      */
     public void alignToAxes(AbstractAxes inAxes) {
         this.axes.alignGlobalsTo(inAxes);
-        // Rot rotation = new Rot(axes.x().heading(), axes.y().heading(),
+        // Quaternion rotation = new Quaternion(axes.x().heading(), axes.y().heading(),
         // inAxes.x().heading(), inAxes.y().heading());
     }
 

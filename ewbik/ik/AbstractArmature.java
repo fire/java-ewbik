@@ -530,8 +530,8 @@ public abstract class AbstractArmature implements Saveable {
      * @param b
      * @return
      */
-    public Rot getRotationBetween(AbstractAxes a, AbstractAxes b) {
-        return new Rot(a.x_().heading(), a.y_().heading(), b.x_().heading(), b.y_().heading());
+    public Quaternion getRotationBetween(AbstractAxes a, AbstractAxes b) {
+        return new Quaternion(a.x_().heading(), a.y_().heading(), b.x_().heading(), b.y_().heading());
     }
 
     public int getDefaultIterations() {

@@ -17,8 +17,8 @@ public abstract class AbstractBasis {
     public static final int Y = 1;
     public static final int Z = 2;
 
-    public Rot rotation = new Rot();
-    public Rot inverseRotation = new Rot();
+    public Quaternion rotation = new Quaternion();
+    public Quaternion inverseRotation = new Quaternion();
     /**
      * a vector respresnting the translation of this basis relative to its parent.
      */
@@ -178,18 +178,18 @@ public abstract class AbstractBasis {
         this.yRay.p2.set(yBase);
         this.zRay.p1.set(this.translate);
         this.zRay.p2.set(zBase);
-        this.rotation = new Rot();
+        this.rotation = new Quaternion();
         refreshPrecomputed();
     }
 
 
-    private Rot createPrioritzedRotation(Vec3f<?> xHeading, Vec3f<?> yHeading, Vec3f<?> zHeading) {
+    private Quaternion createPrioritzedRotation(Vec3f<?> xHeading, Vec3f<?> yHeading, Vec3f<?> zHeading) {
 
         Vec3f<?> tempV = zHeading.copy();
         tempV.set(0, 0, 0);
-        Rot toYZ = new Rot(yBase, zBase, yHeading, zHeading);
+        Quaternion toYZ = new Quaternion(yBase, zBase, yHeading, zHeading);
         toYZ.applyTo(yBase, tempV);
-        Rot toY = new Rot(tempV, yHeading);
+        Quaternion toY = new Quaternion(tempV, yHeading);
 
         return toY.applyTo(toYZ);
 		/*Vec3f<?> xidt = xBase.copy(); Vec3f<?> yidt = yBase.copy();  Vec3f<?> zidt = zBase.copy();
@@ -199,13 +199,13 @@ public abstract class AbstractBasis {
 		Vec3f<?>[] to = {origin.copy(), xHeading, yHeading, zHeading};
 		QCP alignHeads = new QCP(MathUtils.DOUBLE_ROUNDING_ERROR, MathUtils.DOUBLE_ROUNDING_ERROR);
 		alignHeads.setMaxIterations(50);
-		Rot rotation = alignHeads.weightedSuperpose(from, to, null, false);
+		Quaternion rotation = alignHeads.weightedSuperpose(from, to, null, false);
 		return rotation;*/
     }
 
 
-    public Rot getLocalOfRotation(Rot inRot) {
-        Rot resultNew = inverseRotation.applyTo(inRot).applyTo(rotation);
+    public Quaternion getLocalOfRotation(Quaternion inRot) {
+        Quaternion resultNew = inverseRotation.applyTo(inRot).applyTo(rotation);
         return resultNew;
     }
 
@@ -234,12 +234,12 @@ public abstract class AbstractBasis {
         inverseRotation.applyTo(output, output);
     }
 
-    public void rotateTo(Rot newRotation) {
+    public void rotateTo(Quaternion newRotation) {
         this.rotation.set(newRotation);
         this.refreshPrecomputed();
     }
 
-    public void rotateBy(Rot addRotation) {
+    public void rotateBy(Quaternion addRotation) {
         addRotation.applyTo(this.rotation, this.rotation);
         this.refreshPrecomputed();
     }
@@ -354,7 +354,7 @@ public abstract class AbstractBasis {
     /**
      * @return a precomputed inverse of the rotation represented by this basis object.
      */
-    public Rot getInverseRotation() {
+    public Quaternion getInverseRotation() {
         return this.inverseRotation;
     }
 

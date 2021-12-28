@@ -480,21 +480,21 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
 
     public void rotateAboutX(float angle, boolean orthonormalized) {
         this.updateGlobal();
-        Rot xRot = new Rot(getGlobalMBasis().getXHeading(), angle);
+        Quaternion xRot = new Quaternion(getGlobalMBasis().getXHeading(), angle);
         this.rotateBy(xRot);
         this.markDirty();
     }
 
     public void rotateAboutY(float angle, boolean orthonormalized) {
         this.updateGlobal();
-        Rot yRot = new Rot(getGlobalMBasis().getYHeading(), angle);
+        Quaternion yRot = new Quaternion(getGlobalMBasis().getYHeading(), angle);
         this.rotateBy(yRot);
         this.markDirty();
     }
 
     public void rotateAboutZ(float angle, boolean orthonormalized) {
         this.updateGlobal();
-        Rot zRot = new Rot(getGlobalMBasis().getZHeading(), angle);
+        Quaternion zRot = new Quaternion(getGlobalMBasis().getZHeading(), angle);
         this.rotateBy(zRot);
         this.markDirty();
     }
@@ -502,10 +502,10 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
     public void rotateBy(MRotation apply) {
         this.updateGlobal();
         if (parent != null) {
-            Rot newRot = this.getParentAxes().getGlobalMBasis().getLocalOfRotation(new Rot(apply));
+            Quaternion newRot = this.getParentAxes().getGlobalMBasis().getLocalOfRotation(new Quaternion(apply));
             this.getLocalMBasis().rotateBy(newRot);
         } else {
-            this.getLocalMBasis().rotateBy(new Rot(apply));
+            this.getLocalMBasis().rotateBy(new Quaternion(apply));
         }
         this.markDirty();
     }
@@ -516,11 +516,11 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
      *
      * @param rotation
      */
-    public void rotateBy(Rot apply) {
+    public void rotateBy(Quaternion apply) {
 
         this.updateGlobal();
         if (this.getParentAxes() != null) {
-            Rot newRot = this.getParentAxes().getGlobalMBasis().getLocalOfRotation(apply);
+            Quaternion newRot = this.getParentAxes().getGlobalMBasis().getLocalOfRotation(apply);
             this.getLocalMBasis().rotateBy(newRot);
         } else {
             this.getLocalMBasis().rotateBy(apply);
@@ -534,7 +534,7 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
      *
      * @param rotation
      */
-    public void rotateByLocal(Rot apply) {
+    public void rotateByLocal(Quaternion apply) {
         this.updateGlobal();
         if (parent != null) {
             this.getLocalMBasis().rotateBy(apply);
@@ -574,7 +574,7 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
      * its shear, translate and scale attributes.
      */
     public void rotateToParent() {
-        this.getLocalMBasis().rotateTo(new Rot(MRotation.IDENTITY));
+        this.getLocalMBasis().rotateTo(new Quaternion(MRotation.IDENTITY));
         this.markDirty();
     }
 
@@ -612,11 +612,11 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
 
     /**
      * updates the axes object such that its global orientation
-     * matches the given Rot object.
+     * matches the given Quaternion object.
      *
      * @param rotation
      */
-    public void setGlobalOrientationTo(Rot rotation) {
+    public void setGlobalOrientationTo(Quaternion rotation) {
         this.updateGlobal();
         if (this.getParentAxes() != null) {
             this.getGlobalMBasis().rotateTo(rotation);
@@ -736,7 +736,7 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
     @Override
     public void loadFromJSONObject(JSONObject j, LoadManager l) {
         SGVec_3f origin = new SGVec_3f(j.getJSONArray("translation"));
-        Rot rotation = new Rot(j.getJSONArray("rotation"));
+        Quaternion rotation = new Quaternion(j.getJSONArray("rotation"));
         this.getLocalMBasis().translate = origin;
         this.getLocalMBasis().rotation = rotation;
         this.getLocalMBasis().refreshPrecomputed();

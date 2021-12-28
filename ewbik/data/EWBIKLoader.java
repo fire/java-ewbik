@@ -8,7 +8,7 @@ import ewbik.asj.data.StringFuncs;
 import ewbik.ik.*;
 import ewbik.math.AbstractAxes;
 import ewbik.math.MRotation;
-import ewbik.math.Rot;
+import ewbik.math.Quaternion;
 import ewbik.math.SGVec_3f;
 
 import java.io.File;
@@ -156,10 +156,10 @@ public class EWBIKLoader {
             Object item = jsonArray.get(i);
             if (c == SGVec_3f.class)
                 list.add((T) new SGVec_3f(jsonArray.getJSONArray(i)));
-            else if (c == Rot.class)
-                list.add((T) new Rot(jsonArray.getJSONArray(i)));
+            else if (c == Quaternion.class)
+                list.add((T) new Quaternion(jsonArray.getJSONArray(i)));
             else if (c == MRotation.class)
-                list.add((T) new Rot(jsonArray.getJSONArray(i)).rotation);
+                list.add((T) new Quaternion(jsonArray.getJSONArray(i)).rotation);
             else if (c.getName().startsWith("java.lang"))
                 list.add((T) parsePrimitive(c, "" + jsonArray.get(i)));
             else {

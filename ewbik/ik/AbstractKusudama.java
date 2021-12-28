@@ -95,8 +95,8 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
             for (int i = 0; i < getLimitCones().size() - 1; i++) {
                 Vec3f<?> thisC = getLimitCones().get(i).getControlPoint().copy();
                 Vec3f<?> nextC = getLimitCones().get(i + 1).getControlPoint().copy();
-                Rot thisToNext = new Rot(thisC, nextC);
-                Rot halfThisToNext = new Rot(thisToNext.getAxis(), thisToNext.getAngle() / 2f);
+                Quaternion thisToNext = new Quaternion(thisC, nextC);
+                Quaternion halfThisToNext = new Quaternion(thisToNext.getAxis(), thisToNext.getAngle() / 2f);
 
                 Vec3f<?> halfAngle = halfThisToNext.applyToCopy(thisC);
                 halfAngle.normalize();
@@ -119,7 +119,7 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
 
         sgRayf newYRay = new sgRayf(new SGVec_3f(0, 0, 0), newY);
 
-        Rot oldYtoNewY = new Rot(limitingAxes.y_().heading(), originalLimitingAxes.getGlobalOf(newYRay).heading());
+        Quaternion oldYtoNewY = new Quaternion(limitingAxes.y_().heading(), originalLimitingAxes.getGlobalOf(newYRay).heading());
         limitingAxes.rotateBy(oldYtoNewY);
 
         for (AbstractLimitCone lc : getLimitCones()) {
@@ -182,7 +182,7 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
                 Vec3f<?> pathPoint = pointOnPathSequence(inPoint, limitingAxes);
                 inPoint.sub(origin);
                 pathPoint.sub(origin);
-                Rot toClamp = new Rot(inPoint, pathPoint);
+                Quaternion toClamp = new Quaternion(inPoint, pathPoint);
                 toClamp.rotation.clampToQuadranceAngle(cosHalfReturnfullness);
                 toSet.rotateBy(toClamp);
             }
@@ -256,7 +256,7 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
         if (inBounds[0] == -1 && inLimits != null) {
             constrainedRay.p1().set(boneRay.p1());
             constrainedRay.p2().set(limitingAxes.getGlobalOf(inLimits));
-            Rot rectifiedRot = new Rot(boneRay.heading(), constrainedRay.heading());
+            Quaternion rectifiedRot = new Quaternion(boneRay.heading(), constrainedRay.heading());
             toSet.rotateBy(rectifiedRot);
             toSet.updateGlobal();
         }
@@ -314,8 +314,8 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
         if (!axiallyConstrained)
             return 0f;
 
-        Rot alignRot = limitingAxes.getGlobalMBasis().getInverseRotation().applyTo(toSet.getGlobalMBasis().rotation);
-        Rot[] decomposition = alignRot.getSwingTwist(new SGVec_3f(0, 1, 0));
+        Quaternion alignRot = limitingAxes.getGlobalMBasis().getInverseRotation().applyTo(toSet.getGlobalMBasis().rotation);
+        Quaternion[] decomposition = alignRot.getSwingTwist(new SGVec_3f(0, 1, 0));
         float angleDelta2 = decomposition[1].getAngle() * decomposition[1].getAxis().y * -1f;
         angleDelta2 = toTau(angleDelta2);
         float fromMinToAngleDelta = toTau(signedAngleDifference(angleDelta2, TAU - this.minAxialAngle()));
@@ -346,8 +346,8 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
         if (!axiallyConstrained)
             return 0f;
 
-        Rot alignRot = limitingAxes.getGlobalMBasis().getInverseRotation().applyTo(toSet.getGlobalMBasis().rotation);
-        Rot[] decomposition = alignRot.getSwingTwist(new SGVec_3f(0, 1, 0));
+        Quaternion alignRot = limitingAxes.getGlobalMBasis().getInverseRotation().applyTo(toSet.getGlobalMBasis().rotation);
+        Quaternion[] decomposition = alignRot.getSwingTwist(new SGVec_3f(0, 1, 0));
         float angleDelta2 = decomposition[1].getAngle() * decomposition[1].getAxis().y * -1f;
         angleDelta2 = toTau(angleDelta2);
 
@@ -359,8 +359,8 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
     public boolean inTwistLimits(AbstractAxes boneAxes, AbstractAxes limitingAxes) {
 
         limitingAxes.updateGlobal();
-        Rot alignRot = limitingAxes.getGlobalMBasis().getInverseRotation().applyTo(boneAxes.globalMBasis.rotation);
-        Rot[] decomposition = alignRot.getSwingTwist(new SGVec_3f(0, 1, 0));
+        Quaternion alignRot = limitingAxes.getGlobalMBasis().getInverseRotation().applyTo(boneAxes.globalMBasis.rotation);
+        Quaternion[] decomposition = alignRot.getSwingTwist(new SGVec_3f(0, 1, 0));
 
         float angleDelta = decomposition[1].getAngle() * decomposition[1].getAxis().y * -1;
         // uncomment the next line for reflectable axis support (removed for performance
@@ -454,8 +454,8 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
                 return inPoint;
             } else {
                 Vec3f<?> axis = limitCones.get(0).getControlPoint().crossCopy(point);
-                // Rot toLimit = new Rot(limitCones.get(0).getControlPoint(), point);
-                Rot toLimit = new Rot(axis, limitCones.get(0).getRadius());
+                // Quaternion toLimit = new Quaternion(limitCones.get(0).getControlPoint(), point);
+                Quaternion toLimit = new Quaternion(axis, limitCones.get(0).getRadius());
                 Vec3f<?> newPoint = toLimit.applyToCopy(limitCones.get(0).getControlPoint());
                 return newPoint;
             }

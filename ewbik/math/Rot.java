@@ -26,12 +26,12 @@ package ewbik.math;
 
 import ewbik.asj.data.JSONArray;
 
-public class Rot {
+public class Quaternion {
     public MRotation rotation;
     private float[] workingInput = new float[3];
     private float[] workingOutput = new float[3];
 
-    public Rot() {
+    public Quaternion() {
         this.rotation = new MRotation(
                 MRotation.IDENTITY.getQ0(),
                 MRotation.IDENTITY.getQ1(),
@@ -41,11 +41,11 @@ public class Rot {
 
     ;
 
-    public Rot(MRotation r) {
+    public Quaternion(MRotation r) {
         this.rotation = new MRotation(r.getQ0(), r.getQ1(), r.getQ2(), r.getQ3());
     }
 
-    public <V extends Vec3f<?>> Rot(V v1, V v2, V u1, V u2) {
+    public <V extends Vec3f<?>> Quaternion(V v1, V v2, V u1, V u2) {
         // try {
         rotation = new MRotation(v1, v2, u1, u2);
         // } catch(Exception e) {
@@ -53,7 +53,7 @@ public class Rot {
         // }
     }
 
-    public <V extends Vec3f<?>> Rot(V axis, float angle) {
+    public <V extends Vec3f<?>> Quaternion(V axis, float angle) {
         // try {
         rotation = new MRotation(axis, angle);
         // } catch(Exception e) {
@@ -61,11 +61,11 @@ public class Rot {
         // }
     }
 
-    public Rot(float w, float x, float y, float z, boolean needsNormalization) {
+    public Quaternion(float w, float x, float y, float z, boolean needsNormalization) {
         this.rotation = new MRotation(w, x, y, z, needsNormalization);
     }
 
-    public <V extends Vec3f<?>> Rot(V begin, V end) {
+    public <V extends Vec3f<?>> Quaternion(V begin, V end) {
         // try{
         rotation = new MRotation(begin, end);
         // } catch(Exception e) {
@@ -73,8 +73,8 @@ public class Rot {
         // }
     }
 
-    public Rot copy() {
-        return new Rot(new MRotation(rotation.getQ0(), rotation.getQ1(), rotation.getQ2(), rotation.getQ3(), false));
+    public Quaternion copy() {
+        return new Quaternion(new MRotation(rotation.getQ0(), rotation.getQ1(), rotation.getQ2(), rotation.getQ3(), false));
     }
 
     /**
@@ -94,7 +94,7 @@ public class Rot {
      *
      * @param r a rotation to make this rotation equivalent to
      */
-    public void set(Rot r) {
+    public void set(Quaternion r) {
         if (r != null)
             this.set(r.rotation);
         else
@@ -169,17 +169,17 @@ public class Rot {
      * this.applyTo(L) = r.
      *
      * @param r
-     * @return public Rot getLocalOfRotation(Rot r) {
+     * @return public Quaternion getLocalOfRotation(Quaternion r) {
      * Rotation composedRot = this.rotation.composeInverse(r.rotation,
      * RotationConvention.VECTOR_OPERATOR);
      * <p>
      * <p>
-     * return new Rot(composedRot);
+     * return new Quaternion(composedRot);
      * }
      */
 
-    private Rot getNormalized(MRotation r) {
-        return new Rot(new MRotation(r.getQ0(), r.getQ1(), r.getQ2(), r.getQ3(), true));
+    private Quaternion getNormalized(MRotation r) {
+        return new Quaternion(new MRotation(r.getQ0(), r.getQ1(), r.getQ2(), r.getQ3(), true));
     }
 
     public sgRayf applyToCopy(sgRayf rIn) {
@@ -204,7 +204,7 @@ public class Rot {
         return result;
     }
 
-    public void applyTo(Rot rot, Rot storeIn) {
+    public void applyTo(Quaternion rot, Quaternion storeIn) {
         MRotation r = rot.rotation;
         MRotation tr = this.rotation;
         storeIn.rotation.set(
@@ -215,7 +215,7 @@ public class Rot {
                 true);
     }
 
-    public void applyInverseTo(Rot rot, Rot storeIn) {
+    public void applyInverseTo(Quaternion rot, Quaternion storeIn) {
         MRotation r = rot.rotation;
         MRotation tr = this.rotation;
         storeIn.rotation.set(
@@ -226,7 +226,7 @@ public class Rot {
                 true);
     }
 
-    public Rot applyTo(Rot rot) {
+    public Quaternion applyTo(Quaternion rot) {
         MRotation r = rot.rotation;
         MRotation tr = this.rotation;
         MRotation result = new MRotation(
@@ -235,10 +235,10 @@ public class Rot {
                 r.getQ2() * tr.getQ0() + r.getQ0() * tr.getQ2() + (r.getQ3() * tr.getQ1() - r.getQ1() * tr.getQ3()),
                 r.getQ3() * tr.getQ0() + r.getQ0() * tr.getQ3() + (r.getQ1() * tr.getQ2() - r.getQ2() * tr.getQ1()),
                 true);
-        return new Rot(result);
+        return new Quaternion(result);
     }
 
-    public Rot applyInverseTo(Rot rot) {
+    public Quaternion applyInverseTo(Quaternion rot) {
         MRotation r = rot.rotation;
         MRotation tr = this.rotation;
         MRotation result = new MRotation(
@@ -247,7 +247,7 @@ public class Rot {
                 -r.getQ2() * tr.getQ0() + r.getQ0() * tr.getQ2() + (r.getQ3() * tr.getQ1() - r.getQ1() * tr.getQ3()),
                 -r.getQ3() * tr.getQ0() + r.getQ0() * tr.getQ3() + (r.getQ1() * tr.getQ2() - r.getQ2() * tr.getQ1()),
                 true);
-        return new Rot(result);
+        return new Quaternion(result);
     }
 
     public float getAngle() {
@@ -264,8 +264,8 @@ public class Rot {
         rotation.setToAxis(output);
     }
 
-    public Rot revert() {
-        return new Rot(this.rotation.revert());
+    public Quaternion revert() {
+        return new Quaternion(this.rotation.revert());
     }
 
     /**
@@ -273,7 +273,7 @@ public class Rot {
      *
      * @param storeIN
      */
-    public void setToReversion(Rot r) {
+    public void setToReversion(Quaternion r) {
         rotation.revert(r.rotation);
     }
 
@@ -281,7 +281,7 @@ public class Rot {
      * interpolate between two rotations (SLERP)
      *
      */
-    public Rot(float amount, Rot v1, Rot v2) {
+    public Quaternion(float amount, Quaternion v1, Quaternion v2) {
         rotation = slerp(amount, v1.rotation, v2.rotation);
     }
 
@@ -300,24 +300,24 @@ public class Rot {
      *              swing and twist rotation
      * @param axisZ the Z component of the normalized axis for which to get the
      *              swing and twist rotation
-     * @return an Array of Rot objects. With the first element representing the
+     * @return an Array of Quaternion objects. With the first element representing the
      * swing, and the second representing the twist
      * @see <a href=
      * "http://www.euclideanspace.com/maths/geometry/rotations/for/decomposition">calculation</a>
      */
-    public Rot[] getSwingTwist(SGVec_3f axis) {
-        Rot twistRot = new Rot(new MRotation(rotation.getQ0(), rotation.getQ1(), rotation.getQ2(), rotation.getQ3()));
+    public Quaternion[] getSwingTwist(SGVec_3f axis) {
+        Quaternion twistRot = new Quaternion(new MRotation(rotation.getQ0(), rotation.getQ1(), rotation.getQ2(), rotation.getQ3()));
         final float d = SGVec_3f.dot(twistRot.rotation.getQ1(), twistRot.rotation.getQ2(), twistRot.rotation.getQ3(),
                 axis.x, axis.y, axis.z);
         twistRot.rotation.set(rotation.getQ0(), axis.x * d, axis.y * d, axis.z * d, true);
         if (d < 0)
             twistRot.rotation.multiply(-1f);
 
-        Rot swing = new Rot(twistRot.rotation);
+        Quaternion swing = new Quaternion(twistRot.rotation);
         swing.rotation.setToConjugate();
         swing.rotation = MRotation.multiply(twistRot.rotation, swing.rotation);
 
-        Rot[] result = new Rot[2];
+        Quaternion[] result = new Quaternion[2];
         result[0] = swing;
         result[1] = twistRot;
         return result;
@@ -375,7 +375,7 @@ public class Rot {
                 (value1.getQ3() * t1) + (z2 * t2));
     }
 
-    public static Rot nlerp(Rot[] rotations, float[] weights) {
+    public static Quaternion nlerp(Quaternion[] rotations, float[] weights) {
 
         if (weights == null) {
             return nlerp(rotations);
@@ -401,11 +401,11 @@ public class Rot {
             q2 /= total;
             q3 /= total;
 
-            return new Rot(q0, q1, q2, q3, true);
+            return new Quaternion(q0, q1, q2, q3, true);
         }
     }
 
-    public static Rot nlerp(Rot[] rotations) {
+    public static Quaternion nlerp(Quaternion[] rotations) {
         float q0 = 0f;
         float q1 = 0f;
         float q2 = 0f;
@@ -424,7 +424,7 @@ public class Rot {
         q2 /= total;
         q3 /= total;
 
-        return new Rot(q0, q1, q2, q3, true);
+        return new Quaternion(q0, q1, q2, q3, true);
     }
 
     /**
@@ -443,7 +443,7 @@ public class Rot {
      * @return the weighted average Rotation. If the total weights are 0, then
      * returns null.
      */
-    public static Rot instantaneousAvg(Rot[] rots, float[] weights) {
+    public static Quaternion instantaneousAvg(Quaternion[] rots, float[] weights) {
         SGVec_3f accumulatedAxisAngle = new SGVec_3f();
         float totalWeight = rots.length;
         if (weights != null) {
@@ -469,7 +469,7 @@ public class Rot {
         }
         float extractAngle = accumulatedAxisAngle.mag();
         accumulatedAxisAngle.div(extractAngle);
-        return new Rot(accumulatedAxisAngle, extractAngle);
+        return new Quaternion(accumulatedAxisAngle, extractAngle);
     }
 
     public String toString() {
@@ -477,7 +477,7 @@ public class Rot {
         // "+((float)MathUtils.toDegrees(this.getAngle()));
     }
 
-    public boolean equalTo(Rot m) {
+    public boolean equalTo(Quaternion m) {
         return MRotation.distance(this.rotation, m.rotation) < MathUtils.DOUBLE_ROUNDING_ERROR;
     }
 
@@ -492,7 +492,7 @@ public class Rot {
      *
      * @param jarray
      */
-    public Rot(JSONArray jarray) {
+    public Quaternion(JSONArray jarray) {
         rotation = new MRotation(jarray.getFloat(0), jarray.getFloat(1), jarray.getFloat(2), jarray.getFloat(3), true);
     }
 

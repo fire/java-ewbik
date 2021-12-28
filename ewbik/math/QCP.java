@@ -208,15 +208,15 @@ public class QCP {
      * @param weight array of weigths for each equivalent point position
      * @return
      */
-    public <V extends Vec3f<?>> Rot weightedSuperpose(V[] moved, V[] target, float[] weight, boolean translate) {
+    public <V extends Vec3f<?>> Quaternion weightedSuperpose(V[] moved, V[] target, float[] weight, boolean translate) {
         set(moved, target, weight, translate);
-        Rot result = getRotation();
+        Quaternion result = getRotation();
         //transformation.set(rotmat);
         return result;//transformation;
     }
 
-    private Rot getRotation() {
-        Rot result = null;
+    private Quaternion getRotation() {
+        Quaternion result = null;
         if (!transformationCalculated) {
             if (!innerProductCalculated)
                 innerProduct(target, moved);
@@ -387,11 +387,11 @@ public class QCP {
         rmsd = MathUtils.sqrt(MathUtils.abs(2.0f * (e0 - mxEigenV) / len));
     }
 
-    private Rot calcRotation() {
+    private Quaternion calcRotation() {
 
         //QCP doesn't handle single targets, so if we only have one point and one target, we just rotate by the angular distance between them
         if (moved.length == 1) {
-            return new Rot(moved[0], target[0]);
+            return new Quaternion(moved[0], target[0]);
         } else {
 
             float a11 = SxxpSyy + Szz - mxEigenV;
@@ -458,7 +458,7 @@ public class QCP {
                             /*
                              * if qsqr is still too small, return the identity rotation
                              */
-                            return new Rot();
+                            return new Quaternion();
                         }
                     }
                 }
@@ -469,7 +469,7 @@ public class QCP {
             min = q3 < min ? q3 : min;
             min = q4 < min ? q4 : min;
 
-            return new Rot(q1 / min, q2 / min, q3 / min, q4 / min, true);
+            return new Quaternion(q1 / min, q2 / min, q3 / min, q4 / min, true);
         }
     }
 

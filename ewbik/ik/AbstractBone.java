@@ -43,7 +43,7 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
     public AbstractArmature parentArmature;
     protected String tag;
 
-    protected Rot lastRotation;
+    protected Quaternion lastRotation;
     protected AbstractAxes previousOrientation;
     protected AbstractAxes localAxes;
     protected AbstractAxes majorRotationAxes;
@@ -81,7 +81,7 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
             float inputBoneHeight, // bone length
             frameType coordinateType) throws NullParentForBoneException {
 
-        this.lastRotation = new Rot(MRotation.IDENTITY);
+        this.lastRotation = new Quaternion(MRotation.IDENTITY);
         if (par != null) {
             if (inputTag == null || inputTag == "") {
                 this.tag = Integer.toString(System.identityHashCode(this));
@@ -162,7 +162,7 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
                         float inputBoneHeight // bone length
     ) throws NullParentForBoneException {
 
-        this.lastRotation = new Rot(MRotation.IDENTITY);
+        this.lastRotation = new Quaternion(MRotation.IDENTITY);
         if (par != null) {
             if (inputTag == null || inputTag == "") {
                 this.tag = Integer.toString(System.identityHashCode(this));
@@ -172,7 +172,7 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
             this.boneHeight = inputBoneHeight;
 
             AbstractAxes tempAxes = par.localAxes().getGlobalCopy();
-            Rot newRot = new Rot(new MRotation(RotationOrder.XZY, xAngle, yAngle, zAngle));
+            Quaternion newRot = new Quaternion(new MRotation(RotationOrder.XZY, xAngle, yAngle, zAngle));
             tempAxes.rotateBy(newRot);
 
             this.parent = par;
@@ -229,7 +229,7 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
                         frameType coordinateType)
             throws NullParentForBoneException {
 
-        this.lastRotation = new Rot(MRotation.IDENTITY);
+        this.lastRotation = new Quaternion(MRotation.IDENTITY);
         if (par != null) {
             if (inputTag == null || inputTag == "") {
                 this.tag = Integer.toString(System.identityHashCode(this));
@@ -296,7 +296,7 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
             frameType coordinateType)
             throws NullParentForBoneException {
 
-        this.lastRotation = new Rot(MRotation.IDENTITY);
+        this.lastRotation = new Quaternion(MRotation.IDENTITY);
         if (parArma != null) {
             if (inputTag == null || inputTag == "") {
                 this.tag = Integer.toString(System.identityHashCode(this));
@@ -358,7 +358,7 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
                         frameType coordinateType)
             throws NullParentForBoneException {
 
-        this.lastRotation = new Rot(MRotation.IDENTITY);
+        this.lastRotation = new Quaternion(MRotation.IDENTITY);
         if (parArma != null) {
             if (inputTag == null || inputTag == "") {
                 this.tag = Integer.toString(System.identityHashCode(this));
@@ -413,13 +413,13 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
     }
 
     public AbstractBone() {
-        this.lastRotation = new Rot(MRotation.IDENTITY);
+        this.lastRotation = new Quaternion(MRotation.IDENTITY);
     }
 
     /*
      * public AbstractBone(AbstractArmature parArma, JSONObject boneJSON,
      * AbstractAxes attachedAxes) {
-     * this.lastRotation = new Rot(MRotation.IDENTITY);
+     * this.lastRotation = new Quaternion(MRotation.IDENTITY);
      * this.localAxes = attachedAxes;
      * previousOrientation = localAxes.attachedCopy(true);
      * this.boneHeight = boneJSON.getFloat("boneHeight");
@@ -538,8 +538,8 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
      * than an array of angles.
      * And allows you to treat rotation in a wide variety of conventions.
      */
-    public Rot getRotation() {
-        return (new Rot(this.majorRotationAxes.x_().heading(), this.majorRotationAxes.y_().heading(),
+    public Quaternion getRotation() {
+        return (new Quaternion(this.majorRotationAxes.x_().heading(), this.majorRotationAxes.y_().heading(),
                 this.localAxes().x_().heading(), this.localAxes().y_().heading()));
     }
 
@@ -549,7 +549,7 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
      * BoneExample from its previous orientation to its current orientation.
      */
 
-    public Rot getRotationFromPrevious() {
+    public Quaternion getRotationFromPrevious() {
         return lastRotation;
     }
 
@@ -568,7 +568,7 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
      *
      * @param rot
      */
-    public void rotateBy(Rot rot) {
+    public void rotateBy(Quaternion rot) {
         this.previousOrientation.alignLocalsTo(localAxes);
         this.localAxes.rotateBy(rot);
 
@@ -620,7 +620,7 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
         // localAxes().alignLocalsTo(previousOrientation);
         previousOrientation.alignLocalsTo(localAxes);
 
-        Rot xRot = new Rot(majorRotationAxes.x_().heading(), amt);
+        Quaternion xRot = new Quaternion(majorRotationAxes.x_().heading(), amt);
         localAxes.rotateBy(xRot);
 
         lastRotation.set(xRot);
@@ -639,7 +639,7 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
     public void rotAboutFrameY(float amt, boolean obeyConstraints) {
         previousOrientation.alignLocalsTo(localAxes);
 
-        Rot yRot = new Rot(majorRotationAxes.y_().heading(), amt);
+        Quaternion yRot = new Quaternion(majorRotationAxes.y_().heading(), amt);
         localAxes.rotateBy(yRot);
 
         lastRotation.set(yRot);
@@ -658,7 +658,7 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
     public void rotAboutFrameZ(float amt, boolean obeyConstraints) {
         previousOrientation.alignLocalsTo(localAxes);
 
-        Rot zRot = new Rot(majorRotationAxes.z_().heading(), amt);
+        Quaternion zRot = new Quaternion(majorRotationAxes.z_().heading(), amt);
         localAxes.rotateBy(zRot);
 
         lastRotation.set(zRot);

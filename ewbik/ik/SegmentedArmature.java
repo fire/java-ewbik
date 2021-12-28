@@ -347,7 +347,7 @@ public class SegmentedArmature {
         AbstractAxes thisBoneAxes = sb.simLocalAxes;
         thisBoneAxes.updateGlobal();
 
-        Rot bestOrientation = new Rot(thisBoneAxes.getGlobalMBasis().rotation.rotation);
+        Quaternion bestOrientation = new Quaternion(thisBoneAxes.getGlobalMBasis().rotation.rotation);
         float newDampening = -1;
         if (forBone.getParent() == null || localizedTargetHeadings.length == 1)
             stabilizationPasses = 0;
@@ -433,7 +433,7 @@ public class SegmentedArmature {
             float totalIterations) {
 
         qcpOrientationAligner.setMaxIterations(0);
-        Rot qcpRot = qcpOrientationAligner.weightedSuperpose(localizedTipHeadings, localizedTargetHeadings, weights,
+        Quaternion qcpRot = qcpOrientationAligner.weightedSuperpose(localizedTipHeadings, localizedTargetHeadings, weights,
                 translate);
 
         SGVec_3f translateBy = qcpOrientationAligner.getTranslation();

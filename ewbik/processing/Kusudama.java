@@ -22,7 +22,7 @@ package ewbik.processing.singlePrecision;
 import ewbik.ik.AbstractKusudama;
 import ewbik.ik.AbstractLimitCone;
 import ewbik.math.MRotation;
-import ewbik.math.Rot;
+import ewbik.math.Quaternion;
 import ewbik.math.SGVec_3f;
 import ewbik.math.Vec3f;
 import ewbik.processing.sceneGraph.Axes;
@@ -121,9 +121,9 @@ public class Kusudama extends AbstractKusudama {
         float circumference = (float) (attachedTo().getBoneHeight() / 2.5f);
         SGVec_3f min = new SGVec_3f(0f, 0f, circumference);
         SGVec_3f current = new SGVec_3f(0f, 0f, circumference);
-        Rot minRot = new Rot(new SGVec_3f(0, 1, 0), minAxialAngle());
+        Quaternion minRot = new Quaternion(new SGVec_3f(0, 1, 0), minAxialAngle());
         float absAngle = minAxialAngle + range;
-        Rot maxRot = new Rot(new SGVec_3f(0, 1, 0), absAngle);
+        Quaternion maxRot = new Quaternion(new SGVec_3f(0, 1, 0), absAngle);
 
         float pieces = 20f;
         float granularity = 1f / pieces;
@@ -132,7 +132,7 @@ public class Kusudama extends AbstractKusudama {
         p.fill(0, 150, 0, 120);
         p.vertex(0, 0, 0);
         for (float i = 0; i <= pieces + (3 * granularity); i++) {
-            MRotation interp = Rot.slerp(i * granularity, minRot.rotation, maxRot.rotation);
+            MRotation interp = Quaternion.slerp(i * granularity, minRot.rotation, maxRot.rotation);
             current = interp.applyTo(min);
             p.vertex((float) current.x, (float) current.y, (float) (current.z));
         }
@@ -154,12 +154,12 @@ public class Kusudama extends AbstractKusudama {
         p.sphereDetail(30);
         p.sphere((float) attachedTo().getBoneHeight() / 3.5f);
         p.resetShader();
-        Rot alignRot = limitingAxes.getGlobalMBasis().getInverseRotation()
+        Quaternion alignRot = limitingAxes.getGlobalMBasis().getInverseRotation()
                 .applyTo(attachedTo().localAxes().getGlobalMBasis().rotation);
 
-        Rot[] decomposition = alignRot.getSwingTwist(new SGVec_3f(0, 1, 0));
+        Quaternion[] decomposition = alignRot.getSwingTwist(new SGVec_3f(0, 1, 0));
         float angle = decomposition[1].getAngle() * decomposition[1].getAxis().y;
-        Rot zRot = new Rot(new SGVec_3f(0, 1, 0), angle);
+        Quaternion zRot = new Quaternion(new SGVec_3f(0, 1, 0), angle);
         SGVec_3f yaw = new SGVec_3f(0, 0, circumference);
         yaw = zRot.applyToCopy(yaw);
         p.stroke(25, 25, 195);

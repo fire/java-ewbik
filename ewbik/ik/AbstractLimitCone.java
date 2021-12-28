@@ -245,7 +245,7 @@ public abstract class AbstractLimitCone implements Saveable {
             if (input.dot(c1xt1) > 0 && input.dot(t1xc2) > 0) {
                 if (input.dot(tangentCircleCenterNext1) > tangentCircleRadiusNextCos) {
                     Vec3f<?> planeNormal = tangentCircleCenterNext1.crossCopy(input);
-                    Rot rotateAboutBy = new Rot(planeNormal, tangentCircleRadiusNext);
+                    Quaternion rotateAboutBy = new Quaternion(planeNormal, tangentCircleRadiusNext);
                     return rotateAboutBy.applyToCopy(tangentCircleCenterNext1);
                 } else {
                     return input.copy();
@@ -259,7 +259,7 @@ public abstract class AbstractLimitCone implements Saveable {
             if (input.dot(t2xc1) > 0 && input.dot(c2xt2) > 0) {
                 if (input.dot(tangentCircleCenterNext2) > tangentCircleRadiusNextCos) {
                     Vec3f<?> planeNormal = tangentCircleCenterNext2.crossCopy(input);
-                    Rot rotateAboutBy = new Rot(planeNormal, tangentCircleRadiusNext);
+                    Quaternion rotateAboutBy = new Quaternion(planeNormal, tangentCircleRadiusNext);
                     return rotateAboutBy.applyToCopy(tangentCircleCenterNext2);
                 } else {
                     return input.copy();
@@ -317,9 +317,9 @@ public abstract class AbstractLimitCone implements Saveable {
         } else {
             Vec3f<?> axis = this.getControlPoint().crossCopy(input);
             // axis.normalize();
-            // Rot pointDiff = new Rot(this.getControlPoint(), input);
-            Rot rotTo = new Rot(axis, this.getRadius());
-            // Rot rot2To = new Rot(pointDiff.getAxis(), this.getRadius());
+            // Quaternion pointDiff = new Quaternion(this.getControlPoint(), input);
+            Quaternion rotTo = new Quaternion(axis, this.getRadius());
+            // Quaternion rot2To = new Quaternion(pointDiff.getAxis(), this.getRadius());
             Vec3f<?> result = rotTo.applyToCopy(this.getControlPoint());
             inBounds[0] = false;
             return result;
@@ -371,15 +371,15 @@ public abstract class AbstractLimitCone implements Saveable {
             // points.
             Vec3f<?> scaledAxisA = SGVec_3f.mult(A, MathUtils.cos(boundaryPlusTangentRadiusA));
             // a point on the plane running through the tangent contact points
-            Vec3f<?> planeDir1A = new Rot(arcNormal, boundaryPlusTangentRadiusA).applyToCopy(A);
+            Vec3f<?> planeDir1A = new Quaternion(arcNormal, boundaryPlusTangentRadiusA).applyToCopy(A);
             // another poiint on the same plane
-            Vec3f<?> planeDir2A = new Rot(A, MathUtils.PI / 2f).applyToCopy(planeDir1A);
+            Vec3f<?> planeDir2A = new Quaternion(A, MathUtils.PI / 2f).applyToCopy(planeDir1A);
 
             Vec3f<?> scaledAxisB = Vec3f.mult(B, MathUtils.cos(boundaryPlusTangentRadiusB));
             // a point on the plane running through the tangent contact points
-            Vec3f<?> planeDir1B = new Rot(arcNormal, boundaryPlusTangentRadiusB).applyToCopy(B);
+            Vec3f<?> planeDir1B = new Quaternion(arcNormal, boundaryPlusTangentRadiusB).applyToCopy(B);
             // another poiint on the same plane
-            Vec3f<?> planeDir2B = new Rot(B, MathUtils.PI / 2f).applyToCopy(planeDir1B);
+            Vec3f<?> planeDir2B = new Quaternion(B, MathUtils.PI / 2f).applyToCopy(planeDir1B);
 
             // ray from scaled center of next cone to half way point between the
             // circumference of this cone and the next cone.
