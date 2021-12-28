@@ -98,13 +98,6 @@ public class Axes extends Transform3D {
         return new Vector3(ev.x, ev.y, ev.z);
     }
 
-    public static Ray3 toSgRay(ewbik.processing.singlePrecision.sceneGraph.Ray er) {
-        return new Ray3(
-                toVector3(er.p1),
-                toVector3(er.p2)
-        );
-    }
-
     //////////////////// END OF CONVERSION FUNCTIONS
 
     public PVector origin() {

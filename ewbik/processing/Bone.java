@@ -24,7 +24,6 @@ import ewbik.ik.IKExceptions.NullParentForBoneException;
 import ewbik.math.AbstractAxes;
 import ewbik.math.Vec3f;
 import ewbik.processing.sceneGraph.Axes;
-import ewbik.processing.singlePrecision.sceneGraph.*;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
