@@ -2,7 +2,9 @@
 .gradle/
 build/
 bin/
-
 blur-sep.glsl
-
 kusudama.glsl
+kusudama_stencil.glsl
+kusudama_vert.glsl
+
+Humanoid_Holding_Item.arm
