@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author Eron
  *
  */
-public abstract class AbstractKusudama implements Constraint {
+public abstract class AbstractKusudama {
 
     public static final float TAU = MathUtils.PI * 2;
     public static final float PI = MathUtils.PI;
@@ -226,7 +226,6 @@ public abstract class AbstractKusudama implements Constraint {
         return painfullness;
     }
 
-    @Override
     public <V extends Vec3f<?>> boolean isInLimits_(V globalPoint) {
         float[] inBounds = {1f};
         // boneRay.p1.set(toSet.origin());
@@ -575,7 +574,6 @@ public abstract class AbstractKusudama implements Constraint {
      * @return the limitingAxes of this Kusudama (these are just its parentBone's
      *         majorRotationAxes)
      */
-    @Override
     public <A extends AbstractAxes> A limitingAxes() {
         // if(inverted) return inverseLimitingAxes;
         return (A) limitingAxes;

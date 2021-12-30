@@ -47,7 +47,7 @@ public abstract class AbstractBone implements Comparable<AbstractBone> {
     protected ArrayList<AbstractBone> freeChildren = new ArrayList<>();
     protected ArrayList<AbstractBone> effectoredChildren = new ArrayList<>();
 
-    public Constraint constraints;
+    public AbstractKusudama constraints;
     protected AbstractIKPin pin = null;
     protected boolean orientationLock = false;
     protected float stiffnessScalar = 0f;
@@ -466,7 +466,7 @@ public abstract class AbstractBone implements Comparable<AbstractBone> {
      * @param newConstraint a constraint Object to add to this bone
      * @return the constraintObject that was just added
      */
-    public Constraint addConstraint(Constraint newConstraint) {
+    public AbstractKusudama addConstraint(AbstractKusudama newConstraint) {
         constraints = newConstraint;
         return constraints;
     }
@@ -474,7 +474,7 @@ public abstract class AbstractBone implements Comparable<AbstractBone> {
     /**
      * @return this bone's constraint object.
      */
-    public Constraint getConstraint() {
+    public AbstractKusudama getConstraint() {
         return constraints;
     }
 
