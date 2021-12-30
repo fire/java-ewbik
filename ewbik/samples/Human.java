@@ -58,7 +58,7 @@ public class Human extends PApplet {
             activePin.translateTo(new PVector(ui.mouse.x, ui.mouse.y, activePin.getLocation_().z));
             loadedArmature.IKSolver(loadedArmature.getRootBone());
         } else {
-            rootBone.rotateAboutY(PI / 500f, true);
+            rootBone.rotAboutFrameY(PI / 500f, true);
         }
         // decrease the numerator to increase the zoom.
         zoomScalar = 200f / height;
