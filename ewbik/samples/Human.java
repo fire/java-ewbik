@@ -17,7 +17,6 @@ public class Human extends PApplet {
     ArrayList<IKPin> pins = new ArrayList<>();
     UI ui;
     IKPin activePin;
-    Axes worldAxes;
     float zoomScalar = 200f / height;
     boolean cubeMode = true;
 
@@ -44,8 +43,6 @@ public class Human extends PApplet {
         loadedArmature = new ewbik.processing.Skeleton3D("example");
         initializeBones();
         setBoneConstraints();
-        worldAxes = new Axes();
-        loadedArmature.localAxes().setParent(worldAxes);
         updatePinList();
 
         activePin = pins.get(pins.size() - 1);
@@ -62,7 +59,7 @@ public class Human extends PApplet {
             activePin.translateTo(new PVector(ui.mouse.x, ui.mouse.y, activePin.getLocation_().z));
             loadedArmature.IKSolver(loadedArmature.getRootBone());
         } else {
-            worldAxes.rotateAboutY(PI / 500f, true);
+            rootBone.rotateAboutY(PI / 500f, true);
         }
         String additionalInstructions = "Hit the 'C' key to select or deselect the cube";
         // decrease the numerator to increase the zoom.
@@ -132,11 +129,11 @@ public class Human extends PApplet {
         l_hand.enablePin();
         l_hand.getIKPin().getAxes().rotateAboutX(MathUtils.toRadians(90f), true);
         l_hand.getIKPin().setTargetPriorities(.5f, 0f, .5f);
-        l_hand.getIKPin().translateBy(new PVector(20f, 20f, 20f));
+        l_hand.getIKPin().translateBy(new PVector(20f, -20f, 20f));
         r_hand.enablePin();
         r_hand.getIKPin().getAxes().rotateAboutX(MathUtils.toRadians(90f), true);
         r_hand.getIKPin().setTargetPriorities(.5f, 0f, .5f);
-        r_hand.getIKPin().translateBy(new PVector(-20f, 20f, 20f));
+        r_hand.getIKPin().translateBy(new PVector(-20f, -20f, 20f));
 
         head.enablePin();
         head.getIKPin().setPinWeight(5f);
