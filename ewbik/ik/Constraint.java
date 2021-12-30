@@ -1,10 +1,9 @@
 package ewbik.ik;
 
-import ewbik.asj.Saveable;
 import ewbik.math.AbstractAxes;
 import ewbik.math.Vec3f;
 
-public interface Constraint extends Saveable {
+public interface Constraint {
 
     public void snapToLimits();
 

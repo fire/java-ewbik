@@ -1,8 +1,5 @@
 package ewbik.math;
 
-import ewbik.asj.LoadManager;
-import ewbik.asj.data.JSONObject;
-
 public class Transform3D extends AbstractAxes {
 
 
@@ -88,11 +85,6 @@ public class Transform3D extends AbstractAxes {
         freeCopy.markDirty();
         freeCopy.updateGlobal();
         return freeCopy;
-    }
-
-    @Override
-    public void loadFromJSONObject(JSONObject j, LoadManager l) {
-        super.loadFromJSONObject(j, l);
     }
 
     /**

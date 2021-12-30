@@ -15,11 +15,6 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package ewbik.ik;
-
-import ewbik.asj.LoadManager;
-import ewbik.asj.SaveManager;
-import ewbik.asj.Saveable;
-import ewbik.asj.data.JSONObject;
 import ewbik.math.*;
 
 import java.util.ArrayList;
@@ -32,7 +27,7 @@ import java.util.HashMap;
  *
  * @author Eron Gjoni
  */
-public abstract class AbstractSkeleton3D implements Saveable {
+public abstract class AbstractSkeleton3D {
 
     protected AbstractAxes localAxes;
     protected AbstractAxes tempWorkingAxes;
@@ -567,67 +562,4 @@ public abstract class AbstractSkeleton3D implements Saveable {
         }
 
     }
-
-    @Override
-    public void makeSaveable(SaveManager saveManager) {
-        saveManager.addToSaveState(this);
-        if (this.localAxes().getParentAxes() != null)
-            this.localAxes().getParentAxes().makeSaveable(saveManager);
-        else
-            this.localAxes().makeSaveable(saveManager);
-        this.rootBone.makeSaveable(saveManager);
-    }
-
-    @Override
-    public JSONObject getSaveJSON(SaveManager saveManager) {
-        JSONObject saveJSON = new JSONObject();
-        saveJSON.setString("identityHash", this.getIdentityHash());
-        saveJSON.setString("localAxes", localAxes().getIdentityHash());
-        saveJSON.setString("rootBone", getRootBone().getIdentityHash());
-        saveJSON.setInt("defaultIterations", getDefaultIterations());
-        saveJSON.setFloat("dampening", this.getDampening());
-        // saveJSON.setBoolean("inverseWeighted", this.isInverseWeighted());
-        saveJSON.setString("tag", this.getTag());
-        return saveJSON;
-    }
-
-    public void loadFromJSONObject(JSONObject j, LoadManager l) {
-        try {
-            this.localAxes = l.getObjectFor(AbstractAxes.class, j, "localAxes");
-            this.rootBone = l.getObjectFor(AbstractBone.class, j, "rootBone");
-            this.IKIterations = j.getInt("defaultIterations");
-            this.dampening = j.getFloat("dampening");
-            this.tag = j.getString("tag");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void notifyOfSaveIntent(SaveManager saveManager) {
-        this.makeSaveable(saveManager);
-    }
-
-    @Override
-    public void notifyOfSaveCompletion(SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void notifyOfLoadCompletion() {
-        this.createRootBone(rootBone);
-        refreshArmaturePins();
-        updateArmatureSegments();
-    }
-
-    @Override
-    public boolean isLoading() {
-        return false;
-    }
-
-    @Override
-    public void setLoading(boolean loading) {
-    }
-
 }

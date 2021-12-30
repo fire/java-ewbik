@@ -269,4 +269,8 @@ public class Bone extends AbstractBone {
         drawKusudamas = draw;
     }
 
+    @Override
+    public int compareTo(AbstractBone i) {
+        return this.ancestorCount - i.ancestorCount;
+    }
 }

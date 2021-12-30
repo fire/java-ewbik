@@ -1,10 +1,5 @@
 package ewbik.math;
 
-import ewbik.asj.LoadManager;
-import ewbik.asj.SaveManager;
-import ewbik.asj.Saveable;
-import ewbik.asj.data.JSONObject;
-
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,7 +9,7 @@ import java.util.function.Consumer;
 /**
  * @author Eron Gjoni
  */
-public abstract class AbstractAxes implements AxisDependency, Saveable {
+public abstract class AbstractAxes implements AxisDependency {
     public static final int NORMAL = 0, IGNORE = 1, FORWARD = 2;
     public static final int RIGHT = 1, LEFT = -1;
     public static final int X = 0, Y = 1, Z = 2;
@@ -703,56 +698,6 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
         return localMBasis;
     }
 
-    @Override
-    public JSONObject getSaveJSON(SaveManager saveManager) {
-        this.updateGlobal();
-        JSONObject thisAxes = new JSONObject();
-        JSONObject shearScale = new JSONObject();
-        Vector3 xShear = new Vector3();
-        Vector3 yShear = new Vector3();
-        Vector3 zShear = new Vector3();
-
-        this.getLocalMBasis().setToShearXBase(xShear);
-        this.getLocalMBasis().setToShearYBase(yShear);
-        this.getLocalMBasis().setToShearZBase(zShear);
-
-        shearScale.setJSONArray("x", xShear.toJSONArray());
-        shearScale.setJSONArray("y", yShear.toJSONArray());
-        shearScale.setJSONArray("z", zShear.toJSONArray());
-
-        thisAxes.setJSONArray("translation", (new Vector3(getLocalMBasis().translate)).toJSONArray());
-        thisAxes.setJSONArray("rotation", getLocalMBasis().rotation.toJsonArray());
-        thisAxes.setJSONObject("bases", shearScale);
-
-        //thisAxes.setJSONArray("flippedAxes", saveManager.primitiveArrayToJSONArray(this.getLocalMBasis().flippedAxes));
-        String parentHash = "-1";
-        if (getParentAxes() != null) parentHash = ((Saveable) getParentAxes()).getIdentityHash();
-        thisAxes.setString("parent", parentHash);
-        thisAxes.setInt("slipType", this.getSlipType());
-        thisAxes.setString("identityHash", this.getIdentityHash());
-        return thisAxes;
-    }
-
-    @Override
-    public void loadFromJSONObject(JSONObject j, LoadManager l) {
-        Vector3 origin = new Vector3(j.getJSONArray("translation"));
-        Quaternion rotation = new Quaternion(j.getJSONArray("rotation"));
-        this.getLocalMBasis().translate = origin;
-        this.getLocalMBasis().rotation = rotation;
-        this.getLocalMBasis().refreshPrecomputed();
-        AbstractAxes par;
-        try {
-            par = (AbstractAxes) l.getObjectFor(AbstractAxes.class, j, "parent");
-            if (par != null)
-                this.setRelativeToParent(par);
-            this.setSlipType(j.getInt("slipType"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
     public void axisSlipWarning(AbstractAxes globalPriorToSlipping, AbstractAxes globalAfterSlipping, AbstractAxes actualAxis, ArrayList<Object> dontWarn) {
         this.updateGlobal();
         if (this.slipType == NORMAL) {
@@ -896,40 +841,6 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
         String global = "Global: " + getGlobalMBasis().toString();
         String local = "Local: " + getLocalMBasis().toString();
         return global + "\n" + local;
-    }
-
-    @Override
-    public void notifyOfSaveIntent(SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void notifyOfSaveCompletion(SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void setLoading(boolean loading) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public boolean isLoading() {
-
-        return false;
-    }
-
-    @Override
-    public void makeSaveable(SaveManager saveManager) {
-        saveManager.addToSaveState(this);
-        forEachDependent(
-                (ad) -> {
-                    if (Saveable.class.isAssignableFrom(ad.get().getClass()))
-                        ((Saveable) ad.get()).makeSaveable(saveManager);
-                });
     }
 
     /**

@@ -135,11 +135,11 @@ public class ItemHolding extends PApplet {
         l_hand.enablePin();
         l_hand.getIKPin().getAxes().rotateAboutX(MathUtils.toRadians(90f), true);
         l_hand.getIKPin().setTargetPriorities(.5f, 0f, .5f);
-        l_hand.getIKPin().translateBy(new PVector(-20f, 20f, 20f));
+        l_hand.getIKPin().translateBy(new PVector(20f, 20f, 20f));
         r_hand.enablePin();
         r_hand.getIKPin().getAxes().rotateAboutX(MathUtils.toRadians(90f), true);
         r_hand.getIKPin().setTargetPriorities(.5f, 0f, .5f);
-        r_hand.getIKPin().translateBy(new PVector(20f, 20f, 20f));
+        r_hand.getIKPin().translateBy(new PVector(-20f, 20f, 20f));
 
         head.enablePin();
         head.getIKPin().setPinWeight(5f);

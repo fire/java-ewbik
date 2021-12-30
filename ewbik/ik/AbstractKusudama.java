@@ -3,10 +3,6 @@
  */
 package ewbik.ik;
 
-import ewbik.asj.LoadManager;
-import ewbik.asj.SaveManager;
-import ewbik.asj.Saveable;
-import ewbik.asj.data.JSONObject;
 import ewbik.ik.SegmentedArmature.WorkingBone;
 import ewbik.math.*;
 
@@ -16,7 +12,7 @@ import java.util.ArrayList;
  * @author Eron
  *
  */
-public abstract class AbstractKusudama implements Constraint, Saveable {
+public abstract class AbstractKusudama implements Constraint {
 
     public static final float TAU = MathUtils.PI * 2;
     public static final float PI = MathUtils.PI;
@@ -741,70 +737,5 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
 
     public ArrayList<? extends AbstractLimitCone> getLimitCones() {
         return this.limitCones;
-    }
-
-    @Override
-    public void makeSaveable(SaveManager saveManager) {
-        saveManager.addToSaveState(this);
-        for (AbstractLimitCone lc : limitCones) {
-            lc.makeSaveable(saveManager);
-        }
-    }
-
-    @Override
-    public JSONObject getSaveJSON(SaveManager saveManager) {
-        JSONObject saveJSON = new JSONObject();
-        saveJSON.setString("identityHash", this.getIdentityHash());
-        saveJSON.setString("limitAxes", limitingAxes().getIdentityHash());
-        saveJSON.setString("attachedTo", attachedTo().getIdentityHash());
-        saveJSON.setJSONArray("limitCones", saveManager.arrayListToJSONArray(limitCones));
-        saveJSON.setFloat("minAxialAngle", minAxialAngle);
-        saveJSON.setFloat("axialRange", range);
-        saveJSON.setBoolean("axiallyConstrained", this.axiallyConstrained);
-        saveJSON.setBoolean("orientationallyConstrained", this.orientationallyConstrained);
-        saveJSON.setFloat("painfulness", this.painfullness);
-        return saveJSON;
-    }
-
-    public void loadFromJSONObject(JSONObject j, LoadManager l) {
-        this.attachedTo = l.getObjectFor(AbstractBone.class, j, "attachedTo");
-        this.limitingAxes = l.getObjectFor(AbstractAxes.class, j, "limitAxes");
-        limitCones = new ArrayList<>();
-        l.arrayListFromJSONArray(j.getJSONArray("limitCones"), limitCones, AbstractLimitCone.class);
-        this.minAxialAngle = j.getFloat("minAxialAngle");
-        this.range = j.getFloat("axialRange");
-        this.axiallyConstrained = j.getBoolean("axiallyConstrained");
-        this.orientationallyConstrained = j.getBoolean("orientationallyConstrained");
-        this.painfullness = j.getFloat("painfulness");
-    }
-
-    @Override
-    public void notifyOfSaveIntent(SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void notifyOfSaveCompletion(SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void notifyOfLoadCompletion() {
-        this.constraintUpdateNotification();
-        this.optimizeLimitingAxes();
-    }
-
-    @Override
-    public boolean isLoading() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public void setLoading(boolean loading) {
-        // TODO Auto-generated method stub
-
     }
 }
