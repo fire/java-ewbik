@@ -755,16 +755,13 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
      * at the bone's tip.
      */
     public void enablePin() {
-        // System.out.println("pinning");
         if (pin == null) {
             AbstractAxes pinAxes = this.localAxes().getGlobalCopy();
             pinAxes.setParent(this.parentArmature.localAxes().getParentAxes());
             pin = createAndReturnPinOnAxes(pinAxes);
         }
         pin.enable();
-        // System.out.println("clearing children");
         freeChildren.clear();
-        // System.out.println("adding children");
         for (AbstractBone child : getChildren()) {
             if (child.pin != null && !child.pin.isEnabled()) {
                 addFreeChild(child);

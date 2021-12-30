@@ -61,7 +61,7 @@ public class ItemHolding extends PApplet {
         /**
          * The armature we're loading is already posed such that its hands touch
          * a box. So all we need to do is , first
-         * move our box into the appropriate postion
+         * move our box into the appropriate position
          */
         cubeAxes.translateTo(new PVector(-13, -27, 32));
         cubeAxes.setRelativeToParent(worldAxes);
