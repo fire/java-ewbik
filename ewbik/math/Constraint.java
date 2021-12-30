@@ -1,4 +1,4 @@
-package ewbik.ik;
+package math;
 
 import ewbik.math.AbstractAxes;
 import ewbik.math.Vec3f;

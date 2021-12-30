@@ -1,9 +1,9 @@
 /**
  *
  */
-package ewbik.ik;
+package math;
 
-import ewbik.ik.SegmentedArmature.WorkingBone;
+import math.SegmentedArmature.WorkingBone;
 import ewbik.math.*;
 
 import java.util.ArrayList;
@@ -534,7 +534,7 @@ public abstract class AbstractKusudama implements Constraint {
      *
      * @param insertAt the intended index for this LimitCone in the sequence of
      *                 LimitCones from which the Kusudama will infer a path. @see
-     *                 ewbik.ik.AbstractKusudama.limitCones limitCones array.
+     *                 math.AbstractKusudama.limitCones limitCones array.
      * @param newPoint where on the Kusudama to add the LimitCone (in Kusudama's
      *                 local coordinate frame defined by its bone's
      *                 majorRotationAxes))

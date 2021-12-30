@@ -14,7 +14,7 @@
  * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-package ewbik.ik;
+package math;
 import ewbik.math.*;
 
 import java.util.ArrayList;
@@ -91,7 +91,7 @@ public abstract class AbstractSkeleton3D {
         return rootBone;
     }
 
-    protected abstract void initializeRootBone(ewbik.ik.AbstractSkeleton3D armature,
+    protected abstract void initializeRootBone(AbstractSkeleton3D armature,
                                                Vec3f<?> tipHeading, Vec3f<?> rollHeading,
                                                String inputTag,
                                                float boneHeight,

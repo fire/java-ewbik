@@ -16,10 +16,10 @@ DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 
  */
-package ewbik.ik;
+package math;
 
-import ewbik.ik.IKExceptions.NullParentForBoneException;
-import ewbik.ik.SegmentedArmature.WorkingBone;
+import math.IKExceptions.NullParentForBoneException;
+import math.SegmentedArmature.WorkingBone;
 import ewbik.math.*;
 
 import java.util.ArrayList;

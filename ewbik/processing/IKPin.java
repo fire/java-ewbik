@@ -1,6 +1,6 @@
 package ewbik.processing.singlePrecision;
 
-import ewbik.ik.AbstractIKPin;
+import math.AbstractIKPin;
 import ewbik.processing.sceneGraph.Axes;
 import processing.core.PVector;
 

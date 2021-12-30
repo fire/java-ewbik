@@ -19,11 +19,12 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package ewbik.processing.singlePrecision;
 
-import ewbik.ik.AbstractBone;
-import ewbik.ik.IKExceptions.NullParentForBoneException;
+import math.AbstractBone;
+import math.IKExceptions.NullParentForBoneException;
 import ewbik.math.AbstractAxes;
 import ewbik.math.Vec3f;
 import ewbik.processing.sceneGraph.Axes;
+import math.AbstractSkeleton3D;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
@@ -82,7 +83,7 @@ public class Bone extends AbstractBone {
      * @throws NullParentForBoneException
      */
     public Bone(
-            ewbik.ik.AbstractSkeleton3D armature,
+            AbstractSkeleton3D armature,
             PVector tipHeading,
             PVector rollHeading,
             String inputTag,
