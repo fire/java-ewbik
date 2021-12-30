@@ -44,19 +44,11 @@ public class Quaternion {
     }
 
     public <V extends Vec3f<?>> Quaternion(V v1, V v2, V u1, V u2) {
-        // try {
         rotation = new MRotation(v1, v2, u1, u2);
-        // } catch(Exception e) {
-        // rotation = new MRotation(v1, 0f);
-        // }
     }
 
     public <V extends Vec3f<?>> Quaternion(V axis, float angle) {
-        // try {
         rotation = new MRotation(axis, angle);
-        // } catch(Exception e) {
-        // rotation = new MRotation(RotationOrder.X, 0f);
-        // }
     }
 
     public Quaternion(float w, float x, float y, float z, boolean needsNormalization) {
@@ -64,11 +56,7 @@ public class Quaternion {
     }
 
     public <V extends Vec3f<?>> Quaternion(V begin, V end) {
-        // try{
         rotation = new MRotation(begin, end);
-        // } catch(Exception e) {
-        // rotation = new MRotation(RotationOrder.X, 0f);
-        // }
     }
 
     public Quaternion copy() {
@@ -170,7 +158,6 @@ public class Quaternion {
      * @return public Quaternion getLocalOfRotation(Quaternion r) {
      * Rotation composedRot = this.rotation.composeInverse(r.rotation,
      * RotationConvention.VECTOR_OPERATOR);
-     * <p>
      * <p>
      * return new Quaternion(composedRot);
      * }
