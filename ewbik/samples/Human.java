@@ -40,7 +40,7 @@ public class Human extends PApplet {
 
     public void setup() {
         ui = new UI(this);
-        loadedArmature = new ewbik.processing.Skeleton3D("example");
+        loadedArmature = new ewbik.processing.Skeleton3D("Armature");
         initializeBones();
         setBoneConstraints();
         updatePinList();
@@ -61,10 +61,9 @@ public class Human extends PApplet {
         } else {
             rootBone.rotateAboutY(PI / 500f, true);
         }
-        String additionalInstructions = "Hit the 'C' key to select or deselect the cube";
         // decrease the numerator to increase the zoom.
         zoomScalar = 200f / height;
-        ui.drawScene(zoomScalar, 12f, null, loadedArmature, additionalInstructions, activePin, null,
+        ui.drawScene(zoomScalar, 12f, null, loadedArmature, "", activePin, null,
                 false);
     }
 
