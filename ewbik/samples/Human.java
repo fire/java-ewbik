@@ -6,15 +6,12 @@ import ewbik.processing.singlePrecision.Bone;
 import ewbik.processing.singlePrecision.IKPin;
 import ewbik.processing.singlePrecision.Kusudama;
 import processing.core.PApplet;
-import processing.core.PGraphics;
 import processing.core.PVector;
 import processing.event.MouseEvent;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 
-public class ItemHolding extends PApplet {
+public class Human extends PApplet {
 
     ewbik.processing.Skeleton3D loadedArmature;
     ArrayList<IKPin> pins = new ArrayList<>();
@@ -35,7 +32,7 @@ public class ItemHolding extends PApplet {
     head;
 
     public static void main(String[] args) {
-        PApplet.main("samples.ItemHolding");
+        PApplet.main("samples.Human");
     }
 
     public void settings() {
