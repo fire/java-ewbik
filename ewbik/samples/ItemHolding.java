@@ -109,27 +109,27 @@ public class ItemHolding extends PApplet {
         rootBone.setBoneHeight(1f);
         rootBone.localAxes().markDirty();
         rootBone.localAxes().updateGlobal();
-        c1 = new Bone(rootBone, "c1", 15f);
-        c3 = new Bone(c1, "c3", 15f);
-        c5 = new Bone(c3, "c5", 15f);
-        neck_1 = new Bone(c5, "neck 1", 12f);
-        neck_2 = new Bone(neck_1, "neck 2", 12f);
-        head = new Bone(neck_2, "head", 15f);
+        c1 = new Bone(rootBone, "c1", -15f);
+        c3 = new Bone(c1, "c3", -15f);
+        c5 = new Bone(c3, "c5", -15f);
+        neck_1 = new Bone(c5, "neck 1", -12f);
+        neck_2 = new Bone(neck_1, "neck 2", -12f);
+        head = new Bone(neck_2, "head", -15f);
 
-        r_collar_bone = new Bone(c5, "right collar bone", 15f);
+        r_collar_bone = new Bone(c5, "right collar bone", -15f);
         r_collar_bone.rotAboutFrameZ(MathUtils.toRadians(-50f));
 
-        r_upper_arm = new Bone(r_collar_bone, "right upper arm", 40f);
+        r_upper_arm = new Bone(r_collar_bone, "right upper arm", -40f);
         r_upper_arm.rotAboutFrameZ(MathUtils.toRadians(-130f));
-        r_lower_arm = new Bone(r_upper_arm, "right lower arm", 40f);
-        r_hand = new Bone(r_lower_arm, "right hand", 10f);
+        r_lower_arm = new Bone(r_upper_arm, "right lower arm", -40f);
+        r_hand = new Bone(r_lower_arm, "right hand", -10f);
 
-        l_collar_bone = new Bone(c5, "left collar bone", 15f);
+        l_collar_bone = new Bone(c5, "left collar bone", -15f);
         l_collar_bone.rotAboutFrameZ(MathUtils.toRadians(50f));
 
-        l_upper_arm = new Bone(l_collar_bone, "left upper arm", 40f);
+        l_upper_arm = new Bone(l_collar_bone, "left upper arm", -40f);
         l_upper_arm.rotAboutFrameZ(MathUtils.toRadians(130f));
-        l_lower_arm = new Bone(l_upper_arm, "right lower arm", 40f);
+        l_lower_arm = new Bone(l_upper_arm, "right lower arm", -40f);
         l_hand = new Bone(l_lower_arm, "left hand", 10f);
 
         l_hand.enablePin();
