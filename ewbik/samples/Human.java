@@ -18,7 +18,6 @@ public class Human extends PApplet {
     UI ui;
     IKPin activePin;
     float zoomScalar = 200f / height;
-    boolean cubeMode = true;
 
     Bone  rootBone, 
     c1, c3, c5,
@@ -83,17 +82,13 @@ public class Human extends PApplet {
     public void keyPressed() {
         if (key == CODED) {
             if (keyCode == DOWN) {
-                cubeMode = false;
                 int currentPinIndex = (pins.indexOf(activePin) + 1) % pins.size();
                 activePin = pins.get(currentPinIndex);
             } else if (keyCode == UP) {
-                cubeMode = false;
                 int idx = pins.indexOf(activePin);
                 int currentPinIndex = (pins.size() - 1) - (((pins.size() - 1) - (idx - 1)) % pins.size());
                 activePin = pins.get(currentPinIndex);
             }
-        } else if (key == 'c') {
-            cubeMode = !cubeMode;
         }
     }
 
