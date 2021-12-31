@@ -26,9 +26,6 @@ import processing.core.PMatrix3D;
 import processing.core.PVector;
 
 public class Axes extends Transform3D {
-    public static int renderMode = 1;
-
-
     public Axes(AbstractBasis b, AbstractAxes parent) {
         super(b, parent);
     }
@@ -276,21 +273,18 @@ public class Axes extends Transform3D {
         updateGlobal();
         pg.pushMatrix();
         pg.setMatrix(getGlobalPMatrix());
-        if (renderMode == 1) pg.fill(0, 255, 0);
-        else pg.fill(0, 0, 0, 255);
+        pg.fill(0, 255, 0);
         pg.pushMatrix();
         pg.translate(size / 2f, 0, 0);
         pg.box(size, size / 10f, size / 10f);
         pg.popMatrix();
         drawRay(pg, x_().getRayScaledTo(size));
-        if (renderMode == 1) pg.fill(255, 0, 0);
-        else pg.fill(0, 0, 0, 255);
+        pg.fill(255, 0, 0);
         pg.pushMatrix();
         pg.translate(0, size / 2f, 0);
         pg.box(size / 10f, size, size / 10f);
         pg.popMatrix();
-        if (renderMode == 1) pg.fill(0, 0, 255);
-        else pg.fill(0, 0, 0, 255);
+        pg.fill(0, 0, 255);
         pg.pushMatrix();
         pg.translate(0, 0, size / 2f);
         pg.box(size / 10f, size / 10f, size);

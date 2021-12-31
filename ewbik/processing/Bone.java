@@ -36,7 +36,6 @@ import java.util.ArrayList;
  * AbstractBone. Please refer to the {@link AbstractBone AbstractBone docs.}
  */
 public class Bone extends AbstractBone {
-    public static int renderMode = 1;
     public static boolean drawKusudamas = false;
 
     // default constructor required for file loader to work.
@@ -195,11 +194,7 @@ public class Bone extends AbstractBone {
         pg.applyMatrix(localMat);
 
         pg.beginShape(PConstants.TRIANGLE_FAN);
-        if (renderMode == 1) {
-            pg.fill(pg.color(0, 255 - boneCol, boneCol));
-        } else {
-            pg.fill(pg.color(0, 0, 0));
-        }
+        pg.fill(pg.color(0, 255 - boneCol, boneCol));
         // pg.stroke(lineColor);
         float circumference = (float) (boneHeight / 8f);
         pg.noStroke();

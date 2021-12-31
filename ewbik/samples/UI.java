@@ -128,10 +128,7 @@ public class UI {
 
     }
 
-    public void drawPass(int mode, float drawSize, Runnable preArmatureDraw, PGraphics buffer, ewbik.processing.Skeleton3D armature) {
-        Kusudama.renderMode = mode;
-        Bone.renderMode = mode;
-        Axes.renderMode = mode;
+    public void drawPass(float drawSize, Runnable preArmatureDraw, PGraphics buffer, ewbik.processing.Skeleton3D armature) {
         if (preArmatureDraw != null)
             preArmatureDraw.run();
         armature.drawMe(buffer, 100, drawSize);
@@ -153,7 +150,7 @@ public class UI {
         currentDrawSurface = display;
         display.beginDraw();
         setSceneAndCamera(display, zoomScalar);
-        drawPass(1, drawSize, additionalDraw, display, armature);
+        drawPass(drawSize, additionalDraw, display, armature);
         display.endDraw();
 
         currentDrawSurface = pa.g;

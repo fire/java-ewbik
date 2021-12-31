@@ -42,7 +42,6 @@ import java.util.ArrayList;
 public class Kusudama extends AbstractKusudama {
 
     public static PShader kusudamaShader;
-    public static int renderMode = 1;
     public static PShader currentShader;
 
     float[] coneSequence;
@@ -140,10 +139,7 @@ public class Kusudama extends AbstractKusudama {
         p.fill(p.color(r, g, b));// p.color(255, 0, 255, 100));
         p.textureMode(PConstants.NORMAL);
         p.shader(currentShader);
-        if (renderMode == 0)
-            p.fill(p.color(r, g, b));
-        else
-            p.fill(p.color(200, 0, 200, 255));
+        p.fill(p.color(200, 0, 200, 255));
 
         currentShader.set("modelViewInv", ((PGraphicsOpenGL) p).modelviewInv);
         currentShader.set("coneSequence", coneSequence, 4);
@@ -164,8 +160,6 @@ public class Kusudama extends AbstractKusudama {
         p.line(0f, 0f, 0f, (float) yaw.x, (float) yaw.y, (float) yaw.z);
 
     }
-
-    int lastRenderMode = -1;
 
     protected void updateShaderTexture() {
 
