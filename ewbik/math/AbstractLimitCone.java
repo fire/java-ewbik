@@ -17,15 +17,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
  */
 
-package ewbik.ik;
+package math;
 
-import ewbik.asj.LoadManager;
-import ewbik.asj.SaveManager;
-import ewbik.asj.Saveable;
-import ewbik.asj.data.JSONObject;
 import ewbik.math.*;
 
-public abstract class AbstractLimitCone implements Saveable {
+public abstract class AbstractLimitCone {
 
     Vec3f<?> controlPoint;
     Vec3f<?> radialPoint;
@@ -458,60 +454,5 @@ public abstract class AbstractLimitCone implements Saveable {
 
     public AbstractKusudama getParentKusudama() {
         return parentKusudama;
-    }
-
-    @Override
-    public void makeSaveable(SaveManager saveManager) {
-        saveManager.addToSaveState(this);
-    }
-
-    @Override
-    public JSONObject getSaveJSON(SaveManager saveManager) {
-        JSONObject saveJSON = new JSONObject();
-        saveJSON.setString("identityHash", this.getIdentityHash());
-        saveJSON.setString("parentKusudama", this.getParentKusudama().getIdentityHash());
-        saveJSON.setJSONObject("controlPoint", this.controlPoint.toJSONObject());
-        saveJSON.setFloat("radius", this.radius);
-        return saveJSON;
-    }
-
-    public void loadFromJSONObject(JSONObject j, LoadManager l) {
-        this.parentKusudama = (AbstractKusudama) l.getObjectFromClassMaps(AbstractKusudama.class,
-                j.getString("parentKusudama"));
-        Vector3 controlPointJ = null;
-        try {
-            controlPointJ = new Vector3(j.getJSONObject("controlPoint"));
-        } catch (Exception e) {
-            controlPointJ = new Vector3(j.getJSONArray("controlPoint"));
-        }
-
-        controlPointJ.normalize();
-
-        this.controlPoint = controlPointJ;
-        this.setRadius(j.getFloat("radius"));
-    }
-
-    @Override
-    public void notifyOfSaveIntent(SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void notifyOfSaveCompletion(SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public boolean isLoading() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public void setLoading(boolean loading) {
-        // TODO Auto-generated method stub
-
     }
 }

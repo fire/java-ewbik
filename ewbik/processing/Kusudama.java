@@ -19,8 +19,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package ewbik.processing.singlePrecision;
 
-import ewbik.ik.AbstractKusudama;
-import ewbik.ik.AbstractLimitCone;
+import math.AbstractKusudama;
+import math.AbstractLimitCone;
 import ewbik.math.MRotation;
 import ewbik.math.Quaternion;
 import ewbik.math.Vec3f;
@@ -94,7 +94,7 @@ public class Kusudama extends AbstractKusudama {
      *
      * @param insertAt the intended index for this LimitCone in the sequence of
      *                 LimitCones from which the Kusudama will infer a path. @see
-     *                 ewbik.ik.AbstractKusudama.limitCones limitCones array.
+     *                 math.AbstractKusudama.limitCones limitCones array.
      * @param newPoint where on the Kusudama to add the LimitCone (in Kusudama's
      *                 local coordinate frame defined by its bone's
      *                 majorRotationAxes))

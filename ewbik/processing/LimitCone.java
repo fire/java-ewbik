@@ -19,8 +19,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package ewbik.processing.singlePrecision;
 
-import ewbik.ik.AbstractKusudama;
-import ewbik.ik.AbstractLimitCone;
+import math.AbstractKusudama;
+import math.AbstractLimitCone;
 import ewbik.processing.sceneGraph.Axes;
 import processing.core.PVector;
 

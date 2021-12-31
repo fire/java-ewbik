@@ -1,13 +1,9 @@
 /**
  *
  */
-package ewbik.ik;
+package math;
 
-import ewbik.asj.LoadManager;
-import ewbik.asj.SaveManager;
-import ewbik.asj.Saveable;
-import ewbik.asj.data.JSONObject;
-import ewbik.ik.SegmentedArmature.WorkingBone;
+import math.SegmentedArmature.WorkingBone;
 import ewbik.math.*;
 
 import java.util.ArrayList;
@@ -16,7 +12,7 @@ import java.util.ArrayList;
  * @author Eron
  *
  */
-public abstract class AbstractKusudama implements Constraint, Saveable {
+public abstract class AbstractKusudama {
 
     public static final float TAU = MathUtils.PI * 2;
     public static final float PI = MathUtils.PI;
@@ -230,7 +226,6 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
         return painfullness;
     }
 
-    @Override
     public <V extends Vec3f<?>> boolean isInLimits_(V globalPoint) {
         float[] inBounds = {1f};
         // boneRay.p1.set(toSet.origin());
@@ -538,7 +533,7 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
      *
      * @param insertAt the intended index for this LimitCone in the sequence of
      *                 LimitCones from which the Kusudama will infer a path. @see
-     *                 ewbik.ik.AbstractKusudama.limitCones limitCones array.
+     *                 math.AbstractKusudama.limitCones limitCones array.
      * @param newPoint where on the Kusudama to add the LimitCone (in Kusudama's
      *                 local coordinate frame defined by its bone's
      *                 majorRotationAxes))
@@ -579,7 +574,6 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
      * @return the limitingAxes of this Kusudama (these are just its parentBone's
      *         majorRotationAxes)
      */
-    @Override
     public <A extends AbstractAxes> A limitingAxes() {
         // if(inverted) return inverseLimitingAxes;
         return (A) limitingAxes;
@@ -741,70 +735,5 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
 
     public ArrayList<? extends AbstractLimitCone> getLimitCones() {
         return this.limitCones;
-    }
-
-    @Override
-    public void makeSaveable(SaveManager saveManager) {
-        saveManager.addToSaveState(this);
-        for (AbstractLimitCone lc : limitCones) {
-            lc.makeSaveable(saveManager);
-        }
-    }
-
-    @Override
-    public JSONObject getSaveJSON(SaveManager saveManager) {
-        JSONObject saveJSON = new JSONObject();
-        saveJSON.setString("identityHash", this.getIdentityHash());
-        saveJSON.setString("limitAxes", limitingAxes().getIdentityHash());
-        saveJSON.setString("attachedTo", attachedTo().getIdentityHash());
-        saveJSON.setJSONArray("limitCones", saveManager.arrayListToJSONArray(limitCones));
-        saveJSON.setFloat("minAxialAngle", minAxialAngle);
-        saveJSON.setFloat("axialRange", range);
-        saveJSON.setBoolean("axiallyConstrained", this.axiallyConstrained);
-        saveJSON.setBoolean("orientationallyConstrained", this.orientationallyConstrained);
-        saveJSON.setFloat("painfulness", this.painfullness);
-        return saveJSON;
-    }
-
-    public void loadFromJSONObject(JSONObject j, LoadManager l) {
-        this.attachedTo = l.getObjectFor(AbstractBone.class, j, "attachedTo");
-        this.limitingAxes = l.getObjectFor(AbstractAxes.class, j, "limitAxes");
-        limitCones = new ArrayList<>();
-        l.arrayListFromJSONArray(j.getJSONArray("limitCones"), limitCones, AbstractLimitCone.class);
-        this.minAxialAngle = j.getFloat("minAxialAngle");
-        this.range = j.getFloat("axialRange");
-        this.axiallyConstrained = j.getBoolean("axiallyConstrained");
-        this.orientationallyConstrained = j.getBoolean("orientationallyConstrained");
-        this.painfullness = j.getFloat("painfulness");
-    }
-
-    @Override
-    public void notifyOfSaveIntent(SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void notifyOfSaveCompletion(SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void notifyOfLoadCompletion() {
-        this.constraintUpdateNotification();
-        this.optimizeLimitingAxes();
-    }
-
-    @Override
-    public boolean isLoading() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public void setLoading(boolean loading) {
-        // TODO Auto-generated method stub
-
     }
 }

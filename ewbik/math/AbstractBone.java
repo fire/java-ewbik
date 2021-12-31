@@ -16,15 +16,10 @@ DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 
  */
-package ewbik.ik;
+package math;
 
-import ewbik.asj.LoadManager;
-import ewbik.asj.SaveManager;
-import ewbik.asj.Saveable;
-import ewbik.asj.data.JSONArray;
-import ewbik.asj.data.JSONObject;
-import ewbik.ik.IKExceptions.NullParentForBoneException;
-import ewbik.ik.SegmentedArmature.WorkingBone;
+import math.IKExceptions.NullParentForBoneException;
+import math.SegmentedArmature.WorkingBone;
 import ewbik.math.*;
 
 import java.util.ArrayList;
@@ -32,7 +27,7 @@ import java.util.ArrayList;
 /**
  * @author Eron Gjoni
  */
-public abstract class AbstractBone implements Saveable, Comparable<AbstractBone> {
+public abstract class AbstractBone implements Comparable<AbstractBone> {
 
     public enum frameType {
         GLOBAL, RELATIVE
@@ -52,7 +47,7 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
     protected ArrayList<AbstractBone> freeChildren = new ArrayList<>();
     protected ArrayList<AbstractBone> effectoredChildren = new ArrayList<>();
 
-    public Constraint constraints;
+    public AbstractKusudama constraints;
     protected AbstractIKPin pin = null;
     protected boolean orientationLock = false;
     protected float stiffnessScalar = 0f;
@@ -471,7 +466,7 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
      * @param newConstraint a constraint Object to add to this bone
      * @return the constraintObject that was just added
      */
-    public Constraint addConstraint(Constraint newConstraint) {
+    public AbstractKusudama addConstraint(AbstractKusudama newConstraint) {
         constraints = newConstraint;
         return constraints;
     }
@@ -479,7 +474,7 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
     /**
      * @return this bone's constraint object.
      */
-    public Constraint getConstraint() {
+    public AbstractKusudama getConstraint() {
         return constraints;
     }
 
@@ -1080,98 +1075,6 @@ public abstract class AbstractBone implements Saveable, Comparable<AbstractBone>
                 }
             }
         }
-    }
-
-    @Override
-    public void loadFromJSONObject(JSONObject j, LoadManager l) {
-        this.localAxes = (AbstractAxes) l.getObjectFromClassMaps(AbstractAxes.class, j.getString("localAxes"));
-        this.majorRotationAxes = (AbstractAxes) l.getObjectFromClassMaps(AbstractAxes.class,
-                j.getString("majorRotationAxes"));
-        this.parentArmature = (AbstractSkeleton3D) l.getObjectFromClassMaps(AbstractSkeleton3D.class,
-                j.getString("parentArmature"));
-        l.arrayListFromJSONArray(j.getJSONArray("children"), this.children, this.getClass());
-        this.boneHeight = j.getFloat("boneHeight");
-        if (j.hasKey("stiffness"))
-            this.setStiffness(j.getFloat("stiffness"));
-        if (j.hasKey("constraints"))
-            this.constraints = (Constraint) l.getObjectFromClassMaps(Constraint.class, j.getString("constraints"));
-        if (j.hasKey("IKPin"))
-            this.pin = (AbstractIKPin) l.getObjectFromClassMaps(AbstractIKPin.class, j.getString("IKPin"));
-        this.tag = j.getString("tag");
-    }
-
-    @Override
-    public JSONObject getSaveJSON(SaveManager saveManager) {
-        JSONObject thisBone = new JSONObject();
-        thisBone.setString("identityHash", this.getIdentityHash());
-        thisBone.setString("localAxes", this.localAxes.getIdentityHash());
-        thisBone.setString("majorRotationAxes", majorRotationAxes.getIdentityHash());
-        thisBone.setString("parentArmature", ((Saveable) parentArmature).getIdentityHash());
-        JSONArray children = saveManager.arrayListToJSONArray(getChildren());
-        thisBone.setJSONArray("children", children);
-        if (constraints != null) {
-            thisBone.setString("constraints", constraints.getIdentityHash());
-        }
-        if (pin != null)
-            thisBone.setString("IKPin", pin.getIdentityHash());
-
-        thisBone.setFloat("boneHeight", this.getBoneHeight());
-        thisBone.setFloat("stiffness", this.getStiffness());
-        thisBone.setString("tag", this.getTag());
-
-        return thisBone;
-    }
-
-    @Override
-    public void makeSaveable(SaveManager saveManager) {
-        saveManager.addToSaveState(this);
-        if (this.getIKPin() != null) {
-            this.getIKPin().makeSaveable(saveManager);
-        }
-        for (AbstractBone b : this.children) {
-            b.makeSaveable(saveManager);
-        }
-        if (this.getConstraint() != null) {
-            this.getConstraint().makeSaveable(saveManager);
-        }
-    }
-
-    @Override
-    public void notifyOfSaveIntent(SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void notifyOfSaveCompletion(SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void notifyOfLoadCompletion() {
-        this.setBoneHeight(boneHeight);
-        for (AbstractBone b : this.children) {
-            b.attachToParent(this);
-        }
-        this.parentArmature.addToBoneList(this);
-    }
-
-    @Override
-    public boolean isLoading() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public void setLoading(boolean loading) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public int compareTo(AbstractBone i) {
-        return this.ancestorCount - i.ancestorCount;
     }
 
     public String toString() {

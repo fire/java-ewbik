@@ -22,7 +22,7 @@ package ewbik.math;
  *
  * @author Xoppa
  */
-public interface Vecf<T extends Vecf<T>> extends Vec<T> {
+public interface Vecf<T extends Vecf<T>> {
 
 
     /**

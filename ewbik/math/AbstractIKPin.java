@@ -1,15 +1,11 @@
-package ewbik.ik;
+package math;
 
-import ewbik.asj.LoadManager;
-import ewbik.asj.SaveManager;
-import ewbik.asj.Saveable;
-import ewbik.asj.data.JSONObject;
 import ewbik.math.AbstractAxes;
 import ewbik.math.Vec3f;
 
 import java.util.ArrayList;
 
-public abstract class AbstractIKPin implements Saveable {
+public abstract class AbstractIKPin {
 
     protected boolean isEnabled;
     protected AbstractAxes axes;
@@ -332,74 +328,5 @@ public abstract class AbstractIKPin implements Saveable {
     public void setPinWeight(float weight) {
         this.pinWeight = weight;
         this.forBone.parentArmature.rootwardlyUpdateFalloffCacheFrom(forBone);
-    }
-
-    @Override
-    public void makeSaveable(SaveManager saveManager) {
-        saveManager.addToSaveState(this);
-        getAxes().makeSaveable(saveManager);
-    }
-
-    @Override
-    public JSONObject getSaveJSON(SaveManager saveManager) {
-        JSONObject saveJSON = new JSONObject();
-        saveJSON.setString("identityHash", this.getIdentityHash());
-        saveJSON.setString("axes", getAxes().getIdentityHash());
-        saveJSON.setString("forBone", forBone.getIdentityHash());
-        saveJSON.setBoolean("isEnabled", this.isEnabled());
-        saveJSON.setFloat("pinWeight", this.pinWeight);
-        JSONObject priorities = new JSONObject();
-        priorities.setFloat("x", xPriority);
-        priorities.setFloat("y", yPriority);
-        priorities.setFloat("z", zPriority);
-        saveJSON.setFloat("depthFalloff", depthFalloff);
-        saveJSON.setJSONObject("priorities", priorities);
-        return saveJSON;
-    }
-
-    public void loadFromJSONObject(JSONObject j, LoadManager l) {
-        this.axes = (AbstractAxes) l.getObjectFromClassMaps(AbstractAxes.class, j.getString("axes"));
-        this.isEnabled = j.getBoolean("isEnabled");
-        this.pinWeight = j.getFloat("pinWeight");
-        this.forBone = (AbstractBone) l.getObjectFromClassMaps(AbstractBone.class, j.getString("forBone"));
-        if (j.hasKey("priorities")) {
-            JSONObject priorities = j.getJSONObject("priorities");
-            xPriority = priorities.getFloat("x");
-            yPriority = priorities.getFloat("y");
-            zPriority = priorities.getFloat("z");
-        }
-        if (j.hasKey("depthFalloff")) {
-            this.depthFalloff = j.getFloat("depthFalloff");
-        }
-    }
-
-    @Override
-    public void notifyOfLoadCompletion() {
-        this.setTargetPriorities(xPriority, yPriority, zPriority);
-        this.setDepthFalloff(depthFalloff);
-    }
-
-    @Override
-    public void notifyOfSaveIntent(SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void notifyOfSaveCompletion(SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public boolean isLoading() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public void setLoading(boolean loading) {
-        // TODO Auto-generated method stub
-
     }
 }
