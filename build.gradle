@@ -10,7 +10,7 @@ repositories {
 }
 
 application {
-    mainClass = 'samples.Human'
+    mainClass = 'samples.ItemHolding'
 }
 
 dependencies {

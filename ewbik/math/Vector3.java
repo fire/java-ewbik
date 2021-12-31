@@ -16,6 +16,10 @@
 
 package ewbik.math;
 
+import ewbik.asj.CanLoad;
+import ewbik.asj.data.JSONArray;
+import ewbik.asj.data.JSONObject;
+
 //import com.badlogic.gdx.utils.GdxRuntimeException;
 //import com.badlogic.gdx.utils.NumberUtils;
 
@@ -25,7 +29,7 @@ package ewbik.math;
  *
  * @author badlogicgames@gmail.com
  */
-public class Vector3 extends Vec3f<ewbik.math.Vector3> {
+public class Vector3 extends Vec3f<ewbik.math.Vector3> implements CanLoad {
 
     public <V extends Vec3f<?>> Vector3(V v) {
         this.x = v.x;
@@ -42,6 +46,28 @@ public class Vector3 extends Vec3f<ewbik.math.Vector3> {
     }
 
     @Override
+    public CanLoad populateSelfFromJSON(JSONObject j) {
+        JSONArray components = j.getJSONArray("vec");
+        this.x = components.getFloat(0);
+        this.y = components.getFloat(1);
+        this.z = components.getFloat(2);
+        return this;
+    }
+
+    public Vector3(JSONObject j) {
+        JSONArray components = j.getJSONArray("vec");
+        this.x = components.getFloat(0);
+        this.y = components.getFloat(1);
+        this.z = components.getFloat(2);
+    }
+
+    public Vector3(JSONArray j) {
+        this.x = j.getFloat(0);
+        this.y = j.getFloat(1);
+        this.z = j.getFloat(2);
+    }
+
+    @Override
     public ewbik.math.Vector3 copy() {
         return new ewbik.math.Vector3(this);
     }
@@ -50,4 +76,24 @@ public class Vector3 extends Vec3f<ewbik.math.Vector3> {
     public ewbik.math.Vector3 toVec3f() {
         return new ewbik.math.Vector3((float) x, (float) y, (float) z);
     }
+
+    public JSONArray toJSONArray() {
+        JSONArray vec = new JSONArray();
+        vec.append(this.x);
+        vec.append(this.y);
+        vec.append(this.z);
+        return vec;
+    }
+
+    @Override
+    public JSONObject toJSONObject() {
+        JSONObject j = new JSONObject();
+        JSONArray components = new JSONArray();
+        components.append(this.x);
+        components.append(this.y);
+        components.append(this.z);
+        j.setJSONArray("vec", components);
+        return j;
+    }
+
 }

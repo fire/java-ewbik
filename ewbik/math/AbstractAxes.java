@@ -1,5 +1,10 @@
 package ewbik.math;
 
+import ewbik.asj.LoadManager;
+import ewbik.asj.SaveManager;
+import ewbik.asj.Saveable;
+import ewbik.asj.data.JSONObject;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -9,7 +14,7 @@ import java.util.function.Consumer;
 /**
  * @author Eron Gjoni
  */
-public abstract class AbstractAxes {
+public abstract class AbstractAxes implements AxisDependency, Saveable {
     public static final int NORMAL = 0, IGNORE = 1, FORWARD = 2;
     public static final int RIGHT = 1, LEFT = -1;
     public static final int X = 0, Y = 1, Z = 2;
@@ -29,7 +34,7 @@ public abstract class AbstractAxes {
     //public boolean forceOrthoNormality = true;
 
 
-    public LinkedList<DependencyReference<AbstractAxes>> dependentsRegistry = new LinkedList<DependencyReference<AbstractAxes>>();
+    public LinkedList<DependencyReference<AxisDependency>> dependentsRegistry = new LinkedList<DependencyReference<AxisDependency>>();
 
     protected Vec3f<?> workingVector;
 
@@ -146,7 +151,7 @@ public abstract class AbstractAxes {
     public void setParent(AbstractAxes intendedParent, Object requestedBy) {
         this.updateGlobal();
         AbstractAxes oldParent = this.getParentAxes();
-		/*for(DependencyReference<AbstractAxes> ad : this.dependentsRegistry) {
+		/*for(DependencyReference<AxisDependency> ad : this.dependentsRegistry) {
 			ad.get().parentChangeWarning(this, oldParent, intendedParent, requestedBy);
 		}*/
         forEachDependent(
@@ -172,7 +177,7 @@ public abstract class AbstractAxes {
 
         forEachDependent(
                 (ad) -> ad.get().parentChangeCompletionNotice(this, oldParent, intendedParent, requestedBy));
-		/*for(DependencyReference<AbstractAxes> ad : this.dependentsRegistry) {
+		/*for(DependencyReference<AxisDependency> ad : this.dependentsRegistry) {
 			ad.get().parentChangeCompletionNotice(this, oldParent, intendedParent, requestedBy);
 		}*/
     }
@@ -184,10 +189,10 @@ public abstract class AbstractAxes {
      *
      * @param r
      */
-    public void forEachDependent(Consumer<DependencyReference<AbstractAxes>> action) {
-        Iterator<DependencyReference<AbstractAxes>> i = dependentsRegistry.iterator();
+    public void forEachDependent(Consumer<DependencyReference<AxisDependency>> action) {
+        Iterator<DependencyReference<AxisDependency>> i = dependentsRegistry.iterator();
         while (i.hasNext()) {
-            DependencyReference<AbstractAxes> dr = i.next();
+            DependencyReference<AxisDependency> dr = i.next();
             if (dr.get() != null) {
                 action.accept(dr);
             } else {
@@ -623,15 +628,15 @@ public abstract class AbstractAxes {
     }
 
 
-    public void registerDependent(AbstractAxes newDependent) {
+    public void registerDependent(AxisDependency newDependent) {
         //Make sure we don't hit a dependency loop
         if (AbstractAxes.class.isAssignableFrom(newDependent.getClass())) {
             if (((AbstractAxes) newDependent).isAncestorOf(this)) {
-                this.transferToParent(((AbstractAxes) newDependent).getParentAxes());
+                this.transferToParent(((AxisDependency) newDependent).getParentAxes());
             }
         }
         if (dependentsRegistry.indexOf(newDependent) == -1) {
-            dependentsRegistry.add(new DependencyReference<AbstractAxes>(newDependent));
+            dependentsRegistry.add(new DependencyReference<AxisDependency>(newDependent));
         }
     }
 
@@ -670,7 +675,7 @@ public abstract class AbstractAxes {
         if (this.getParentAxes() != null) {
             this.updateGlobal();
             AbstractAxes oldParent = this.getParentAxes();
-            for (DependencyReference<AbstractAxes> ad : this.dependentsRegistry) {
+            for (DependencyReference<AxisDependency> ad : this.dependentsRegistry) {
                 ad.get().parentChangeWarning(this, this.getParentAxes(), null, null);
             }
             this.getLocalMBasis().adoptValues(this.globalMBasis);
@@ -679,13 +684,13 @@ public abstract class AbstractAxes {
             this.areGlobal = true;
             this.markDirty();
             this.updateGlobal();
-            for (DependencyReference<AbstractAxes> ad : this.dependentsRegistry) {
+            for (DependencyReference<AxisDependency> ad : this.dependentsRegistry) {
                 ad.get().parentChangeCompletionNotice(this, oldParent, null, null);
             }
         }
     }
 
-    public void disown(AbstractAxes child) {
+    public void disown(AxisDependency child) {
         dependentsRegistry.remove(child);
     }
 
@@ -697,6 +702,56 @@ public abstract class AbstractAxes {
     public AbstractBasis getLocalMBasis() {
         return localMBasis;
     }
+
+    @Override
+    public JSONObject getSaveJSON(SaveManager saveManager) {
+        this.updateGlobal();
+        JSONObject thisAxes = new JSONObject();
+        JSONObject shearScale = new JSONObject();
+        Vector3 xShear = new Vector3();
+        Vector3 yShear = new Vector3();
+        Vector3 zShear = new Vector3();
+
+        this.getLocalMBasis().setToShearXBase(xShear);
+        this.getLocalMBasis().setToShearYBase(yShear);
+        this.getLocalMBasis().setToShearZBase(zShear);
+
+        shearScale.setJSONArray("x", xShear.toJSONArray());
+        shearScale.setJSONArray("y", yShear.toJSONArray());
+        shearScale.setJSONArray("z", zShear.toJSONArray());
+
+        thisAxes.setJSONArray("translation", (new Vector3(getLocalMBasis().translate)).toJSONArray());
+        thisAxes.setJSONArray("rotation", getLocalMBasis().rotation.toJsonArray());
+        thisAxes.setJSONObject("bases", shearScale);
+
+        //thisAxes.setJSONArray("flippedAxes", saveManager.primitiveArrayToJSONArray(this.getLocalMBasis().flippedAxes));
+        String parentHash = "-1";
+        if (getParentAxes() != null) parentHash = ((Saveable) getParentAxes()).getIdentityHash();
+        thisAxes.setString("parent", parentHash);
+        thisAxes.setInt("slipType", this.getSlipType());
+        thisAxes.setString("identityHash", this.getIdentityHash());
+        return thisAxes;
+    }
+
+    @Override
+    public void loadFromJSONObject(JSONObject j, LoadManager l) {
+        Vector3 origin = new Vector3(j.getJSONArray("translation"));
+        Quaternion rotation = new Quaternion(j.getJSONArray("rotation"));
+        this.getLocalMBasis().translate = origin;
+        this.getLocalMBasis().rotation = rotation;
+        this.getLocalMBasis().refreshPrecomputed();
+        AbstractAxes par;
+        try {
+            par = (AbstractAxes) l.getObjectFor(AbstractAxes.class, j, "parent");
+            if (par != null)
+                this.setRelativeToParent(par);
+            this.setSlipType(j.getInt("slipType"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     public void axisSlipWarning(AbstractAxes globalPriorToSlipping, AbstractAxes globalAfterSlipping, AbstractAxes actualAxis, ArrayList<Object> dontWarn) {
         this.updateGlobal();
@@ -786,7 +841,7 @@ public abstract class AbstractAxes {
     public void notifyDependentsOfSlip(AbstractAxes newAxisGlobal, ArrayList<Object> dontWarn) {
         for (int i = 0; i < dependentsRegistry.size(); i++) {
             if (!dontWarn.contains(dependentsRegistry.get(i))) {
-                AbstractAxes dependant = dependentsRegistry.get(i).get();
+                AxisDependency dependant = dependentsRegistry.get(i).get();
 
                 //First we check if the dependent extends AbstractAxes
                 //so we know whether or not to pass the dontWarn list
@@ -843,10 +898,38 @@ public abstract class AbstractAxes {
         return global + "\n" + local;
     }
 
-    public void parentChangeWarning(AbstractAxes warningBy, AbstractAxes oldParent, AbstractAxes intendedParent, Object requestedBy) {
+    @Override
+    public void notifyOfSaveIntent(SaveManager saveManager) {
+        // TODO Auto-generated method stub
+
     }
 
-    public void parentChangeCompletionNotice(AbstractAxes warningBy, AbstractAxes oldParent, AbstractAxes intendedParent, Object requestedBy) {
+    @Override
+    public void notifyOfSaveCompletion(SaveManager saveManager) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setLoading(boolean loading) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isLoading() {
+
+        return false;
+    }
+
+    @Override
+    public void makeSaveable(SaveManager saveManager) {
+        saveManager.addToSaveState(this);
+        forEachDependent(
+                (ad) -> {
+                    if (Saveable.class.isAssignableFrom(ad.get().getClass()))
+                        ((Saveable) ad.get()).makeSaveable(saveManager);
+                });
     }
 
     /**

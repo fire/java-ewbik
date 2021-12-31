@@ -19,10 +19,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package ewbik.processing;
 
-import math.AbstractBone.frameType;
+import ewbik.ik.AbstractBone.frameType;
 import ewbik.math.Vec3f;
 import ewbik.processing.sceneGraph.Axes;
-import math.AbstractSkeleton3D;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
@@ -30,10 +29,10 @@ import processing.core.PVector;
 
 /**
  * Note, this class is a concrete implementation of the abstract class
- * AbstractSkeleton3D. Please refer to the {@link AbstractSkeleton3D
+ * AbstractSkeleton3D. Please refer to the {@link ewbik.ik.AbstractSkeleton3D
  * AbstractSkeleton3D docs.}
  */
-public class Skeleton3D extends AbstractSkeleton3D {
+public class Skeleton3D extends ewbik.ik.AbstractSkeleton3D {
 
     // default constructor required for file loading to work
     public Skeleton3D() {
@@ -46,7 +45,7 @@ public class Skeleton3D extends AbstractSkeleton3D {
 
     @Override
     protected void initializeRootBone(
-            AbstractSkeleton3D armature,
+            ewbik.ik.AbstractSkeleton3D armature,
             Vec3f<?> tipHeading,
             Vec3f<?> rollHeading,
             String inputTag,

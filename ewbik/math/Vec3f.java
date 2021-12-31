@@ -1,6 +1,8 @@
 package ewbik.math;
 
-public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T> {
+import ewbik.asj.CanLoad;
+
+public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
 
     private static final long serialVersionUID = 3840054589595372522L;
 

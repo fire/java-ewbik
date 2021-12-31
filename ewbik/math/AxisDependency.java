@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 2015 Eron Gjoni
+Copyright (c) 2016 Eron Gjoni
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
 associated documentation files (the "Software"), to deal in the Software without restriction, including 
@@ -17,21 +17,45 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
 
-package ewbik.processing.singlePrecision;
 
-import ewbik.ik.AbstractKusudama;
-import ewbik.ik.AbstractLimitCone;
-import ewbik.processing.sceneGraph.Axes;
-import processing.core.PVector;
+package ewbik.math;
 
-public class LimitCone extends AbstractLimitCone {
 
-    // default constructor required for file loading to work
-    public LimitCone() {
+public interface AxisDependency {
+    default void emancipate() {
     }
 
-    public LimitCone(PVector location, float rad, AbstractKusudama attachedTo) {
-        super(Axes.toVector3(location), rad, attachedTo);
+    ;
+
+    default void axisSlipWarning(AbstractAxes globalPriorToSlipping, AbstractAxes globalAfterSlipping, AbstractAxes thisAxis) {
     }
 
+    ;
+
+    default void axisSlipCompletionNotice(AbstractAxes globalPriorToSlipping, AbstractAxes globalAfterSlipping, AbstractAxes thisAxis) {
+    }
+
+    ;
+
+    default void parentChangeWarning(AbstractAxes warningBy, AbstractAxes oldParent, AbstractAxes intendedParent, Object requestedBy) {
+    }
+
+    ;
+
+    default void parentChangeCompletionNotice(AbstractAxes warningBy, AbstractAxes oldParent, AbstractAxes intendedParent, Object requestedBy) {
+    }
+
+    ;
+
+    default void markDirty() {
+    }
+
+    ;
+
+    default void markDependentsDirty() {
+    }
+
+    ;
+
+    public AbstractAxes getParentAxes();
 }

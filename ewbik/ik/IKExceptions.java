@@ -1,4 +1,4 @@
-package math;
+package ewbik.ik;
 
 public final class IKExceptions extends Exception {
 
