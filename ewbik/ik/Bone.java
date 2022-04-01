@@ -25,6 +25,7 @@ import ewbik.math.AbstractAxes;
 import ewbik.math.Vec3f;
 import ewbik.processing.sceneGraph.Axes;
 import ewbik.processing.singlePrecision.Kusudama;
+import processing.Skeleton3D;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
@@ -43,7 +44,7 @@ import ewbik.math.Ray3;
  */
 public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     public static boolean drawKusudamas = false;
-    public ewbik.ik.AbstractSkeleton3D parentArmature;
+    public Skeleton3D parentArmature;
     public Kusudama constraints;
     public int ancestorCount = 0;
     protected String tag;
@@ -160,12 +161,12 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      * @throws NullParentForBoneException
      */
     public Bone(
-        ewbik.ik.AbstractSkeleton3D parArma,
-        Vec3f<?> tipHeading,
-        Vec3f<?> rollHeading,
-        String inputTag,
-        float inputBoneHeight,
-        frameType coordinateType)
+            Skeleton3D parArma,
+            Vec3f<?> tipHeading,
+            Vec3f<?> rollHeading,
+            String inputTag,
+            float inputBoneHeight,
+            frameType coordinateType)
             throws NullParentForBoneException {
 
             this.lastRotation = new Quaternion(MRotation.IDENTITY);
@@ -1132,7 +1133,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         this.localAxes = (AbstractAxes) l.getObjectFromClassMaps(AbstractAxes.class, j.getString("localAxes"));
         this.majorRotationAxes = (AbstractAxes) l.getObjectFromClassMaps(AbstractAxes.class,
                 j.getString("majorRotationAxes"));
-        this.parentArmature = (AbstractSkeleton3D) l.getObjectFromClassMaps(AbstractSkeleton3D.class,
+        this.parentArmature = (Skeleton3D) l.getObjectFromClassMaps(Skeleton3D.class,
                 j.getString("parentArmature"));
         l.arrayListFromJSONArray(j.getJSONArray("children"), this.children, this.getClass());
         this.boneHeight = j.getFloat("boneHeight");

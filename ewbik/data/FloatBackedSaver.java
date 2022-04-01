@@ -9,6 +9,7 @@ import ewbik.ik.*;
 import ewbik.math.AbstractAxes;
 import ik.Bone;
 import ik.IKPin;
+import processing.Skeleton3D;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +28,7 @@ public class FloatBackedSaver extends SaveManager {
 
     }
 
-    public void saveArmature(AbstractSkeleton3D toSave, String absolutePath) {
+    public void saveArmature(Skeleton3D toSave, String absolutePath) {
         try {
             File tempFile = File.createTempFile("GiftedApprentice", ".tmp");
             System.out.println(tempFile.getParent());
@@ -78,7 +79,7 @@ public class FloatBackedSaver extends SaveManager {
             if (jsonObj != null) {
                 if (AbstractAxes.class.isAssignableFrom(s.getClass()))
                     axesJSON.append(jsonObj);
-                if (AbstractSkeleton3D.class.isAssignableFrom(s.getClass()))
+                if (Skeleton3D.class.isAssignableFrom(s.getClass()))
                     armaturesJSON.append(jsonObj);
                 if (Bone.class.isAssignableFrom(s.getClass()))
                     bonesJSON.append(jsonObj);

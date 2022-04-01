@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.WeakHashMap;
 import ik.Bone;
 import ik.IKPin;
+import processing.Skeleton3D;
 
 public class EWBIKSaver extends SaveManager {
 
@@ -21,9 +22,9 @@ public class EWBIKSaver extends SaveManager {
     public static String currentFilePath;
     public static String tempDir;
 
-    public void saveArmature(AbstractSkeleton3D toSave, String path) {
+    public void saveArmature(Skeleton3D toSave, String path) {
         clearSaveState();
-        ((AbstractSkeleton3D) toSave).notifyOfSaveIntent(this);
+        ((Skeleton3D) toSave).notifyOfSaveIntent(this);
         saveAs(path);
         notifyCurrentSaveablesOfSaveCompletion();
     }
@@ -66,7 +67,7 @@ public class EWBIKSaver extends SaveManager {
             if (jsonObj != null) {
                 if (AbstractAxes.class.isAssignableFrom(s.getClass()))
                     axesJSON.append(jsonObj);
-                if (AbstractSkeleton3D.class.isAssignableFrom(s.getClass()))
+                if (Skeleton3D.class.isAssignableFrom(s.getClass()))
                     armaturesJSON.append(jsonObj);
                 if (Bone.class.isAssignableFrom(s.getClass()))
                     bonesJSON.append(jsonObj);

@@ -39,7 +39,7 @@ public class SegmentedArmature {
     WorkingBone[] pinnedBones;
 
     public HashMap<Bone, WorkingBone> simulatedBones = new HashMap<>();
-    ArrayList<Bone> segmentBoneList = new ArrayList<Bone>();
+    public ArrayList<Bone> segmentBoneList = new ArrayList<Bone>();
 
     private SegmentedArmature parentSegment = null;
     private boolean basePinned = false;
@@ -114,14 +114,14 @@ public class SegmentedArmature {
      * this
      * segment reach for (based on modecode set in the IKPin)
      */
-    static void recursivelyCreateHeadingArraysFor(SegmentedArmature s) {
+    public static void recursivelyCreateHeadingArraysFor(SegmentedArmature s) {
         s.createHeadingArrays();
         for (SegmentedArmature c : s.childSegments) {
             recursivelyCreateHeadingArraysFor(c);
         }
     }
 
-    void createHeadingArrays() {
+    public void createHeadingArrays() {
         ArrayList<ArrayList<Float>> penaltyArray = new ArrayList<ArrayList<Float>>();
         ArrayList<WorkingBone> pinSequence = new ArrayList<>();
         recursivelyCreatePenaltyArray(this, penaltyArray, pinSequence, 1f);
@@ -716,7 +716,7 @@ public class SegmentedArmature {
             simLocalAxes = forBone.localAxes().getGlobalCopy();
             simConstraintAxes = forBone.getMajorRotationAxes().getGlobalCopy();
             float predamp = 1f - forBone.getStiffness();
-            float defaultDampening = forBone.parentArmature.dampening;
+            float defaultDampening = forBone.parentArmature.getDampening();
             float dampening = forBone.getParent() == null ? MathUtils.PI : predamp * defaultDampening;
             cosHalfDampen = MathUtils.cos(dampening / 2f);
             Kusudama k = ((Kusudama) forBone.getConstraint());
@@ -730,7 +730,7 @@ public class SegmentedArmature {
 
         public void updateCosDampening() {
             float predamp = 1f - forBone.getStiffness();
-            float defaultDampening = forBone.parentArmature.dampening;
+            float defaultDampening = forBone.parentArmature.getDampening();
             float dampening = forBone.getParent() == null ? MathUtils.PI : predamp * defaultDampening;
             cosHalfDampen = MathUtils.cos(dampening / 2f);
             Kusudama k = ((Kusudama) forBone.getConstraint());
@@ -744,7 +744,7 @@ public class SegmentedArmature {
 
         public void populateReturnDampeningIterationArray(Kusudama k) {
             float predamp = 1f - forBone.getStiffness();
-            float defaultDampening = forBone.parentArmature.dampening;
+            float defaultDampening = forBone.parentArmature.getDampening();
             float dampening = forBone.getParent() == null ? MathUtils.PI : predamp * defaultDampening;
             float iterations = forBone.parentArmature.getDefaultIterations();
             float returnfullness = k.getPainfullness();

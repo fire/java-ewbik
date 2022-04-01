@@ -19,34 +19,70 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package processing;
 
+import ewbik.asj.LoadManager;
+import ewbik.asj.SaveManager;
+import ewbik.asj.Saveable;
 import ewbik.math.AbstractAxes;
 import ewbik.math.Vec3f;
 import ewbik.processing.sceneGraph.Axes;
+import ewbik.ik.SegmentedArmature;
 import ik.Bone;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
 import processing.core.PVector;
+import ewbik.math.Vector3;
+import ewbik.math.MathUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Note, this class is a concrete implementation of the abstract class
- * AbstractSkeleton3D. Please refer to the {@link ewbik.ik.AbstractSkeleton3D
- * AbstractSkeleton3D docs.}
+ * Skeleton3D. Please refer to the {@link Skeleton3D
+ * Skeleton3D docs.}
  */
-public class Skeleton3D extends ewbik.ik.AbstractSkeleton3D {
+public class Skeleton3D implements Saveable {
+
+    public Axes localAxes;
+    public HashMap<Bone, SegmentedArmature> boneSegmentMap = new HashMap<Bone, SegmentedArmature>();
+    public SegmentedArmature segmentedArmature;
+    public float IKSolverStability = 0f;
+    public int defaultStabilizingPassCount = 1;
+    protected Axes tempWorkingAxes;
+    protected ArrayList<Bone> bones = new ArrayList<Bone>();
+    protected HashMap<String, Bone> tagBoneMap = new HashMap<String, Bone>();
+    protected Bone rootBone;
+    protected String tag;
+    protected int IKIterations = 15;
+    protected float dampening = MathUtils.toRadians(5f);
+    PerformanceStats performance = new PerformanceStats();
+    AbstractAxes fauxParent;
+    boolean debug = true;
+    Bone lastDebugBone = null;
+    // debug code -- use to set a minimum distance an effector must move
+    // in order to trigger a chain iteration
+    float debugMag = 5f;
+    Vector3 lastTargetPos = new Vector3();
+    boolean monitorPerformance = false;
+    private boolean abilityBiasing = false;
 
     // default constructor required for file loading to work
     public Skeleton3D() {
     }
 
     public Skeleton3D(String name) {
-        super(new Axes(
-                new PVector(0, 0, 0), new PVector(1, 0, 0), new PVector(0, 1, 0), new PVector(0, 0, 1), null), name);
+
+        this.localAxes = (Axes) new Axes(
+                new PVector(0, 0, 0), new PVector(1, 0, 0), new PVector(0, 1, 0), new PVector(0, 0, 1), null);
+        this.tempWorkingAxes = Skeleton3D.this.localAxes.getGlobalCopy();
+        this.tag = name;
+        Skeleton3D.this.createRootBone(Skeleton3D.this.localAxes.y_().heading(), Skeleton3D.this.localAxes.z_().heading(), Skeleton3D.this.tag + " : rootBone", 1f,
+                Bone.frameType.GLOBAL);
     }
 
-    @Override
     protected void initializeRootBone(
-            ewbik.ik.AbstractSkeleton3D armature,
+            Skeleton3D armature,
             Vec3f<?> tipHeading,
             Vec3f<?> rollHeading,
             String inputTag,
@@ -72,19 +108,543 @@ public class Skeleton3D extends ewbik.ik.AbstractSkeleton3D {
         pg.popMatrix();
     }
 
-    @Override
+    /**
+         * @return the rootBone of this armature.
+         */
     public Bone getRootBone() {
         return (Bone) rootBone;
     }
 
-    @Override
+    /**
+         * @param tag the tag of the bone object you wish to retrieve
+         * @return the bone object corresponding to this tag
+         */
     public Bone getBoneTagged(String tag) {
         return (Bone) tagBoneMap.get(tag);
     }
 
-    @Override
+    /**
+         * @return a reference to the Axes serving as this Armature's coordinate system.
+         */
     public Axes localAxes() {
-        return (Axes) super.localAxes();
+        return (Axes) this.localAxes;
     }
 
+    /**
+     * Set the inputBone as this Armature's Root Bone.
+     *
+     * @param inputBone
+     * @return
+     */
+    public Bone createRootBone(Bone inputBone) {
+        this.rootBone = inputBone;
+        this.segmentedArmature = new SegmentedArmature(rootBone);
+        fauxParent = rootBone.localAxes().getGlobalCopy();
+
+        return rootBone;
+    }
+
+    private <V extends Vec3f<?>> Bone createRootBone(V tipHeading, V rollHeading, String inputTag,
+                                                     float boneHeight, Bone.frameType coordinateType) {
+        initializeRootBone(this, tipHeading, rollHeading, inputTag, boneHeight, coordinateType);
+        this.segmentedArmature = new SegmentedArmature(rootBone);
+        fauxParent = rootBone.localAxes().getGlobalCopy();
+
+        return rootBone;
+    }
+
+    /**
+     * The default number of iterations to run over this armature whenever
+     * IKSolver() is called.
+     * The higher this value, the more likely the Armature is to have converged on a
+     * solution when
+     * by the time it returns. However, it will take longer to return (linear cost)
+     *
+     * @param iter
+     */
+    public void setDefaultIterations(int iter) {
+        this.IKIterations = iter;
+        updateArmatureSegments();
+    }
+
+    /**
+     * The default maximum number of radians a bone is allowed to rotate per solver
+     * iteration.
+     * The lower this value, the more natural the pose results. However, this will
+     * the number of iterations
+     * the solver requires to converge.
+     * <p>
+     * !!THIS IS AN EXPENSIVE OPERATION.
+     * This updates the entire armature's cache of precomputed quadrance angles.
+     * The cache makes things faster in general, but if you need to dynamically
+     * change the dampening during a call to IKSolver, use
+     * the IKSolver(bone, dampening, iterations, stabilizationPasses) function,
+     * which clamps rotations on the fly.
+     *
+     * @param damp
+     */
+    public void setDefaultDampening(float damp) {
+        this.dampening = MathUtils.min(MathUtils.PI * 3f,
+                MathUtils.max(MathUtils.abs(Float.MIN_VALUE), MathUtils.abs(damp)));
+        updateArmatureSegments();
+    }
+
+    /**
+     * (warning, this function is untested)
+     *
+     * @return all bones belonging to this armature.
+     */
+    public ArrayList<? extends Bone> getBoneList() {
+        this.bones.clear();
+        rootBone.addDescendantsToArmature();
+        return bones;
+    }
+
+    /**
+     * The armature maintains an internal hashmap of bone name's and their
+     * corresponding
+     * bone objects. This method should be called by any bone object if ever its
+     * name is changed.
+     *
+     * @param bone
+     * @param previousTag
+     * @param newTag
+     */
+    public void updateBoneTag(Bone bone, String previousTag, String newTag) {
+        tagBoneMap.remove(previousTag);
+        tagBoneMap.put(newTag, bone);
+    }
+
+    /**
+     * this method should be called by any newly created bone object if the armature
+     * is
+     * to know it exists.
+     *
+     * @param bone
+     */
+    public void addToBoneList(Bone Bone) {
+        if (!bones.contains(Bone)) {
+            bones.add(Bone);
+            tagBoneMap.put(Bone.getTag(), Bone);
+        }
+    }
+
+    /**
+     * this method should be called by any newly deleted bone object if the armature
+     * is
+     * to know it no longer exists
+     */
+    public void removeFromBoneList(Bone Bone) {
+        if (bones.contains(Bone)) {
+            bones.remove(Bone);
+            tagBoneMap.remove(Bone);
+            this.updateArmatureSegments();
+        }
+    }
+
+    /**
+     * @return the user specified tag String for this armature.
+     */
+    public String getTag() {
+        return this.tag;
+    }
+
+    /**
+     * @param A user specified tag string for this armature.
+     */
+    public void setTag(String newTag) {
+        this.tag = newTag;
+    }
+
+    /**
+     * this method should be called whenever a bone
+     * in this armature has been pinned or unpinned.
+     * <p>
+     * for the most part, the abstract classes call this when necessary.
+     * But if you are extending classes more than you would reasonably expect
+     * this library to reasonably expect and getting weird results, you might try
+     * calling
+     * this method after making any substantial structural changes to the armature.
+     */
+    public void updateArmatureSegments() {
+        segmentedArmature.updateSegmentedArmature();
+        boneSegmentMap.clear();
+        recursivelyUpdateBoneSegmentMapFrom(segmentedArmature);
+        SegmentedArmature.recursivelyCreateHeadingArraysFor(segmentedArmature);
+    }
+
+    private void recursivelyUpdateBoneSegmentMapFrom(SegmentedArmature startFrom) {
+        for (Bone b : startFrom.segmentBoneList) {
+            boneSegmentMap.put(b, startFrom);
+        }
+        for (SegmentedArmature c : startFrom.childSegments) {
+            recursivelyUpdateBoneSegmentMapFrom(c);
+        }
+    }
+
+    /**
+     * If you have created some sort of save / load system
+     * for your armatures which might make it difficult to notify the armature
+     * when a pin has been enabled on a bone, you can call this function after
+     * all bones and pins have been instantiated and associated with one another
+     * to index all of the pins on the armature.
+     */
+    public void refreshArmaturePins() {
+        Bone rootBone = this.getRootBone();
+        ArrayList<Bone> pinnedBones = new ArrayList<>();
+        rootBone.addSelfIfPinned(pinnedBones);
+
+        for (Bone b : pinnedBones) {
+            b.notifyAncestorsOfPin(false);
+            updateArmatureSegments();
+        }
+    }
+
+    /**
+     * automatically solves the IK system of this armature from the
+     * given bone using the armature's default IK parameters.
+     * <p>
+     * You can specify these using the setDefaultIterations() setDefaultIKType() and
+     * setDefaultDampening() methods.
+     * The library comes with some defaults already set, so you can more or less use
+     * this method out of the box if
+     * you're just testing things out.
+     *
+     * @param bone
+     */
+    public void IKSolver(Bone bone) {
+        IKSolver(bone, -1, -1, -1);
+    }
+
+    /**
+     * automatically solves the IK system of this armature from the
+     * given bone using the given parameters.
+     *
+     * @param bone
+     * @param dampening         dampening angle in radians. Set this to -1 if you
+     *                          want to use the armature's default.
+     * @param iterations        number of iterations to run. Set this to -1 if you
+     *                          want to use the armature's default.
+     * @param stabilizingPasses number of stabilization passes to run. Set this to
+     *                          -1 if you want to use the armature's default.
+     */
+    public void IKSolver(Bone bone, float dampening, int iterations, int stabilizingPasses) {
+        performance.startPerformanceMonitor();
+        iteratedImprovedSolver(bone, dampening, iterations, stabilizingPasses);// (bone, dampening, iterations);
+        performance.solveFinished(iterations == -1 ? this.IKIterations : iterations);
+    }
+
+    /**
+     * The solver tends to be quite stable whenever a pose is reachable (or
+     * unreachable but without excessive contortion).
+     * However, in cases of extreme unreachability (due to excessive contortion on
+     * orientation constraints), the solution might fail to stabilize, resulting in
+     * an undulating
+     * motion.
+     * <p>
+     * Setting this parameter to "1" will prevent such undulations, with a
+     * negligible cost to performance. Setting this parameter to a value higher than
+     * 1 will offer minor
+     * benefits in pose quality in situations that would otherwise be prone to
+     * instability, however, it will do so at a significant performance cost.
+     * <p>
+     * You're encourage to experiment with this parameter as per your use case, but
+     * you may find the following guiding principles helpful:
+     * <ul>
+     * <li>
+     * If your armature doesn't have any constraints, then leave this parameter set
+     * to 0.
+     * </li>
+     * <li>
+     * If your armature doesn't make use of orientation aware pins (x,y,and,z
+     * direction pin priorities are set to 0) the leave this parameter set to 0.
+     * </li>
+     * <li>
+     * If your armature makes use of orientation aware pins and orientation
+     * constraints, then set this parameter to 1
+     * </li>
+     * <li>
+     * If your armature makes use of orientation aware pins and orientation
+     * constraints, but speed is of the highest possible priority, then set this
+     * parameter to 0
+     * </li>
+     * </ul>
+     *
+     * @param passCount
+     */
+    public void setDefaultStabilizingPassCount(int passCount) {
+        defaultStabilizingPassCount = passCount;
+    }
+
+    private void recursivelyNotifyBonesOfCompletedIKSolution(SegmentedArmature startFrom) {
+        for (Bone b : startFrom.segmentBoneList) {
+            b.IKUpdateNotification();
+        }
+        for (SegmentedArmature s : startFrom.childSegments) {
+            recursivelyNotifyBonesOfCompletedIKSolution(s);
+        }
+    }
+
+    /**
+     * @param startFrom
+     * @param dampening
+     * @param iterations
+     */
+
+    public void iteratedImprovedSolver(Bone startFrom, float dampening, int iterations,
+                                       int stabilizationPasses) {
+        SegmentedArmature armature = boneSegmentMap.get(startFrom);
+
+        if (armature != null) {
+            SegmentedArmature pinnedRootChain = armature.getPinnedRootChainFromHere();
+            armature = pinnedRootChain == null ? armature.getAncestorSegmentContaining(rootBone) : pinnedRootChain;
+            if (armature != null && armature.pinnedDescendants.size() > 0) {
+                armature.alignSimulationAxesToBones();
+                iterations = iterations == -1 ? IKIterations : iterations;
+                float totalIterations = iterations;
+                stabilizationPasses = stabilizationPasses == -1 ? this.defaultStabilizingPassCount
+                        : stabilizationPasses;
+                for (int i = 0; i < iterations; i++) {
+                    if (!armature.isBasePinned()) {
+                        armature.updateOptimalRotationToPinnedDescendants(armature.segmentRoot, MathUtils.PI, true,
+                                stabilizationPasses, i, totalIterations);
+                        armature.setProcessed(false);
+                        for (SegmentedArmature s : armature.childSegments) {
+                            groupedRecursiveSegmentSolver(s, dampening, stabilizationPasses, i, totalIterations);
+                        }
+                    } else {
+                        groupedRecursiveSegmentSolver(armature, dampening, stabilizationPasses, i, totalIterations);
+                    }
+                }
+                armature.recursivelyAlignBonesToSimAxesFrom(armature.segmentRoot);
+                recursivelyNotifyBonesOfCompletedIKSolution(armature);
+            }
+        }
+
+    }
+
+    public void groupedRecursiveSegmentSolver(SegmentedArmature startFrom, float dampening, int stabilizationPasses,
+                                              int iteration, float totalIterations) {
+        recursiveSegmentSolver(startFrom, dampening, stabilizationPasses, iteration, totalIterations);
+        for (SegmentedArmature a : startFrom.pinnedDescendants) {
+            for (SegmentedArmature c : a.childSegments) {
+                groupedRecursiveSegmentSolver(c, dampening, stabilizationPasses, iteration, totalIterations);
+            }
+        }
+    }
+
+    /**
+     * given a segmented armature, solves each chain from its pinned
+     * tips down to its pinned root.
+     *
+     * @param armature
+     */
+    public void recursiveSegmentSolver(SegmentedArmature armature, float dampening, int stabilizationPasses,
+                                       int iteration, float totalIterations) {
+        if (armature.childSegments == null && !armature.isTipPinned()) {
+            return;
+        } else if (!armature.isTipPinned()) {
+            for (SegmentedArmature c : armature.childSegments) {
+                recursiveSegmentSolver(c, dampening, stabilizationPasses, iteration, totalIterations);
+                c.setProcessed(true);
+            }
+        }
+        QCPSolver(armature, dampening, false, stabilizationPasses, iteration, totalIterations);
+    }
+
+    private void QCPSolver(
+            SegmentedArmature chain,
+            float dampening,
+            boolean inverseWeighting,
+            int stabilizationPasses,
+            int iteration,
+            float totalIterations) {
+
+        debug = false;
+        Bone startFrom = debug && lastDebugBone != null ? lastDebugBone : chain.segmentTip;
+        Bone stopAfter = chain.segmentRoot;
+
+        Bone currentBone = startFrom;
+
+        if (debug && chain.simulatedBones.size() < 2) {
+        } else {
+            while (currentBone != null) {
+                if (!currentBone.getIKOrientationLock()) {
+                    chain.updateOptimalRotationToPinnedDescendants(currentBone, dampening, false, stabilizationPasses,
+                            iteration, totalIterations);
+                }
+                if (currentBone == stopAfter)
+                    currentBone = null;
+                else
+                    currentBone = currentBone.getParent();
+
+                if (debug) {
+                    lastDebugBone = currentBone;
+                    break;
+                }
+            }
+        }
+    }
+
+    public void rootwardlyUpdateFalloffCacheFrom(Bone forBone) {
+        SegmentedArmature current = boneSegmentMap.get(forBone);
+        while (current != null) {
+            current.createHeadingArrays();
+            current = current.getParentSegment();
+        }
+    }
+
+    /**
+     * currently unused
+     *
+     * @param enabled
+     */
+    public void setAbilityBiasing(boolean enabled) {
+        abilityBiasing = enabled;
+    }
+
+    public boolean getAbilityBiasing() {
+        return abilityBiasing;
+    }
+
+    /**
+     * returns the rotation that would bring the right-handed orthonormal axes of a
+     * into alignment with b
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    public ewbik.math.Quaternion getRotationBetween(AbstractAxes a, AbstractAxes b) {
+        return new ewbik.math.Quaternion(a.x_().heading(), a.y_().heading(), b.x_().heading(), b.y_().heading());
+    }
+
+    public int getDefaultIterations() {
+        return IKIterations;
+    }
+
+    public float getDampening() {
+        return dampening;
+    }
+
+    public void setPerformanceMonitor(boolean state) {
+        monitorPerformance = state;
+    }
+
+    @Override
+    public void makeSaveable(SaveManager saveManager) {
+        saveManager.addToSaveState(this);
+        if (this.localAxes().getParentAxes() != null)
+            this.localAxes().getParentAxes().makeSaveable(saveManager);
+        else
+            this.localAxes().makeSaveable(saveManager);
+        this.rootBone.makeSaveable(saveManager);
+    }
+
+    @Override
+    public ewbik.asj.data.JSONObject getSaveJSON(SaveManager saveManager) {
+        ewbik.asj.data.JSONObject saveJSON = new ewbik.asj.data.JSONObject();
+        saveJSON.setString("identityHash", this.getIdentityHash());
+        saveJSON.setString("localAxes", localAxes().getIdentityHash());
+        saveJSON.setString("rootBone", getRootBone().getIdentityHash());
+        saveJSON.setInt("defaultIterations", getDefaultIterations());
+        saveJSON.setFloat("dampening", this.getDampening());
+        // saveJSON.setBoolean("inverseWeighted", this.isInverseWeighted());
+        saveJSON.setString("tag", this.getTag());
+        return saveJSON;
+    }
+
+    public void loadFromJSONObject(ewbik.asj.data.JSONObject j, LoadManager l) {
+        try {
+            this.localAxes = l.getObjectFor(AbstractAxes.class, j, "localAxes");
+            this.rootBone = l.getObjectFor(Bone.class, j, "rootBone");
+            this.IKIterations = j.getInt("defaultIterations");
+            this.dampening = j.getFloat("dampening");
+            this.tag = j.getString("tag");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void notifyOfSaveIntent(SaveManager saveManager) {
+        this.makeSaveable(saveManager);
+    }
+
+    @Override
+    public void notifyOfSaveCompletion(SaveManager saveManager) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void notifyOfLoadCompletion() {
+        this.createRootBone(rootBone);
+        refreshArmaturePins();
+        updateArmatureSegments();
+    }
+
+    @Override
+    public boolean isLoading() {
+        return false;
+    }
+
+    @Override
+    public void setLoading(boolean loading) {
+    }
+
+    public class PerformanceStats {
+        int timedCalls = 0;
+        int benchmarkWindow = 60;
+        int iterationCount = 0;
+        float averageSolutionTime = 0;
+        float averageIterationTime = 0;
+        int solutionCount = 0;
+        float iterationsPerSecond = 0f;
+        long totalSolutionTime = 0;
+
+        long startTime = 0;
+
+        public void startPerformanceMonitor() {
+            if (monitorPerformance) {
+                if (timedCalls > benchmarkWindow) {
+                    performance.resetPerformanceStat();
+                }
+                startTime = System.nanoTime();
+            }
+        }
+
+        public void solveFinished(int iterations) {
+            if (monitorPerformance) {
+                totalSolutionTime += System.nanoTime() - startTime;
+                solutionCount++;
+                iterationCount += iterations;
+
+                if (timedCalls > benchmarkWindow) {
+                    timedCalls = 0;
+                    performance.printStats();
+                }
+                timedCalls++;
+            }
+        }
+
+        public void resetPerformanceStat() {
+            startTime = 0;
+            iterationCount = 0;
+            averageSolutionTime = 0;
+            solutionCount = 0;
+            iterationsPerSecond = 0f;
+            totalSolutionTime = 0;
+            averageIterationTime = 0;
+        }
+
+        public void printStats() {
+            averageSolutionTime = (float) (totalSolutionTime / solutionCount) / 1000000f;
+            averageIterationTime = (float) (totalSolutionTime / iterationCount) / 1000000f;
+            System.out.println("solution time average: ");
+            System.out.println("per call = " + (averageSolutionTime) + "ms");
+            System.out.println("per iteration = " + (averageIterationTime) + "ms \n");
+        }
+
+    }
 }

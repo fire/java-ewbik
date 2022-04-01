@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import ik.Bone;
 import ik.IKPin;
+import processing.Skeleton3D;
 
 public class EWBIKLoader {
     FloatBackedLoader floatBackedLoader = new FloatBackedLoader();
@@ -30,7 +31,7 @@ public class EWBIKLoader {
      * @param BoneClass      the class object you've used to extend the Bone
      *                       class. If null, Bone will be used.
      * @param ArmatureClass  the class object you've used to extend the
-     *                       AbstractSkeleton3D class. If null, AbstractSkeleton3D will
+     *                       Skeleton3D class. If null, Skeleton3D will
      *                       be used.
      * @param KusudamaClass  the class object you've used to extend the
      *                       Kusudama class. If null, Kusudama will
@@ -44,13 +45,13 @@ public class EWBIKLoader {
      * @return a list of all instantiated armatures specified by the input file.
      */
 
-    public Collection<? extends AbstractSkeleton3D> importSinglePrecisionArmatures(String filepath,
-                                                                                 Class<? extends AbstractAxes> AxesClass,
-                                                                                 Class<? extends Bone> BoneClass,
-                                                                                 Class<? extends AbstractSkeleton3D> ArmatureClass,
-                                                                                 Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
-                                                                                 Class<? extends ewbik.processing.singlePrecision.LimitCone> LimitConeClass,
-                                                                                 Class<? extends IKPin> IKPinClass) {
+    public Collection<? extends Skeleton3D> importSinglePrecisionArmatures(String filepath,
+                                                                           Class<? extends AbstractAxes> AxesClass,
+                                                                           Class<? extends Bone> BoneClass,
+                                                                           Class<? extends Skeleton3D> ArmatureClass,
+                                                                           Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
+                                                                           Class<? extends ewbik.processing.singlePrecision.LimitCone> LimitConeClass,
+                                                                           Class<? extends IKPin> IKPinClass) {
         File selection = new File(filepath);
         JSONObject loadFile = StringFuncs.loadJSONObject(selection);
         clearCurrentLoadObjects();
