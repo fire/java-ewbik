@@ -5,8 +5,8 @@
 
 package ewbik.math;
 
-import ewbik.numerical.Precision;
-import ewbik.numerical.Precision.*;
+import math.Precision;
+import math.Precision.*;
 
 public class MRotation {
     public static final MRotation IDENTITY = new MRotation(1.0f, 0.0f, 0.0f, 0.0f, false);

@@ -1,4 +1,4 @@
-package ewbik.numerical;
+package math;
 
 
 public final class Precision {
