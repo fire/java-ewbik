@@ -38,10 +38,6 @@ import java.util.ArrayList;
 
 import ewbik.math.Ray3;
 
-/**
- * Note, this class is a concrete implementation of the abstract class
- * Bone. Please refer to the {@link Bone Bone docs.}
- */
 public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     public static boolean drawKusudamas = false;
     public Skeleton3D parentArmature;
