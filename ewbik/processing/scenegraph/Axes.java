@@ -25,11 +25,11 @@ import processing.core.PMatrix;
 import processing.core.PMatrix3D;
 import processing.core.PVector;
 
-public class Axes extends Transform3D {
+public class Axes extends ewbik.math.Transform3D {
     float[][] outMatLocal = new float[4][4];
     float[][] outMatGlobal = new float[4][4];
 
-    public Axes(AbstractBasis b, AbstractAxes parent) {
+    public Axes(ewbik.math.AbstractBasis b, ewbik.math.Transform3D parent) {
         super(b, parent);
     }
 
@@ -45,7 +45,7 @@ public class Axes extends Transform3D {
                 PVector inX,
                 PVector inY,
                 PVector inZ,
-                AbstractAxes parent) {
+                Transform3D parent) {
 
         super(
                 toVector3(origin),
@@ -69,11 +69,11 @@ public class Axes extends Transform3D {
                 new Vector3(1, 0, 0),
                 new Vector3(0, 1, 0),
                 new Vector3(0, 0, 1),
-                (AbstractAxes) null
+                (Transform3D) null
         );
     }
 
-    public Axes(Vec3f<?> origin, Vec3f<?> x, Vec3f<?> y, Vec3f<?> z, boolean forceOrthoNormality, AbstractAxes parent) {
+    public Axes(Vec3f<?> origin, Vec3f<?> x, Vec3f<?> y, Vec3f<?> z, boolean forceOrthoNormality, Transform3D parent) {
         super(origin, x, y, z, parent);
     }
 

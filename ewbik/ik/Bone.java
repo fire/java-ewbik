@@ -40,9 +40,9 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     public int ancestorCount = 0;
     protected String tag;
     protected Quaternion lastRotation;
-    protected AbstractAxes previousOrientation;
-    protected AbstractAxes localAxes;
-    protected AbstractAxes majorRotationAxes;
+    protected Transform3D previousOrientation;
+    protected Transform3D localAxes;
+    protected Transform3D majorRotationAxes;
     protected float boneHeight;
     protected Bone parent;
     protected ArrayList<Bone> children = new ArrayList<>();
@@ -253,7 +253,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             }
             this.boneHeight = inputBoneHeight;
 
-            AbstractAxes tempAxes = par.localAxes().getGlobalCopy();
+            Transform3D tempAxes = par.localAxes().getGlobalCopy();
             Quaternion newRot = new Quaternion(RotationOrder.XZY, xAngle, yAngle, zAngle);
             tempAxes.rotateBy(newRot);
 
@@ -292,7 +292,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             }
             this.boneHeight = inputBoneHeight;
 
-            AbstractAxes tempAxes = par.localAxes().getGlobalCopy();
+            Transform3D tempAxes = par.localAxes().getGlobalCopy();
             Quaternion newRot = new Quaternion();
             tempAxes.rotateBy(newRot);
 
@@ -335,7 +335,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         return new PVector(tip.x, tip.y, tip.z);
     }
 
-    protected IKPin createAndReturnPinOnAxes(AbstractAxes on) {
+    protected IKPin createAndReturnPinOnAxes(Transform3D on) {
         return new IKPin(
                 (Axes) on,
                 true,
@@ -509,13 +509,13 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      * you are unlikely to need to use this, and at the moment
      * it presumes KusudamaExample constraints
      */
-    public void setAxesToSnapped(AbstractAxes toSet, AbstractAxes limitingAxes, float cosHalfAngleDampen) {
+    public void setAxesToSnapped(Transform3D toSet, Transform3D limitingAxes, float cosHalfAngleDampen) {
         if (constraints != null && Kusudama.class.isAssignableFrom(constraints.getClass())) {
             ((Kusudama) constraints).setAxesToSnapped(toSet, limitingAxes, cosHalfAngleDampen);
         }
     }
 
-    public void setAxesToReturnfulled(AbstractAxes toSet, AbstractAxes limitingAxes, float cosHalfAngleDampen,
+    public void setAxesToReturnfulled(Transform3D toSet, Transform3D limitingAxes, float cosHalfAngleDampen,
                                       float angleDampen) {
         if (constraints != null && Kusudama.class.isAssignableFrom(constraints.getClass())) {
             ((Kusudama) constraints).setAxesToReturnfulled(toSet, limitingAxes, cosHalfAngleDampen,
@@ -560,7 +560,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         if (this.parent != null) {
             this.localAxes().markDirty();
             this.localAxes().updateGlobal();
-            AbstractAxes result = this.localAxes().getGlobalCopy();
+            Transform3D result = this.localAxes().getGlobalCopy();
             this.getMajorRotationAxes().updateGlobal();
             this.getMajorRotationAxes().globalMBasis.setToLocalOf(result.globalMBasis, result.globalMBasis);
             return result.globalMBasis.rotation.getAngles(RotationOrder.XYZ);
@@ -596,7 +596,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      * relative to
      * its parent.
      */
-    public AbstractAxes getPreviousOrientation() {
+    public Transform3D getPreviousOrientation() {
         return previousOrientation;
     }
 
@@ -767,7 +767,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      *                                 You don't need to change this unless you
      *                                 start wishing you could change this.
      */
-    public void setFrameofRotation(AbstractAxes rotationFrameCoordinates) {
+    public void setFrameofRotation(Transform3D rotationFrameCoordinates) {
         majorRotationAxes.alignLocalsTo(rotationFrameCoordinates);
         if (parent != null) {
             majorRotationAxes.translateTo(parent.getTip_());
@@ -807,7 +807,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      */
     public void enablePin() {
         if (pin == null) {
-            AbstractAxes pinAxes = this.localAxes().getGlobalCopy();
+            Transform3D pinAxes = this.localAxes().getGlobalCopy();
             pinAxes.setParent(this.parentArmature.localAxes().getParentAxes());
             pin = createAndReturnPinOnAxes(pinAxes);
         }
@@ -835,7 +835,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
     public void enablePin_(Vec3f<?> pinTo) {
         if (pin == null) {
-            AbstractAxes pinAxes = this.localAxes().getGlobalCopy();
+            Transform3D pinAxes = this.localAxes().getGlobalCopy();
             pinAxes.setParent(this.parentArmature.localAxes().getParentAxes());
             pinAxes.translateTo(pinTo);
             pin = createAndReturnPinOnAxes(pinAxes);
@@ -890,7 +890,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         return mostImmediatePinnedDescendants;
     }
 
-    public AbstractAxes getPinnedAxes() {
+    public Transform3D getPinnedAxes() {
         if (this.pin == null)
             return null;
         return this.pin.getAxes();
@@ -1119,8 +1119,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
     @Override
     public void loadFromJSONObject(ewbik.asj.data.JSONObject j, ewbik.asj.LoadManager l) {
-        this.localAxes = (AbstractAxes) l.getObjectFromClassMaps(AbstractAxes.class, j.getString("localAxes"));
-        this.majorRotationAxes = (AbstractAxes) l.getObjectFromClassMaps(AbstractAxes.class,
+        this.localAxes = (Transform3D) l.getObjectFromClassMaps(Transform3D.class, j.getString("localAxes"));
+        this.majorRotationAxes = (Transform3D) l.getObjectFromClassMaps(Transform3D.class,
                 j.getString("majorRotationAxes"));
         this.parentArmature = (Skeleton3D) l.getObjectFromClassMaps(Skeleton3D.class,
                 j.getString("parentArmature"));

@@ -3,16 +3,55 @@ package ewbik.math;
 import ewbik.asj.LoadManager;
 import ewbik.asj.data.JSONObject;
 
-public class Transform3D extends AbstractAxes {
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.function.Consumer;
+import ewbik.math.AbstractBasis;
+import  ewbik.math.Vector3;
+import ewbik.math.Quaternion;
+
+public class Transform3D implements ewbik.asj.Saveable {
 
 
-    public Transform3D(AbstractBasis globalBasis, AbstractAxes parent) {
-        super(globalBasis, parent);
+    public static final int NORMAL = 0;
+    public static final int IGNORE = 1;
+    public static final int FORWARD = 2;
+    public static final int RIGHT = 1;
+    public static final int LEFT = -1;
+    public static final int X = 0;
+    public static final int Y = 1;
+    public static final int Z = 2;
+    public boolean debug = false;
+    public AbstractBasis localMBasis;
+    public AbstractBasis globalMBasis;
+    public boolean dirty = true;
+    public LinkedList<DependencyReference<Transform3D>> dependentsRegistry = new LinkedList<DependencyReference<Transform3D>>();
+    protected Vec3f<?> workingVector;
+    //public boolean forceOrthoNormality = true;
+    protected boolean areGlobal = true;
+    Vec3f<?> tempOrigin;
+    private DependencyReference<Transform3D> parent = null;
+    private int slipType = 0;
+
+    public Transform3D(AbstractBasis globalBasis, Transform3D parent) {
+        this.globalMBasis = globalBasis.copy();
+        createTempVars(globalBasis.getOrigin());
+        if (this.getParentAxes() != null)
+            setParent(parent);
+        else {
+            this.areGlobal = true;
+            this.localMBasis = globalBasis.copy();
+        }
+
+        this.updateGlobal();
     }
 
     public Transform3D(Vec3f<?> origin, Vec3f<?> inX, Vec3f<?> inY, Vec3f<?> inZ,
-                       AbstractAxes parent) {
-        super(origin, inX, inY, inZ, parent, true);
+                       Transform3D parent) {
+        if (parent == null)
+            this.areGlobal = true;
         createTempVars(origin);
 
         areGlobal = true;
@@ -34,24 +73,38 @@ public class Transform3D extends AbstractAxes {
         this.updateGlobal();
     }
 
+    /**
+         * return a ray / segment representing this Axes global x basis position and direction and magnitude
+         *
+         * @return a ray / segment representing this Axes global x basis position and direction and magnitude
+         */
     public Ray3 x_() {
         this.updateGlobal();
         return this.getGlobalMBasis().getXRay();
     }
 
 
+    /**
+         * return a ray / segment representing this Axes global y basis position and direction and magnitude
+         *
+         * @return a ray / segment representing this Axes global y basis position and direction and magnitude
+         */
     public Ray3 y_() {
         this.updateGlobal();
         return this.getGlobalMBasis().getYRay();
     }
 
+    /**
+         * return a ray / segment representing this Axes global z basis position and direction and magnitude
+         *
+         * @return a ray / segment representing this Axes global z basis position and direction and magnitude
+         */
     public Ray3 z_() {
         this.updateGlobal();
         return this.getGlobalMBasis().getZRay();
     }
 
-    @Override
-    public <A extends AbstractAxes> boolean equals(A ax) {
+    public <A extends Transform3D> boolean equals(A ax) {
         this.updateGlobal();
         ax.updateGlobal();
 
@@ -61,47 +114,29 @@ public class Transform3D extends AbstractAxes {
         return composedRotationsAreEquivalent && originsAreEquivalent;
     }
 
-    @Override
+    /**
+         * Make a GlobalCopy of these Axes.
+         *
+         * @return
+         */
     public ewbik.math.Transform3D getGlobalCopy() {
         return new ewbik.math.Transform3D(getGlobalMBasis(), this.getParentAxes());
     }
 
-
-    @Override
-    public AbstractAxes relativeTo(AbstractAxes in) {
-        // TODO Auto-generated method stub
+    public Transform3D relativeTo(Transform3D in) {
         return null;
     }
 
-    @Override
-    public AbstractAxes getLocalOf(AbstractAxes input) {
-        // TODO Auto-generated method stub
+    public Transform3D getLocalOf(Transform3D input) {
         return null;
-    }
-
-    @Override
-    public AbstractAxes freeCopy() {
-        AbstractAxes freeCopy =
-                new ewbik.math.Transform3D(this.getLocalMBasis(),
-                        null);
-        freeCopy.getLocalMBasis().adoptValues(this.localMBasis);
-        freeCopy.markDirty();
-        freeCopy.updateGlobal();
-        return freeCopy;
-    }
-
-    @Override
-    public void loadFromJSONObject(JSONObject j, LoadManager l) {
-        super.loadFromJSONObject(j, l);
     }
 
     /**
-     * Creates an exact copy of this Axes object. Attached to the same parent as this Axes object
-     *
-     * @param slipAware
-     * @return
-     */
-    @Override
+         * Creates an exact copy of this Axes object. Attached to the same parent as this Axes object
+         *
+         * @param slipAware
+         * @return
+         */
     public ewbik.math.Transform3D attachedCopy(boolean slipAware) {
         this.updateGlobal();
         ewbik.math.Transform3D copy = new ewbik.math.Transform3D(getGlobalMBasis(),
@@ -112,11 +147,797 @@ public class Transform3D extends AbstractAxes {
         return copy;
     }
 
-    @Override
     public <B extends AbstractBasis> B getLocalOf(B input) {
         Basis newBasis = new Basis((Basis) input);
         getGlobalMBasis().setToLocalOf(input, newBasis);
         return (B) newBasis;
     }
 
+    public <V extends Vec3f<?>> void createTempVars(V type) {
+        workingVector = type.copy();
+        tempOrigin = type.copy();
+    }
+
+    public Transform3D getParentAxes() {
+        if (this.parent == null)
+            return null;
+        else
+            return this.parent.get();
+    }
+
+    public void updateGlobal() {
+        if (this.dirty) {
+            if (this.areGlobal) {
+                globalMBasis.adoptValues(this.localMBasis);
+            } else {
+                getParentAxes().updateGlobal();
+                getParentAxes().getGlobalMBasis().setToGlobalOf(this.localMBasis, this.globalMBasis);
+            }
+        }
+        dirty = false;
+    }
+
+    public void debugCall() {
+    }
+
+    public Vec3f<?> origin_() {
+        this.updateGlobal();
+        tempOrigin.set(this.getGlobalMBasis().getOrigin());
+        return tempOrigin;
+    }
+
+    /**
+     * Sets the parentAxes for this axis globally.
+     * in other words, globalX, globalY, and globalZ remain unchanged, but lx, ly, and lz
+     * change.
+     *
+     * @param par the new parent Axes
+     **/
+    public void setParent(Transform3D par) {
+        setParent(par, null);
+    }
+
+    /**
+     * Sets the parentAxes for this axis globally.
+     * in other words, globalX, globalY, and globalZ remain unchanged, but lx, ly, and lz
+     * change.
+     *
+     * @param intendedParent the new parent Axes
+     * @param requestedBy    the object making thisRequest, will be passed on to parentChangeWarning
+     *                       for any AxisDependancy objects registered with this Transform3D  (can be null if not important)
+     **/
+    public void setParent(Transform3D intendedParent, Object requestedBy) {
+        this.updateGlobal();
+        Transform3D oldParent = this.getParentAxes();
+		/*for(DependencyReference<AxisDependency> ad : this.dependentsRegistry) {
+			ad.get().parentChangeWarning(this, oldParent, intendedParent, requestedBy);
+		}*/
+        forEachDependent(
+                (ad) -> ad.get().parentChangeWarning(this, oldParent, intendedParent, requestedBy));
+
+
+        if (intendedParent != null && intendedParent != this) {
+            intendedParent.updateGlobal();
+            intendedParent.getGlobalMBasis().setToLocalOf(globalMBasis, localMBasis);
+
+            if (oldParent != null) oldParent.disown(this);
+            this.parent = new DependencyReference<Transform3D>(intendedParent);
+
+            this.getParentAxes().registerDependent(this);
+            this.areGlobal = false;
+        } else {
+            if (oldParent != null) oldParent.disown(this);
+            this.parent = new DependencyReference<Transform3D>(null);
+            this.areGlobal = true;
+        }
+        this.markDirty();
+        this.updateGlobal();
+
+        forEachDependent(
+                (ad) -> ad.get().parentChangeCompletionNotice(this, oldParent, intendedParent, requestedBy));
+		/*for(DependencyReference<AxisDependency> ad : this.dependentsRegistry) {
+			ad.get().parentChangeCompletionNotice(this, oldParent, intendedParent, requestedBy);
+		}*/
+    }
+
+    /**
+     * runs the given runnable on each dependent axis,
+     * taking advantage of the call to remove entirely any
+     * weakreferences to elements that have been cleaned up by the garbage collector.
+     *
+     * @param r
+     */
+    public void forEachDependent(Consumer<DependencyReference<Transform3D>> action) {
+        Iterator<DependencyReference<Transform3D>> i = dependentsRegistry.iterator();
+        while (i.hasNext()) {
+            DependencyReference<Transform3D> dr = i.next();
+            if (dr.get() != null) {
+                action.accept(dr);
+            } else {
+                i.remove();
+            }
+        }
+    }
+
+    public int getGlobalChirality() {
+        this.updateGlobal();
+        return this.getGlobalMBasis().chirality;
+    }
+
+    public int getLocalChirality() {
+        this.updateGlobal();
+        return this.getLocalMBasis().chirality;
+    }
+
+    /**
+     * True if the input axis of this Axes object in global coordinates should be multiplied by negative one after rotation.
+     * By default, this always returns false. But can be overriden for more advanced implementations
+     * allowing for reflection transformations.
+     *
+     * @param axis
+     * @return true if axis should be flipped, false otherwise. Default is false.
+     */
+    public boolean isGlobalAxisFlipped(int axis) {
+        this.updateGlobal();
+        return globalMBasis.isAxisFlipped(axis);
+    }
+
+    /**
+     * True if the input axis of this Axes object in local coordinates should be multiplied by negative one after rotation.
+     * By default, this always returns false. But can be overriden for more advanced implementations
+     * allowing for reflection transformations.
+     *
+     * @param axis
+     * @return true if axis should be flipped, false otherwise. Default is false.
+     */
+    public boolean isLocalAxisFlipped(int axis) {
+        return localMBasis.isAxisFlipped(axis);
+    }
+
+    /**
+     * Sets the parentAxes for this axis locally.
+     * in other words, lx,ly,lz remain unchanged, but globalX, globalY, and globalZ
+     * change.
+     * <p>
+     * if setting this parent would result in a dependency loop, then the input Axes
+     * parent is set to this Axes' parent, prior to this axes setting the input axes
+     * as its parent.
+     **/
+    public void setRelativeToParent(Transform3D par) {
+        if (this.getParentAxes() != null) this.getParentAxes().disown(this);
+        this.parent = new DependencyReference<Transform3D>(par);
+        this.areGlobal = false;
+        this.getParentAxes().registerDependent(this);
+        this.markDirty();
+    }
+
+    public boolean needsUpdate() {
+        if (this.dirty) return true;
+        else return false;
+    }
+
+    /**
+     * Given a vector in this axes local coordinates, returns the vector's position in global coordinates.
+     *
+     * @param in
+     * @return
+     */
+    public <V extends Vec3f<?>> V getGlobalOf(V in) {
+        V result = (V) in.copy();
+        setToGlobalOf(in, result);
+        return result;
+    }
+
+    /**
+     * Given a vector in this axes local coordinates, modifies the vector's values to represent its position global coordinates.
+     *
+     * @param in
+     * @return a reference to this the @param in object.
+     */
+    public Vec3f<?> setToGlobalOf(Vec3f<?> in) {
+        this.updateGlobal();
+        getGlobalMBasis().setToGlobalOf(in, in);
+        return in;
+    }
+
+    /**
+     * Given an input vector in this axes local coordinates, modifies the output vector's values to represent the input's position in global coordinates.
+     *
+     * @param in
+     */
+    public <V extends Vec3f<?>> void setToGlobalOf(V input, V output) {
+        this.updateGlobal();
+        getGlobalMBasis().setToGlobalOf(input, output);
+    }
+
+    /**
+     * Given an input sgRay in this axes local coordinates, modifies the output Rays's values to represent the input's in global coordinates.
+     *
+     * @param in
+     */
+    public void setToGlobalOf(Ray3 input, Ray3 output) {
+        this.updateGlobal();
+        this.setToGlobalOf(input.p1(), output.p1());
+        this.setToGlobalOf(input.p2(), output.p2());
+    }
+
+    public Ray3 getGlobalOf(Ray3 in) {
+        return new Ray3(this.getGlobalOf(in.p1()), this.getGlobalOf(in.p2()));
+    }
+
+    public <V extends Vec3f<?>> V getLocalOf(V in) {
+        this.updateGlobal();
+        return getGlobalMBasis().getLocalOf(in);
+    }
+
+    /**
+     * Given a vector in global coordinates, modifies the vector's values to represent its position in theseAxes local coordinates.
+     *
+     * @param in
+     * @return a reference to the @param in object.
+     */
+
+    public <V extends Vec3f<?>> V setToLocalOf(V in) {
+        this.updateGlobal();
+        V result = (V) in.copy();
+        this.getGlobalMBasis().setToLocalOf(in, result);
+        in.set(result);
+        return result;
+    }
+
+    /**
+     * Given a vector in global coordinates, modifies the vector's values to represent its position in theseAxes local coordinates.
+     *
+     * @param in
+     */
+
+    public <V extends Vec3f<?>> void setToLocalOf(V in, V out) {
+        this.updateGlobal();
+        this.getGlobalMBasis().setToLocalOf(in, out);
+    }
+
+    /**
+     * Given a sgRay in global coordinates, modifies the sgRay's values to represent its position in theseAxes local coordinates.
+     *
+     * @param in
+     */
+
+    public void setToLocalOf(Ray3 in, Ray3 out) {
+        this.setToLocalOf(in.p1(), out.p1());
+        this.setToLocalOf(in.p2(), out.p2());
+    }
+
+    public void setToLocalOf(AbstractBasis input, AbstractBasis output) {
+        this.updateGlobal();
+        this.getGlobalMBasis().setToLocalOf(input, output);
+    }
+
+    public <R extends Ray3> R getLocalOf(R in) {
+        R result = (R) in.copy();
+        result.p1.set(this.getLocalOf(in.p1()));
+        result.p2.set(this.getLocalOf(in.p2()));
+        return result;
+    }
+
+    public <V extends Vec3f<?>> void translateByLocal(V translate) {
+        this.updateGlobal();
+        getLocalMBasis().translateBy(translate);
+        this.markDirty();
+
+    }
+
+    public void translateByGlobal(Vec3f<?> translate) {
+        if (this.getParentAxes() != null) {
+            this.updateGlobal();
+            this.translateTo(translate.addCopy(this.origin_()));
+        } else {
+            getLocalMBasis().translateBy(translate);
+        }
+
+        this.markDirty();
+    }
+
+    public void translateTo(Vec3f<?> translate, boolean slip) {
+        this.updateGlobal();
+        if (slip) {
+            Transform3D tempTransform3D = this.getGlobalCopy();
+            tempTransform3D.translateTo(translate);
+            this.slipTo(tempTransform3D);
+        } else {
+            this.translateTo(translate);
+        }
+    }
+
+    public void translateTo(Vec3f<?> translate) {
+        if (this.getParentAxes() != null) {
+            this.updateGlobal();
+            getLocalMBasis().translateTo(getParentAxes().getGlobalMBasis().getLocalOf(translate));
+            this.markDirty();
+        } else {
+            this.updateGlobal();
+            getLocalMBasis().translateTo(translate);
+            this.markDirty();
+        }
+
+
+    }
+
+    public int getSlipType() {
+        return this.slipType;
+    }
+
+    public void setSlipType(int type) {
+        if (this.getParentAxes() != null) {
+            if (type == IGNORE) {
+                this.getParentAxes().dependentsRegistry.remove(this);
+            } else if (type == NORMAL || type == FORWARD) {
+                this.getParentAxes().registerDependent(this);
+            }
+        }
+        this.slipType = type;
+    }
+
+    public void rotateAboutX(float angle, boolean orthonormalized) {
+        this.updateGlobal();
+        Quaternion xRot = new Quaternion(getGlobalMBasis().getXHeading(), angle);
+        this.rotateBy(xRot);
+        this.markDirty();
+    }
+
+    public void rotateAboutY(float angle, boolean orthonormalized) {
+        this.updateGlobal();
+        Quaternion yRot = new Quaternion(getGlobalMBasis().getYHeading(), angle);
+        this.rotateBy(yRot);
+        this.markDirty();
+    }
+
+    public void rotateAboutZ(float angle, boolean orthonormalized) {
+        this.updateGlobal();
+        Quaternion zRot = new Quaternion(getGlobalMBasis().getZHeading(), angle);
+        this.rotateBy(zRot);
+        this.markDirty();
+    }
+
+    public void rotateBy(MRotation apply) {
+        this.updateGlobal();
+        if (parent != null) {
+            Quaternion newRot = this.getParentAxes().getGlobalMBasis().getLocalOfRotation(new Quaternion(apply));
+            this.getLocalMBasis().rotateBy(newRot);
+        } else {
+            this.getLocalMBasis().rotateBy(new Quaternion(apply));
+        }
+        this.markDirty();
+    }
+
+    /**
+     * Rotates the bases around their origin in global coordinates
+     *
+     * @param rotation
+     */
+    public void rotateBy(Quaternion apply) {
+
+        this.updateGlobal();
+        if (this.getParentAxes() != null) {
+            Quaternion newRot = this.getParentAxes().getGlobalMBasis().getLocalOfRotation(apply);
+            this.getLocalMBasis().rotateBy(newRot);
+        } else {
+            this.getLocalMBasis().rotateBy(apply);
+        }
+
+        this.markDirty();
+    }
+
+    /**
+     * rotates the bases around their origin in Local coordinates
+     *
+     * @param rotation
+     */
+    public void rotateByLocal(Quaternion apply) {
+        this.updateGlobal();
+        if (parent != null) {
+            this.getLocalMBasis().rotateBy(apply);
+        }
+        this.markDirty();
+    }
+
+    /**
+     * sets these axes to have the same orientation and location relative to their parent
+     * axes as the input's axes do to the input's parent axes.
+     * <p>
+     * If the axes on which this function is called are orthonormal,
+     * this function normalizes and orthogonalizes them regardless of whether the targetAxes are orthonormal.
+     *
+     * @param targetAxes the Axes to make this Axis identical to
+     */
+    public void alignLocalsTo(Transform3D targetAxes) {
+        this.getLocalMBasis().adoptValues(targetAxes.localMBasis);
+        this.markDirty();
+    }
+
+    /**
+     * sets the bases to the Identity basis and Identity rotation relative to its parent, and translates
+     * its origin to the parent's origin.
+     * <p>
+     * be careful calling this method, as it destroys any shear / scale information.
+     */
+    public void alignToParent() {
+        this.getLocalMBasis().setIdentity();
+        this.markDirty();
+    }
+
+    /**
+     * rotates and translates the axes back to its parent, but maintains
+     * its shear, translate and scale attributes.
+     */
+    public void rotateToParent() {
+        this.getLocalMBasis().rotateTo(new Quaternion());
+        this.markDirty();
+    }
+
+    /**
+     * sets these axes to have the same global orientation as the input Axes.
+     * these Axes lx, ly, and lz headings will differ from the target ages,
+     * but its gx, gy, and gz headings should be identical unless this
+     * axis is orthonormalized and the target axes are not.
+     *
+     * @param targetAxes
+     */
+    public void alignGlobalsTo(Transform3D targetAxes) {
+        targetAxes.updateGlobal();
+        this.updateGlobal();
+        if (this.getParentAxes() != null) {
+            getParentAxes().getGlobalMBasis().setToLocalOf(targetAxes.globalMBasis, localMBasis);
+        } else {
+            this.getLocalMBasis().adoptValues(targetAxes.globalMBasis);
+        }
+        this.markDirty();
+        this.updateGlobal();
+    }
+
+    public void alignOrientationTo(Transform3D targetAxes) {
+        targetAxes.updateGlobal();
+        this.updateGlobal();
+        if (this.getParentAxes() != null) {
+            this.getGlobalMBasis().rotateTo(targetAxes.getGlobalMBasis().rotation);
+            getParentAxes().getGlobalMBasis().setToLocalOf(this.globalMBasis, this.localMBasis);
+        } else {
+            this.getLocalMBasis().rotateTo(targetAxes.getGlobalMBasis().rotation);
+        }
+        this.markDirty();
+    }
+
+    /**
+     * updates the axes object such that its global orientation
+     * matches the given Quaternion object.
+     *
+     * @param rotation
+     */
+    public void setGlobalOrientationTo(Quaternion rotation) {
+        this.updateGlobal();
+        if (this.getParentAxes() != null) {
+            this.getGlobalMBasis().rotateTo(rotation);
+            getParentAxes().getGlobalMBasis().setToLocalOf(this.globalMBasis, this.localMBasis);
+        } else {
+            this.getLocalMBasis().rotateTo(rotation);
+        }
+        this.markDirty();
+    }
+
+    public void registerDependent(Transform3D newDependent) {
+        //Make sure we don't hit a dependency loop
+        if (Transform3D.class.isAssignableFrom(newDependent.getClass())) {
+            if (((Transform3D) newDependent).isAncestorOf(this)) {
+                this.transferToParent(((Transform3D) newDependent).getParentAxes());
+            }
+        }
+        if (dependentsRegistry.indexOf(newDependent) == -1) {
+            dependentsRegistry.add(new DependencyReference<Transform3D>(newDependent));
+        }
+    }
+
+    public boolean isAncestorOf(Transform3D potentialDescendent) {
+        boolean result = false;
+        Transform3D cursor = potentialDescendent.getParentAxes();
+        while (cursor != null) {
+            if (cursor == this) {
+                result = true;
+                break;
+            } else {
+                cursor = cursor.getParentAxes();
+            }
+        }
+        return result;
+    }
+
+    /**
+     * unregisters this Transform3D from its current parent and
+     * registers it to a new parent without changing its global position or orientation
+     * when doing so.
+     *
+     * @param newParent
+     */
+
+    public void transferToParent(Transform3D newParent) {
+        this.emancipate();
+        this.setParent(newParent);
+    }
+
+    /**
+     * unregisters this Transform3D from its parent,
+     * but keeps its global position the same.
+     */
+    public void emancipate() {
+        if (this.getParentAxes() != null) {
+            this.updateGlobal();
+            Transform3D oldParent = this.getParentAxes();
+            for (DependencyReference<Transform3D> ad : this.dependentsRegistry) {
+                ad.get().parentChangeWarning(this, this.getParentAxes(), null, null);
+            }
+            this.getLocalMBasis().adoptValues(this.globalMBasis);
+            this.getParentAxes().disown(this);
+            this.parent = new DependencyReference<Transform3D>(null);
+            this.areGlobal = true;
+            this.markDirty();
+            this.updateGlobal();
+            for (DependencyReference<Transform3D> ad : this.dependentsRegistry) {
+                ad.get().parentChangeCompletionNotice(this, oldParent, null, null);
+            }
+        }
+    }
+
+    public void disown(Transform3D child) {
+        dependentsRegistry.remove(child);
+    }
+
+    public AbstractBasis getGlobalMBasis() {
+        this.updateGlobal();
+        return globalMBasis;
+    }
+
+    public AbstractBasis getLocalMBasis() {
+        return localMBasis;
+    }
+
+    @Override
+    public JSONObject getSaveJSON(ewbik.asj.SaveManager saveManager) {
+        this.updateGlobal();
+        JSONObject thisAxes = new JSONObject();
+        JSONObject shearScale = new JSONObject();
+        Vector3 xShear = new Vector3();
+        Vector3 yShear = new Vector3();
+        Vector3 zShear = new Vector3();
+
+        this.getLocalMBasis().setToShearXBase(xShear);
+        this.getLocalMBasis().setToShearYBase(yShear);
+        this.getLocalMBasis().setToShearZBase(zShear);
+
+        shearScale.setJSONArray("x", xShear.toJSONArray());
+        shearScale.setJSONArray("y", yShear.toJSONArray());
+        shearScale.setJSONArray("z", zShear.toJSONArray());
+
+        thisAxes.setJSONArray("translation", (new Vector3(getLocalMBasis().translate)).toJSONArray());
+        thisAxes.setJSONArray("rotation", getLocalMBasis().rotation.toJsonArray());
+        thisAxes.setJSONObject("bases", shearScale);
+
+        //thisAxes.setJSONArray("flippedAxes", saveManager.primitiveArrayToJSONArray(this.getLocalMBasis().flippedAxes));
+        String parentHash = "-1";
+        if (getParentAxes() != null) parentHash = ((ewbik.asj.Saveable) getParentAxes()).getIdentityHash();
+        thisAxes.setString("parent", parentHash);
+        thisAxes.setInt("slipType", this.getSlipType());
+        thisAxes.setString("identityHash", this.getIdentityHash());
+        return thisAxes;
+    }
+
+    public void axisSlipWarning(Transform3D globalPriorToSlipping, Transform3D globalAfterSlipping, Transform3D actualAxis, ArrayList<Object> dontWarn) {
+        this.updateGlobal();
+        if (this.slipType == NORMAL) {
+            if (this.getParentAxes() != null) {
+                Transform3D globalVals = globalPriorToSlipping;
+                this.getLocalMBasis().adoptValues(globalMBasis);
+                this.markDirty();
+            }
+        } else if (this.slipType == FORWARD) {
+            Transform3D globalAfterVals = this.relativeTo(globalAfterSlipping);
+            this.notifyDependentsOfSlip(globalAfterVals, dontWarn);
+        }
+    }
+
+    public void axisSlipWarning(Transform3D globalPriorToSlipping, Transform3D globalAfterSlipping, Transform3D actualAxis) {
+
+    }
+
+    public void axisSlipCompletionNotice(Transform3D globalPriorToSlipping, Transform3D globalAfterSlipping, Transform3D thisAxis) {
+
+    }
+
+    public void slipTo(Transform3D newAxisGlobal) {
+        this.updateGlobal();
+        Transform3D originalGlobal = this.getGlobalCopy();
+        notifyDependentsOfSlip(newAxisGlobal);
+        Transform3D newVals = newAxisGlobal.freeCopy();
+
+        if (this.getParentAxes() != null) {
+            newVals = getParentAxes().getLocalOf(newVals);
+        }
+        this.getLocalMBasis().adoptValues(newVals.globalMBasis);
+        this.dirty = true;
+        this.updateGlobal();
+
+        notifyDependentsOfSlipCompletion(originalGlobal);
+    }
+
+    public Transform3D freeCopy() {
+        Transform3D freeCopy =
+                new ewbik.math.Transform3D(this.getLocalMBasis(),
+                        null);
+        freeCopy.getLocalMBasis().adoptValues(this.localMBasis);
+        freeCopy.markDirty();
+        freeCopy.updateGlobal();
+        return freeCopy;
+    }
+
+    /**
+     * You probably shouldn't touch this unless you're implementing i/o or undo/redo.
+     *
+     * @return
+     */
+    protected DependencyReference<Transform3D> getWeakRefToParent() {
+        return this.parent;
+    }
+
+    /**
+     * You probably shouldn't touch this unless you're implementing i/o or undo/redo.
+     *
+     * @return
+     */
+    protected void setWeakRefToParent(DependencyReference<Transform3D> parentRef) {
+        this.parent = parentRef;
+    }
+
+    public void slipTo(Transform3D newAxisGlobal, ArrayList<Object> dontWarn) {
+        this.updateGlobal();
+        Transform3D originalGlobal = this.getGlobalCopy();
+        notifyDependentsOfSlip(newAxisGlobal, dontWarn);
+        Transform3D newVals = newAxisGlobal.getGlobalCopy();
+
+        if (this.getParentAxes() != null) {
+            newVals = getParentAxes().getLocalOf(newAxisGlobal);
+        }
+        this.alignGlobalsTo(newAxisGlobal);
+        this.markDirty();
+        this.updateGlobal();
+
+        notifyDependentsOfSlipCompletion(originalGlobal, dontWarn);
+    }
+
+    public void notifyDependentsOfSlip(Transform3D newAxisGlobal, ArrayList<Object> dontWarn) {
+        for (int i = 0; i < dependentsRegistry.size(); i++) {
+            if (!dontWarn.contains(dependentsRegistry.get(i))) {
+                Transform3D dependant = dependentsRegistry.get(i).get();
+
+                //First we check if the dependent extends Transform3D
+                //so we know whether or not to pass the dontWarn list
+                if (this.getClass().isAssignableFrom(dependant.getClass())) {
+                    ((Transform3D) dependant).axisSlipWarning(this.getGlobalCopy(), newAxisGlobal, this, dontWarn);
+                } else {
+                    dependant.axisSlipWarning(this.getGlobalCopy(), newAxisGlobal, this);
+                }
+            } else {
+                System.out.println("skipping: " + dependentsRegistry.get(i));
+            }
+        }
+    }
+
+    public void notifyDependentsOfSlipCompletion(Transform3D globalAxisPriorToSlipping, ArrayList<Object> dontWarn) {
+        for (int i = 0; i < dependentsRegistry.size(); i++) {
+            if (!dontWarn.contains(dependentsRegistry.get(i)))
+                dependentsRegistry.get(i).get().axisSlipCompletionNotice(globalAxisPriorToSlipping, this.getGlobalCopy(), this);
+            else
+                System.out.println("skipping: " + dependentsRegistry.get(i));
+        }
+    }
+
+    public void notifyDependentsOfSlip(Transform3D newAxisGlobal) {
+        for (int i = 0; i < dependentsRegistry.size(); i++) {
+            dependentsRegistry.get(i).get().axisSlipWarning(this.getGlobalCopy(), newAxisGlobal, this);
+        }
+    }
+
+    public void notifyDependentsOfSlipCompletion(Transform3D globalAxisPriorToSlipping) {
+        for (int i = 0; i < dependentsRegistry.size(); i++) {//AxisDependancy dependent : dependentsRegistry) {
+            dependentsRegistry.get(i).get().axisSlipCompletionNotice(globalAxisPriorToSlipping, this.getGlobalCopy(), this);
+        }
+    }
+
+    public void markDirty() {
+
+        if (!this.dirty) {
+            this.dirty = true;
+            this.markDependentsDirty();
+        }
+
+    }
+
+    public void markDependentsDirty() {
+        forEachDependent((a) -> a.get().markDirty());
+    }
+
+    public String toString() {
+        String global = "Global: " + getGlobalMBasis().toString();
+        String local = "Local: " + getLocalMBasis().toString();
+        return global + "\n" + local;
+    }
+
+    @Override
+    public void notifyOfSaveIntent(ewbik.asj.SaveManager saveManager) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void notifyOfSaveCompletion(ewbik.asj.SaveManager saveManager) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean isLoading() {
+
+        return false;
+    }
+
+    @Override
+    public void setLoading(boolean loading) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void makeSaveable(ewbik.asj.SaveManager saveManager) {
+        saveManager.addToSaveState(this);
+        forEachDependent(
+                (ad) -> {
+                    if (ewbik.asj.Saveable.class.isAssignableFrom(ad.get().getClass()))
+                        ((ewbik.asj.Saveable) ad.get()).makeSaveable(saveManager);
+                });
+    }
+
+    public void parentChangeWarning(Transform3D warningBy, Transform3D oldParent, Transform3D intendedParent, Object requestedBy) {
+    }
+
+    public void parentChangeCompletionNotice(Transform3D warningBy, Transform3D oldParent, Transform3D intendedParent, Object requestedBy) {
+    }
+
+    /**
+     * custom Weakreference extension for garbage collection
+     */
+    public class DependencyReference<E> extends WeakReference<E> {
+        public DependencyReference(E referent) {
+            super(referent);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o == this) return true;
+            if (o == this.get()) return true;
+            else return false;
+        }
+    }
+    public void loadFromJSONObject(JSONObject j, LoadManager l) {
+        Vector3 origin = new Vector3(j.getJSONArray("translation"));
+        Quaternion rotation = new Quaternion(j.getJSONArray("rotation"));
+        this.getLocalMBasis().translate = origin;
+        this.getLocalMBasis().rotation = rotation;
+        this.getLocalMBasis().refreshPrecomputed();
+        Transform3D par;
+        try {
+            par = l.getObjectFor(Transform3D.class, j, "parent");
+            if (par != null)
+                this.setRelativeToParent(par);
+            this.setSlipType(j.getInt("slipType"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 }

@@ -1,5 +1,6 @@
 package ik;
 
+import ewbik.math.Transform3D;
 import ewbik.processing.sceneGraph.Axes;
 import processing.core.PVector;
 
@@ -12,7 +13,7 @@ public class IKPin implements ewbik.asj.Saveable {
     public static final short ZDir = 4;
     public Bone forBone;
     protected boolean isEnabled;
-    protected ewbik.math.AbstractAxes axes;
+    protected Transform3D axes;
     protected IKPin parentPin;
     protected ArrayList<IKPin> childPins = new ArrayList<>();
     protected float xPriority = 1f;
@@ -29,13 +30,13 @@ public class IKPin implements ewbik.asj.Saveable {
 
     public IKPin(Axes inAxes, boolean enabled, Bone bone) {
         this.isEnabled = enabled;
-        this.axes = (ewbik.math.AbstractAxes) inAxes;
+        this.axes = (Transform3D) inAxes;
         this.forBone = bone;
         setTargetPriorities(IKPin.this.xPriority, IKPin.this.yPriority, IKPin.this.zPriority);
     }
 
     public IKPin(Axes inAxes, Bone bone) {
-        this.axes = (ewbik.math.AbstractAxes) inAxes;
+        this.axes = (Transform3D) inAxes;
         this.forBone = bone;
         this.isEnabled = false;
         setTargetPriorities(IKPin.this.xPriority, IKPin.this.yPriority, IKPin.this.zPriority);
@@ -232,7 +233,7 @@ public class IKPin implements ewbik.asj.Saveable {
      *
      * @param inAxes
      */
-    public void alignToAxes(ewbik.math.AbstractAxes inAxes) {
+    public void alignToAxes(Transform3D inAxes) {
         this.axes.alignGlobalsTo(inAxes);
     }
 
@@ -253,7 +254,7 @@ public class IKPin implements ewbik.asj.Saveable {
      * @param location
      */
     public void translateToArmatureLocal_(ewbik.math.Vec3f<?> location) {
-        ewbik.math.AbstractAxes armAxes = this.forBone().parentArmature.localAxes().getParentAxes();
+        Transform3D armAxes = this.forBone().parentArmature.localAxes().getParentAxes();
         if (armAxes == null) {
             this.axes.translateTo(location);
         } else {
@@ -391,7 +392,7 @@ public class IKPin implements ewbik.asj.Saveable {
     }
 
     public void loadFromJSONObject(ewbik.asj.data.JSONObject j, ewbik.asj.LoadManager l) {
-        this.axes = (ewbik.math.AbstractAxes) l.getObjectFromClassMaps(ewbik.math.AbstractAxes.class, j.getString("axes"));
+        this.axes = (Transform3D) l.getObjectFromClassMaps(Transform3D.class, j.getString("axes"));
         this.isEnabled = j.getBoolean("isEnabled");
         this.pinWeight = j.getFloat("pinWeight");
         this.forBone = (Bone) l.getObjectFromClassMaps(Bone.class, j.getString("forBone"));
