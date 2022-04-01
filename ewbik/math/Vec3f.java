@@ -1,6 +1,6 @@
 package ewbik.math;
 
-import agnosticsavior.CanLoad;
+import data.agnosticsavior.CanLoad;
 
 public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
 

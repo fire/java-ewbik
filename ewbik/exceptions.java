@@ -1,6 +1,3 @@
-package ewbik.exceptions;
-
-
 public class exceptions {
 
     public class NotStrictlyPositiveException extends Exception {
