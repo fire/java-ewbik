@@ -6,7 +6,7 @@ import ewbik.asj.data.JSONObject;
 
 /**
  * Encapsulates a general vector. Allows chaining operations by returning a reference to itself in all modification methods. See
- * {@link SGVec_2f} and {@link Vec3f} for specific imlementations.
+ * {@link SGVec_2f} and {@link ewbik.math.Vector3} for specific imlementations.
  *
  * @author Xoppa
  */
@@ -310,7 +310,7 @@ interface Array<T extends ewbik.math.Array<T>> {
     /**
      * @return a copy of this Vector cast to a single precision analog.
      */
-    public <V extends Vec3f> V toVec3f();
+    public <V extends ewbik.math.Vector3> V toVec3f();
 
     <V extends ewbik.math.Array<?>> T crs(V vector);
 
@@ -396,10 +396,10 @@ interface Array<T extends ewbik.math.Array<T>> {
      */
     public T normalize();
 
-    public <V extends Vec3f> T add(V vector);
+    public <V extends ewbik.math.Vector3> T add(V vector);
 
 }
-public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
+public class Vector3 implements ewbik.math.Array<ewbik.math.Vector3>, CanLoad {
 
     public final static int X = 0, Y = 1, Z = 2;
     private static final long serialVersionUID = 3840054589595372522L;
@@ -419,7 +419,7 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
     /**
      * Constructs a vector at (0,0,0)
      */
-    public Vec3f() {
+    public Vector3() {
     }
 
     /**
@@ -429,7 +429,7 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
      * @param y The y-component
      * @param z The z-component
      */
-    public Vec3f(float x, float y, float z) {
+    public Vector3(float x, float y, float z) {
         this.set(x, y, z);
     }
 
@@ -438,7 +438,7 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
      *
      * @param vector The vector
      */
-    public Vec3f(Vec3f vector) {
+    public Vector3(ewbik.math.Vector3 vector) {
         this.set(vector);
     }
 
@@ -448,7 +448,7 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
      *
      * @param values The array
      */
-    public Vec3f(final float[] values) {
+    public Vector3(final float[] values) {
         this.set(values[0], values[1], values[2]);
     }
 
@@ -459,27 +459,27 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
         return (float) MathUtils.sqrt(x * x + y * y + z * z);
     }
 
-    public Vec3f(JSONObject j) {
+    public Vector3(JSONObject j) {
         JSONArray components = j.getJSONArray("vec");
         this.x = components.getFloat(0);
         this.y = components.getFloat(1);
         this.z = components.getFloat(2);
     }
 
-    public Vec3f(JSONArray j) {
+    public Vector3(JSONArray j) {
         this.x = j.getFloat(0);
         this.y = j.getFloat(1);
         this.z = j.getFloat(2);
     }
 
     @Override
-    public Vec3f copy() {
-        return (Vec3f) new Vec3f(this);
+    public ewbik.math.Vector3 copy() {
+        return (ewbik.math.Vector3) new ewbik.math.Vector3(this);
     }
 
     @Override
-    public ewbik.math.Vec3f toVec3f() {
-        return new ewbik.math.Vec3f((float) x, (float) y, (float) z);
+    public ewbik.math.Vector3 toVec3f() {
+        return new ewbik.math.Vector3((float) x, (float) y, (float) z);
     }
 
     public JSONArray toJSONArray() {
@@ -525,15 +525,15 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
         return x1 * x2 + y1 * y2 + z1 * z2;
     }
 
-    public static float dot(Vec3f u, Vec3f v) {
+    public static float dot(ewbik.math.Vector3 u, ewbik.math.Vector3 v) {
         return u.dot(v);
     }
 
-    public static <V extends Vec3f> V add(V v1, V v2) {
+    public static <V extends ewbik.math.Vector3> V add(V v1, V v2) {
         return add(v1, v2, null);
     }
 
-    public static <V extends Vec3f> V add(V v1, V v2, V target) {
+    public static <V extends ewbik.math.Vector3> V add(V v1, V v2, V target) {
         if (target == null) {
             target = (V) v1.copy();
             v1.set(
@@ -551,17 +551,17 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
     /**
      * Subtract one vector from another and store in another vector
      *
-     * @param target Vec3f in which to store the result
+     * @param target Vector3 in which to store the result
      */
-    static public <V extends Vec3f> V sub(V v1, V v2) {
+    static public <V extends ewbik.math.Vector3> V sub(V v1, V v2) {
         return sub(v1, v2, (V) null);
     }
 
-    static public <V extends Vec3f> V mult(V v, float n) {
+    static public <V extends ewbik.math.Vector3> V mult(V v, float n) {
         return mult(v, n, null);
     }
 
-    static public <V extends Vec3f> V mult(V v, float n, V target) {
+    static public <V extends ewbik.math.Vector3> V mult(V v, float n, V target) {
         if (target == null) {
             target = (V) v.copy();
         }
@@ -569,11 +569,11 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
         return target;
     }
 
-    static public <V extends Vec3f> V div(V v, float n) {
+    static public <V extends ewbik.math.Vector3> V div(V v, float n) {
         return div(v, n, null);
     }
 
-    static public <V extends Vec3f> V div(V v, float n, V target) {
+    static public <V extends ewbik.math.Vector3> V div(V v, float n, V target) {
         if (target == null) {
             target = (V) v.copy();
         }
@@ -585,10 +585,10 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
     /**
      * Subtract v3 from v1 and store in target
      *
-     * @param target Vec3f in which to store the result
+     * @param target Vector3 in which to store the result
      * @return
      */
-    static public <V extends Vec3f> V sub(V v1, V v2, V target) {
+    static public <V extends ewbik.math.Vector3> V sub(V v1, V v2, V target) {
         if (target == null) {
             target = (V) v1.copy();
         }
@@ -600,11 +600,11 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
     }
 
     /**
-     * @param v1     any variable of type Vec3f
-     * @param v2     any variable of type Vec3f
-     * @param target Vec3f to store the result
+     * @param v1     any variable of type Vector3
+     * @param v2     any variable of type Vector3
+     * @param target Vector3 to store the result
      */
-    public static <V extends Vec3f> V cross(V v1, V v2, V target) {
+    public static <V extends ewbik.math.Vector3> V cross(V v1, V v2, V target) {
         float crossX = v1.y * v2.z - v2.y * v1.z;
         float crossY = v1.z * v2.x - v2.z * v1.x;
         float crossZ = v1.x * v2.y - v2.x * v1.y;
@@ -618,12 +618,12 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
     }
 
     /**
-     * Linear interpolate between two vectors (returns a new Vec3f object)
+     * Linear interpolate between two vectors (returns a new Vector3 object)
      *
      * @param v1 the vector to start from
      * @param v2 the vector to lerp to
      */
-    public static <V extends Vec3f> V lerp(V v1, V v2, float amt) {
+    public static <V extends ewbik.math.Vector3> V lerp(V v1, V v2, float amt) {
         V v = (V) v1.copy();
         v.lerp(v2, amt);
         return v;
@@ -636,13 +636,13 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
      * <p>
      * ( end auto-generated )
      *
-     * @param v1 the x, y, and z components of a Vec3f
-     * @param v2 the x, y, and z components of a Vec3f
-     * @webref Vec3f:method
+     * @param v1 the x, y, and z components of a Vector3
+     * @param v2 the x, y, and z components of a Vector3
+     * @webref Vector3:method
      * @usage web_application
      * @brief Calculate and return the angle between two vectors
      */
-    static public float angleBetween(Vec3f v1, Vec3f v2) {
+    static public float angleBetween(ewbik.math.Vector3 v1, ewbik.math.Vector3 v2) {
 
         // We get NaN if we pass in a zero vector which can cause problems
         // Zero seems like a reasonable angle between a (0,0,0) vector and something
@@ -677,14 +677,14 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
      * @param z The z-component
      * @return this vector for chaining
      */
-    public Vec3f set(float x, float y, float z) {
+    public ewbik.math.Vector3 set(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
-        return (Vec3f) this;
+        return (ewbik.math.Vector3) this;
     }
 
-    public Vec3f set(final Vec3f vector) {
+    public ewbik.math.Vector3 set(final ewbik.math.Vector3 vector) {
         return this.set(vector.getX(), vector.getY(), vector.getZ());
     }
 
@@ -695,7 +695,7 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
      * @return this vector for chaining
      */
     @Override
-    public Vec3f set(final float[] values) {
+    public ewbik.math.Vector3 set(final float[] values) {
         return this.set(values[0], values[1], values[2]);
     }
 
@@ -706,7 +706,7 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
      * @param polarAngle     The angle between z-axis in radians [0, pi]
      * @return This vector for chaining
      */
-    public Vec3f setFromSpherical(float azimuthalAngle, float polarAngle) {
+    public ewbik.math.Vector3 setFromSpherical(float azimuthalAngle, float polarAngle) {
         float cosPolar = MathUtils.cos(polarAngle);
         float sinPolar = MathUtils.sin(polarAngle);
 
@@ -717,17 +717,17 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
     }
 
     @Override
-    public <V extends ewbik.math.Array<?>> Vec3f add(V vector) {
+    public <V extends ewbik.math.Array<?>> ewbik.math.Vector3 add(V vector) {
         return this.add(vector.getX(), vector.getY(), vector.getZ());
     }
 
     @Override
-    public <V extends Vec3f> Vec3f add(V vector) {
+    public <V extends ewbik.math.Vector3> ewbik.math.Vector3 add(V vector) {
         return this.add(vector.getX(), vector.getY(), vector.getZ());
     }
 
     @Override
-    public Vec3f add(float[] v) {
+    public ewbik.math.Vector3 add(float[] v) {
         return this.add(v[0], v[1], v[2]);
     }
 
@@ -739,11 +739,11 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
      * @param z The z-component of the other vector
      * @return This vector for chaining.
      */
-    public Vec3f add(float x, float y, float z) {
+    public ewbik.math.Vector3 add(float x, float y, float z) {
         this.x += x;
         this.y += y;
         this.z += z;
-        return (Vec3f) this;
+        return (ewbik.math.Vector3) this;
     }
 
     /**
@@ -752,16 +752,16 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
      * @param values The value
      * @return This vector for chaining
      */
-    public Vec3f add(float values) {
+    public ewbik.math.Vector3 add(float values) {
         return set(this.x + values, this.y + values, this.z + values);
     }
 
-    public Vec3f sub(Vec3f a_vec) {
+    public ewbik.math.Vector3 sub(ewbik.math.Vector3 a_vec) {
         return sub(a_vec.x, a_vec.y, a_vec.z);
     }
 
     @Override
-    public <V extends ewbik.math.Array<?>> Vec3f sub(V a_vec) {
+    public <V extends ewbik.math.Array<?>> ewbik.math.Vector3 sub(V a_vec) {
         return sub(a_vec.getX(), a_vec.getY(), a_vec.getZ());
     }
 
@@ -773,7 +773,7 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
      * @param z The z-component of the other vector
      * @return This vector for chaining
      */
-    public Vec3f sub(float x, float y, float z) {
+    public ewbik.math.Vector3 sub(float x, float y, float z) {
         return this.set(this.x - x, this.y - y, this.z - z);
     }
 
@@ -783,16 +783,16 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
      * @param value The value
      * @return This vector for chaining
      */
-    public Vec3f sub(float value) {
+    public ewbik.math.Vector3 sub(float value) {
         return this.set(this.x - value, this.y - value, this.z - value);
     }
 
     @Override
-    public <V extends ewbik.math.Array<?>> Vec3f mult(V other) {
+    public <V extends ewbik.math.Array<?>> ewbik.math.Vector3 mult(V other) {
         return this.set(x * other.getX(), y * other.getY(), z * other.getZ());
     }
 
-    public <V extends Vec3f> Vec3f mult(V other) {
+    public <V extends ewbik.math.Vector3> ewbik.math.Vector3 mult(V other) {
         return this.set(x * other.x, y * other.y, z * other.z);
     }
 
@@ -804,46 +804,46 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
      * @param vz Z value
      * @return This vector for chaining
      */
-    public Vec3f mult(float vx, float vy, float vz) {
+    public ewbik.math.Vector3 mult(float vx, float vy, float vz) {
         return this.set(this.x * vx, this.y * vy, this.z * vz);
     }
 
     @Override
-    public Vec3f div(float n) {
+    public ewbik.math.Vector3 div(float n) {
         x /= n;
         y /= n;
         z /= n;
-        return (Vec3f) this;
+        return (ewbik.math.Vector3) this;
     }
 
     @Override
-    public <V extends ewbik.math.Array<?>> Vec3f mulAdd(V vec, float scalar) {
+    public <V extends ewbik.math.Array<?>> ewbik.math.Vector3 mulAdd(V vec, float scalar) {
         this.x += vec.getX() * scalar;
         this.y += vec.getY() * scalar;
         this.z += vec.getZ() * scalar;
-        return (Vec3f) this;
+        return (ewbik.math.Vector3) this;
     }
 
-    public Vec3f mulAdd(Vec3f vec, float scalar) {
+    public ewbik.math.Vector3 mulAdd(ewbik.math.Vector3 vec, float scalar) {
         this.x += vec.x * scalar;
         this.y += vec.y * scalar;
         this.z += vec.z * scalar;
-        return (Vec3f) this;
+        return (ewbik.math.Vector3) this;
     }
 
     @Override
-    public <V extends ewbik.math.Array<?>> Vec3f mulAdd(V vec, V mulVec) {
+    public <V extends ewbik.math.Array<?>> ewbik.math.Vector3 mulAdd(V vec, V mulVec) {
         this.x += vec.getX() * mulVec.getX();
         this.y += vec.getY() * mulVec.getY();
         this.z += vec.getZ() * mulVec.getZ();
-        return (Vec3f) this;
+        return (ewbik.math.Vector3) this;
     }
 
-    public Vec3f mulAdd(Vec3f vec, Vec3f mulVec) {
+    public ewbik.math.Vector3 mulAdd(ewbik.math.Vector3 vec, ewbik.math.Vector3 mulVec) {
         this.x += vec.x * mulVec.x;
         this.y += vec.y * mulVec.y;
         this.z += vec.z * mulVec.z;
-        return (Vec3f) this;
+        return (ewbik.math.Vector3) this;
     }
 
     @Override
@@ -860,12 +860,12 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
      * @param vector The other vector
      * @return Whether this and the other vector are equal
      */
-    public boolean idt(final Vec3f vector) {
+    public boolean idt(final ewbik.math.Vector3 vector) {
         return x == vector.x && y == vector.y && z == vector.z;
     }
 
     @Override
-    public float dist(final Vec3f vector) {
+    public float dist(final ewbik.math.Vector3 vector) {
         final float a = vector.x - x;
         final float b = vector.y - y;
         final float c = vector.z - z;
@@ -883,7 +883,7 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
     }
 
     @Override
-    public float distSq(Vec3f point) {
+    public float distSq(ewbik.math.Vector3 point) {
         final float a = point.x - x;
         final float b = point.y - y;
         final float c = point.z - z;
@@ -906,10 +906,10 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
     }
 
     @Override
-    public Vec3f normalize() {
+    public ewbik.math.Vector3 normalize() {
         final float len2 = this.mag();
         if (len2 == 0f || len2 == 1f)
-            return (Vec3f) this;
+            return (ewbik.math.Vector3) this;
         return this.mult(1f / (float) len2);
     }
 
@@ -918,7 +918,7 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
         return x * vector.getX() + y * vector.getY() + z * vector.getZ();
     }
 
-    public <V extends Vec3f> float dot(final V vector) {
+    public <V extends ewbik.math.Vector3> float dot(final V vector) {
         return x * vector.x + y * vector.y + z * vector.z;
     }
 
@@ -941,7 +941,7 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
      * @return Vec3fhis vector for chaining
      */
     @Override
-    public <V extends ewbik.math.Array<?>> Vec3f crs(final V vector) {
+    public <V extends ewbik.math.Array<?>> ewbik.math.Vector3 crs(final V vector) {
         return this.set(y * vector.getZ() - z * vector.getY(), z * vector.getX() - x * vector.getZ(),
                 x * vector.getY() - y * vector.getX());
     }
@@ -952,7 +952,7 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
      * @param vector Vec3fhe other vector
      * @return This vector for chaining
      */
-    public <V extends Vec3f> Vec3f crs(final V vector) {
+    public <V extends ewbik.math.Vector3> ewbik.math.Vector3 crs(final V vector) {
         return this.set(y * vector.z - z * vector.y, z * vector.x - x * vector.z, x * vector.y - y * vector.x);
     }
 
@@ -964,7 +964,7 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
      * @param z The z-component of the other vector
      * @return This vector for chaining
      */
-    public Vec3f crs(float x, float y, float z) {
+    public ewbik.math.Vector3 crs(float x, float y, float z) {
         return this.set(this.y * z - this.z * y, this.z * x - this.x * z, this.x * y - this.y * x);
     }
 
@@ -976,7 +976,7 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
      * @param matrix The matrix
      * @return This vector for chaining
      */
-    public Vec3f mul4x3(float[] matrix) {
+    public ewbik.math.Vector3 mul4x3(float[] matrix) {
         return set(x * matrix[0] + y * matrix[3] + z * matrix[6] + matrix[9],
                 x * matrix[1] + y * matrix[4] + z * matrix[7]
                         + matrix[10],
@@ -992,8 +992,8 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
      * @param p2 vector representing second edge of plane
      * @return
      */
-    public Vec3f getPlaneProjectionOf(Vec3f p1, Vec3f p2) {
-        return this.getPlaneProjectionOf((Vec3f) p1.crossCopy(p2));
+    public ewbik.math.Vector3 getPlaneProjectionOf(ewbik.math.Vector3 p1, ewbik.math.Vector3 p2) {
+        return this.getPlaneProjectionOf((ewbik.math.Vector3) p1.crossCopy(p2));
     }
 
     /**
@@ -1003,12 +1003,12 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
      * @param norm
      * @return
      */
-    public Vec3f getPlaneProjectionOf(Vec3f rawNorm) {
-        Vec3f norm = (Vec3f) rawNorm.copy().normalize();
-        Vec3f normProj = (Vec3f) norm.multCopy(this.dot(norm));
+    public ewbik.math.Vector3 getPlaneProjectionOf(ewbik.math.Vector3 rawNorm) {
+        ewbik.math.Vector3 norm = (ewbik.math.Vector3) rawNorm.copy().normalize();
+        ewbik.math.Vector3 normProj = (ewbik.math.Vector3) norm.multCopy(this.dot(norm));
         normProj.mult(-1);
 
-        return (Vec3f) normProj.addCopy(this);
+        return (ewbik.math.Vector3) normProj.addCopy(this);
     }
 
     @Override
@@ -1032,62 +1032,62 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
     }
 
     @Override
-    public boolean isOnLine(Vec3f other, float epsilon) {
+    public boolean isOnLine(ewbik.math.Vector3 other, float epsilon) {
         return magSq(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x) <= epsilon;
     }
 
     @Override
-    public boolean isOnLine(Vec3f other) {
+    public boolean isOnLine(ewbik.math.Vector3 other) {
         return magSq(y * other.z - z * other.y, z * other.x - x * other.z,
                 x * other.y - y * other.x) <= MathUtils.DOUBLE_ROUNDING_ERROR;
     }
 
     @Override
-    public boolean isCollinear(Vec3f other, float epsilon) {
+    public boolean isCollinear(ewbik.math.Vector3 other, float epsilon) {
         return isOnLine(other, epsilon) && hasSameDirection(other);
     }
 
     @Override
-    public boolean isCollinear(Vec3f other) {
+    public boolean isCollinear(ewbik.math.Vector3 other) {
         return isOnLine(other) && hasSameDirection(other);
     }
 
     @Override
-    public boolean isCollinearOpposite(Vec3f other, float epsilon) {
+    public boolean isCollinearOpposite(ewbik.math.Vector3 other, float epsilon) {
         return isOnLine(other, epsilon) && hasOppositeDirection(other);
     }
 
     @Override
-    public boolean isCollinearOpposite(Vec3f other) {
+    public boolean isCollinearOpposite(ewbik.math.Vector3 other) {
         return isOnLine(other) && hasOppositeDirection(other);
     }
 
     @Override
-    public boolean isPerpendicular(Vec3f vector) {
+    public boolean isPerpendicular(ewbik.math.Vector3 vector) {
         return MathUtils.isZero(dot(vector));
     }
 
     @Override
-    public boolean isPerpendicular(Vec3f vector, float epsilon) {
+    public boolean isPerpendicular(ewbik.math.Vector3 vector, float epsilon) {
         return MathUtils.isZero(dot(vector), epsilon);
     }
 
     @Override
-    public boolean hasSameDirection(Vec3f vector) {
+    public boolean hasSameDirection(ewbik.math.Vector3 vector) {
         return dot(vector) > 0;
     }
 
     @Override
-    public boolean hasOppositeDirection(Vec3f vector) {
+    public boolean hasOppositeDirection(ewbik.math.Vector3 vector) {
         return dot(vector) < 0;
     }
 
     @Override
-    public Vec3f lerp(final Vec3f target, float alpha) {
+    public ewbik.math.Vector3 lerp(final ewbik.math.Vector3 target, float alpha) {
         x += alpha * (target.x - x);
         y += alpha * (target.y - y);
         z += alpha * (target.z - z);
-        return (Vec3f) this;
+        return (ewbik.math.Vector3) this;
     }
 
     /**
@@ -1099,7 +1099,7 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
      * @param alpha  The interpolation coefficient
      * @return This vector for chaining.
      */
-    public Vec3f slerp(final Vec3f target, float alpha) {
+    public ewbik.math.Vector3 slerp(final ewbik.math.Vector3 target, float alpha) {
         final float dot = dot(target);
         // If the inputs are too close for comfort, simply linearly interpolate.
         if (dot > 0.9995 || dot < -0.9995)
@@ -1121,7 +1121,7 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
     }
 
     /**
-     * Converts this {@code Vec3f} to a string in the format {@code (x,y,z)}.
+     * Converts this {@code Vector3} to a string in the format {@code (x,y,z)}.
      *
      * @return a string representation of this object.
      */
@@ -1131,45 +1131,45 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
     }
 
     @Override
-    public Vec3f limit(float limit) {
+    public ewbik.math.Vector3 limit(float limit) {
         return limitSq(limit * limit);
     }
 
     @Override
-    public Vec3f limitSq(float limit2) {
+    public ewbik.math.Vector3 limitSq(float limit2) {
         float len2 = magSq();
         if (len2 > limit2) {
             mult((float) MathUtils.sqrt(limit2 / len2));
         }
-        return (Vec3f) this;
+        return (ewbik.math.Vector3) this;
     }
 
     @Override
-    public Vec3f setMag(float len) {
+    public ewbik.math.Vector3 setMag(float len) {
         return setMagSq(len * len);
     }
 
     @Override
-    public Vec3f setMagSq(float len2) {
+    public ewbik.math.Vector3 setMagSq(float len2) {
         float oldLen2 = magSq();
-        return (oldLen2 == 0 || oldLen2 == len2) ? (Vec3f) this : mult((float) MathUtils.sqrt(len2 / oldLen2));
+        return (oldLen2 == 0 || oldLen2 == len2) ? (ewbik.math.Vector3) this : mult((float) MathUtils.sqrt(len2 / oldLen2));
     }
 
     @Override
-    public Vec3f clamp(float min, float max) {
+    public ewbik.math.Vector3 clamp(float min, float max) {
         final float len2 = magSq();
         if (len2 == 0f)
-            return (Vec3f) this;
+            return (ewbik.math.Vector3) this;
         float max2 = max * max;
         if (len2 > max2)
             return mult((float) MathUtils.sqrt(max2 / len2));
         float min2 = min * min;
         if (len2 < min2)
             return mult((float) MathUtils.sqrt(min2 / len2));
-        return (Vec3f) this;
+        return (ewbik.math.Vector3) this;
     }
 
-    public <V extends Vec3f> boolean epsilonEquals(V other, float epsilon) {
+    public <V extends ewbik.math.Vector3> boolean epsilonEquals(V other, float epsilon) {
         if (other == null)
             return false;
         if (MathUtils.abs(other.x - x) > epsilon)
@@ -1211,11 +1211,11 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
     }
 
     @Override
-    public Vec3f setZero() {
+    public ewbik.math.Vector3 setZero() {
         this.x = 0;
         this.y = 0;
         this.z = 0;
-        return (Vec3f) this;
+        return (ewbik.math.Vector3) this;
     }
 
     @Override
@@ -1248,8 +1248,8 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
         this.z = z;
     }
 
-    public Vec3f getOrthogonal() {
-        Vec3f result = this.copy();
+    public ewbik.math.Vector3 getOrthogonal() {
+        ewbik.math.Vector3 result = this.copy();
         result.set(0, 0, 0);
         float threshold = this.mag() * 0.6f;
         if (threshold > 0) {
@@ -1268,11 +1268,11 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
     }
 
     @Override
-    public Vec3f mult(float scalar) {
+    public ewbik.math.Vector3 mult(float scalar) {
         this.x *= scalar;
         this.y *= scalar;
         this.z *= scalar;
-        return (Vec3f) this;
+        return (ewbik.math.Vector3) this;
     }
 
     /**
@@ -1283,7 +1283,7 @@ public class Vec3f implements ewbik.math.Array<Vec3f>, CanLoad {
      *
      * @param v
      */
-    public void adoptValuesOf(Vec3f v) {
+    public void adoptValuesOf(ewbik.math.Vector3 v) {
         setX_(v.getX());
         setY_(v.getY());
         setZ_(v.getZ());

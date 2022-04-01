@@ -72,8 +72,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
                 String inputTag, // some user specified name for the bone, if desired
                 float inputBoneHeight, // bone length
                 frameType coordinateType) throws NullParentForBoneException {
-        Vec3f tipHeading1 = ewbik.processing.sceneGraph.Transform3D.toVec3f(tipHeading);
-        Vec3f rollHeading1 = ewbik.processing.sceneGraph.Transform3D.toVec3f(rollHeading);
+        Vector3 tipHeading1 = ewbik.processing.sceneGraph.Transform3D.toVec3f(tipHeading);
+        Vector3 rollHeading1 = ewbik.processing.sceneGraph.Transform3D.toVec3f(rollHeading);
 
         this.lastRotation = new Quaternion();
         if (par != null) {
@@ -85,11 +85,11 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
             Ray3 tipHeadingRay = new Ray3(((Bone) par).getTip_(), tipHeading1);
             Ray3 rollHeadingRay = new Ray3(((Bone) par).getTip_(), rollHeading1);
-            Vec3f tempTip = tipHeading1.copy();
+            Vector3 tempTip = tipHeading1.copy();
             tempTip.set(0, 0, 0);
-            Vec3f tempRoll = rollHeading1.copy();
+            Vector3 tempRoll = rollHeading1.copy();
             tempRoll.set(0, 0, 0);
-            Vec3f tempX = tempRoll.copy();
+            Vector3 tempX = tempRoll.copy();
             tempX.set(0, 0, 0);
 
             if (coordinateType == Bone.frameType.GLOBAL) {
@@ -149,8 +149,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      */
     public Bone(
             Skeleton3D parArma,
-            Vec3f tipHeading,
-            Vec3f rollHeading,
+            Vector3 tipHeading,
+            Vector3 rollHeading,
             String inputTag,
             float inputBoneHeight,
             frameType coordinateType)
@@ -167,9 +167,9 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             tipHeadingRay = new Ray3(parArma.localTransform3D.origin_(), tipHeading);
             tipHeadingRay.getRayScaledTo(inputBoneHeight);
             Ray3 rollHeadingRay = new Ray3(parArma.localTransform3D.origin_(), rollHeading);
-            Vec3f tempTip = tipHeading.copy();
-            Vec3f tempRoll = rollHeading.copy();
-            Vec3f tempX = tempTip.copy();
+            Vector3 tempTip = tipHeading.copy();
+            Vector3 tempRoll = rollHeading.copy();
+            Vector3 tempX = tempTip.copy();
 
             if (coordinateType == frameType.GLOBAL) {
                 tempTip = tipHeadingRay.heading();
@@ -319,17 +319,17 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         drawKusudamas = draw;
     }
 
-    protected void generateAxes(Vec3f origin, Vec3f x, Vec3f y, Vec3f z) {
+    protected void generateAxes(Vector3 origin, Vector3 x, Vector3 y, Vector3 z) {
         this.localTransform3D = new ewbik.processing.sceneGraph.Transform3D(origin, x, y, z);
     }
 
     public PVector getBase() {
-        ewbik.math.Vec3f base = (ewbik.math.Vec3f) getBase_();
+        ewbik.math.Vector3 base = (ewbik.math.Vector3) getBase_();
         return new PVector(base.x, base.y, base.z);
     }
 
     public PVector getTip() {
-        ewbik.math.Vec3f tip = (ewbik.math.Vec3f) getTip_();
+        ewbik.math.Vector3 tip = (ewbik.math.Vector3) getTip_();
         return new PVector(tip.x, tip.y, tip.z);
     }
 
@@ -341,11 +341,11 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     }
 
     public void enablePin(PVector pin) {
-        enablePin_(new ewbik.math.Vec3f(pin.x, pin.y, pin.z));
+        enablePin_(new ewbik.math.Vector3(pin.x, pin.y, pin.z));
     }
 
     public void setPin(PVector pin) {
-        setPin_(new ewbik.math.Vec3f(pin.x, pin.y, pin.z));
+        setPin_(new ewbik.math.Vector3(pin.x, pin.y, pin.z));
     }
 
     /**
@@ -357,7 +357,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         if (pin == null)
             return null;
         else {
-            ewbik.math.Vec3f loc = (ewbik.math.Vec3f) pin.getLocation_();
+            ewbik.math.Vector3 loc = (ewbik.math.Vector3) pin.getLocation_();
             return new PVector(loc.x, loc.y, loc.z);
         }
     }
@@ -521,7 +521,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         }
     }
 
-    public void setPin_(Vec3f pin) {
+    public void setPin_(Vector3 pin) {
         if (this.pin == null) {
             this.enablePin_(pin);
         } else {
@@ -831,7 +831,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      *              parentArmature.
      */
 
-    public void enablePin_(Vec3f pinTo) {
+    public void enablePin_(Vector3 pinTo) {
         if (pin == null) {
             ewbik.processing.sceneGraph.Transform3D pinTransform3D = this.localAxes().getGlobalCopy();
             pinTransform3D.setParent(this.parentArmature.localAxes().getParentAxes());
@@ -972,11 +972,11 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         this.tag = newTag;
     }
 
-    public Vec3f getBase_() {
+    public Vector3 getBase_() {
         return localTransform3D.origin_().copy();
     }
 
-    public Vec3f getTip_() {
+    public Vector3 getTip_() {
         return localTransform3D.y_().getScaledTo(boneHeight);
     }
 

@@ -77,8 +77,8 @@ public class Kusudama implements Saveable {
 
     float[] coneSequence;
     int coneCount;
-    Ray3 boneRay = new Ray3(new Vec3f(), new Vec3f());
-    Ray3 constrainedRay = new Ray3(new Vec3f(), new Vec3f());
+    Ray3 boneRay = new Ray3(new Vector3(), new Vector3());
+    Ray3 constrainedRay = new Ray3(new Vector3(), new Vector3());
     float unitHyperArea = 2 * MathUtils.pow(MathUtils.PI, 2);
     float unitArea = 4 * MathUtils.PI;
     float rotationalFreedom = 1f;
@@ -117,7 +117,7 @@ public class Kusudama implements Saveable {
     /**
      * {@inheritDoc}
      **/
-    public ewbik.processing.singlePrecision.LimitCone createLimitConeForIndex(int insertAt, Vec3f newPoint, float radius) {
+    public ewbik.processing.singlePrecision.LimitCone createLimitConeForIndex(int insertAt, Vector3 newPoint, float radius) {
         return new LimitCone(ewbik.processing.sceneGraph.Transform3D.toPVector(newPoint), radius, this);
     }
 
@@ -153,11 +153,11 @@ public class Kusudama implements Saveable {
         PMatrix localMat = limitingAxes().getLocalPMatrix();
         p.applyMatrix(localMat);
         float circumference = (float) (attachedTo().getBoneHeight() / 2.5f);
-        ewbik.math.Vec3f min = new ewbik.math.Vec3f(0f, 0f, circumference);
-        ewbik.math.Vec3f current = new ewbik.math.Vec3f(0f, 0f, circumference);
-        Quaternion minRot = new Quaternion(new ewbik.math.Vec3f(0, 1, 0), minAxialAngle());
+        ewbik.math.Vector3 min = new ewbik.math.Vector3(0f, 0f, circumference);
+        ewbik.math.Vector3 current = new ewbik.math.Vector3(0f, 0f, circumference);
+        Quaternion minRot = new Quaternion(new ewbik.math.Vector3(0, 1, 0), minAxialAngle());
         float absAngle = minAxialAngle + range;
-        Quaternion maxRot = new Quaternion(new ewbik.math.Vec3f(0, 1, 0), absAngle);
+        Quaternion maxRot = new Quaternion(new ewbik.math.Vector3(0, 1, 0), absAngle);
 
         float pieces = 20f;
         float granularity = 1f / pieces;
@@ -188,10 +188,10 @@ public class Kusudama implements Saveable {
         Quaternion alignRot = limitingTransform3D.getGlobalMBasis().getInverseRotation()
                 .applyTo(attachedTo().localAxes().getGlobalMBasis().rotation);
 
-        Quaternion[] decomposition = alignRot.getSwingTwist(new ewbik.math.Vec3f(0, 1, 0));
+        Quaternion[] decomposition = alignRot.getSwingTwist(new ewbik.math.Vector3(0, 1, 0));
         float angle = decomposition[1].getAngle() * decomposition[1].getAxis().y;
-        Quaternion zRot = new Quaternion(new ewbik.math.Vec3f(0, 1, 0), angle);
-        ewbik.math.Vec3f yaw = new ewbik.math.Vec3f(0, 0, circumference);
+        Quaternion zRot = new Quaternion(new ewbik.math.Vector3(0, 1, 0), angle);
+        ewbik.math.Vector3 yaw = new ewbik.math.Vector3(0, 0, circumference);
         yaw = zRot.applyToCopy(yaw);
         p.stroke(25, 25, 195);
         p.strokeWeight(4);
@@ -283,25 +283,25 @@ public class Kusudama implements Saveable {
     public void optimizeLimitingAxes() {
         ewbik.processing.sceneGraph.Transform3D originalLimitingTransform3D = limitingTransform3D.getGlobalCopy();
 
-        ArrayList<Vec3f> directions = new ArrayList<>();
+        ArrayList<Vector3> directions = new ArrayList<>();
         if (getLimitCones().size() == 1) {
             directions.add((limitCones.get(0).getControlPoint()).copy());
         } else {
             for (int i = 0; i < getLimitCones().size() - 1; i++) {
-                Vec3f thisC = getLimitCones().get(i).getControlPoint().copy();
-                Vec3f nextC = getLimitCones().get(i + 1).getControlPoint().copy();
+                Vector3 thisC = getLimitCones().get(i).getControlPoint().copy();
+                Vector3 nextC = getLimitCones().get(i + 1).getControlPoint().copy();
                 Quaternion thisToNext = new Quaternion(thisC, nextC);
                 Quaternion halfThisToNext = new Quaternion(thisToNext.getAxis(), thisToNext.getAngle() / 2f);
 
-                Vec3f halfAngle = halfThisToNext.applyToCopy(thisC);
+                Vector3 halfAngle = halfThisToNext.applyToCopy(thisC);
                 halfAngle.normalize();
                 halfAngle.mult(thisToNext.getAngle());
                 directions.add(halfAngle);
             }
         }
 
-        Vec3f newY = new Vec3f();
-        for (Vec3f dv : directions) {
+        Vector3 newY = new Vector3();
+        for (Vector3 dv : directions) {
             newY.add(dv);
         }
 
@@ -309,10 +309,10 @@ public class Kusudama implements Saveable {
         if (newY.mag() != 0 && !Float.isNaN(newY.y)) {
             newY.normalize();
         } else {
-            newY = new Vec3f(0, 1f, 0);
+            newY = new Vector3(0, 1f, 0);
         }
 
-        Ray3 newYRay = new Ray3(new Vec3f(0, 0, 0), newY);
+        Ray3 newYRay = new Ray3(new Vector3(0, 0, 0), newY);
 
         Quaternion oldYtoNewY = new Quaternion(limitingTransform3D.y_().heading(), originalLimitingTransform3D.getGlobalOf(newYRay).heading());
         limitingTransform3D.rotateBy(oldYtoNewY);
@@ -361,9 +361,9 @@ public class Kusudama implements Saveable {
                                       float angleReturnfullness) {
         if (limitingTransform3D != null && painfullness > 0f) {
             if (orientationallyConstrained) {
-                Vec3f origin = toSet.origin_();
-                Vec3f inPoint = toSet.y_().p2().copy();
-                Vec3f pathPoint = pointOnPathSequence(inPoint, limitingTransform3D);
+                Vector3 origin = toSet.origin_();
+                Vector3 inPoint = toSet.y_().p2().copy();
+                Vector3 pathPoint = pointOnPathSequence(inPoint, limitingTransform3D);
                 inPoint.sub(origin);
                 pathPoint.sub(origin);
                 Quaternion toClamp = new Quaternion(inPoint, pathPoint);
@@ -414,11 +414,11 @@ public class Kusudama implements Saveable {
         }
     }
 
-    public <V extends Vec3f> boolean isInLimits_(V globalPoint) {
+    public <V extends Vector3> boolean isInLimits_(V globalPoint) {
         float[] inBounds = {1f};
         // boneRay.p1.set(toSet.origin());
         // boneRay.p2.set(toSet.y().getScaledTo(attachedTo.boneHeight));
-        Vec3f inLimits = this.pointInLimits(limitingTransform3D.getLocalOf(globalPoint), inBounds);
+        Vector3 inLimits = this.pointInLimits(limitingTransform3D.getLocalOf(globalPoint), inBounds);
         return inBounds[0] > 0f;
     }
 
@@ -433,8 +433,8 @@ public class Kusudama implements Saveable {
         limitingTransform3D.updateGlobal();
         boneRay.p1().set(limitingTransform3D.origin_());
         boneRay.p2().set(toSet.y_().p2());
-        Vec3f bonetip = limitingTransform3D.getLocalOf(toSet.y_().p2());
-        Vec3f inLimits = this.pointInLimits(bonetip, inBounds);
+        Vector3 bonetip = limitingTransform3D.getLocalOf(toSet.y_().p2());
+        Vector3 inLimits = this.pointInLimits(bonetip, inBounds);
 
         if (inBounds[0] == -1 && inLimits != null) {
             constrainedRay.p1().set(boneRay.p1());
@@ -449,7 +449,7 @@ public class Kusudama implements Saveable {
         float[] inBounds = {1f};
         // boneRay.p1().set(globalAxes.origin_());
         // boneRay.p2().set(globalAxes.y_().getScaledTo(attachedTo.boneHeight));
-        Vec3f inLimits = this.pointInLimits(limitingTransform3D.getLocalOf(globalTransform3D.y_().p2()), inBounds);
+        Vector3 inLimits = this.pointInLimits(limitingTransform3D.getLocalOf(globalTransform3D.y_().p2()), inBounds);
         if (inBounds[0] == -1l) {
             return false;
         } else {
@@ -495,7 +495,7 @@ public class Kusudama implements Saveable {
             return 0f;
 
         Quaternion alignRot = limitingTransform3D.getGlobalMBasis().getInverseRotation().applyTo(toSet.getGlobalMBasis().rotation);
-        Quaternion[] decomposition = alignRot.getSwingTwist(new Vec3f(0, 1, 0));
+        Quaternion[] decomposition = alignRot.getSwingTwist(new Vector3(0, 1, 0));
         float angleDelta2 = decomposition[1].getAngle() * decomposition[1].getAxis().y * -1f;
         angleDelta2 = toTau(angleDelta2);
         float fromMinToAngleDelta = toTau(signedAngleDifference(angleDelta2, TAU - this.minAxialAngle()));
@@ -527,7 +527,7 @@ public class Kusudama implements Saveable {
             return 0f;
 
         Quaternion alignRot = limitingTransform3D.getGlobalMBasis().getInverseRotation().applyTo(toSet.getGlobalMBasis().rotation);
-        Quaternion[] decomposition = alignRot.getSwingTwist(new Vec3f(0, 1, 0));
+        Quaternion[] decomposition = alignRot.getSwingTwist(new Vector3(0, 1, 0));
         float angleDelta2 = decomposition[1].getAngle() * decomposition[1].getAxis().y * -1f;
         angleDelta2 = toTau(angleDelta2);
 
@@ -540,7 +540,7 @@ public class Kusudama implements Saveable {
 
         limitingTransform3D.updateGlobal();
         Quaternion alignRot = limitingTransform3D.getGlobalMBasis().getInverseRotation().applyTo(boneTransform3D.globalMBasis.rotation);
-        Quaternion[] decomposition = alignRot.getSwingTwist(new Vec3f(0, 1, 0));
+        Quaternion[] decomposition = alignRot.getSwingTwist(new Vector3(0, 1, 0));
 
         float angleDelta = decomposition[1].getAngle() * decomposition[1].getAxis().y * -1;
         // uncomment the next line for reflectable axis support (removed for performance
@@ -595,19 +595,19 @@ public class Kusudama implements Saveable {
      * @return the original point, if it's in limits, or the closest point which is
      * in limits.
      */
-    public <V extends Vec3f> Vec3f pointInLimits(V inPoint, float[] inBounds) {
+    public <V extends Vector3> Vector3 pointInLimits(V inPoint, float[] inBounds) {
 
-        Vec3f point = inPoint.copy();
+        Vector3 point = inPoint.copy();
         point.normalize();
         // point.mult(attachedTo.boneHeight);
 
         inBounds[0] = -1;
 
-        Vec3f closestCollisionPoint = null;
+        Vector3 closestCollisionPoint = null;
         float closestCos = -2f;
         if (limitCones.size() > 1 && this.orientationallyConstrained) {
             for (int i = 0; i < limitCones.size() - 1; i++) {
-                Vec3f collisionPoint = inPoint.copy();
+                Vector3 collisionPoint = inPoint.copy();
                 collisionPoint.set(0, 0, 0);
                 ewbik.processing.singlePrecision.LimitCone nextCone = limitCones.get(i + 1);
                 boolean inSegBounds = limitCones.get(i).inBoundsFromThisToNext(nextCone, point, collisionPoint);
@@ -633,10 +633,10 @@ public class Kusudama implements Saveable {
                 inBounds[0] = 1;
                 return inPoint;
             } else {
-                Vec3f axis = limitCones.get(0).getControlPoint().crossCopy(point);
+                Vector3 axis = limitCones.get(0).getControlPoint().crossCopy(point);
                 // Quaternion toLimit = new Quaternion(limitCones.get(0).getControlPoint(), point);
                 Quaternion toLimit = new Quaternion(axis, limitCones.get(0).getRadius());
-                Vec3f newPoint = toLimit.applyToCopy(limitCones.get(0).getControlPoint());
+                Vector3 newPoint = toLimit.applyToCopy(limitCones.get(0).getControlPoint());
                 return newPoint;
             }
         } else {
@@ -645,18 +645,18 @@ public class Kusudama implements Saveable {
         }
     }
 
-    public <V extends Vec3f> Vec3f pointOnPathSequence(V inPoint, ewbik.processing.sceneGraph.Transform3D limitingTransform3D) {
+    public <V extends Vector3> Vector3 pointOnPathSequence(V inPoint, ewbik.processing.sceneGraph.Transform3D limitingTransform3D) {
         float closestPointDot = 0f;
-        Vec3f point = limitingTransform3D.getLocalOf(inPoint);
+        Vector3 point = limitingTransform3D.getLocalOf(inPoint);
         point.normalize();
-        Vec3f result = (Vec3f) point.copy();
+        Vector3 result = (Vector3) point.copy();
 
         if (limitCones.size() == 1) {
             result.set(limitCones.get(0).getControlPoint());
         } else {
             for (int i = 0; i < limitCones.size() - 1; i++) {
                 ewbik.processing.singlePrecision.LimitCone nextCone = limitCones.get(i + 1);
-                Vec3f closestPathPoint = limitCones.get(i).getClosestPathPoint(nextCone, point);
+                Vector3 closestPathPoint = limitCones.get(i).getClosestPathPoint(nextCone, point);
                 float closeDot = closestPathPoint.dot(point);
                 if (closeDot > closestPointDot) {
                     result.set(closestPathPoint);
@@ -685,7 +685,7 @@ public class Kusudama implements Saveable {
      *                 LimitCone is not supposed to be between two existing
      *                 LimitCones)
      */
-    public void addLimitCone(Vec3f newPoint, float radius, ewbik.processing.singlePrecision.LimitCone previous, ewbik.processing.singlePrecision.LimitCone next) {
+    public void addLimitCone(Vector3 newPoint, float radius, ewbik.processing.singlePrecision.LimitCone previous, ewbik.processing.singlePrecision.LimitCone next) {
         int insertAt = 0;
 
         if (next == null || limitCones.size() == 0) {
@@ -720,7 +720,7 @@ public class Kusudama implements Saveable {
      *                 majorRotationAxes))
      * @param radius   the radius of the limitCone
      */
-    public void addLimitConeAtIndex(int insertAt, Vec3f newPoint, float radius) {
+    public void addLimitConeAtIndex(int insertAt, Vector3 newPoint, float radius) {
         ewbik.processing.singlePrecision.LimitCone newCone = createLimitConeForIndex(insertAt, newPoint, radius);
         if (insertAt == -1) {
             limitCones.add(newCone);

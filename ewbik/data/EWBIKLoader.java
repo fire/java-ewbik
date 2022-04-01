@@ -154,8 +154,8 @@ public class EWBIKLoader {
     public <T extends Object> void arrayListFromJSONArray(JSONArray jsonArray, ArrayList<T> list, Class c) {
         for (int i = 0; i < jsonArray.size(); i++) {
             Object item = jsonArray.get(i);
-            if (c == ewbik.math.Vec3f.class)
-                list.add((T) new ewbik.math.Vec3f(jsonArray.getJSONArray(i)));
+            if (c == ewbik.math.Vector3.class)
+                list.add((T) new ewbik.math.Vector3(jsonArray.getJSONArray(i)));
             else if (c == Quaternion.class)
                 list.add((T) new Quaternion(jsonArray.getJSONArray(i)));
             else if (c.getName().startsWith("java.lang"))

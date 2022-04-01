@@ -240,7 +240,7 @@ public class IKPin implements ewbik.asj.Saveable {
      *
      * @param location
      */
-    public void translateTo_(ewbik.math.Vec3f location) {
+    public void translateTo_(ewbik.math.Vector3 location) {
         this.transform3D.translateTo(location);
     }
 
@@ -251,7 +251,7 @@ public class IKPin implements ewbik.asj.Saveable {
      *
      * @param location
      */
-    public void translateToArmatureLocal_(ewbik.math.Vec3f location) {
+    public void translateToArmatureLocal_(ewbik.math.Vector3 location) {
         ewbik.processing.sceneGraph.Transform3D armTransform3D = this.forBone().parentArmature.localAxes().getParentAxes();
         if (armTransform3D == null) {
             this.transform3D.translateTo(location);
@@ -266,14 +266,14 @@ public class IKPin implements ewbik.asj.Saveable {
      *
      * @param location
      */
-    public void translateBy_(ewbik.math.Vec3f location) {
+    public void translateBy_(ewbik.math.Vector3 location) {
         this.transform3D.translateByLocal(location);
     }
 
     /**
      * @return the pin locationin global coordinates
      */
-    public ewbik.math.Vec3f getLocation_() {
+    public ewbik.math.Vector3 getLocation_() {
         return transform3D.origin_();
     }
 

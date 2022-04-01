@@ -2,19 +2,19 @@ package ewbik.math;
 
 public class QCP {
 
-    public Vec3f[] target;
+    public Vector3[] target;
     /**
      * Implementation of the Quaternionff-Based Characteristic Polynomial algorithm
      * for RMSD and Superposition calculations.
      * <p>
      * Usage:
      * <p>
-     * The input consists of 2 Vec3f arrays of equal length. The input coordinates
+     * The input consists of 2 Vector3 arrays of equal length. The input coordinates
      * are not changed.
      *
      * <pre>
-     *    Vec3f[] x = ...
-     *    Vec3f[] y = ...
+     *    Vector3[] x = ...
+     *    Vector3[] y = ...
      *    SuperPositionQCP qcp = new SuperPositionQCP();
      *    qcp.set(x, y);
      * </pre>
@@ -43,7 +43,7 @@ public class QCP {
      * C. Get transformated points (y superposed onto the reference x)
      *
      * <pre>
-     * Vec3f[] ySuperposed = qcp.getTransformedCoordinates();
+     * Vector3[] ySuperposed = qcp.getTransformedCoordinates();
      * </pre>
      * <p>
      * Citations:
@@ -87,13 +87,13 @@ public class QCP {
     private float evec_prec = (float) 1E-6;
     private float eval_prec = (float) 1E-11;
     private int max_iterations = 5;
-    private Vec3f[] moved;
+    private Vector3[] moved;
 
     private float[] weight;
     private float wsum;
 
-    private Vec3f targetCenter = new Vec3f();
-    private Vec3f movedCenter = new Vec3f();
+    private Vector3 targetCenter = new Vector3();
+    private Vector3 movedCenter = new Vector3();
 
     private float e0;
     //private Matrix3f rotmat = new Matrix3f();
@@ -122,7 +122,7 @@ public class QCP {
         this.eval_prec = eval_prec;
     }
 
-    public static <V extends Vec3f> void translate(V trans, V[] x) {
+    public static <V extends Vector3> void translate(V trans, V[] x) {
         for (V p : x) {
             p.add(trans);
         }
@@ -147,7 +147,7 @@ public class QCP {
      * @param x 3f points of reference coordinate set
      * @param y 3f points of coordinate set for superposition
      */
-    private void set(Vec3f[] target, Vec3f[] moved) {
+    private void set(Vector3[] target, Vector3[] moved) {
         this.moved = target;
         this.target = moved;
         rmsdCalculated = false;
@@ -163,7 +163,7 @@ public class QCP {
      * @param moved  3f points of coordinate set for superposition
      * @param weight a weight in the inclusive range [0,1] for each point
      */
-    public <V extends Vec3f> void set(V[] moved, V[] target, float[] weight, boolean translate) {
+    public <V extends Vector3> void set(V[] moved, V[] target, float[] weight, boolean translate) {
         this.target = target;
         this.moved = moved;
         this.weight = weight;
@@ -213,7 +213,7 @@ public class QCP {
      * @param weight array of weigths for each equivalent point position
      * @return
      */
-    public <V extends Vec3f> Quaternion weightedSuperpose(V[] moved, V[] target, float[] weight, boolean translate) {
+    public <V extends Vector3> Quaternion weightedSuperpose(V[] moved, V[] target, float[] weight, boolean translate) {
         set(moved, target, weight, translate);
         Quaternion result = getRotation();
         //transformation.set(rotmat);
@@ -238,7 +238,7 @@ public class QCP {
      * @param x 3f points of reference coordinate set
      * @param y 3f points of coordinate set for superposition
      */
-    private <V extends Vec3f> void calcRmsd(V[] x, V[] y) {
+    private <V extends Vector3> void calcRmsd(V[] x, V[] y) {
         //QCP doesn't handle alignment of single values, so if we only have one point
         //we just compute regular distance.
         if (x.length == 1) {
@@ -254,7 +254,7 @@ public class QCP {
     /**
      * Calculates the inner product between two coordinate sets x and y
      * (optionally weighted, if weights set through
-     * {@link #set(Vec3f[], Vec3f[], float[])}). It also calculates an
+     * {@link #set(Vector3[], Vector3[], float[])}). It also calculates an
      * upper bound of the most positive root of the key matrix.
      * http://theobald.brandeis.edu/qcp/qcprot.c
      *
@@ -262,7 +262,7 @@ public class QCP {
      * @param coords2
      * @return
      */
-    private <V extends Vec3f> void innerProduct(V[] coords1, V[] coords2) {
+    private <V extends Vector3> void innerProduct(V[] coords1, V[] coords2) {
         float x1, x2, y1, y2, z1, z2;
         float g1 = 0f, g2 = 0f;
 
@@ -477,12 +477,12 @@ public class QCP {
         }
     }
 
-    public float getRmsd(Vec3f[] fixed, Vec3f[] moved) {
+    public float getRmsd(Vector3[] fixed, Vector3[] moved) {
         set(moved, fixed);
         return getRmsd();
     }
 
-    public <V extends Vec3f> V moveToWeightedCenter(V[] toCenter, float[] weight, V center) {
+    public <V extends Vector3> V moveToWeightedCenter(V[] toCenter, float[] weight, V center) {
 
         if (weight != null) {
             for (int i = 0; i < toCenter.length; i++) {
@@ -502,7 +502,7 @@ public class QCP {
         return center;
     }
 
-    public Vec3f getTranslation() {
+    public Vector3 getTranslation() {
         return targetCenter.subCopy(movedCenter);
     }
 

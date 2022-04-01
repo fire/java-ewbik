@@ -45,12 +45,12 @@ public class Transform3D implements ewbik.asj.Saveable {
     public Basis globalMBasis;
     public boolean dirty = true;
     public LinkedList<DependencyReference<ewbik.processing.sceneGraph.Transform3D>> dependentsRegistry = new LinkedList<DependencyReference<ewbik.processing.sceneGraph.Transform3D>>();
-    protected Vec3f workingVector;
+    protected Vector3 workingVector;
     //public boolean forceOrthoNormality = true;
     protected boolean areGlobal = true;
     float[][] outMatLocal = new float[4][4];
     float[][] outMatGlobal = new float[4][4];
-    Vec3f tempOrigin;
+    Vector3 tempOrigin;
     private DependencyReference<ewbik.processing.sceneGraph.Transform3D> parent = null;
     private int slipType = 0;
 
@@ -81,10 +81,10 @@ public class Transform3D implements ewbik.asj.Saveable {
                        PVector inZ,
                        ewbik.processing.sceneGraph.Transform3D parent) {
 
-        Vec3f origin1 = toVec3f(origin);
-        Vec3f inX1 = toVec3f(inX);
-        Vec3f inY1 = toVec3f(inY);
-        Vec3f inZ1 = toVec3f(inZ);
+        Vector3 origin1 = toVec3f(origin);
+        Vector3 inX1 = toVec3f(inX);
+        Vector3 inY1 = toVec3f(inY);
+        Vector3 inZ1 = toVec3f(inZ);
         if (parent == null)
             this.areGlobal = true;
         createTempVars(origin1);
@@ -94,9 +94,9 @@ public class Transform3D implements ewbik.asj.Saveable {
         ewbik.processing.sceneGraph.Transform3D.this.localMBasis = new Basis(origin1, inX1, inY1, inZ1);
         ewbik.processing.sceneGraph.Transform3D.this.globalMBasis = new Basis(origin1, inX1, inY1, inZ1);
 
-        Vec3f o = origin1.copy();
+        Vector3 o = origin1.copy();
         o.set(0, 0, 0);
-        Vec3f i = o.copy();
+        Vector3 i = o.copy();
         i.set(1, 1, 1);
 
         if (parent != null) {
@@ -108,18 +108,18 @@ public class Transform3D implements ewbik.asj.Saveable {
         this.updateGlobal();
     }
 
-    public Transform3D(Vec3f origin,
-                       Vec3f x,
-                       Vec3f y,
-                       Vec3f z) {
+    public Transform3D(Vector3 origin,
+                       Vector3 x,
+                       Vector3 y,
+                       Vector3 z) {
         this(origin, x, y, z, true, null);
     }
 
     public Transform3D() {
-        Vec3f origin = new Vec3f(0, 0, 0);
-        Vec3f inX = new Vec3f(1, 0, 0);
-        Vec3f inY = new Vec3f(0, 1, 0);
-        Vec3f inZ = new Vec3f(0, 0, 1);
+        Vector3 origin = new Vector3(0, 0, 0);
+        Vector3 inX = new Vector3(1, 0, 0);
+        Vector3 inY = new Vector3(0, 1, 0);
+        Vector3 inZ = new Vector3(0, 0, 1);
         if ((ewbik.processing.sceneGraph.Transform3D) null == null)
             this.areGlobal = true;
         createTempVars(origin);
@@ -129,9 +129,9 @@ public class Transform3D implements ewbik.asj.Saveable {
         ewbik.processing.sceneGraph.Transform3D.this.localMBasis = new Basis(origin, inX, inY, inZ);
         ewbik.processing.sceneGraph.Transform3D.this.globalMBasis = new Basis(origin, inX, inY, inZ);
 
-        Vec3f o = origin.copy();
+        Vector3 o = origin.copy();
         o.set(0, 0, 0);
-        Vec3f i = o.copy();
+        Vector3 i = o.copy();
         i.set(1, 1, 1);
 
         if ((ewbik.processing.sceneGraph.Transform3D) null != null) {
@@ -143,7 +143,7 @@ public class Transform3D implements ewbik.asj.Saveable {
         this.updateGlobal();
     }
 
-    public Transform3D(Vec3f origin, Vec3f x, Vec3f y, Vec3f z, boolean forceOrthoNormality, ewbik.processing.sceneGraph.Transform3D parent) {
+    public Transform3D(Vector3 origin, Vector3 x, Vector3 y, Vector3 z, boolean forceOrthoNormality, ewbik.processing.sceneGraph.Transform3D parent) {
         if (parent == null)
             this.areGlobal = true;
         createTempVars(origin);
@@ -153,9 +153,9 @@ public class Transform3D implements ewbik.asj.Saveable {
         ewbik.processing.sceneGraph.Transform3D.this.localMBasis = new Basis(origin, x, y, z);
         ewbik.processing.sceneGraph.Transform3D.this.globalMBasis = new Basis(origin, x, y, z);
 
-        Vec3f o = origin.copy();
+        Vector3 o = origin.copy();
         o.set(0, 0, 0);
-        Vec3f i = o.copy();
+        Vector3 i = o.copy();
         i.set(1, 1, 1);
 
         if (parent != null) {
@@ -172,13 +172,13 @@ public class Transform3D implements ewbik.asj.Saveable {
      * framework's native vector and ray representations.
      */
     //////////////////////////////////////////////////////////////////////////////////////////////
-    public static PVector toPVector(Vec3f sv) {
+    public static PVector toPVector(Vector3 sv) {
         return new PVector(sv.x, sv.y, sv.z);
     }
 
     //////////////////// END OF CONVERSION FUNCTIONS
 
-    public static void toDVector(Vec3f sv, PVector storeIn) {
+    public static void toDVector(Vector3 sv, PVector storeIn) {
         storeIn.x = sv.x;
         storeIn.y = sv.y;
         storeIn.z = sv.z;
@@ -188,15 +188,15 @@ public class Transform3D implements ewbik.asj.Saveable {
     ///WRAPPER FUNCTIONS. Basically just find + replace these with the appropriate class names and conversion functions above if you need them
     //and you should be good to go.
 
-    public static Vec3f toVec3f(PVector ev) {
-        return new Vec3f(ev.x, ev.y, ev.z);
+    public static Vector3 toVec3f(PVector ev) {
+        return new Vector3(ev.x, ev.y, ev.z);
     }
 
     public static void drawRay(PGraphics p, Ray3 r) {
         p.line(r.p1().x, r.p1().y, r.p1().z, r.p2().x, r.p2().y, r.p2().z);
     }
 
-    public static void drawPoint(PGraphics p, Vec3f pt) {
+    public static void drawPoint(PGraphics p, Vector3 pt) {
         p.point(pt.x, pt.y, pt.z);
     }
 
@@ -297,7 +297,7 @@ public class Transform3D implements ewbik.asj.Saveable {
     }
 
     public void setToLocalOf(PVector global_input, PVector local_output) {
-        Vec3f tempVec = new Vec3f();
+        Vector3 tempVec = new Vector3();
         setToLocalOf(
                 toVec3f(global_input),
                 tempVec
@@ -311,11 +311,11 @@ public class Transform3D implements ewbik.asj.Saveable {
     private void updateMatrix(Basis b, float[][] outputMatrix) {
         b.refreshPrecomputed();
 
-        Vec3f x = b.getXHeading();
-        Vec3f y = b.getYHeading();
-        Vec3f z = b.getZHeading();
+        Vector3 x = b.getXHeading();
+        Vector3 y = b.getYHeading();
+        Vector3 z = b.getZHeading();
 
-        Vec3f origin = b.getOrigin();
+        Vector3 origin = b.getOrigin();
 
         outputMatrix[0][0] = x.x;
         outputMatrix[0][1] = x.y;
@@ -454,7 +454,7 @@ public class Transform3D implements ewbik.asj.Saveable {
         return (B) newBasis;
     }
 
-    public <V extends Vec3f> void createTempVars(V type) {
+    public <V extends Vector3> void createTempVars(V type) {
         workingVector = type.copy();
         tempOrigin = type.copy();
     }
@@ -481,7 +481,7 @@ public class Transform3D implements ewbik.asj.Saveable {
     public void debugCall() {
     }
 
-    public Vec3f origin_() {
+    public Vector3 origin_() {
         this.updateGlobal();
         tempOrigin.set(this.getGlobalMBasis().getOrigin());
         return tempOrigin;
@@ -623,7 +623,7 @@ public class Transform3D implements ewbik.asj.Saveable {
      * @param in
      * @return
      */
-    public <V extends Vec3f> V getGlobalOf(V in) {
+    public <V extends Vector3> V getGlobalOf(V in) {
         V result = (V) in.copy();
         setToGlobalOf(in, result);
         return result;
@@ -635,7 +635,7 @@ public class Transform3D implements ewbik.asj.Saveable {
      * @param in
      * @return a reference to this the @param in object.
      */
-    public Vec3f setToGlobalOf(Vec3f in) {
+    public Vector3 setToGlobalOf(Vector3 in) {
         this.updateGlobal();
         getGlobalMBasis().setToGlobalOf(in, in);
         return in;
@@ -646,7 +646,7 @@ public class Transform3D implements ewbik.asj.Saveable {
      *
      * @param in
      */
-    public <V extends Vec3f> void setToGlobalOf(V input, V output) {
+    public <V extends Vector3> void setToGlobalOf(V input, V output) {
         this.updateGlobal();
         getGlobalMBasis().setToGlobalOf(input, output);
     }
@@ -666,7 +666,7 @@ public class Transform3D implements ewbik.asj.Saveable {
         return new Ray3(this.getGlobalOf(in.p1()), this.getGlobalOf(in.p2()));
     }
 
-    public <V extends Vec3f> V getLocalOf(V in) {
+    public <V extends Vector3> V getLocalOf(V in) {
         this.updateGlobal();
         return getGlobalMBasis().getLocalOf(in);
     }
@@ -678,7 +678,7 @@ public class Transform3D implements ewbik.asj.Saveable {
      * @return a reference to the @param in object.
      */
 
-    public <V extends Vec3f> V setToLocalOf(V in) {
+    public <V extends Vector3> V setToLocalOf(V in) {
         this.updateGlobal();
         V result = (V) in.copy();
         this.getGlobalMBasis().setToLocalOf(in, result);
@@ -692,7 +692,7 @@ public class Transform3D implements ewbik.asj.Saveable {
      * @param in
      */
 
-    public <V extends Vec3f> void setToLocalOf(V in, V out) {
+    public <V extends Vector3> void setToLocalOf(V in, V out) {
         this.updateGlobal();
         this.getGlobalMBasis().setToLocalOf(in, out);
     }
@@ -717,14 +717,14 @@ public class Transform3D implements ewbik.asj.Saveable {
         return new Ray3(this.getLocalOf(in.p1()), this.getLocalOf(in.p2()));
     }
 
-    public <V extends Vec3f> void translateByLocal(V translate) {
+    public <V extends Vector3> void translateByLocal(V translate) {
         this.updateGlobal();
         getLocalMBasis().translateBy(translate);
         this.markDirty();
 
     }
 
-    public void translateByGlobal(Vec3f translate) {
+    public void translateByGlobal(Vector3 translate) {
         if (this.getParentAxes() != null) {
             this.updateGlobal();
             this.translateTo(translate.addCopy(this.origin_()));
@@ -735,7 +735,7 @@ public class Transform3D implements ewbik.asj.Saveable {
         this.markDirty();
     }
 
-    public void translateTo(Vec3f translate, boolean slip) {
+    public void translateTo(Vector3 translate, boolean slip) {
         this.updateGlobal();
         if (slip) {
             ewbik.processing.sceneGraph.Transform3D tempTransform3D = this.getGlobalCopy();
@@ -746,7 +746,7 @@ public class Transform3D implements ewbik.asj.Saveable {
         }
     }
 
-    public void translateTo(Vec3f translate) {
+    public void translateTo(Vector3 translate) {
         if (this.getParentAxes() != null) {
             this.updateGlobal();
             getLocalMBasis().translateTo(getParentAxes().getGlobalMBasis().getLocalOf(translate));
@@ -983,9 +983,9 @@ public class Transform3D implements ewbik.asj.Saveable {
         this.updateGlobal();
         ewbik.asj.data.JSONObject thisAxes = new ewbik.asj.data.JSONObject();
         ewbik.asj.data.JSONObject shearScale = new ewbik.asj.data.JSONObject();
-        Vec3f xShear = new Vec3f();
-        Vec3f yShear = new Vec3f();
-        Vec3f zShear = new Vec3f();
+        Vector3 xShear = new Vector3();
+        Vector3 yShear = new Vector3();
+        Vector3 zShear = new Vector3();
 
         this.getLocalMBasis().setToShearXBase(xShear);
         this.getLocalMBasis().setToShearYBase(yShear);
@@ -995,7 +995,7 @@ public class Transform3D implements ewbik.asj.Saveable {
         shearScale.setJSONArray("y", yShear.toJSONArray());
         shearScale.setJSONArray("z", zShear.toJSONArray());
 
-        thisAxes.setJSONArray("translation", (new Vec3f(getLocalMBasis().translate)).toJSONArray());
+        thisAxes.setJSONArray("translation", (new Vector3(getLocalMBasis().translate)).toJSONArray());
         thisAxes.setJSONArray("rotation", getLocalMBasis().rotation.toJsonArray());
         thisAxes.setJSONObject("bases", shearScale);
 
@@ -1189,7 +1189,7 @@ public class Transform3D implements ewbik.asj.Saveable {
     }
 
     public void loadFromJSONObject(ewbik.asj.data.JSONObject j, ewbik.asj.LoadManager l) {
-        Vec3f origin = new Vec3f(j.getJSONArray("translation"));
+        Vector3 origin = new Vector3(j.getJSONArray("translation"));
         Quaternion rotation = new Quaternion(j.getJSONArray("rotation"));
         this.getLocalMBasis().translate = origin;
         this.getLocalMBasis().rotation = rotation;

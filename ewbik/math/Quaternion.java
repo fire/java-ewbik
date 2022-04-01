@@ -123,7 +123,7 @@ class MRotation {
      * @param angle rotation angle.
      * @throws MathIllegalArgumentException if the axis norm is zero
      */
-    public <V extends Vec3f> MRotation(V axis, float angle) {
+    public <V extends Vector3> MRotation(V axis, float angle) {
 
         float norm = axis.mag();
         if (norm == 0) {
@@ -315,7 +315,7 @@ class MRotation {
      * @throws MathArithmeticException if the norm of one of the vectors is zero,
      *                                 or if one of the pair is degenerated (i.e. the vectors of the pair are colinear)
      */
-    public <V extends Vec3f> MRotation(V u1, V u2, V v1, V v2) {
+    public <V extends Vector3> MRotation(V u1, V u2, V v1, V v2) {
 
         // norms computation
         float u1u1 = u1.dot(u1);
@@ -339,7 +339,7 @@ class MRotation {
         float v1x = coeff * v1.x;
         float v1y = coeff * v1.y;
         float v1z = coeff * v1.z;
-        Vec3f va1 = new Vec3f(v1x, v1y, v1z);
+        Vector3 va1 = new Vector3(v1x, v1y, v1z);
 
         // adjust v2 in order to have (u1|u2) = (v1|v2) and (v2'|v2') = (u2|u2)
         float u1u2 = u1.dot(u2);
@@ -355,7 +355,7 @@ class MRotation {
         va2.set(v2x, v2y, v2z);
 
         // preliminary computation (we use explicit formulation instead
-        // of relying on the Vec3f class in order to avoid building lots
+        // of relying on the Vector3 class in order to avoid building lots
         // of temporary objects)
         V uRef = u1;
         V vRef = (V) va1;
@@ -365,7 +365,7 @@ class MRotation {
         float dx2 = v2x - u2.x;
         float dy2 = v2y - u2.y;
         float dz2 = v2z - u2.z;
-        Vec3f k = new Vec3f(dy1 * dz2 - dz1 * dy2,
+        Vector3 k = new Vector3(dy1 * dz2 - dz1 * dy2,
                 dz1 * dx2 - dx1 * dz2,
                 dx1 * dy2 - dy1 * dx2);
         float c = k.x * (u1y * u2z - u1z * u2y) +
@@ -376,7 +376,7 @@ class MRotation {
             // the (q1, q2, q3) vector is in the (u1, u2) plane
             // we try other vectors
             V u3 = (V) u1.crossCopy(u2);
-            Vec3f v3 = va1.crossCopy(va2);
+            Vector3 v3 = va1.crossCopy(va2);
             float u3x = u3.x;
             float u3y = u3.y;
             float u3z = u3.z;
@@ -387,7 +387,7 @@ class MRotation {
             float dx3 = v3x - u3x;
             float dy3 = v3y - u3y;
             float dz3 = v3z - u3z;
-            k = new Vec3f(dy1 * dz3 - dz1 * dy3,
+            k = new Vector3(dy1 * dz3 - dz1 * dy3,
                     dz1 * dx3 - dx1 * dz3,
                     dx1 * dy3 - dy1 * dx3);
             c = k.x * (u1y * u3z - u1z * u3y) +
@@ -397,7 +397,7 @@ class MRotation {
             if (MathUtils.abs(c) <= MathUtils.DOUBLE_ROUNDING_ERROR) {
                 // the (q1, q2, q3) vector is aligned with u1:
                 // we try (u2, u3) and (v2, v3)
-                k = new Vec3f(dy2 * dz3 - dz2 * dy3,
+                k = new Vector3(dy2 * dz3 - dz2 * dy3,
                         dz2 * dx3 - dx2 * dz3,
                         dx2 * dy3 - dy2 * dx3);
                 c = k.x * (u2y * u3z - u2z * u3y) +
@@ -430,7 +430,7 @@ class MRotation {
         q3 = inv * k.z;
 
         // compute the scalar part
-        k = new Vec3f(uRef.y * q3 - uRef.z * q2,
+        k = new Vector3(uRef.y * q3 - uRef.z * q2,
                 uRef.z * q1 - uRef.x * q3,
                 uRef.x * q2 - uRef.y * q1);
         c = k.dot(k);
@@ -438,13 +438,13 @@ class MRotation {
 
 		/*// build orthonormalized base from u1, u2
 		// this fails when vectors are null or colinear, which is forbidden to define a rotation
-		final Vec3f u3 = u1.crossCopy(u2).normalize();
+		final Vector3 u3 = u1.crossCopy(u2).normalize();
 		u2 = u3.crossCopy(u1).normalize();
 		u1 = u1.normalize();
 
 		// build an orthonormalized base from v1, v2
 		// this fails when vectors are null or colinear, which is forbidden to define a rotation
-		final Vec3f v3 = v1.crossCopy(v2).normalize();
+		final Vector3 v3 = v1.crossCopy(v2).normalize();
 		v2 = v3.crossCopy(v1).normalize();
 		v1 = v1.normalize();
 
@@ -493,7 +493,7 @@ class MRotation {
      * @param v desired image of u by the rotation
      * @throws MathArithmeticException if the norm of one of the vectors is zero
      */
-    public <V extends Vec3f> MRotation(V u, V v) {
+    public <V extends Vector3> MRotation(V u, V v) {
 
         float normProduct = u.mag() * v.mag();
         if (normProduct == 0) {
@@ -804,16 +804,16 @@ class MRotation {
      * @return normalized axis of the rotation
      * @see #Rotation(T, float)
      */
-    public Vec3f getAxis() {
+    public Vector3 getAxis() {
         float squaredSine = q1 * q1 + q2 * q2 + q3 * q3;
         if (squaredSine == 0) {
-            return new Vec3f(1, 0, 0);
+            return new Vector3(1, 0, 0);
         } else if (q0 < 0) {
             float inverse = 1 / MathUtils.sqrt(squaredSine);
-            return new Vec3f(q1 * inverse, q2 * inverse, q3 * inverse);
+            return new Vector3(q1 * inverse, q2 * inverse, q3 * inverse);
         }
         float inverse = -1 / MathUtils.sqrt(squaredSine);
-        return new Vec3f(q1 * inverse, q2 * inverse, q3 * inverse);
+        return new Vector3(q1 * inverse, q2 * inverse, q3 * inverse);
     }
 
     /**
@@ -823,7 +823,7 @@ class MRotation {
      * @param angle
      * @throws Exception
      */
-    public <T extends Vec3f> void setAxis(T newAxis) throws Exception {
+    public <T extends Vector3> void setAxis(T newAxis) throws Exception {
 
         float angle = this.getAngle();
         float norm = newAxis.mag();
@@ -855,7 +855,7 @@ class MRotation {
      * @return normalized axis of the rotation
      * @see #Rotation(T, float)
      */
-    public <T extends Vec3f> void setToAxis(T v) {
+    public <T extends Vector3> void setToAxis(T v) {
         float squaredSine = q1 * q1 + q2 * q2 + q3 * q3;
         if (squaredSine == 0) {
             v.set(1, 0, 0);
@@ -965,8 +965,8 @@ class MRotation {
             // (-r) (T .plusI) coordinates are :
             // cos (psi) cos (theta), -sin (psi) cos (theta), sin (theta)
             // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
-            Vec3f v1 = applyTo(RotationOrder.Z);
-            Vec3f v2 = applyInverseTo(RotationOrder.X);
+            Vector3 v1 = applyTo(RotationOrder.Z);
+            Vector3 v2 = applyInverseTo(RotationOrder.X);
             if ((v2.z < -0.9999999999) || (v2.z > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -988,8 +988,8 @@ class MRotation {
             // (-r) (T .plusI) coordinates are :
             // cos (theta) cos (psi), -sin (psi), sin (theta) cos (psi)
             // and we can choose to have psi in the interval [-PI/2 ; +PI/2]
-            Vec3f v1 = applyTo(RotationOrder.X);
-            Vec3f v2 = applyInverseTo(RotationOrder.Y);
+            Vector3 v1 = applyTo(RotationOrder.X);
+            Vector3 v2 = applyInverseTo(RotationOrder.Y);
             if ((v2.y < -0.9999999999) || (v2.y > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -1010,8 +1010,8 @@ class MRotation {
             // (-r) (T .plusJ) coordinates are :
             // sin (psi) cos (phi), cos (psi) cos (phi), -sin (phi)
             // and we can choose to have phi in the interval [-PI/2 ; +PI/2]
-            Vec3f v1 = applyTo(RotationOrder.Z);
-            Vec3f v2 = applyInverseTo(RotationOrder.Y);
+            Vector3 v1 = applyTo(RotationOrder.Z);
+            Vector3 v2 = applyInverseTo(RotationOrder.Y);
             if ((v2.z < -0.9999999999) || (v2.z > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -1032,8 +1032,8 @@ class MRotation {
             // (-r) (T .plusJ) coordinates are :
             // sin (psi), cos (phi) cos (psi), -sin (phi) cos (psi)
             // and we can choose to have psi in the interval [-PI/2 ; +PI/2]
-            Vec3f v1 = applyTo(RotationOrder.X);
-            Vec3f v2 = applyInverseTo(RotationOrder.Y);
+            Vector3 v1 = applyTo(RotationOrder.X);
+            Vector3 v2 = applyInverseTo(RotationOrder.Y);
             if ((v2.x < -0.9999999999) || (v2.x > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -1054,8 +1054,8 @@ class MRotation {
             // (-r) (T .plusK) coordinates are :
             // -sin (theta) cos (phi), sin (phi), cos (theta) cos (phi)
             // and we can choose to have phi in the interval [-PI/2 ; +PI/2]
-            Vec3f v1 = applyTo(RotationOrder.Y);
-            Vec3f v2 = applyInverseTo(RotationOrder.Z);
+            Vector3 v1 = applyTo(RotationOrder.Y);
+            Vector3 v2 = applyInverseTo(RotationOrder.Z);
             if ((v2.y < -0.9999999999) || (v2.y > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -1076,8 +1076,8 @@ class MRotation {
             // (-r) (T .plusK) coordinates are :
             // -sin (theta), sin (phi) cos (theta), cos (phi) cos (theta)
             // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
-            Vec3f v1 = applyTo(RotationOrder.X);
-            Vec3f v2 = applyInverseTo(RotationOrder.Z);
+            Vector3 v1 = applyTo(RotationOrder.X);
+            Vector3 v2 = applyInverseTo(RotationOrder.Z);
             if ((v2.x < -0.9999999999) || (v2.x > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -1098,8 +1098,8 @@ class MRotation {
             // (-r) (T .plusI) coordinates are :
             // cos (theta), sin (theta) sin (phi2), sin (theta) cos (phi2)
             // and we can choose to have theta in the interval [0 ; PI]
-            Vec3f v1 = applyTo(RotationOrder.X);
-            Vec3f v2 = applyInverseTo(RotationOrder.X);
+            Vector3 v1 = applyTo(RotationOrder.X);
+            Vector3 v2 = applyInverseTo(RotationOrder.X);
             if ((v2.x < -0.9999999999) || (v2.x > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -1120,8 +1120,8 @@ class MRotation {
             // (-r) (T .plusI) coordinates are :
             // cos (psi), -sin (psi) cos (phi2), sin (psi) sin (phi2)
             // and we can choose to have psi in the interval [0 ; PI]
-            Vec3f v1 = applyTo(RotationOrder.X);
-            Vec3f v2 = applyInverseTo(RotationOrder.X);
+            Vector3 v1 = applyTo(RotationOrder.X);
+            Vector3 v2 = applyInverseTo(RotationOrder.X);
             if ((v2.x < -0.9999999999) || (v2.x > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -1142,8 +1142,8 @@ class MRotation {
             // (-r) (T .plusJ) coordinates are :
             // sin (phi) sin (theta2), cos (phi), -sin (phi) cos (theta2)
             // and we can choose to have phi in the interval [0 ; PI]
-            Vec3f v1 = applyTo(RotationOrder.Y);
-            Vec3f v2 = applyInverseTo(RotationOrder.Y);
+            Vector3 v1 = applyTo(RotationOrder.Y);
+            Vector3 v2 = applyInverseTo(RotationOrder.Y);
             if ((v2.y < -0.9999999999) || (v2.y > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -1164,8 +1164,8 @@ class MRotation {
             // (-r) (T .plusJ) coordinates are :
             // sin (psi) cos (theta2), cos (psi), sin (psi) sin (theta2)
             // and we can choose to have psi in the interval [0 ; PI]
-            Vec3f v1 = applyTo(RotationOrder.Y);
-            Vec3f v2 = applyInverseTo(RotationOrder.Y);
+            Vector3 v1 = applyTo(RotationOrder.Y);
+            Vector3 v2 = applyInverseTo(RotationOrder.Y);
             if ((v2.y < -0.9999999999) || (v2.y > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -1186,8 +1186,8 @@ class MRotation {
             // (-r) (T .plusK) coordinates are :
             // sin (phi) sin (psi2), sin (phi) cos (psi2), cos (phi)
             // and we can choose to have phi in the interval [0 ; PI]
-            Vec3f v1 = applyTo(RotationOrder.Z);
-            Vec3f v2 = applyInverseTo(RotationOrder.Z);
+            Vector3 v1 = applyTo(RotationOrder.Z);
+            Vector3 v2 = applyInverseTo(RotationOrder.Z);
             if ((v2.z < -0.9999999999) || (v2.z > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -1208,8 +1208,8 @@ class MRotation {
             // (-r) (T .plusK) coordinates are :
             // -sin (theta) cos (psi2), sin (theta) sin (psi2), cos (theta)
             // and we can choose to have theta in the interval [0 ; PI]
-            Vec3f v1 = applyTo(RotationOrder.Z);
-            Vec3f v2 = applyInverseTo(RotationOrder.Z);
+            Vector3 v1 = applyTo(RotationOrder.Z);
+            Vector3 v2 = applyInverseTo(RotationOrder.Z);
             if ((v2.z < -0.9999999999) || (v2.z > 0.9999999999)) {
                 try {
                     throw new CardanEulerSingularityException(true);
@@ -1356,7 +1356,7 @@ class MRotation {
      * @param u vector to apply the rotation to
      * @return a new vector which is the image of u by the rotation
      */
-    public <T extends Vec3f> T applyTo(T u) {
+    public <T extends Vector3> T applyTo(T u) {
 
         float x = u.x;
         float y = u.y;
@@ -1430,7 +1430,7 @@ class MRotation {
      * @param u vector to apply the inverse of the rotation to
      * @return a new vector which such that u is its image by the rotation
      */
-    public <T extends Vec3f> T applyInverseTo(T u) {
+    public <T extends Vector3> T applyInverseTo(T u) {
 
         float x = u.x;
         float y = u.y;
@@ -1614,7 +1614,7 @@ class MRotation {
                 q3 / norm);
     }
 
-    public <V extends Vec3f> void set(V u, V v) {
+    public <V extends Vector3> void set(V u, V v) {
 
         float normProduct = u.mag() * v.mag();
         if (normProduct == 0) {
@@ -1648,7 +1648,7 @@ class MRotation {
 
     }
 
-    public <V extends Vec3f> void set(V axis, float angle) {
+    public <V extends Vector3> void set(V axis, float angle) {
 
         float norm = axis.mag();
         if (norm == 0) {
@@ -1807,7 +1807,7 @@ public class Quaternion {
     }
 
 
-    public <V extends Vec3f> Quaternion(V v1, V v2, V u1, V u2) {
+    public <V extends Vector3> Quaternion(V v1, V v2, V u1, V u2) {
         // try {
         rotation = new MRotation(v1, v2, u1, u2);
         // } catch(Exception e) {
@@ -1815,7 +1815,7 @@ public class Quaternion {
         // }
     }
 
-    public <V extends Vec3f> Quaternion(V axis, float angle) {
+    public <V extends Vector3> Quaternion(V axis, float angle) {
         // try {
         rotation = new MRotation(axis, angle);
         // } catch(Exception e) {
@@ -1827,7 +1827,7 @@ public class Quaternion {
         this.rotation = new MRotation(w, x, y, z, needsNormalization);
     }
 
-    public <V extends Vec3f> Quaternion(V begin, V end) {
+    public <V extends Vector3> Quaternion(V begin, V end) {
         // try{
         rotation = new MRotation(begin, end);
         // } catch(Exception e) {
@@ -1979,7 +1979,7 @@ public class Quaternion {
      * returns null.
      */
     public static Quaternion instantaneousAvg(Quaternion[] rots, float[] weights) {
-        Vec3f accumulatedAxisAngle = new Vec3f();
+        Vector3 accumulatedAxisAngle = new Vector3();
         float totalWeight = rots.length;
         if (weights != null) {
             totalWeight = 0f;
@@ -1993,7 +1993,7 @@ public class Quaternion {
         }
 
         for (int i = 0; i < rots.length; i++) {
-            Vec3f axis = rots[i].getAxis();
+            Vector3 axis = rots[i].getAxis();
             float angle = rots[i].getAngle();
             angle /= totalWeight;
             if (weights != null) {
@@ -2042,7 +2042,7 @@ public class Quaternion {
      * @param axis
      * @param angle
      */
-    public <V extends Vec3f> void set(V axis, float angle) {
+    public <V extends Vector3> void set(V axis, float angle) {
         this.rotation.set(axis, angle);
     }
 
@@ -2053,11 +2053,11 @@ public class Quaternion {
      * @param axis
      * @param angle
      */
-    public <V extends Vec3f> void set(V startVec, V targetVec) {
+    public <V extends Vector3> void set(V startVec, V targetVec) {
         this.rotation.set(startVec, targetVec);
     }
 
-    public <V extends Vec3f> void applyTo(V v, V output) {
+    public <V extends Vector3> void applyTo(V v, V output) {
         workingInput[0] = v.x;
         workingInput[1] = v.y;
         workingInput[2] = v.z;
@@ -2065,7 +2065,7 @@ public class Quaternion {
         output.set(workingOutput);
     }
 
-    public <V extends Vec3f> void applyInverseTo(V v, V output) {
+    public <V extends Vector3> void applyInverseTo(V v, V output) {
         workingInput[0] = v.x;
         workingInput[1] = v.y;
         workingInput[2] = v.z;
@@ -2080,7 +2080,7 @@ public class Quaternion {
      * @return
      */
 
-    public <T extends Vec3f> T applyToCopy(T v) {
+    public <T extends Vector3> T applyToCopy(T v) {
         workingInput[0] = v.x;
         workingInput[1] = v.y;
         workingInput[2] = v.z;
@@ -2089,7 +2089,7 @@ public class Quaternion {
         return (T) copy.set(workingOutput[0], workingOutput[1], workingOutput[2]);
     }
 
-    public <T extends Vec3f> T applyInverseToCopy(T v) {
+    public <T extends Vector3> T applyInverseToCopy(T v) {
         workingInput[0] = v.x;
         workingInput[1] = v.y;
         workingInput[2] = v.z;
@@ -2188,13 +2188,13 @@ public class Quaternion {
         return (float) rotation.getAngle();
     }
 
-    public Vec3f getAxis() {
-        Vec3f result = new Vec3f();
+    public Vector3 getAxis() {
+        Vector3 result = new Vector3();
         getAxis(result);
         return result;
     }
 
-    public <T extends Vec3f> void getAxis(T output) {
+    public <T extends Vector3> void getAxis(T output) {
         rotation.setToAxis(output);
     }
 
@@ -2231,9 +2231,9 @@ public class Quaternion {
      * @see <a href=
      * "http://www.euclideanspace.com/maths/geometry/rotations/for/decomposition">calculation</a>
      */
-    public Quaternion[] getSwingTwist(Vec3f axis) {
+    public Quaternion[] getSwingTwist(Vector3 axis) {
         Quaternion twistRot = new Quaternion(new MRotation(rotation.getQ0(), rotation.getQ1(), rotation.getQ2(), rotation.getQ3()));
-        final float d = Vec3f.dot(twistRot.rotation.getQ1(), twistRot.rotation.getQ2(), twistRot.rotation.getQ3(),
+        final float d = Vector3.dot(twistRot.rotation.getQ1(), twistRot.rotation.getQ2(), twistRot.rotation.getQ3(),
                 axis.x, axis.y, axis.z);
         twistRot.rotation.set(rotation.getQ0(), axis.x * d, axis.y * d, axis.z * d, true);
         if (d < 0)
@@ -2262,7 +2262,7 @@ public class Quaternion {
         return rotation.getAngles(order);
     }
 
-    public <T extends Vec3f> T applyTo(T u) {
+    public <T extends Vector3> T applyTo(T u) {
         return rotation.applyTo(u);
     }
 
