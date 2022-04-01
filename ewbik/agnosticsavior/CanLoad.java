@@ -1,4 +1,4 @@
-package ewbik.asj;
+package agnosticsavior;
 
 /**
  * This interface defines objects which can self populate from JSONObjects but don't

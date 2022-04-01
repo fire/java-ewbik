@@ -16,7 +16,7 @@
 
 package ewbik.math;
 
-import ewbik.asj.CanLoad;
+import agnosticsavior.CanLoad;
 import ewbik.asj.data.JSONArray;
 import ewbik.asj.data.JSONObject;
 

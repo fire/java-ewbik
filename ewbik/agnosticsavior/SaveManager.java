@@ -1,5 +1,6 @@
 package ewbik.asj;
 
+import agnosticsavior.CanLoad;
 import ewbik.asj.data.*;
 
 import java.util.*;
