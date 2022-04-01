@@ -19,6 +19,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package ik;
 
+import ewbik.ik.AbstractKusudama;
 import ewbik.ik.IKExceptions.NullParentForBoneException;
 import ewbik.ik.SegmentedArmature;
 import ewbik.math.AbstractAxes;
@@ -43,7 +44,7 @@ import ewbik.math.Ray3;
 public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     public static boolean drawKusudamas = false;
     public ewbik.ik.AbstractSkeleton3D parentArmature;
-    public ewbik.ik.Constraint constraints;
+    public AbstractKusudama constraints;
     public int ancestorCount = 0;
     protected String tag;
     protected Quaternion lastRotation;
@@ -540,7 +541,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      * @param newConstraint a constraint Object to add to this bone
      * @return the constraintObject that was just added
      */
-    public Constraint addConstraint(Constraint newConstraint) {
+    public AbstractKusudama addConstraint(AbstractKusudama newConstraint) {
         constraints = newConstraint;
         return constraints;
     }
@@ -548,7 +549,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     /**
      * @return this bone's constraint object.
      */
-    public Constraint getConstraint() {
+    public AbstractKusudama getConstraint() {
         return constraints;
     }
 
@@ -1138,7 +1139,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         if (j.hasKey("stiffness"))
             this.setStiffness(j.getFloat("stiffness"));
         if (j.hasKey("constraints"))
-            this.constraints = (Constraint) l.getObjectFromClassMaps(Constraint.class, j.getString("constraints"));
+            this.constraints = (ewbik.processing.singlePrecision.Kusudama) l.getObjectFromClassMaps(ewbik.processing.singlePrecision.Kusudama.class, j.getString("constraints"));
         if (j.hasKey("IKPin"))
             this.pin = (IKPin) l.getObjectFromClassMaps(IKPin.class, j.getString("IKPin"));
         this.tag = j.getString("tag");

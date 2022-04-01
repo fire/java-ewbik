@@ -48,7 +48,7 @@ public class EWBIKLoader {
                                                                                  Class<? extends AbstractAxes> AxesClass,
                                                                                  Class<? extends Bone> BoneClass,
                                                                                  Class<? extends AbstractSkeleton3D> ArmatureClass,
-                                                                                 Class<? extends Constraint> KusudamaClass,
+                                                                                 Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
                                                                                  Class<? extends AbstractLimitCone> LimitConeClass,
                                                                                  Class<? extends IKPin> IKPinClass) {
         File selection = new File(filepath);

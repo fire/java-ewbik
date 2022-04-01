@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * @author Eron
  *
  */
-public abstract class AbstractKusudama implements Constraint, Saveable {
+public abstract class AbstractKusudama implements Saveable {
 
     public static final float TAU = MathUtils.PI * 2;
     public static final float PI = MathUtils.PI;
@@ -231,7 +231,6 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
         return painfullness;
     }
 
-    @Override
     public <V extends Vec3f<?>> boolean isInLimits_(V globalPoint) {
         float[] inBounds = {1f};
         // boneRay.p1.set(toSet.origin());
@@ -580,7 +579,6 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
      * @return the limitingAxes of this Kusudama (these are just its parentBone's
      *         majorRotationAxes)
      */
-    @Override
     public <A extends AbstractAxes> A limitingAxes() {
         // if(inverted) return inverseLimitingAxes;
         return (A) limitingAxes;
@@ -658,22 +656,17 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
     float unitArea = 4 * MathUtils.PI;
 
     /**
-     * TODO: // this functionality is not yet fully implemented It always returns an
-     * overly simplistic representation
-     * not in line with what is described below.
-     *
-     * @return an (approximate) measure of the amount of rotational
-     *         freedom afforded by this kusudama, with 0 meaning no rotational
-     *         freedom, and 1 meaning total unconstrained freedom.
-     *
-     *         This is approximately computed as a ratio between the orientations
-     *         the bone can be in
-     *         vs the orientations it cannot be in. Note that unfortunately this
-     *         function float counts
-     *         the orientations a bone can be in between two limit cones in a
-     *         sequence if those limit
-     *         cones intersect with a previous sequence.
-     */
+         * @return a measure of the rotational freedom afforded by this constraint.
+         * with 0 meaning no rotational freedom (the bone is essentially
+         * stationary in relation to its parent)
+         * and 1 meaning full rotational freedom (the bone is completely
+         * unconstrained).
+         * <p>
+         * This should be computed as ratio between orientations a bone can be
+         * in and orientations
+         * a bone cannot be in as defined by its representation as a point on
+         * the surface of a hypersphere.
+         */
     public float getRotationalFreedom() {
 
         // computation cached from updateRotationalFreedom
@@ -808,4 +801,5 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
         // TODO Auto-generated method stub
 
     }
+
 }
