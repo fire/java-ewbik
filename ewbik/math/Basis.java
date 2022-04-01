@@ -12,7 +12,7 @@ public class Basis {
     public Quaternion rotation = new Quaternion();
     public Quaternion inverseRotation = new Quaternion();
     /**
-     * a vector respresnting the translation of this basis relative to its parent.
+     * a vector representing the translation of this basis relative to its parent.
      */
     public Vec3f<?> translate;
     protected Vec3f<?> xBase; //= new Vector3(1,0,0);
