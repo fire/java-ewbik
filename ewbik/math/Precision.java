@@ -354,7 +354,7 @@ public final class Precision {
         public static String NOT_POSITIVE_MEAN = "mean must be positive  = {0})";
         public static String MEAN = "mean  = {0})"; /* keep */
         public static String NOT_POSITIVE_NUMBER_OF_SAMPLES = "number of sample is not positive: {0}";
-        public static String NUMBER_OF_SAMPLES = "number of samples  = {0})"; /* keep */
+        public static String NUMBER_OF_SAMPLES = "number of processing.samples  = {0})"; /* keep */
         public static String NOT_POSITIVE_PERMUTATION = "permutation k  = {0}) must be positive";
         public static String PERMUTATION_SIZE = "permutation size  = {0}"; /* keep */
         public static String NOT_POSITIVE_POISSON_MEAN = "the Poisson mean must be positive  = {0})";

@@ -1,4 +1,4 @@
-package samples;
+package processing.samples;
 
 import ewbik.processing.sceneGraph.Axes;
 import ik.Bone;
@@ -24,7 +24,7 @@ public class ItemHolding extends PApplet {
     boolean cubeMode = true;
 
     public static void main(String[] args) {
-        PApplet.main("samples.ItemHolding");
+        PApplet.main("processing.samples.ItemHolding");
     }
 
     public void settings() {

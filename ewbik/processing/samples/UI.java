@@ -1,4 +1,4 @@
-package samples;
+package processing.samples;
 
 import ewbik.processing.sceneGraph.Axes;
 import ewbik.processing.singlePrecision.Kusudama;
