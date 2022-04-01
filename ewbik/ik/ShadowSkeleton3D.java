@@ -31,12 +31,12 @@ import java.util.HashMap;
  *
  * @author Eron Gjoni
  */
-public class SegmentedArmature {
+public class ShadowSkeleton3D {
     public Bone segmentRoot;
     public Bone segmentTip;
 
-    public ArrayList<SegmentedArmature> childSegments = new ArrayList<SegmentedArmature>();
-    public ArrayList<SegmentedArmature> pinnedDescendants = new ArrayList<SegmentedArmature>();
+    public ArrayList<ewbik.ik.ShadowSkeleton3D> childSegments = new ArrayList<ewbik.ik.ShadowSkeleton3D>();
+    public ArrayList<ewbik.ik.ShadowSkeleton3D> pinnedDescendants = new ArrayList<ewbik.ik.ShadowSkeleton3D>();
     public HashMap<Bone, WorkingBone> simulatedBones = new HashMap<>();
     public ArrayList<Bone> segmentBoneList = new ArrayList<Bone>();
     public int distanceToRoot = 0;
@@ -49,19 +49,19 @@ public class SegmentedArmature {
     Vector3[] localizedTargetHeadings;
     Vector3[] localizedTipHeadings;
     float[] weights;
-    private SegmentedArmature parentSegment = null;
+    private ewbik.ik.ShadowSkeleton3D parentSegment = null;
     private boolean basePinned = false;
     private boolean tipPinned = false;
     private boolean processed = false;
     private boolean simAligned = false;
 
-    public SegmentedArmature(Bone rootBone) {
+    public ShadowSkeleton3D(Bone rootBone) {
         segmentRoot = armatureRootBone(rootBone);
         generateArmatureSegments();
         ensureAxesHeirarchy();
     }
 
-    public SegmentedArmature(SegmentedArmature inputParentSegment, Bone inputSegmentRoot) {
+    public ShadowSkeleton3D(ewbik.ik.ShadowSkeleton3D inputParentSegment, Bone inputSegmentRoot) {
         this.segmentRoot = inputSegmentRoot;
         this.setParentSegment(inputParentSegment);
         this.distanceToRoot = this.getParentSegment().distanceToRoot + 1;
@@ -73,9 +73,9 @@ public class SegmentedArmature {
      * this
      * segment reach for (based on modecode set in the IKPin)
      */
-    public static void recursivelyCreateHeadingArraysFor(SegmentedArmature s) {
+    public static void recursivelyCreateHeadingArraysFor(ewbik.ik.ShadowSkeleton3D s) {
         s.createHeadingArrays();
-        for (SegmentedArmature c : s.childSegments) {
+        for (ewbik.ik.ShadowSkeleton3D c : s.childSegments) {
             recursivelyCreateHeadingArraysFor(c);
         }
     }
@@ -103,7 +103,7 @@ public class SegmentedArmature {
                 this.segmentTip = tempSegmentTip;
 
                 for (Bone childBone : childrenWithPinnedDescendants) {
-                    this.childSegments.add(new SegmentedArmature(this, childBone));
+                    this.childSegments.add(new ewbik.ik.ShadowSkeleton3D(this, childBone));
                 }
 
                 break;
@@ -144,7 +144,7 @@ public class SegmentedArmature {
         }
     }
 
-    void recursivelyCreatePenaltyArray(SegmentedArmature from, ArrayList<ArrayList<Float>> weightArray,
+    void recursivelyCreatePenaltyArray(ewbik.ik.ShadowSkeleton3D from, ArrayList<ArrayList<Float>> weightArray,
                                        ArrayList<WorkingBone> pinSequence, float currentFalloff) {
         if (currentFalloff == 0) {
             return;
@@ -187,7 +187,7 @@ public class SegmentedArmature {
                         .get(pin.forBone()));
             }
             float thisFalloff = pin == null ? 1f : pin.getDepthFalloff();
-            for (SegmentedArmature s : from.childSegments) {
+            for (ewbik.ik.ShadowSkeleton3D s : from.childSegments) {
                 recursivelyCreatePenaltyArray(s, weightArray, pinSequence, currentFalloff * thisFalloff);
             }
 
@@ -200,7 +200,7 @@ public class SegmentedArmature {
      * for simulatedAxes throughout the SegmentedArmature .
      */
     private void ensureAxesHeirarchy() {
-        SegmentedArmature rootStrand = this;
+        ewbik.ik.ShadowSkeleton3D rootStrand = this;
         while (rootStrand.parentSegment != null) {
             rootStrand = rootStrand.parentSegment;
         }
@@ -208,7 +208,7 @@ public class SegmentedArmature {
     }
 
     private void recursivelyEnsureAxesHeirarchyFor(Bone b, ewbik.processing.sceneGraph.Transform3D parentTo) {
-        SegmentedArmature chain = getChainFor(b);
+        ewbik.ik.ShadowSkeleton3D chain = getChainFor(b);
         if (chain != null) {
             WorkingBone sb = chain.simulatedBones.get(b);
             sb.simLocalTransform3D.setParent(parentTo);
@@ -276,12 +276,12 @@ public class SegmentedArmature {
         pinnedDescendants = this.returnSegmentPinnedNodes();
     }
 
-    public ArrayList<SegmentedArmature> returnSegmentPinnedNodes() {
-        ArrayList<SegmentedArmature> innerPinnedChains = new ArrayList<>();
+    public ArrayList<ewbik.ik.ShadowSkeleton3D> returnSegmentPinnedNodes() {
+        ArrayList<ewbik.ik.ShadowSkeleton3D> innerPinnedChains = new ArrayList<>();
         if (this.isTipPinned()) {
             innerPinnedChains.add(this);
         } else {
-            for (SegmentedArmature childSegment : childSegments) {
+            for (ewbik.ik.ShadowSkeleton3D childSegment : childSegments) {
                 innerPinnedChains.addAll(childSegment.returnSegmentPinnedNodes());
             }
         }
@@ -513,9 +513,9 @@ public class SegmentedArmature {
      * @return returns the segment chain (pinned or unpinned, doesn't matter) to
      * which the inputBone belongs.
      */
-    public SegmentedArmature getChainFor(Bone chainMember) {
+    public ewbik.ik.ShadowSkeleton3D getChainFor(Bone chainMember) {
         // Bone candidate = this.segmentTip;
-        SegmentedArmature result = null;
+        ewbik.ik.ShadowSkeleton3D result = null;
         if (this.segmentBoneList.contains(chainMember))
             return this;
         if (this.parentSegment != null)
@@ -525,12 +525,12 @@ public class SegmentedArmature {
         return result;
     }
 
-    public SegmentedArmature getChildSegmentContaining(Bone b) {
+    public ewbik.ik.ShadowSkeleton3D getChildSegmentContaining(Bone b) {
         if (segmentBoneList.contains(b)) {
             return this;
         } else {
-            for (SegmentedArmature s : childSegments) {
-                SegmentedArmature childContaining = s.getChildSegmentContaining(b);
+            for (ewbik.ik.ShadowSkeleton3D s : childSegments) {
+                ewbik.ik.ShadowSkeleton3D childContaining = s.getChildSegmentContaining(b);
                 if (childContaining != null)
                     return childContaining;
             }
@@ -538,7 +538,7 @@ public class SegmentedArmature {
         return null;
     }
 
-    public SegmentedArmature getAncestorSegmentContaining(Bone b) {
+    public ewbik.ik.ShadowSkeleton3D getAncestorSegmentContaining(Bone b) {
         if (segmentBoneList.contains(b))
             return this;
         else if (this.parentSegment != null)
@@ -554,9 +554,9 @@ public class SegmentedArmature {
      * @return returns the first chain encountered with a pinned base. Or, null if
      * it reaches an unpinned armature root.
      */
-    public SegmentedArmature getPinnedRootChainFromHere() {
+    public ewbik.ik.ShadowSkeleton3D getPinnedRootChainFromHere() {
 
-        SegmentedArmature currentChain = this;
+        ewbik.ik.ShadowSkeleton3D currentChain = this;
         while (currentChain != null) {
             if (currentChain.isBasePinned())
                 return currentChain;
@@ -592,11 +592,11 @@ public class SegmentedArmature {
         this.basePinned = basePinned;
     }
 
-    public SegmentedArmature getParentSegment() {
+    public ewbik.ik.ShadowSkeleton3D getParentSegment() {
         return parentSegment;
     }
 
-    public void setParentSegment(SegmentedArmature parentSegment) {
+    public void setParentSegment(ewbik.ik.ShadowSkeleton3D parentSegment) {
         this.parentSegment = parentSegment;
     }
 
@@ -616,7 +616,7 @@ public class SegmentedArmature {
     }
 
     public void recursivelyAlignSimAxesOutwardFrom(Bone b, boolean forceGlobal) {
-        SegmentedArmature bChain = getChildSegmentContaining(b);
+        ewbik.ik.ShadowSkeleton3D bChain = getChildSegmentContaining(b);
         if (bChain != null) {
             WorkingBone sb = bChain.simulatedBones.get(b);
             ewbik.processing.sceneGraph.Transform3D bTransform3D = sb.simLocalTransform3D;
@@ -645,7 +645,7 @@ public class SegmentedArmature {
      * @param b bone to start from
      */
     public void recursivelyAlignBonesToSimAxesFrom(Bone b) {
-        SegmentedArmature chain = b.parentArmature.boneSegmentMap.get(b); // getChainFor(b);
+        ewbik.ik.ShadowSkeleton3D chain = b.parentArmature.boneSegmentMap.get(b); // getChainFor(b);
         if (chain != null) {
             WorkingBone sb = chain.simulatedBones.get(b);
             ewbik.processing.sceneGraph.Transform3D simulatedLocalTransform3D = sb.simLocalTransform3D;
@@ -672,13 +672,13 @@ public class SegmentedArmature {
      *
      * @param segments
      */
-    public void getRootMostUnprocessedChains(ArrayList<SegmentedArmature> segments) {
+    public void getRootMostUnprocessedChains(ArrayList<ewbik.ik.ShadowSkeleton3D> segments) {
         if (!this.processed) {
             segments.add(this);
         } else {
             if (this.tipPinned)
                 return;
-            for (SegmentedArmature c : childSegments) {
+            for (ewbik.ik.ShadowSkeleton3D c : childSegments) {
                 c.getRootMostUnprocessedChains(segments);
             }
         }
@@ -687,7 +687,7 @@ public class SegmentedArmature {
     public void setProcessed(boolean b) {
         this.processed = b;
         if (processed == false) {
-            for (SegmentedArmature c : childSegments) {
+            for (ewbik.ik.ShadowSkeleton3D c : childSegments) {
                 c.setProcessed(false);
             }
         }
