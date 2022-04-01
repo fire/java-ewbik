@@ -25,7 +25,7 @@ import ewbik.asj.Saveable;
 import ewbik.math.*;
 import ewbik.math.MathUtils;
 import ewbik.math.Vec3f;
-import ewbik.math.Vector3;
+import ewbik.math.Vec3f;
 import ik.Bone;
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -61,7 +61,7 @@ public class Skeleton3D implements Saveable {
     // debug code -- use to set a minimum distance an effector must move
     // in order to trigger a chain iteration
     float debugMag = 5f;
-    Vector3 lastTargetPos = new Vector3();
+    Vec3f lastTargetPos = new Vec3f();
     boolean monitorPerformance = false;
     private boolean abilityBiasing = false;
 
@@ -81,8 +81,8 @@ public class Skeleton3D implements Saveable {
 
     protected void initializeRootBone(
             Skeleton3D armature,
-            Vec3f<?> tipHeading,
-            Vec3f<?> rollHeading,
+            Vec3f tipHeading,
+            Vec3f rollHeading,
             String inputTag,
             float boneHeight,
             Bone.frameType coordinateType) {
@@ -142,7 +142,7 @@ public class Skeleton3D implements Saveable {
         return rootBone;
     }
 
-    private <V extends Vec3f<?>> Bone createRootBone(V tipHeading, V rollHeading, String inputTag,
+    private <V extends Vec3f> Bone createRootBone(V tipHeading, V rollHeading, String inputTag,
                                                      float boneHeight, Bone.frameType coordinateType) {
         initializeRootBone(this, tipHeading, rollHeading, inputTag, boneHeight, coordinateType);
         this.shadowSkeleton3D = new ewbik.ik.ShadowSkeleton3D(rootBone);

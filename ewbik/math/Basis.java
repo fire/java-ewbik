@@ -14,20 +14,20 @@ public class Basis {
     /**
      * a vector representing the translation of this basis relative to its parent.
      */
-    public Vec3f<?> translate;
-    protected Vec3f<?> xBase; //= new Vector3(1,0,0);
-    protected Vec3f<?> yBase; //= new Vector3(0,1,0);
-    protected Vec3f<?> zBase;// = new Vector3(0,0,1);
-    protected Ray3 xRay;// = new Ray3(new Vector3(0,0,0), new Vector3(1,0,0));
-    protected Ray3 yRay;// = new Ray3(new Vector3(0,0,0), new Vector3(0,1,0));
-    protected Ray3 zRay;// = new Ray3(new Vector3(0,0,0), new Vector3(0,0,1));
+    public Vec3f translate;
+    protected Vec3f xBase; //= new Vec3f(1,0,0);
+    protected Vec3f yBase; //= new Vec3f(0,1,0);
+    protected Vec3f zBase;// = new Vec3f(0,0,1);
+    protected Ray3 xRay;// = new Ray3(new Vec3f(0,0,0), new Vec3f(1,0,0));
+    protected Ray3 yRay;// = new Ray3(new Vec3f(0,0,0), new Vec3f(0,1,0));
+    protected Ray3 zRay;// = new Ray3(new Vec3f(0,0,0), new Vec3f(0,0,1));
 
     /**
      * Initialize this basis at the origin. The basis will be righthanded by default.
      *
      * @param origin
      */
-    public Basis(Vec3f<?> origin) {
+    public Basis(Vec3f origin) {
         translate = origin.copy();
         xBase = origin.copy();
         yBase = origin.copy();
@@ -35,7 +35,7 @@ public class Basis {
         xBase.set(1, 0, 0);
         yBase.set(0, 1, 0);
         zBase.set(0, 0, 1);
-        Vec3f<?> zero = origin.copy();
+        Vec3f zero = origin.copy();
         zero.set(0, 0, 0);
         xRay = new Ray3(zero.copy(), xBase.copy());
         yRay = new Ray3(zero.copy(), yBase.copy());
@@ -51,7 +51,7 @@ public class Basis {
         xBase.set(1, 0, 0);
         yBase.set(0, 1, 0);
         zBase.set(0, 0, 1);
-        Vec3f<?> zero = translate.copy();
+        Vec3f zero = translate.copy();
         zero.set(0, 0, 0);
         xRay = new Ray3(zero.copy(), xBase.copy());
         yRay = new Ray3(zero.copy(), yBase.copy());
@@ -77,7 +77,7 @@ public class Basis {
      * @param y      basis vector direction
      * @param z      basis vector direction
      */
-    public <V extends Vec3f<?>> Basis(V origin, V x, V y, V z) {
+    public <V extends Vec3f> Basis(V origin, V x, V y, V z) {
         this.translate = origin.copy();
         xRay = new Ray3(origin.copy(), origin.copy());
         yRay = new Ray3(origin.copy(), origin.copy());
@@ -106,9 +106,9 @@ public class Basis {
         xRay = x.copy();
         yRay = y.copy();
         zRay = z.copy();
-        Vec3f<?> xDirNew = x.heading().copy();
-        Vec3f<?> yDirNew = y.heading().copy();
-        Vec3f<?> zDirNew = z.heading().copy();
+        Vec3f xDirNew = x.heading().copy();
+        Vec3f yDirNew = y.heading().copy();
+        Vec3f zDirNew = z.heading().copy();
         xDirNew.normalize();
         yDirNew.normalize();
         zDirNew.normalize();
@@ -121,14 +121,14 @@ public class Basis {
         return new ewbik.math.Basis(this);
     }
 
-    private <V extends Vec3f<?>> void set(V x, V y, V z) {
+    private <V extends Vec3f> void set(V x, V y, V z) {
         xBase = translate.copy();
         yBase = translate.copy();
         zBase = translate.copy();
         xBase.set(1, 0, 0);
         yBase.set(0, 1, 0);
         zBase.set(0, 0, 1);
-        Vec3f<?> zero = translate.copy();
+        Vec3f zero = translate.copy();
         zero.set(0, 0, 0);
         xRay.setP1(zero.copy());
         xRay.setP2(xBase.copy());
@@ -175,20 +175,20 @@ public class Basis {
         refreshPrecomputed();
     }
 
-    private Quaternion createPrioritzedRotation(Vec3f<?> xHeading, Vec3f<?> yHeading, Vec3f<?> zHeading) {
+    private Quaternion createPrioritzedRotation(Vec3f xHeading, Vec3f yHeading, Vec3f zHeading) {
 
-        Vec3f<?> tempV = zHeading.copy();
+        Vec3f tempV = zHeading.copy();
         tempV.set(0, 0, 0);
         Quaternion toYZ = new Quaternion(yBase, zBase, yHeading, zHeading);
         toYZ.applyTo(yBase, tempV);
         Quaternion toY = new Quaternion(tempV, yHeading);
 
         return toY.applyTo(toYZ);
-		/*Vec3f<?> xidt = xBase.copy(); Vec3f<?> yidt = yBase.copy();  Vec3f<?> zidt = zBase.copy();
-		Vec3f<?> origin = xBase.copy(); origin.set(0,0,0);
+		/*Vec3f xidt = xBase.copy(); Vec3f yidt = yBase.copy();  Vec3f zidt = zBase.copy();
+		Vec3f origin = xBase.copy(); origin.set(0,0,0);
 
-		Vec3f<?>[] from = {origin, xidt, yidt, zidt};
-		Vec3f<?>[] to = {origin.copy(), xHeading, yHeading, zHeading};
+		Vec3f[] from = {origin, xidt, yidt, zidt};
+		Vec3f[] to = {origin.copy(), xHeading, yHeading, zHeading};
 		QCP alignHeads = new QCP(MathUtils.DOUBLE_ROUNDING_ERROR, MathUtils.DOUBLE_ROUNDING_ERROR);
 		alignHeads.setMaxIterations(50);
 		Quaternion rotation = alignHeads.weightedSuperpose(from, to, null, false);
@@ -212,13 +212,13 @@ public class Basis {
         this.updateRays();
     }
 
-    public <V extends Vec3f<?>> V getLocalOf(V v) {
+    public <V extends Vec3f> V getLocalOf(V v) {
         V result = (V) v.copy();
         setToLocalOf(v, result);
         return result;
     }
 
-    public <V extends Vec3f<?>> void setToLocalOf(V input, V output) {
+    public <V extends Vec3f> void setToLocalOf(V input, V output) {
         output.set(input);
         output.sub(this.translate);
         inverseRotation.applyTo(output, output);
@@ -239,7 +239,7 @@ public class Basis {
      * so by default this function will just set @param vec to (1,0,0),
      * but extending (affine) classes can override this to represent the direction and magnitude of the x axis prior to rotation.
      */
-    public <V extends Vec3f<?>> void setToShearXBase(V vec) {
+    public <V extends Vec3f> void setToShearXBase(V vec) {
         vec.set(xBase);
     }
 
@@ -248,7 +248,7 @@ public class Basis {
      * so by default this function will just set @param vec to (0,1,0),
      * but extending (affine) classes can override this to represent the direction and magnitude of the y axis prior to rotation.
      */
-    public <V extends Vec3f<?>> void setToShearYBase(V vec) {
+    public <V extends Vec3f> void setToShearYBase(V vec) {
         vec.set(yBase);
     }
 
@@ -257,7 +257,7 @@ public class Basis {
      * so by default this function will just set @param vec to (0,0,1),
      * but extending (affine) classes can override this to represent the direction and magnitude of the z axis prior to rotation.
      */
-    public <V extends Vec3f<?>> void setToShearZBase(V vec) {
+    public <V extends Vec3f> void setToShearZBase(V vec) {
         vec.set(zBase);
     }
 
@@ -274,7 +274,7 @@ public class Basis {
         globalOutput.refreshPrecomputed();
     }
 
-    public <V extends Vec3f<?>> void setToGlobalOf(V input, V output) {
+    public <V extends Vec3f> void setToGlobalOf(V input, V output) {
         try {
             rotation.applyTo(input, output);
             output.add(this.translate);
@@ -283,14 +283,14 @@ public class Basis {
         }
     }
 
-    public <V extends Vec3f<?>> void translateBy(V transBy) {
+    public <V extends Vec3f> void translateBy(V transBy) {
         this.translate.x += transBy.x;
         this.translate.y += transBy.y;
         this.translate.z += transBy.z;
         updateRays();
     }
 
-    public <V extends Vec3f<?>> void translateTo(V newOrigin) {
+    public <V extends Vec3f> void translateTo(V newOrigin) {
         this.translate.x = newOrigin.x;
         this.translate.y = newOrigin.y;
         this.translate.z = newOrigin.z;
@@ -309,19 +309,19 @@ public class Basis {
         return zRay;
     }
 
-    public Vec3f<?> getXHeading() {
+    public Vec3f getXHeading() {
         return this.xRay.heading();
     }
 
-    public Vec3f<?> getYHeading() {
+    public Vec3f getYHeading() {
         return this.yRay.heading();
     }
 
-    public Vec3f<?> getZHeading() {
+    public Vec3f getZHeading() {
         return this.zRay.heading();
     }
 
-    public Vec3f<?> getOrigin() {
+    public Vec3f getOrigin() {
         return translate;
     }
 

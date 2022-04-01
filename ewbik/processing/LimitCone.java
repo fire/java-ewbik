@@ -28,12 +28,12 @@ import processing.core.PVector;
 public class LimitCone implements Saveable {
 
     public ewbik.processing.singlePrecision.Kusudama parentKusudama;
-    public Vec3f<?> tangentCircleCenterNext1;
-    public Vec3f<?> tangentCircleCenterNext2;
+    public Vec3f tangentCircleCenterNext1;
+    public Vec3f tangentCircleCenterNext2;
     public float tangentCircleRadiusNext;
     public float tangentCircleRadiusNextCos;
-    public Vec3f<?> tangentCircleCenterPrevious1;
-    public Vec3f<?> tangentCircleCenterPrevious2;
+    public Vec3f tangentCircleCenterPrevious1;
+    public Vec3f tangentCircleCenterPrevious2;
     public float tangentCircleRadiusPrevious;
     public float tangentCircleRadiusPreviousCos;
     // softness of 0 means completely hard.
@@ -47,10 +47,10 @@ public class LimitCone implements Saveable {
      * are the points at which the tangent circle intersects this limitCone and the
      * next limitCone
      */
-    public Vec3f<?>[] firstTriangleNext = new Vector3[3];
-    public Vec3f<?>[] secondTriangleNext = new Vector3[3];
-    Vec3f<?> controlPoint;
-    Vec3f<?> radialPoint;
+    public Vec3f[] firstTriangleNext = new Vec3f[3];
+    public Vec3f[] secondTriangleNext = new Vec3f[3];
+    Vec3f controlPoint;
+    Vec3f radialPoint;
     // radius stored as cosine to save on the acos call necessary for angleBetween.
     private float radiusCosine;
     private float radius;
@@ -60,10 +60,10 @@ public class LimitCone implements Saveable {
     }
 
     public LimitCone(PVector location, float rad, ewbik.processing.singlePrecision.Kusudama attachedTo) {
-        Vec3f<?> location1 = ewbik.processing.sceneGraph.Transform3D.toVector3(location);
+        Vec3f location1 = ewbik.processing.sceneGraph.Transform3D.toVec3f(location);
         setControlPoint(location1);
         LimitCone.this.tangentCircleCenterNext1 = location1.getOrthogonal();
-        LimitCone.this.tangentCircleCenterNext2 = Vector3.mult(LimitCone.this.tangentCircleCenterNext1, -1);
+        LimitCone.this.tangentCircleCenterNext2 = Vec3f.mult(LimitCone.this.tangentCircleCenterNext1, -1);
         this.setRadius(rad);
         LimitCone.this.parentKusudama = attachedTo;
     }
@@ -75,10 +75,10 @@ public class LimitCone implements Saveable {
      *                       the input after accounting for collisions
      * @return
      */
-    public boolean inBoundsFromThisToNext(LimitCone next, Vec3f<?> input, Vec3f<?> collisionPoint) {
+    public boolean inBoundsFromThisToNext(LimitCone next, Vec3f input, Vec3f collisionPoint) {
         boolean isInBounds = false;// determineIfInBounds(next, input);
         // if(!isInBounds) {
-        Vec3f<?> closestCollision = getClosestCollision(next, input);
+        Vec3f closestCollision = getClosestCollision(next, input);
         if (closestCollision == null) {
             /**
              * getClosestCollision returns null if the point is already in bounds,
@@ -110,8 +110,8 @@ public class LimitCone implements Saveable {
      * rectified position
      * if the point was out of bounds.
      */
-    public <V extends Vec3f<?>> Vec3f<?> getClosestCollision(LimitCone next, V input) {
-        Vec3f<?> result = getOnGreatTangentTriangle(next, input);
+    public <V extends Vec3f> Vec3f getClosestCollision(LimitCone next, V input) {
+        Vec3f result = getOnGreatTangentTriangle(next, input);
         if (result == null) {
             boolean[] inBounds = {false};
             result = closestPointOnClosestCone(next, input, inBounds);
@@ -119,8 +119,8 @@ public class LimitCone implements Saveable {
         return result;
     }
 
-    public <V extends Vec3f<?>> Vec3f<?> getClosestPathPoint(LimitCone next, V input) {
-        Vec3f<?> result = getOnPathSequence(next, input);
+    public <V extends Vec3f> Vec3f getClosestPathPoint(LimitCone next, V input) {
+        Vec3f result = getOnPathSequence(next, input);
         if (result == null) {
             result = closestCone(next, input);
         }
@@ -140,7 +140,7 @@ public class LimitCone implements Saveable {
      * @param input
      * @return
      */
-    public boolean determineIfInBounds(LimitCone next, Vec3f<?> input) {
+    public boolean determineIfInBounds(LimitCone next, Vec3f input) {
 
         /**
          * Procedure : Check if input is contained in this cone, or the next cone
@@ -180,7 +180,7 @@ public class LimitCone implements Saveable {
              * as it didn't allow for early termination. .
              */
 
-            // Vec3f<?> planeNormal = controlPoint.crossCopy(tangentCircleCenterNext1);
+            // Vec3f planeNormal = controlPoint.crossCopy(tangentCircleCenterNext1);
             Vec3f c1xc2 = controlPoint.crossCopy(next.controlPoint);
             float c1c2fir = input.dot(c1xc2);
 
@@ -196,14 +196,14 @@ public class LimitCone implements Saveable {
         }
     }
 
-    public <V extends Vec3f<?>> Vec3f<?> closestCone(LimitCone next, V input) {
+    public <V extends Vec3f> Vec3f closestCone(LimitCone next, V input) {
         if (input.dot(controlPoint) > input.dot(next.controlPoint))
             return this.controlPoint.copy();
         else
             return next.controlPoint.copy();
     }
 
-    public <V extends Vec3f<?>> Vec3f<?> getOnPathSequence(LimitCone next, V input) {
+    public <V extends Vec3f> Vec3f getOnPathSequence(LimitCone next, V input) {
         Vec3f c1xc2 = controlPoint.crossCopy(next.controlPoint);
         float c1c2fir = input.dot(c1xc2);
         if (c1c2fir < 0.0) {
@@ -211,8 +211,8 @@ public class LimitCone implements Saveable {
             Vec3f t1xc2 = tangentCircleCenterNext1.crossCopy(next.controlPoint);
             if (input.dot(c1xt1) > 0 && input.dot(t1xc2) > 0) {
                 Ray3 tan1ToInput = new Ray3(tangentCircleCenterNext1, input);
-                Vector3 result = new Vector3();
-                tan1ToInput.intersectsPlane(new Vector3(0, 0, 0), controlPoint, next.controlPoint, result);
+                Vec3f result = new Vec3f();
+                tan1ToInput.intersectsPlane(new Vec3f(0, 0, 0), controlPoint, next.controlPoint, result);
                 return result.normalize();
             } else {
                 return null;
@@ -222,8 +222,8 @@ public class LimitCone implements Saveable {
             Vec3f c2xt2 = next.controlPoint.crossCopy(tangentCircleCenterNext2);
             if (input.dot(t2xc1) > 0 && input.dot(c2xt2) > 0) {
                 Ray3 tan2ToInput = new Ray3(tangentCircleCenterNext2, input);
-                Vector3 result = new Vector3();
-                tan2ToInput.intersectsPlane(new Vector3(0, 0, 0), controlPoint, next.controlPoint, result);
+                Vec3f result = new Vec3f();
+                tan2ToInput.intersectsPlane(new Vec3f(0, 0, 0), controlPoint, next.controlPoint, result);
                 return result.normalize();
             } else {
                 return null;
@@ -232,7 +232,7 @@ public class LimitCone implements Saveable {
 
     }
 
-    public <V extends Vec3f<?>> Vec3f<?> getOnGreatTangentTriangle(LimitCone next, V input) {
+    public <V extends Vec3f> Vec3f getOnGreatTangentTriangle(LimitCone next, V input) {
         Vec3f c1xc2 = controlPoint.crossCopy(next.controlPoint);
         float c1c2fir = input.dot(c1xc2);
         if (c1c2fir < 0.0) {
@@ -240,7 +240,7 @@ public class LimitCone implements Saveable {
             Vec3f t1xc2 = tangentCircleCenterNext1.crossCopy(next.controlPoint);
             if (input.dot(c1xt1) > 0 && input.dot(t1xc2) > 0) {
                 if (input.dot(tangentCircleCenterNext1) > tangentCircleRadiusNextCos) {
-                    Vec3f<?> planeNormal = tangentCircleCenterNext1.crossCopy(input);
+                    Vec3f planeNormal = tangentCircleCenterNext1.crossCopy(input);
                     Quaternion rotateAboutBy = new Quaternion(planeNormal, tangentCircleRadiusNext);
                     return rotateAboutBy.applyToCopy(tangentCircleCenterNext1);
                 } else {
@@ -254,7 +254,7 @@ public class LimitCone implements Saveable {
             Vec3f c2xt2 = next.controlPoint.crossCopy(tangentCircleCenterNext2);
             if (input.dot(t2xc1) > 0 && input.dot(c2xt2) > 0) {
                 if (input.dot(tangentCircleCenterNext2) > tangentCircleRadiusNextCos) {
-                    Vec3f<?> planeNormal = tangentCircleCenterNext2.crossCopy(input);
+                    Vec3f planeNormal = tangentCircleCenterNext2.crossCopy(input);
                     Quaternion rotateAboutBy = new Quaternion(planeNormal, tangentCircleRadiusNext);
                     return rotateAboutBy.applyToCopy(tangentCircleCenterNext2);
                 } else {
@@ -275,13 +275,13 @@ public class LimitCone implements Saveable {
      * @param inBounds
      * @return
      */
-    public <V extends Vec3f<?>> Vec3f<?> closestPointOnClosestCone(LimitCone next, V input,
+    public <V extends Vec3f> Vec3f closestPointOnClosestCone(LimitCone next, V input,
                                                                    boolean[] inBounds) {
-        Vec3f<?> closestToFirst = this.closestToCone(input, inBounds);
+        Vec3f closestToFirst = this.closestToCone(input, inBounds);
         if (inBounds[0]) {
             return closestToFirst;
         }
-        Vec3f<?> closestToSecond = next.closestToCone(input, inBounds);
+        Vec3f closestToSecond = next.closestToCone(input, inBounds);
         if (inBounds[0]) {
             return closestToSecond;
         }
@@ -304,19 +304,19 @@ public class LimitCone implements Saveable {
      * @param inBounds
      * @return
      */
-    public <V extends Vec3f<?>> Vec3f<?> closestToCone(V input, boolean[] inBounds) {
+    public <V extends Vec3f> Vec3f closestToCone(V input, boolean[] inBounds) {
         float controlPointDotProduct = input.dot(this.getControlPoint());
         float radiusCosine = this.getRadiusCosine();
         if (controlPointDotProduct > radiusCosine) {
             inBounds[0] = true;
             return null;// input.copy();
         } else {
-            Vec3f<?> axis = this.getControlPoint().crossCopy(input);
+            Vec3f axis = this.getControlPoint().crossCopy(input);
             // axis.normalize();
             // Quaternion pointDiff = new Quaternion(this.getControlPoint(), input);
             Quaternion rotTo = new Quaternion(axis, this.getRadius());
             // Quaternion rot2To = new Quaternion(pointDiff.getAxis(), this.getRadius());
-            Vec3f<?> result = rotTo.applyToCopy(this.getControlPoint());
+            Vec3f result = rotTo.applyToCopy(this.getControlPoint());
             inBounds[0] = false;
             return result;
         }
@@ -328,10 +328,10 @@ public class LimitCone implements Saveable {
             float radA = this.getRadius();
             float radB = next.getRadius();
 
-            Vec3f<?> A = this.getControlPoint().copy();
-            Vec3f<?> B = next.getControlPoint().copy();
+            Vec3f A = this.getControlPoint().copy();
+            Vec3f B = next.getControlPoint().copy();
 
-            Vec3f<?> arcNormal = A.crossCopy(B);
+            Vec3f arcNormal = A.crossCopy(B);
 
             /**
              * There are an infinite number of circles co-tangent with A and B, every other
@@ -365,17 +365,17 @@ public class LimitCone implements Saveable {
 
             // the axis of this cone, scaled to minimize its distance to the tangent contact
             // points.
-            Vec3f<?> scaledAxisA = Vector3.mult(A, MathUtils.cos(boundaryPlusTangentRadiusA));
+            Vec3f scaledAxisA = Vec3f.mult(A, MathUtils.cos(boundaryPlusTangentRadiusA));
             // a point on the plane running through the tangent contact points
-            Vec3f<?> planeDir1A = new Quaternion(arcNormal, boundaryPlusTangentRadiusA).applyToCopy(A);
+            Vec3f planeDir1A = new Quaternion(arcNormal, boundaryPlusTangentRadiusA).applyToCopy(A);
             // another poiint on the same plane
-            Vec3f<?> planeDir2A = new Quaternion(A, MathUtils.PI / 2f).applyToCopy(planeDir1A);
+            Vec3f planeDir2A = new Quaternion(A, MathUtils.PI / 2f).applyToCopy(planeDir1A);
 
-            Vec3f<?> scaledAxisB = Vec3f.mult(B, MathUtils.cos(boundaryPlusTangentRadiusB));
+            Vec3f scaledAxisB = Vec3f.mult(B, MathUtils.cos(boundaryPlusTangentRadiusB));
             // a point on the plane running through the tangent contact points
-            Vec3f<?> planeDir1B = new Quaternion(arcNormal, boundaryPlusTangentRadiusB).applyToCopy(B);
+            Vec3f planeDir1B = new Quaternion(arcNormal, boundaryPlusTangentRadiusB).applyToCopy(B);
             // another poiint on the same plane
-            Vec3f<?> planeDir2B = new Quaternion(B, MathUtils.PI / 2f).applyToCopy(planeDir1B);
+            Vec3f planeDir2B = new Quaternion(B, MathUtils.PI / 2f).applyToCopy(planeDir1B);
 
             // ray from scaled center of next cone to half way point between the
             // circumference of this cone and the next cone.
@@ -385,15 +385,15 @@ public class LimitCone implements Saveable {
             r1B.elongate(99);
             r2B.elongate(99);
 
-            Vec3f<?> intersection1 = r1B.intersectsPlane(scaledAxisA, planeDir1A, planeDir2A);
-            Vec3f<?> intersection2 = r2B.intersectsPlane(scaledAxisA, planeDir1A, planeDir2A);
+            Vec3f intersection1 = r1B.intersectsPlane(scaledAxisA, planeDir1A, planeDir2A);
+            Vec3f intersection2 = r2B.intersectsPlane(scaledAxisA, planeDir1A, planeDir2A);
 
             Ray3 intersectionRay = new Ray3(intersection1, intersection2);
             intersectionRay.elongate(99);
 
-            Vec3f<?> sphereIntersect1 = new Vector3();
-            Vec3f<?> sphereIntersect2 = new Vector3();
-            Vec3f<?> sphereCenter = new Vector3();
+            Vec3f sphereIntersect1 = new Vec3f();
+            Vec3f sphereIntersect2 = new Vec3f();
+            Vec3f sphereCenter = new Vec3f();
             intersectionRay.intersectsSphere(sphereCenter, 1f, sphereIntersect1, sphereIntersect2);
 
             this.tangentCircleCenterNext1 = sphereIntersect1;
@@ -411,7 +411,7 @@ public class LimitCone implements Saveable {
         if (tangentCircleCenterNext1 == null)
             tangentCircleCenterNext1 = controlPoint.getOrthogonal().normalize();
         if (tangentCircleCenterNext2 == null)
-            tangentCircleCenterNext2 = Vector3.mult(tangentCircleCenterNext1, -1).normalize();
+            tangentCircleCenterNext2 = Vec3f.mult(tangentCircleCenterNext1, -1).normalize();
         if (next != null)
             computeTriangles(next);
     }
@@ -426,11 +426,11 @@ public class LimitCone implements Saveable {
         secondTriangleNext[2] = next.getControlPoint().normalize();
     }
 
-    public Vec3f<?> getControlPoint() {
+    public Vec3f getControlPoint() {
         return controlPoint;
     }
 
-    public void setControlPoint(Vec3f<?> controlPoint) {
+    public void setControlPoint(Vec3f controlPoint) {
         this.controlPoint = controlPoint.copy();
         this.controlPoint.normalize();
         if (this.parentKusudama != null)
@@ -474,11 +474,11 @@ public class LimitCone implements Saveable {
     public void loadFromJSONObject(ewbik.asj.data.JSONObject j, LoadManager l) {
         this.parentKusudama = (ewbik.processing.singlePrecision.Kusudama) l.getObjectFromClassMaps(ewbik.processing.singlePrecision.Kusudama.class,
                 j.getString("parentKusudama"));
-        Vector3 controlPointJ = null;
+        Vec3f controlPointJ = null;
         try {
-            controlPointJ = new Vector3(j.getJSONObject("controlPoint"));
+            controlPointJ = new Vec3f(j.getJSONObject("controlPoint"));
         } catch (Exception e) {
-            controlPointJ = new Vector3(j.getJSONArray("controlPoint"));
+            controlPointJ = new Vec3f(j.getJSONArray("controlPoint"));
         }
 
         controlPointJ.normalize();

@@ -2,9 +2,9 @@ package ewbik.math;
 
 public final class RotationOrder {
 
-    public static final Vector3 X = new Vector3(1, 0, 0);
-    public static final Vector3 Y = new Vector3(0, 1, 0);
-    public static final Vector3 Z = new Vector3(0, 0, 1);
+    public static final Vec3f X = new Vec3f(1, 0, 0);
+    public static final Vec3f Y = new Vec3f(0, 1, 0);
+    public static final Vec3f Z = new Vec3f(0, 0, 1);
 
     /**
      * Set of Cartesian angles.
@@ -110,17 +110,17 @@ public final class RotationOrder {
     /**
      * Axis of the first rotation.
      */
-    private final Vector3 a1;
+    private final Vec3f a1;
 
     /**
      * Axis of the second rotation.
      */
-    private final Vector3 a2;
+    private final Vec3f a2;
 
     /**
      * Axis of the third rotation.
      */
-    private final Vector3 a3;
+    private final Vec3f a3;
 
     /**
      * Private constructor.
@@ -132,7 +132,7 @@ public final class RotationOrder {
      * @param a2   axis of the second rotation
      * @param a3   axis of the third rotation
      */
-    private <T extends Vector3> RotationOrder(final String name,
+    private <T extends Vec3f> RotationOrder(final String name,
                                               final T a1, final T a2, final T a3) {
         this.name = name;
         this.a1 = a1;
@@ -156,7 +156,7 @@ public final class RotationOrder {
      *
      * @return axis of the first rotation
      */
-    public Vector3 getA1() {
+    public Vec3f getA1() {
         return a1;
     }
 
@@ -165,7 +165,7 @@ public final class RotationOrder {
      *
      * @return axis of the second rotation
      */
-    public Vector3 getA2() {
+    public Vec3f getA2() {
         return a2;
     }
 
@@ -174,7 +174,7 @@ public final class RotationOrder {
      *
      * @return axis of the second rotation
      */
-    public Vector3 getA3() {
+    public Vec3f getA3() {
         return a3;
     }
 

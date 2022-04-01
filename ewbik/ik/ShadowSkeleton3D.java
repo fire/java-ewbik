@@ -46,8 +46,8 @@ public class ShadowSkeleton3D {
     WorkingBone[] pinnedBones;
     boolean includeInIK = true;
     int pinDepth = 1;
-    Vector3[] localizedTargetHeadings;
-    Vector3[] localizedTipHeadings;
+    Vec3f[] localizedTargetHeadings;
+    Vec3f[] localizedTipHeadings;
     float[] weights;
     private ewbik.ik.ShadowSkeleton3D parentSegment = null;
     private boolean basePinned = false;
@@ -130,15 +130,15 @@ public class ShadowSkeleton3D {
         for (int i = 0; i < pinSequence.size(); i++) {
             pinnedBones[i] = pinSequence.get(i);
         }
-        localizedTargetHeadings = new Vector3[totalHeadings];
-        localizedTipHeadings = new Vector3[totalHeadings];
+        localizedTargetHeadings = new Vec3f[totalHeadings];
+        localizedTipHeadings = new Vec3f[totalHeadings];
         weights = new float[totalHeadings];
         int currentHeading = 0;
         for (ArrayList<Float> a : penaltyArray) {
             for (Float ad : a) {
                 weights[currentHeading] = ad;
-                localizedTargetHeadings[currentHeading] = new Vector3();
-                localizedTipHeadings[currentHeading] = new Vector3();
+                localizedTargetHeadings[currentHeading] = new Vec3f();
+                localizedTipHeadings[currentHeading] = new Vec3f();
                 currentHeading++;
             }
         }
@@ -288,7 +288,7 @@ public class ShadowSkeleton3D {
         return innerPinnedChains;
     }
 
-    public float getManualMSD(Vector3[] locTips, Vector3[] locTargets, float[] weights) {
+    public float getManualMSD(Vec3f[] locTips, Vec3f[] locTargets, float[] weights) {
         float manualRMSD = 0f;
         float wsum = 0f;
         for (int i = 0; i < locTargets.length; i++) {
@@ -405,8 +405,8 @@ public class ShadowSkeleton3D {
             WorkingBone sb,
             float dampening,
             boolean translate,
-            Vector3[] localizedTipHeadings,
-            Vector3[] localizedTargetHeadings,
+            Vec3f[] localizedTipHeadings,
+            Vec3f[] localizedTargetHeadings,
             float[] weights,
             QCP qcpOrientationAligner,
             int iteration,
@@ -416,7 +416,7 @@ public class ShadowSkeleton3D {
         Quaternion qcpRot = qcpOrientationAligner.weightedSuperpose(localizedTipHeadings, localizedTargetHeadings, weights,
                 translate);
 
-        Vector3 translateBy = qcpOrientationAligner.getTranslation();
+        Vec3f translateBy = qcpOrientationAligner.getTranslation();
         float boneDamp = sb.cosHalfDampen;
 
         if (dampening != -1) {
@@ -435,7 +435,7 @@ public class ShadowSkeleton3D {
 
     }
 
-    public void updateTargetHeadings(Vec3f<?>[] localizedTargetHeadings, float[] weights, ewbik.processing.sceneGraph.Transform3D thisBoneTransform3D) {
+    public void updateTargetHeadings(Vec3f[] localizedTargetHeadings, float[] weights, ewbik.processing.sceneGraph.Transform3D thisBoneTransform3D) {
 
         int hdx = 0;
         for (int i = 0; i < pinnedBones.length; i++) {
@@ -443,7 +443,7 @@ public class ShadowSkeleton3D {
             IKPin pin = sb.forBone.getIKPin();
             ewbik.processing.sceneGraph.Transform3D targetTransform3D = pin.forBone.getPinnedAxes();
             targetTransform3D.updateGlobal();
-            Vec3f<?> origin = thisBoneTransform3D.origin_();
+            Vec3f origin = thisBoneTransform3D.origin_();
             localizedTargetHeadings[hdx].set(targetTransform3D.origin_()).sub(origin);
             byte modeCode = pin.getModeCode();
             hdx++;
@@ -470,7 +470,7 @@ public class ShadowSkeleton3D {
 
     }
 
-    public void upateTipHeadings(Vec3f<?>[] localizedTipHeadings, ewbik.processing.sceneGraph.Transform3D thisBoneTransform3D) {
+    public void upateTipHeadings(Vec3f[] localizedTipHeadings, ewbik.processing.sceneGraph.Transform3D thisBoneTransform3D) {
         int hdx = 0;
 
         for (int i = 0; i < pinnedBones.length; i++) {
@@ -478,7 +478,7 @@ public class ShadowSkeleton3D {
             IKPin pin = sb.forBone.getIKPin();
             ewbik.processing.sceneGraph.Transform3D tipTransform3D = sb.simLocalTransform3D;
             tipTransform3D.updateGlobal();
-            Vec3f<?> origin = thisBoneTransform3D.origin_();
+            Vec3f origin = thisBoneTransform3D.origin_();
             byte modeCode = pin.getModeCode();
 
             ewbik.processing.sceneGraph.Transform3D targetTransform3D = pin.forBone.getPinnedAxes();
