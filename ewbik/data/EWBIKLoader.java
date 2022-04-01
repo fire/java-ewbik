@@ -33,7 +33,7 @@ public class EWBIKLoader {
      *                       AbstractSkeleton3D class. If null, AbstractSkeleton3D will
      *                       be used.
      * @param KusudamaClass  the class object you've used to extend the
-     *                       AbstractKusudama class. If null, AbstractKusudama will
+     *                       Kusudama class. If null, Kusudama will
      *                       be used.
      * @param LimitConeClass the class object you've used to extend the
      *                       LimitCone class. If null, LimitCone

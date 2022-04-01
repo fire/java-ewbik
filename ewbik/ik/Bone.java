@@ -19,12 +19,12 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package ik;
 
-import ewbik.ik.AbstractKusudama;
 import ewbik.ik.IKExceptions.NullParentForBoneException;
 import ewbik.ik.SegmentedArmature;
 import ewbik.math.AbstractAxes;
 import ewbik.math.Vec3f;
 import ewbik.processing.sceneGraph.Axes;
+import ewbik.processing.singlePrecision.Kusudama;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
@@ -44,7 +44,7 @@ import ewbik.math.Ray3;
 public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     public static boolean drawKusudamas = false;
     public ewbik.ik.AbstractSkeleton3D parentArmature;
-    public AbstractKusudama constraints;
+    public Kusudama constraints;
     public int ancestorCount = 0;
     protected String tag;
     protected Quaternion lastRotation;
@@ -516,15 +516,15 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      * it presumes KusudamaExample constraints
      */
     public void setAxesToSnapped(AbstractAxes toSet, AbstractAxes limitingAxes, float cosHalfAngleDampen) {
-        if (constraints != null && AbstractKusudama.class.isAssignableFrom(constraints.getClass())) {
-            ((AbstractKusudama) constraints).setAxesToSnapped(toSet, limitingAxes, cosHalfAngleDampen);
+        if (constraints != null && Kusudama.class.isAssignableFrom(constraints.getClass())) {
+            ((Kusudama) constraints).setAxesToSnapped(toSet, limitingAxes, cosHalfAngleDampen);
         }
     }
 
     public void setAxesToReturnfulled(AbstractAxes toSet, AbstractAxes limitingAxes, float cosHalfAngleDampen,
                                       float angleDampen) {
-        if (constraints != null && AbstractKusudama.class.isAssignableFrom(constraints.getClass())) {
-            ((AbstractKusudama) constraints).setAxesToReturnfulled(toSet, limitingAxes, cosHalfAngleDampen,
+        if (constraints != null && Kusudama.class.isAssignableFrom(constraints.getClass())) {
+            ((Kusudama) constraints).setAxesToReturnfulled(toSet, limitingAxes, cosHalfAngleDampen,
                     angleDampen);
         }
     }
@@ -541,7 +541,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      * @param newConstraint a constraint Object to add to this bone
      * @return the constraintObject that was just added
      */
-    public AbstractKusudama addConstraint(AbstractKusudama newConstraint) {
+    public Kusudama addConstraint(Kusudama newConstraint) {
         constraints = newConstraint;
         return constraints;
     }
@@ -549,7 +549,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     /**
      * @return this bone's constraint object.
      */
-    public AbstractKusudama getConstraint() {
+    public Kusudama getConstraint() {
         return constraints;
     }
 

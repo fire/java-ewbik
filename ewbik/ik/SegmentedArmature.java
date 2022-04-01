@@ -25,6 +25,7 @@ import java.util.HashMap;
 
 import ik.Bone;
 import ik.IKPin;
+import ewbik.processing.singlePrecision.Kusudama;
 
 /**s
  * @author Eron Gjoni
@@ -373,7 +374,7 @@ public class SegmentedArmature {
                 if (bestRMSD >= newRMSD) {
                     if (sb.springy) {
                         if (dampening != -1 || totalIterations != sb.forBone.parentArmature.getDefaultIterations()) {
-                            float returnfullness = ((AbstractKusudama) sb.forBone.getConstraint()).getPainfullness();
+                            float returnfullness = ((Kusudama) sb.forBone.getConstraint()).getPainfullness();
                             float dampenedAngle = sb.forBone.getStiffness() * dampening * returnfullness;
                             float totaliterationssq = totalIterations * totalIterations;
                             float scaledDampenedAngle = dampenedAngle
@@ -718,7 +719,7 @@ public class SegmentedArmature {
             float defaultDampening = forBone.parentArmature.dampening;
             float dampening = forBone.getParent() == null ? MathUtils.PI : predamp * defaultDampening;
             cosHalfDampen = MathUtils.cos(dampening / 2f);
-            AbstractKusudama k = ((AbstractKusudama) forBone.getConstraint());
+            Kusudama k = ((Kusudama) forBone.getConstraint());
             if (k != null && k.getPainfullness() != 0f) {
                 springy = true;
                 populateReturnDampeningIterationArray(k);
@@ -732,7 +733,7 @@ public class SegmentedArmature {
             float defaultDampening = forBone.parentArmature.dampening;
             float dampening = forBone.getParent() == null ? MathUtils.PI : predamp * defaultDampening;
             cosHalfDampen = MathUtils.cos(dampening / 2f);
-            AbstractKusudama k = ((AbstractKusudama) forBone.getConstraint());
+            Kusudama k = ((Kusudama) forBone.getConstraint());
             if (k != null && k.getPainfullness() != 0f) {
                 springy = true;
                 populateReturnDampeningIterationArray(k);
@@ -741,7 +742,7 @@ public class SegmentedArmature {
             }
         }
 
-        public void populateReturnDampeningIterationArray(AbstractKusudama k) {
+        public void populateReturnDampeningIterationArray(Kusudama k) {
             float predamp = 1f - forBone.getStiffness();
             float defaultDampening = forBone.parentArmature.dampening;
             float dampening = forBone.getParent() == null ? MathUtils.PI : predamp * defaultDampening;

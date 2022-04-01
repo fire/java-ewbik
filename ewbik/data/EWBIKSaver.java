@@ -70,7 +70,7 @@ public class EWBIKSaver extends SaveManager {
                     armaturesJSON.append(jsonObj);
                 if (Bone.class.isAssignableFrom(s.getClass()))
                     bonesJSON.append(jsonObj);
-                if (AbstractKusudama.class.isAssignableFrom(s.getClass()))
+                if (ewbik.processing.singlePrecision.Kusudama.class.isAssignableFrom(s.getClass()))
                     kusudamaJSON.append(jsonObj);
                 if (ewbik.processing.singlePrecision.LimitCone.class.isAssignableFrom(s.getClass()))
                     limitConeJSON.append(jsonObj);

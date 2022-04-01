@@ -22,7 +22,6 @@ package ewbik.processing.singlePrecision;
 import ewbik.asj.LoadManager;
 import ewbik.asj.SaveManager;
 import ewbik.asj.Saveable;
-import ewbik.ik.AbstractKusudama;
 import ewbik.processing.sceneGraph.Axes;
 import processing.core.PVector;
 import ewbik.math.Vec3f;
@@ -33,7 +32,7 @@ import ewbik.math.MathUtils;
 
 public class LimitCone implements Saveable {
 
-    public AbstractKusudama parentKusudama;
+    public ewbik.processing.singlePrecision.Kusudama parentKusudama;
     public Vec3f<?> tangentCircleCenterNext1;
     public Vec3f<?> tangentCircleCenterNext2;
     public float tangentCircleRadiusNext;
@@ -65,7 +64,7 @@ public class LimitCone implements Saveable {
     public LimitCone() {
     }
 
-    public LimitCone(PVector location, float rad, AbstractKusudama attachedTo) {
+    public LimitCone(PVector location, float rad, ewbik.processing.singlePrecision.Kusudama attachedTo) {
         Vec3f<?> location1 = Axes.toVector3(location);
         setControlPoint(location1);
         LimitCone.this.tangentCircleCenterNext1 = location1.getOrthogonal();
@@ -458,7 +457,7 @@ public class LimitCone implements Saveable {
             this.parentKusudama.constraintUpdateNotification();
     }
 
-    public AbstractKusudama getParentKusudama() {
+    public ewbik.processing.singlePrecision.Kusudama getParentKusudama() {
         return parentKusudama;
     }
 
@@ -478,7 +477,7 @@ public class LimitCone implements Saveable {
     }
 
     public void loadFromJSONObject(ewbik.asj.data.JSONObject j, LoadManager l) {
-        this.parentKusudama = (AbstractKusudama) l.getObjectFromClassMaps(AbstractKusudama.class,
+        this.parentKusudama = (ewbik.processing.singlePrecision.Kusudama) l.getObjectFromClassMaps(ewbik.processing.singlePrecision.Kusudama.class,
                 j.getString("parentKusudama"));
         Vector3 controlPointJ = null;
         try {
