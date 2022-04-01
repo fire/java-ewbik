@@ -8,7 +8,7 @@ import data.agnosticsavior.CanLoad;
  *
  * @author Xoppa
  */
-interface Vecf<T extends Vecf<T>> {
+interface Array<T extends ewbik.math.Array<T>> {
 
 
     /**
@@ -17,7 +17,7 @@ interface Vecf<T extends Vecf<T>> {
     float mag();
 
     /**
-     * This method is faster than {@link Vecf#mag()} because it avoids calculating a square root. It is useful for comparisons,
+     * This method is faster than {@link ewbik.math.Array#mag()} because it avoids calculating a square root. It is useful for comparisons,
      * but not for getting exact lengths, as the return value is the square of the actual length.
      *
      * @return The squared euclidean length
@@ -76,7 +76,7 @@ interface Vecf<T extends Vecf<T>> {
      * @param v The other vector
      * @return The dot product between this and the other vector
      */
-    <V extends Vecf<?>> float dot(V v);
+    <V extends ewbik.math.Array<?>> float dot(V v);
 
     /**
      * ( begin auto-generated from SGVec_3f_div.xml )
@@ -109,7 +109,7 @@ interface Vecf<T extends Vecf<T>> {
     float dist(T v);
 
     /**
-     * This method is faster than {@link Vecf#dist(Vecf)} because it avoids calculating a square root. It is useful for
+     * This method is faster than {@link ewbik.math.Array#dist(ewbik.math.Array)} because it avoids calculating a square root. It is useful for
      * comparisons, but not for getting accurate distances, as the return value is the square of the actual distance.
      *
      * @param v The other vector
@@ -163,26 +163,26 @@ interface Vecf<T extends Vecf<T>> {
     boolean isOnLine(T other);
 
     /**
-     * @return true if this vector is collinear with the other vector ({@link #isOnLine(Vecf, float)} &&
-     * {@link #hasSameDirection(Vecf)}).
+     * @return true if this vector is collinear with the other vector ({@link #isOnLine(ewbik.math.Array, float)} &&
+     * {@link #hasSameDirection(ewbik.math.Array)}).
      */
     boolean isCollinear(T other, float epsilon);
 
     /**
-     * @return true if this vector is collinear with the other vector ({@link #isOnLine(Vecf)} &&
-     * {@link #hasSameDirection(Vecf)}).
+     * @return true if this vector is collinear with the other vector ({@link #isOnLine(ewbik.math.Array)} &&
+     * {@link #hasSameDirection(ewbik.math.Array)}).
      */
     boolean isCollinear(T other);
 
     /**
-     * @return true if this vector is opposite collinear with the other vector ({@link #isOnLine(Vecf, float)} &&
-     * {@link #hasOppositeDirection(Vecf)}).
+     * @return true if this vector is opposite collinear with the other vector ({@link #isOnLine(ewbik.math.Array, float)} &&
+     * {@link #hasOppositeDirection(ewbik.math.Array)}).
      */
     boolean isCollinearOpposite(T other, float epsilon);
 
     /**
-     * @return true if this vector is opposite collinear with the other vector ({@link #isOnLine(Vecf)} &&
-     * {@link #hasOppositeDirection(Vecf)}).
+     * @return true if this vector is opposite collinear with the other vector ({@link #isOnLine(ewbik.math.Array)} &&
+     * {@link #hasOppositeDirection(ewbik.math.Array)}).
      */
     boolean isCollinearOpposite(T other);
 
@@ -214,7 +214,7 @@ interface Vecf<T extends Vecf<T>> {
      * @param epsilon
      * @return whether the vectors have fuzzy equality.
      */
-    <V extends Vecf<?>> boolean epsilonEquals(V other, float epsilon);
+    <V extends ewbik.math.Array<?>> boolean epsilonEquals(V other, float epsilon);
 
     /**
      * First scale a supplied vector, then add it to this vector.
@@ -222,7 +222,7 @@ interface Vecf<T extends Vecf<T>> {
      * @param v      addition vector
      * @param scalar for scaling the addition vector
      */
-    <V extends Vecf<?>> T mulAdd(V v, float scalar);
+    <V extends ewbik.math.Array<?>> T mulAdd(V v, float scalar);
 
 
     /**
@@ -246,7 +246,7 @@ interface Vecf<T extends Vecf<T>> {
      * @param v      addition vector
      * @param mulVec vector by whose values the addition vector will be scaled
      */
-    <V extends Vecf<?>> T mulAdd(V v, V mulVec);
+    <V extends ewbik.math.Array<?>> T mulAdd(V v, V mulVec);
 
     /**
      * makes a copy of this vector and scales it by the given value, then returns that copy.
@@ -310,7 +310,7 @@ interface Vecf<T extends Vecf<T>> {
      */
     public <V extends Vec3f<?>> V toVec3f();
 
-    <V extends Vecf<?>> T crs(V vector);
+    <V extends ewbik.math.Array<?>> T crs(V vector);
 
 
     /**
@@ -324,7 +324,7 @@ interface Vecf<T extends Vecf<T>> {
      * @param v The vector
      * @return This vector for chaining
      */
-    <V extends Vecf<?>> T add(V v);
+    <V extends ewbik.math.Array<?>> T add(V v);
 
     /**
      * make a copy of this vector and add the given vector to it, then return that copy.
@@ -332,7 +332,7 @@ interface Vecf<T extends Vecf<T>> {
      * @param v The vector
      * @return The resulting vector
      */
-    public default <V extends Vecf<?>> T addCopy(V v) {
+    public default <V extends ewbik.math.Array<?>> T addCopy(V v) {
         T cv = this.copy();
         return cv.add(v);
     }
@@ -345,7 +345,7 @@ interface Vecf<T extends Vecf<T>> {
      * @param vector The other vector
      * @return The copied vector for chaining
      */
-    public default <V extends Vecf<?>> T crossCopy(V vector) {
+    public default <V extends ewbik.math.Array<?>> T crossCopy(V vector) {
         T c = this.copy();
         return c.crs(vector);
     }
@@ -356,7 +356,7 @@ interface Vecf<T extends Vecf<T>> {
      * @param v The vector
      * @return This vector for chaining
      */
-    <V extends Vecf<?>> T sub(V v);
+    <V extends ewbik.math.Array<?>> T sub(V v);
 
     /**
      * make a copy of this vector and subtract the given vector from it, then return that copy.
@@ -364,7 +364,7 @@ interface Vecf<T extends Vecf<T>> {
      * @param v The vector
      * @return the resulting vector
      */
-    default <V extends Vecf<?>> T subCopy(V v) {
+    default <V extends ewbik.math.Array<?>> T subCopy(V v) {
         T cv = this.copy();
         return cv.sub(v);
     }
@@ -374,7 +374,7 @@ interface Vecf<T extends Vecf<T>> {
      *
      * @return This vector for chaining
      */
-    <V extends Vecf<?>> T mult(V v);
+    <V extends ewbik.math.Array<?>> T mult(V v);
 
     /**
      * makes a copy of this vector and multiplies it componentWise by the given vector, then returns that copy.
@@ -382,7 +382,7 @@ interface Vecf<T extends Vecf<T>> {
      * @param v The vector
      * @return the resulting vector
      */
-    default <V extends Vecf<?>> T multCopy(V v) {
+    default <V extends ewbik.math.Array<?>> T multCopy(V v) {
         T cv = this.copy();
         return cv.mult(v);
     }
@@ -397,7 +397,7 @@ interface Vecf<T extends Vecf<T>> {
     public <V extends Vec3f<?>> T add(V vector);
 
 }
-public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
+public abstract class Vec3f<T extends Vec3f<T>> implements ewbik.math.Array<T>, CanLoad {
 
     public final static int X = 0, Y = 1, Z = 2;
     private static final long serialVersionUID = 3840054589595372522L;
@@ -685,7 +685,7 @@ public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
     }
 
     @Override
-    public <V extends Vecf<?>> T add(V vector) {
+    public <V extends ewbik.math.Array<?>> T add(V vector) {
         return this.add(vector.getX(), vector.getY(), vector.getZ());
     }
 
@@ -729,7 +729,7 @@ public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
     }
 
     @Override
-    public <V extends Vecf<?>> T sub(V a_vec) {
+    public <V extends ewbik.math.Array<?>> T sub(V a_vec) {
         return sub(a_vec.getX(), a_vec.getY(), a_vec.getZ());
     }
 
@@ -756,7 +756,7 @@ public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
     }
 
     @Override
-    public <V extends Vecf<?>> T mult(V other) {
+    public <V extends ewbik.math.Array<?>> T mult(V other) {
         return this.set(x * other.getX(), y * other.getY(), z * other.getZ());
     }
 
@@ -785,7 +785,7 @@ public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
     }
 
     @Override
-    public <V extends Vecf<?>> T mulAdd(V vec, float scalar) {
+    public <V extends ewbik.math.Array<?>> T mulAdd(V vec, float scalar) {
         this.x += vec.getX() * scalar;
         this.y += vec.getY() * scalar;
         this.z += vec.getZ() * scalar;
@@ -800,7 +800,7 @@ public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
     }
 
     @Override
-    public <V extends Vecf<?>> T mulAdd(V vec, V mulVec) {
+    public <V extends ewbik.math.Array<?>> T mulAdd(V vec, V mulVec) {
         this.x += vec.getX() * mulVec.getX();
         this.y += vec.getY() * mulVec.getY();
         this.z += vec.getZ() * mulVec.getZ();
@@ -882,7 +882,7 @@ public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
     }
 
     @Override
-    public <V extends Vecf<?>> float dot(final V vector) {
+    public <V extends ewbik.math.Array<?>> float dot(final V vector) {
         return x * vector.getX() + y * vector.getY() + z * vector.getZ();
     }
 
@@ -909,7 +909,7 @@ public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
      * @return This vector for chaining
      */
     @Override
-    public <V extends Vecf<?>> T crs(final V vector) {
+    public <V extends ewbik.math.Array<?>> T crs(final V vector) {
         return this.set(y * vector.getZ() - z * vector.getY(), z * vector.getX() - x * vector.getZ(),
                 x * vector.getY() - y * vector.getX());
     }
@@ -1150,7 +1150,7 @@ public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
     }
 
     @Override
-    public <V extends Vecf<?>> boolean epsilonEquals(V other, float epsilon) {
+    public <V extends ewbik.math.Array<?>> boolean epsilonEquals(V other, float epsilon) {
         if (other == null)
             return false;
         if (MathUtils.abs(other.getX() - x) > epsilon)
