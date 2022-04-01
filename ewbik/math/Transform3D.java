@@ -1,6 +1,6 @@
 package ewbik.math;
 
-public class Basis {
+public class Transform3D {
 
     public static final int LEFT = -1;
     public static final int RIGHT = 1;
@@ -27,7 +27,7 @@ public class Basis {
      *
      * @param origin
      */
-    public Basis(Vector3 origin) {
+    public Transform3D(Vector3 origin) {
         translate = origin.copy();
         xBase = origin.copy();
         yBase = origin.copy();
@@ -43,7 +43,7 @@ public class Basis {
         refreshPrecomputed();
     }
 
-    public <T extends Basis> Basis(T input) {
+    public <T extends ewbik.math.Transform3D> Transform3D(T input) {
         translate = input.translate.copy();
         xBase = translate.copy();
         yBase = translate.copy();
@@ -77,7 +77,7 @@ public class Basis {
      * @param y      basis vector direction
      * @param z      basis vector direction
      */
-    public <V extends Vector3> Basis(V origin, V x, V y, V z) {
+    public <V extends Vector3> Transform3D(V origin, V x, V y, V z) {
         this.translate = origin.copy();
         xRay = new Ray3(origin.copy(), origin.copy());
         yRay = new Ray3(origin.copy(), origin.copy());
@@ -101,7 +101,7 @@ public class Basis {
      * @param y basis Ray
      * @param z basis Ray
      */
-    public <R extends Ray3> Basis(R x, R y, R z) {
+    public <R extends Ray3> Transform3D(R x, R y, R z) {
         this.translate = x.p1().copy();
         xRay = x.copy();
         yRay = y.copy();
@@ -117,8 +117,8 @@ public class Basis {
     }
 
 
-    public Basis copy() {
-        return new ewbik.math.Basis(this);
+    public ewbik.math.Transform3D copy() {
+        return new ewbik.math.Transform3D(this);
     }
 
     private <V extends Vector3> void set(V x, V y, V z) {
@@ -145,7 +145,7 @@ public class Basis {
      *
      * @param in
      */
-    public <T extends Basis> void adoptValues(T in) {
+    public <T extends ewbik.math.Transform3D> void adoptValues(T in) {
         this.translate.set(in.translate);
         this.rotation.set(in.rotation);
         xBase = translate.copy();
@@ -200,7 +200,7 @@ public class Basis {
         return resultNew;
     }
 
-    public <B extends Basis> void setToLocalOf(B global_input, B local_output) {
+    public <B extends ewbik.math.Transform3D> void setToLocalOf(B global_input, B local_output) {
         local_output.translate = this.getLocalOf(global_input.translate);
         inverseRotation.applyTo(global_input.rotation, local_output.rotation);
 
@@ -235,7 +235,7 @@ public class Basis {
     }
 
     /**
-     * the default Basis implementation is orthonormal,
+     * the default Transform3D implementation is orthonormal,
      * so by default this function will just set @param vec to (1,0,0),
      * but extending (affine) classes can override this to represent the direction and magnitude of the x axis prior to rotation.
      */
@@ -244,7 +244,7 @@ public class Basis {
     }
 
     /**
-     * the default Basis implementation is orthonormal,
+     * the default Transform3D implementation is orthonormal,
      * so by default this function will just set @param vec to (0,1,0),
      * but extending (affine) classes can override this to represent the direction and magnitude of the y axis prior to rotation.
      */
@@ -253,7 +253,7 @@ public class Basis {
     }
 
     /**
-     * the default Basis implementation is orthonormal,
+     * the default Transform3D implementation is orthonormal,
      * so by default this function will just set @param vec to (0,0,1),
      * but extending (affine) classes can override this to represent the direction and magnitude of the z axis prior to rotation.
      */
@@ -268,7 +268,7 @@ public class Basis {
      * @param localInput
      * @param globalOutput
      */
-    public <T extends Basis> void setToGlobalOf(T localInput, T globalOutput) {
+    public <T extends ewbik.math.Transform3D> void setToGlobalOf(T localInput, T globalOutput) {
         this.rotation.applyTo(localInput.rotation, globalOutput.rotation);
         this.setToGlobalOf(localInput.translate, globalOutput.translate);
         globalOutput.refreshPrecomputed();

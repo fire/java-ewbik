@@ -41,8 +41,8 @@ public class Node3D implements ewbik.asj.Saveable {
     public static final int Y = 1;
     public static final int Z = 2;
     public boolean debug = false;
-    public Basis localMBasis;
-    public Basis globalMBasis;
+    public Transform3D localMBasis;
+    public Transform3D globalMBasis;
     public boolean dirty = true;
     public LinkedList<DependencyReference<ewbik.processing.sceneGraph.Node3D>> dependentsRegistry = new LinkedList<DependencyReference<ewbik.processing.sceneGraph.Node3D>>();
     protected Vector3 workingVector;
@@ -54,14 +54,14 @@ public class Node3D implements ewbik.asj.Saveable {
     private DependencyReference<ewbik.processing.sceneGraph.Node3D> parent = null;
     private int slipType = 0;
 
-    public Node3D(ewbik.math.Basis b, ewbik.processing.sceneGraph.Node3D parent) {
-        this.globalMBasis = ((Basis) b).copy();
-        createTempVars(((Basis) b).getOrigin());
+    public Node3D(ewbik.math.Transform3D b, ewbik.processing.sceneGraph.Node3D parent) {
+        this.globalMBasis = ((Transform3D) b).copy();
+        createTempVars(((Transform3D) b).getOrigin());
         if (this.getParentAxes() != null)
             ewbik.processing.sceneGraph.Node3D.this.setParent(parent);
         else {
             this.areGlobal = true;
-            this.localMBasis = ((Basis) b).copy();
+            this.localMBasis = ((Transform3D) b).copy();
         }
 
         this.updateGlobal();
@@ -91,8 +91,8 @@ public class Node3D implements ewbik.asj.Saveable {
 
         ewbik.processing.sceneGraph.Node3D.this.areGlobal = true;
 
-        ewbik.processing.sceneGraph.Node3D.this.localMBasis = new Basis(origin1, inX1, inY1, inZ1);
-        ewbik.processing.sceneGraph.Node3D.this.globalMBasis = new Basis(origin1, inX1, inY1, inZ1);
+        ewbik.processing.sceneGraph.Node3D.this.localMBasis = new Transform3D(origin1, inX1, inY1, inZ1);
+        ewbik.processing.sceneGraph.Node3D.this.globalMBasis = new Transform3D(origin1, inX1, inY1, inZ1);
 
         Vector3 o = origin1.copy();
         o.set(0, 0, 0);
@@ -126,8 +126,8 @@ public class Node3D implements ewbik.asj.Saveable {
 
         ewbik.processing.sceneGraph.Node3D.this.areGlobal = true;
 
-        ewbik.processing.sceneGraph.Node3D.this.localMBasis = new Basis(origin, inX, inY, inZ);
-        ewbik.processing.sceneGraph.Node3D.this.globalMBasis = new Basis(origin, inX, inY, inZ);
+        ewbik.processing.sceneGraph.Node3D.this.localMBasis = new Transform3D(origin, inX, inY, inZ);
+        ewbik.processing.sceneGraph.Node3D.this.globalMBasis = new Transform3D(origin, inX, inY, inZ);
 
         Vector3 o = origin.copy();
         o.set(0, 0, 0);
@@ -150,8 +150,8 @@ public class Node3D implements ewbik.asj.Saveable {
 
         ewbik.processing.sceneGraph.Node3D.this.areGlobal = true;
 
-        ewbik.processing.sceneGraph.Node3D.this.localMBasis = new Basis(origin, x, y, z);
-        ewbik.processing.sceneGraph.Node3D.this.globalMBasis = new Basis(origin, x, y, z);
+        ewbik.processing.sceneGraph.Node3D.this.localMBasis = new Transform3D(origin, x, y, z);
+        ewbik.processing.sceneGraph.Node3D.this.globalMBasis = new Transform3D(origin, x, y, z);
 
         Vector3 o = origin.copy();
         o.set(0, 0, 0);
@@ -308,7 +308,7 @@ public class Node3D implements ewbik.asj.Saveable {
         );
     }
 
-    private void updateMatrix(Basis b, float[][] outputMatrix) {
+    private void updateMatrix(Transform3D b, float[][] outputMatrix) {
         b.refreshPrecomputed();
 
         Vector3 x = b.getXHeading();
@@ -448,8 +448,8 @@ public class Node3D implements ewbik.asj.Saveable {
         return copy;
     }
 
-    public <B extends Basis> B getLocalOf(B input) {
-        Basis newBasis = new Basis((Basis) input);
+    public <B extends Transform3D> B getLocalOf(B input) {
+        Transform3D newBasis = new Transform3D((Transform3D) input);
         getGlobalMBasis().setToLocalOf(input, newBasis);
         return (B) newBasis;
     }
@@ -708,7 +708,7 @@ public class Node3D implements ewbik.asj.Saveable {
         this.setToLocalOf(in.p2(), out.p2());
     }
 
-    public void setToLocalOf(Basis input, Basis output) {
+    public void setToLocalOf(Transform3D input, Transform3D output) {
         this.updateGlobal();
         this.getGlobalMBasis().setToLocalOf(input, output);
     }
@@ -969,12 +969,12 @@ public class Node3D implements ewbik.asj.Saveable {
         dependentsRegistry.remove(child);
     }
 
-    public Basis getGlobalMBasis() {
+    public Transform3D getGlobalMBasis() {
         this.updateGlobal();
         return globalMBasis;
     }
 
-    public Basis getLocalMBasis() {
+    public Transform3D getLocalMBasis() {
         return localMBasis;
     }
 
