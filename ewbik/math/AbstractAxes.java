@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 /**
  * @author Eron Gjoni
  */
-public abstract class AbstractAxes implements AxisDependency, Saveable {
+public abstract class AbstractAxes implements Saveable {
     public static final int NORMAL = 0, IGNORE = 1, FORWARD = 2;
     public static final int RIGHT = 1, LEFT = -1;
     public static final int X = 0, Y = 1, Z = 2;
@@ -34,7 +34,7 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
     //public boolean forceOrthoNormality = true;
 
 
-    public LinkedList<DependencyReference<AxisDependency>> dependentsRegistry = new LinkedList<DependencyReference<AxisDependency>>();
+    public LinkedList<DependencyReference<AbstractAxes>> dependentsRegistry = new LinkedList<DependencyReference<AbstractAxes>>();
 
     protected Vec3f<?> workingVector;
 
@@ -189,10 +189,10 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
      *
      * @param r
      */
-    public void forEachDependent(Consumer<DependencyReference<AxisDependency>> action) {
-        Iterator<DependencyReference<AxisDependency>> i = dependentsRegistry.iterator();
+    public void forEachDependent(Consumer<DependencyReference<AbstractAxes>> action) {
+        Iterator<DependencyReference<AbstractAxes>> i = dependentsRegistry.iterator();
         while (i.hasNext()) {
-            DependencyReference<AxisDependency> dr = i.next();
+            DependencyReference<AbstractAxes> dr = i.next();
             if (dr.get() != null) {
                 action.accept(dr);
             } else {
@@ -628,15 +628,15 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
     }
 
 
-    public void registerDependent(AxisDependency newDependent) {
+    public void registerDependent(AbstractAxes newDependent) {
         //Make sure we don't hit a dependency loop
         if (AbstractAxes.class.isAssignableFrom(newDependent.getClass())) {
             if (((AbstractAxes) newDependent).isAncestorOf(this)) {
-                this.transferToParent(((AxisDependency) newDependent).getParentAxes());
+                this.transferToParent(((AbstractAxes) newDependent).getParentAxes());
             }
         }
         if (dependentsRegistry.indexOf(newDependent) == -1) {
-            dependentsRegistry.add(new DependencyReference<AxisDependency>(newDependent));
+            dependentsRegistry.add(new DependencyReference<AbstractAxes>(newDependent));
         }
     }
 
@@ -675,7 +675,7 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
         if (this.getParentAxes() != null) {
             this.updateGlobal();
             AbstractAxes oldParent = this.getParentAxes();
-            for (DependencyReference<AxisDependency> ad : this.dependentsRegistry) {
+            for (DependencyReference<AbstractAxes> ad : this.dependentsRegistry) {
                 ad.get().parentChangeWarning(this, this.getParentAxes(), null, null);
             }
             this.getLocalMBasis().adoptValues(this.globalMBasis);
@@ -684,13 +684,13 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
             this.areGlobal = true;
             this.markDirty();
             this.updateGlobal();
-            for (DependencyReference<AxisDependency> ad : this.dependentsRegistry) {
+            for (DependencyReference<AbstractAxes> ad : this.dependentsRegistry) {
                 ad.get().parentChangeCompletionNotice(this, oldParent, null, null);
             }
         }
     }
 
-    public void disown(AxisDependency child) {
+    public void disown(AbstractAxes child) {
         dependentsRegistry.remove(child);
     }
 
@@ -841,7 +841,7 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
     public void notifyDependentsOfSlip(AbstractAxes newAxisGlobal, ArrayList<Object> dontWarn) {
         for (int i = 0; i < dependentsRegistry.size(); i++) {
             if (!dontWarn.contains(dependentsRegistry.get(i))) {
-                AxisDependency dependant = dependentsRegistry.get(i).get();
+                AbstractAxes dependant = dependentsRegistry.get(i).get();
 
                 //First we check if the dependent extends AbstractAxes
                 //so we know whether or not to pass the dontWarn list
@@ -930,6 +930,12 @@ public abstract class AbstractAxes implements AxisDependency, Saveable {
                     if (Saveable.class.isAssignableFrom(ad.get().getClass()))
                         ((Saveable) ad.get()).makeSaveable(saveManager);
                 });
+    }
+
+    public void parentChangeWarning(AbstractAxes warningBy, AbstractAxes oldParent, AbstractAxes intendedParent, Object requestedBy) {
+    }
+
+    public void parentChangeCompletionNotice(AbstractAxes warningBy, AbstractAxes oldParent, AbstractAxes intendedParent, Object requestedBy) {
     }
 
     /**
