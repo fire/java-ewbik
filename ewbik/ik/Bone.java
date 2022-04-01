@@ -23,7 +23,6 @@ import ewbik.ik.*;
 import ewbik.ik.IKExceptions.NullParentForBoneException;
 import ewbik.ik.SegmentedArmature;
 import ewbik.math.*;
-import ewbik.processing.sceneGraph.Axes;
 import ewbik.processing.singlePrecision.Kusudama;
 import processing.Skeleton3D;
 import processing.core.PConstants;
@@ -40,9 +39,9 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     public int ancestorCount = 0;
     protected String tag;
     protected Quaternion lastRotation;
-    protected Axes previousOrientation;
-    protected Axes localAxes;
-    protected Axes majorRotationAxes;
+    protected ewbik.processing.sceneGraph.Transform3D previousOrientation;
+    protected ewbik.processing.sceneGraph.Transform3D localTransform3D;
+    protected ewbik.processing.sceneGraph.Transform3D majorRotationTransform3D;
     protected float boneHeight;
     protected Bone parent;
     protected ArrayList<Bone> children = new ArrayList<>();
@@ -74,8 +73,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
                 String inputTag, // some user specified name for the bone, if desired
                 float inputBoneHeight, // bone length
                 frameType coordinateType) throws NullParentForBoneException {
-        Vector3 tipHeading1 = Axes.toVector3(tipHeading);
-        Vector3 rollHeading1 = Axes.toVector3(rollHeading);
+        Vector3 tipHeading1 = ewbik.processing.sceneGraph.Transform3D.toVector3(tipHeading);
+        Vector3 rollHeading1 = ewbik.processing.sceneGraph.Transform3D.toVector3(rollHeading);
 
         this.lastRotation = new Quaternion();
         if (par != null) {
@@ -121,13 +120,13 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
             Bone.this.generateAxes(Bone.this.parent.getTip_(), tempX, tempTip, tempRoll);
             // this.localAxes.orthoNormalize(true);
-            Bone.this.localAxes.setParent(Bone.this.parent.localAxes);
+            Bone.this.localTransform3D.setParent(Bone.this.parent.localTransform3D);
 
-            Bone.this.previousOrientation = Bone.this.localAxes.attachedCopy(true);
+            Bone.this.previousOrientation = Bone.this.localTransform3D.attachedCopy(true);
 
-            Bone.this.majorRotationAxes = Bone.this.parent.localAxes().getGlobalCopy();
-            Bone.this.majorRotationAxes.translateTo(Bone.this.parent.getTip_());
-            Bone.this.majorRotationAxes.setParent(Bone.this.parent.localAxes);
+            Bone.this.majorRotationTransform3D = Bone.this.parent.localAxes().getGlobalCopy();
+            Bone.this.majorRotationTransform3D.translateTo(Bone.this.parent.getTip_());
+            Bone.this.majorRotationTransform3D.setParent(Bone.this.parent.localTransform3D);
 
             this.parent.addFreeChild(this);
             this.parent.addChild(this);
@@ -166,9 +165,9 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
                 this.tag = inputTag;
 
             Ray3 tipHeadingRay;
-            tipHeadingRay = new Ray3(parArma.localAxes.origin_(), tipHeading);
+            tipHeadingRay = new Ray3(parArma.localTransform3D.origin_(), tipHeading);
             tipHeadingRay.getRayScaledTo(inputBoneHeight);
-            Ray3 rollHeadingRay = new Ray3(parArma.localAxes.origin_(), rollHeading);
+            Ray3 rollHeadingRay = new Ray3(parArma.localTransform3D.origin_(), rollHeading);
             Vec3f<?> tempTip = tipHeading.copy();
             Vec3f<?> tempRoll = rollHeading.copy();
             Vec3f<?> tempX = tempTip.copy();
@@ -177,8 +176,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
                 tempTip = tipHeadingRay.heading();
                 tempRoll = rollHeadingRay.heading();
             } else if (coordinateType == frameType.RELATIVE) {
-                tempTip = parArma.localAxes.getGlobalOf(tipHeadingRay.heading());
-                tempRoll = parArma.localAxes.getGlobalOf(rollHeadingRay.heading());
+                tempTip = parArma.localTransform3D.getGlobalOf(tipHeadingRay.heading());
+                tempRoll = parArma.localTransform3D.getGlobalOf(rollHeadingRay.heading());
             } else {
                 System.out.println("WOAH WOAH WOAH");
             }
@@ -196,12 +195,12 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             this.parentArmature = parArma;
             parentArmature.addToBoneList(this);
 
-            generateAxes(parentArmature.localAxes.origin_(), tempX, tempTip, tempRoll);
-            localAxes.setParent(parentArmature.localAxes);
-            previousOrientation = localAxes.attachedCopy(true);
+            generateAxes(parentArmature.localTransform3D.origin_(), tempX, tempTip, tempRoll);
+            localTransform3D.setParent(parentArmature.localTransform3D);
+            previousOrientation = localTransform3D.attachedCopy(true);
 
-            majorRotationAxes = parentArmature.localAxes().getGlobalCopy();
-            majorRotationAxes.setParent(parentArmature.localAxes());
+            majorRotationTransform3D = parentArmature.localAxes().getGlobalCopy();
+            majorRotationTransform3D.setParent(parentArmature.localAxes());
 
             this.boneHeight = inputBoneHeight;
             this.updateAncestorCount();
@@ -253,22 +252,22 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             }
             this.boneHeight = inputBoneHeight;
 
-            Axes tempAxes = par.localAxes().getGlobalCopy();
+            ewbik.processing.sceneGraph.Transform3D tempTransform3D = par.localAxes().getGlobalCopy();
             Quaternion newRot = new Quaternion(RotationOrder.XZY, xAngle, yAngle, zAngle);
-            tempAxes.rotateBy(newRot);
+            tempTransform3D.rotateBy(newRot);
 
             this.parent = par;
             this.parentArmature = this.parent.parentArmature;
             Bone.this.parentArmature.addToBoneList(this);
 
-            Bone.this.generateAxes(Bone.this.parent.getTip_(), tempAxes.x_().heading(), tempAxes.y_().heading(), tempAxes.z_().heading());
+            Bone.this.generateAxes(Bone.this.parent.getTip_(), tempTransform3D.x_().heading(), tempTransform3D.y_().heading(), tempTransform3D.z_().heading());
             // this.localAxes.orthoNormalize(true);
-            Bone.this.localAxes.setParent(Bone.this.parent.localAxes);
-            Bone.this.previousOrientation = Bone.this.localAxes.attachedCopy(true);
+            Bone.this.localTransform3D.setParent(Bone.this.parent.localTransform3D);
+            Bone.this.previousOrientation = Bone.this.localTransform3D.attachedCopy(true);
 
-            Bone.this.majorRotationAxes = Bone.this.parent.localAxes().getGlobalCopy();
-            Bone.this.majorRotationAxes.translateTo(Bone.this.parent.getTip_());
-            Bone.this.majorRotationAxes.setParent(Bone.this.parent.localAxes);
+            Bone.this.majorRotationTransform3D = Bone.this.parent.localAxes().getGlobalCopy();
+            Bone.this.majorRotationTransform3D.translateTo(Bone.this.parent.getTip_());
+            Bone.this.majorRotationTransform3D.setParent(Bone.this.parent.localTransform3D);
 
             this.parent.addFreeChild(this);
             this.parent.addChild(this);
@@ -292,22 +291,22 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             }
             this.boneHeight = inputBoneHeight;
 
-            Axes tempAxes = par.localAxes().getGlobalCopy();
+            ewbik.processing.sceneGraph.Transform3D tempTransform3D = par.localAxes().getGlobalCopy();
             Quaternion newRot = new Quaternion();
-            tempAxes.rotateBy(newRot);
+            tempTransform3D.rotateBy(newRot);
 
             this.parent = par;
             this.parentArmature = this.parent.parentArmature;
             Bone.this.parentArmature.addToBoneList(this);
 
-            Bone.this.generateAxes(Bone.this.parent.getTip_(), tempAxes.x_().heading(), tempAxes.y_().heading(), tempAxes.z_().heading());
+            Bone.this.generateAxes(Bone.this.parent.getTip_(), tempTransform3D.x_().heading(), tempTransform3D.y_().heading(), tempTransform3D.z_().heading());
             // this.localAxes.orthoNormalize(true);
-            Bone.this.localAxes.setParent(Bone.this.parent.localAxes);
-            Bone.this.previousOrientation = Bone.this.localAxes.attachedCopy(true);
+            Bone.this.localTransform3D.setParent(Bone.this.parent.localTransform3D);
+            Bone.this.previousOrientation = Bone.this.localTransform3D.attachedCopy(true);
 
-            Bone.this.majorRotationAxes = Bone.this.parent.localAxes().getGlobalCopy();
-            Bone.this.majorRotationAxes.translateTo(Bone.this.parent.getTip_());
-            Bone.this.majorRotationAxes.setParent(Bone.this.parent.localAxes);
+            Bone.this.majorRotationTransform3D = Bone.this.parent.localAxes().getGlobalCopy();
+            Bone.this.majorRotationTransform3D.translateTo(Bone.this.parent.getTip_());
+            Bone.this.majorRotationTransform3D.setParent(Bone.this.parent.localTransform3D);
 
             this.parent.addFreeChild(this);
             this.parent.addChild(this);
@@ -322,7 +321,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     }
 
     protected void generateAxes(Vec3f<?> origin, Vec3f<?> x, Vec3f<?> y, Vec3f<?> z) {
-        this.localAxes = new Axes(origin, x, y, z);
+        this.localTransform3D = new ewbik.processing.sceneGraph.Transform3D(origin, x, y, z);
     }
 
     public PVector getBase() {
@@ -335,9 +334,9 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         return new PVector(tip.x, tip.y, tip.z);
     }
 
-    protected IKPin createAndReturnPinOnAxes(Axes on) {
+    protected IKPin createAndReturnPinOnAxes(ewbik.processing.sceneGraph.Transform3D on) {
         return new IKPin(
-                (Axes) on,
+                (ewbik.processing.sceneGraph.Transform3D) on,
                 true,
                 this);
     }
@@ -405,7 +404,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
         pg.strokeWeight(4f);
         if (this.isPinned()) {
-            ((Axes) this.getIKPin().getAxes()).drawMe(pg, pinSize);
+            ((ewbik.processing.sceneGraph.Transform3D) this.getIKPin().getAxes()).drawMe(pg, pinSize);
         }
 
         if (this.isPinned()) {
@@ -421,8 +420,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     /**
      * Get the Axes associated with this bone.
      */
-    public Axes localAxes() {
-        return (Axes) this.localAxes;
+    public ewbik.processing.sceneGraph.Transform3D localAxes() {
+        return (ewbik.processing.sceneGraph.Transform3D) this.localTransform3D;
     }
 
     /**
@@ -433,8 +432,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public Axes getMajorRotationAxes() {
-        return (Axes) this.majorRotationAxes;
+    public ewbik.processing.sceneGraph.Transform3D getMajorRotationAxes() {
+        return (ewbik.processing.sceneGraph.Transform3D) this.majorRotationTransform3D;
     }
 
     @SuppressWarnings("unchecked")
@@ -509,16 +508,16 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      * you are unlikely to need to use this, and at the moment
      * it presumes KusudamaExample constraints
      */
-    public void setAxesToSnapped(Axes toSet, Axes limitingAxes, float cosHalfAngleDampen) {
+    public void setAxesToSnapped(ewbik.processing.sceneGraph.Transform3D toSet, ewbik.processing.sceneGraph.Transform3D limitingTransform3D, float cosHalfAngleDampen) {
         if (constraints != null && Kusudama.class.isAssignableFrom(constraints.getClass())) {
-            ((Kusudama) constraints).setAxesToSnapped(toSet, limitingAxes, cosHalfAngleDampen);
+            ((Kusudama) constraints).setAxesToSnapped(toSet, limitingTransform3D, cosHalfAngleDampen);
         }
     }
 
-    public void setAxesToReturnfulled(Axes toSet, Axes limitingAxes, float cosHalfAngleDampen,
+    public void setAxesToReturnfulled(ewbik.processing.sceneGraph.Transform3D toSet, ewbik.processing.sceneGraph.Transform3D limitingTransform3D, float cosHalfAngleDampen,
                                       float angleDampen) {
         if (constraints != null && Kusudama.class.isAssignableFrom(constraints.getClass())) {
-            ((Kusudama) constraints).setAxesToReturnfulled(toSet, limitingAxes, cosHalfAngleDampen,
+            ((Kusudama) constraints).setAxesToReturnfulled(toSet, limitingTransform3D, cosHalfAngleDampen,
                     angleDampen);
         }
     }
@@ -560,7 +559,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         if (this.parent != null) {
             this.localAxes().markDirty();
             this.localAxes().updateGlobal();
-            Axes result = this.localAxes().getGlobalCopy();
+            ewbik.processing.sceneGraph.Transform3D result = this.localAxes().getGlobalCopy();
             this.getMajorRotationAxes().updateGlobal();
             this.getMajorRotationAxes().globalMBasis.setToLocalOf(result.globalMBasis, result.globalMBasis);
             return result.globalMBasis.rotation.getAngles(RotationOrder.XYZ);
@@ -577,7 +576,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      * And allows you to treat rotation in a wide variety of conventions.
      */
     public Quaternion getRotation() {
-        return (new Quaternion(this.majorRotationAxes.x_().heading(), this.majorRotationAxes.y_().heading(),
+        return (new Quaternion(this.majorRotationTransform3D.x_().heading(), this.majorRotationTransform3D.y_().heading(),
                 this.localAxes().x_().heading(), this.localAxes().y_().heading()));
     }
 
@@ -596,7 +595,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      * relative to
      * its parent.
      */
-    public Axes getPreviousOrientation() {
+    public ewbik.processing.sceneGraph.Transform3D getPreviousOrientation() {
         return previousOrientation;
     }
 
@@ -607,8 +606,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      * @param rot
      */
     public void rotateBy(Quaternion rot) {
-        this.previousOrientation.alignLocalsTo(localAxes);
-        this.localAxes.rotateBy(rot);
+        this.previousOrientation.alignLocalsTo(localTransform3D);
+        this.localTransform3D.rotateBy(rot);
 
         this.lastRotation.set(rot);
     }
@@ -656,10 +655,10 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      */
     public void rotAboutFrameX(float amt, boolean obeyConstraints) {
         // localAxes().alignLocalsTo(previousOrientation);
-        previousOrientation.alignLocalsTo(localAxes);
+        previousOrientation.alignLocalsTo(localTransform3D);
 
-        Quaternion xRot = new Quaternion(majorRotationAxes.x_().heading(), amt);
-        localAxes.rotateBy(xRot);
+        Quaternion xRot = new Quaternion(majorRotationTransform3D.x_().heading(), amt);
+        localTransform3D.rotateBy(xRot);
 
         lastRotation.set(xRot);
 
@@ -675,10 +674,10 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      *                       when rotating the bone
      */
     public void rotAboutFrameY(float amt, boolean obeyConstraints) {
-        previousOrientation.alignLocalsTo(localAxes);
+        previousOrientation.alignLocalsTo(localTransform3D);
 
-        Quaternion yRot = new Quaternion(majorRotationAxes.y_().heading(), amt);
-        localAxes.rotateBy(yRot);
+        Quaternion yRot = new Quaternion(majorRotationTransform3D.y_().heading(), amt);
+        localTransform3D.rotateBy(yRot);
 
         lastRotation.set(yRot);
 
@@ -694,10 +693,10 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      *                       when rotating the bone
      */
     public void rotAboutFrameZ(float amt, boolean obeyConstraints) {
-        previousOrientation.alignLocalsTo(localAxes);
+        previousOrientation.alignLocalsTo(localTransform3D);
 
-        Quaternion zRot = new Quaternion(majorRotationAxes.z_().heading(), amt);
-        localAxes.rotateBy(zRot);
+        Quaternion zRot = new Quaternion(majorRotationTransform3D.z_().heading(), amt);
+        localTransform3D.rotateBy(zRot);
 
         lastRotation.set(zRot);
 
@@ -713,7 +712,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      *                the bone
      */
     public void rotateAxially(float amt, boolean obeyConstraints) {
-        localAxes.rotateAboutY(amt, true);
+        localTransform3D.rotateAboutY(amt, true);
 
         if (obeyConstraints)
             this.snapToConstraints();
@@ -767,10 +766,10 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      *                                 You don't need to change this unless you
      *                                 start wishing you could change this.
      */
-    public void setFrameofRotation(Axes rotationFrameCoordinates) {
-        majorRotationAxes.alignLocalsTo(rotationFrameCoordinates);
+    public void setFrameofRotation(ewbik.processing.sceneGraph.Transform3D rotationFrameCoordinates) {
+        majorRotationTransform3D.alignLocalsTo(rotationFrameCoordinates);
         if (parent != null) {
-            majorRotationAxes.translateTo(parent.getTip_());
+            majorRotationTransform3D.translateTo(parent.getTip_());
         }
     }
 
@@ -807,9 +806,9 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      */
     public void enablePin() {
         if (pin == null) {
-            Axes pinAxes = this.localAxes().getGlobalCopy();
-            pinAxes.setParent(this.parentArmature.localAxes().getParentAxes());
-            pin = createAndReturnPinOnAxes(pinAxes);
+            ewbik.processing.sceneGraph.Transform3D pinTransform3D = this.localAxes().getGlobalCopy();
+            pinTransform3D.setParent(this.parentArmature.localAxes().getParentAxes());
+            pin = createAndReturnPinOnAxes(pinTransform3D);
         }
         pin.enable();
         freeChildren.clear();
@@ -835,10 +834,10 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
     public void enablePin_(Vec3f<?> pinTo) {
         if (pin == null) {
-            Axes pinAxes = this.localAxes().getGlobalCopy();
-            pinAxes.setParent(this.parentArmature.localAxes().getParentAxes());
-            pinAxes.translateTo(pinTo);
-            pin = createAndReturnPinOnAxes(pinAxes);
+            ewbik.processing.sceneGraph.Transform3D pinTransform3D = this.localAxes().getGlobalCopy();
+            pinTransform3D.setParent(this.parentArmature.localAxes().getParentAxes());
+            pinTransform3D.translateTo(pinTo);
+            pin = createAndReturnPinOnAxes(pinTransform3D);
         } else
             pin.translateTo_(pinTo);
         pin.enable();
@@ -890,7 +889,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         return mostImmediatePinnedDescendants;
     }
 
-    public Axes getPinnedAxes() {
+    public ewbik.processing.sceneGraph.Transform3D getPinnedAxes() {
         if (this.pin == null)
             return null;
         return this.pin.getAxes();
@@ -975,11 +974,11 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     }
 
     public Vec3f<?> getBase_() {
-        return localAxes.origin_().copy();
+        return localTransform3D.origin_().copy();
     }
 
     public Vec3f<?> getTip_() {
-        return localAxes.y_().getScaledTo(boneHeight);
+        return localTransform3D.y_().getScaledTo(boneHeight);
     }
 
     /**
@@ -1018,7 +1017,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         this.boneHeight = inBoneHeight;
         for (Bone child : this.getChildren()) {
             child.localAxes().translateTo(this.getTip_());
-            child.majorRotationAxes.translateTo(this.getTip_());
+            child.majorRotationTransform3D.translateTo(this.getTip_());
         }
     }
 
@@ -1119,8 +1118,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
     @Override
     public void loadFromJSONObject(ewbik.asj.data.JSONObject j, ewbik.asj.LoadManager l) {
-        this.localAxes = (Axes) l.getObjectFromClassMaps(Axes.class, j.getString("localAxes"));
-        this.majorRotationAxes = (Axes) l.getObjectFromClassMaps(Axes.class,
+        this.localTransform3D = (ewbik.processing.sceneGraph.Transform3D) l.getObjectFromClassMaps(ewbik.processing.sceneGraph.Transform3D.class, j.getString("localAxes"));
+        this.majorRotationTransform3D = (ewbik.processing.sceneGraph.Transform3D) l.getObjectFromClassMaps(ewbik.processing.sceneGraph.Transform3D.class,
                 j.getString("majorRotationAxes"));
         this.parentArmature = (Skeleton3D) l.getObjectFromClassMaps(Skeleton3D.class,
                 j.getString("parentArmature"));
@@ -1139,8 +1138,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     public ewbik.asj.data.JSONObject getSaveJSON(ewbik.asj.SaveManager saveManager) {
         ewbik.asj.data.JSONObject thisBone = new ewbik.asj.data.JSONObject();
         thisBone.setString("identityHash", this.getIdentityHash());
-        thisBone.setString("localAxes", this.localAxes.getIdentityHash());
-        thisBone.setString("majorRotationAxes", majorRotationAxes.getIdentityHash());
+        thisBone.setString("localAxes", this.localTransform3D.getIdentityHash());
+        thisBone.setString("majorRotationAxes", majorRotationTransform3D.getIdentityHash());
         thisBone.setString("parentArmature", ((ewbik.asj.Saveable) parentArmature).getIdentityHash());
         ewbik.asj.data.JSONArray children = saveManager.arrayListToJSONArray(getChildren());
         thisBone.setJSONArray("children", children);

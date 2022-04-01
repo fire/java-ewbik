@@ -6,7 +6,6 @@ import ewbik.asj.data.JSONArray;
 import ewbik.asj.data.JSONObject;
 import ewbik.asj.data.StringFuncs;
 import ewbik.ik.*;
-import ewbik.processing.sceneGraph.Axes;
 import ik.Bone;
 import ik.IKPin;
 import processing.Skeleton3D;
@@ -76,7 +75,7 @@ public class FloatBackedSaver extends SaveManager {
         for (Saveable s : sk) {
             JSONObject jsonObj = s.getSaveJSON(this);
             if (jsonObj != null) {
-                if (Axes.class.isAssignableFrom(s.getClass()))
+                if (ewbik.processing.sceneGraph.Transform3D.class.isAssignableFrom(s.getClass()))
                     axesJSON.append(jsonObj);
                 if (Skeleton3D.class.isAssignableFrom(s.getClass()))
                     armaturesJSON.append(jsonObj);

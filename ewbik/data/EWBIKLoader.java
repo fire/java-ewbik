@@ -7,7 +7,6 @@ import ewbik.asj.data.JSONObject;
 import ewbik.asj.data.StringFuncs;
 import ewbik.ik.*;
 import ewbik.math.Quaternion;
-import ewbik.processing.sceneGraph.Axes;
 import ik.Bone;
 import ik.IKPin;
 import processing.Skeleton3D;
@@ -68,7 +67,7 @@ public class EWBIKLoader {
      */
 
     public Collection<? extends Skeleton3D> importSinglePrecisionArmatures(String filepath,
-                                                                           Class<? extends Axes> AxesClass,
+                                                                           Class<? extends ewbik.processing.sceneGraph.Transform3D> AxesClass,
                                                                            Class<? extends Bone> BoneClass,
                                                                            Class<? extends Skeleton3D> ArmatureClass,
                                                                            Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,

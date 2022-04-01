@@ -2,7 +2,6 @@ package ewbik.processing;
 
 import ewbik.data.EWBIKLoader;
 import ewbik.data.EWBIKSaver;
-import ewbik.processing.sceneGraph.Axes;
 import ik.Bone;
 import ik.IKPin;
 import processing.Skeleton3D;
@@ -22,7 +21,7 @@ public final class IO {
         EWBIKLoader newLoader = new EWBIKLoader();
         @SuppressWarnings("unchecked")
         Collection<Skeleton3D> ArmatureList = (Collection<Skeleton3D>) newLoader.importSinglePrecisionArmatures(path,
-                Axes.class, Bone.class, Skeleton3D.class, ewbik.processing.singlePrecision.Kusudama.class, ewbik.processing.singlePrecision.LimitCone.class, IKPin.class);
+                ewbik.processing.sceneGraph.Transform3D.class, Bone.class, Skeleton3D.class, ewbik.processing.singlePrecision.Kusudama.class, ewbik.processing.singlePrecision.LimitCone.class, IKPin.class);
         for (Skeleton3D a : ArmatureList) {
             return a;
         }

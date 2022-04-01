@@ -23,7 +23,6 @@ import ewbik.asj.LoadManager;
 import ewbik.asj.SaveManager;
 import ewbik.asj.Saveable;
 import ewbik.math.*;
-import ewbik.processing.sceneGraph.Axes;
 import processing.core.PVector;
 
 public class LimitCone implements Saveable {
@@ -61,7 +60,7 @@ public class LimitCone implements Saveable {
     }
 
     public LimitCone(PVector location, float rad, ewbik.processing.singlePrecision.Kusudama attachedTo) {
-        Vec3f<?> location1 = Axes.toVector3(location);
+        Vec3f<?> location1 = ewbik.processing.sceneGraph.Transform3D.toVector3(location);
         setControlPoint(location1);
         LimitCone.this.tangentCircleCenterNext1 = location1.getOrthogonal();
         LimitCone.this.tangentCircleCenterNext2 = Vector3.mult(LimitCone.this.tangentCircleCenterNext1, -1);

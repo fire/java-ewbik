@@ -31,7 +31,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 
-public class Axes implements ewbik.asj.Saveable {
+public class Transform3D implements ewbik.asj.Saveable {
     public static final int NORMAL = 0;
     public static final int IGNORE = 1;
     public static final int FORWARD = 2;
@@ -44,21 +44,21 @@ public class Axes implements ewbik.asj.Saveable {
     public Basis localMBasis;
     public Basis globalMBasis;
     public boolean dirty = true;
-    public LinkedList<DependencyReference<Axes>> dependentsRegistry = new LinkedList<DependencyReference<Axes>>();
+    public LinkedList<DependencyReference<ewbik.processing.sceneGraph.Transform3D>> dependentsRegistry = new LinkedList<DependencyReference<ewbik.processing.sceneGraph.Transform3D>>();
     protected Vec3f<?> workingVector;
     //public boolean forceOrthoNormality = true;
     protected boolean areGlobal = true;
     float[][] outMatLocal = new float[4][4];
     float[][] outMatGlobal = new float[4][4];
     Vec3f<?> tempOrigin;
-    private DependencyReference<Axes> parent = null;
+    private DependencyReference<ewbik.processing.sceneGraph.Transform3D> parent = null;
     private int slipType = 0;
 
-    public Axes(ewbik.math.Basis b, Axes parent) {
+    public Transform3D(ewbik.math.Basis b, ewbik.processing.sceneGraph.Transform3D parent) {
         this.globalMBasis = ((Basis) b).copy();
         createTempVars(((Basis) b).getOrigin());
         if (this.getParentAxes() != null)
-            Axes.this.setParent(parent);
+            ewbik.processing.sceneGraph.Transform3D.this.setParent(parent);
         else {
             this.areGlobal = true;
             this.localMBasis = ((Basis) b).copy();
@@ -75,11 +75,11 @@ public class Axes implements ewbik.asj.Saveable {
      * @param inZ                 the direction of the Z basis vector in global coordinates, given as an offset from this base's origin in global coordinates.
      * @param forceOrthoNormality
      */
-    public Axes(PVector origin,
-                PVector inX,
-                PVector inY,
-                PVector inZ,
-                Axes parent) {
+    public Transform3D(PVector origin,
+                       PVector inX,
+                       PVector inY,
+                       PVector inZ,
+                       ewbik.processing.sceneGraph.Transform3D parent) {
 
         Vec3f<?> origin1 = toVector3(origin);
         Vec3f<?> inX1 = toVector3(inX);
@@ -89,10 +89,10 @@ public class Axes implements ewbik.asj.Saveable {
             this.areGlobal = true;
         createTempVars(origin1);
 
-        Axes.this.areGlobal = true;
+        ewbik.processing.sceneGraph.Transform3D.this.areGlobal = true;
 
-        Axes.this.localMBasis = new Basis(origin1, inX1, inY1, inZ1);
-        Axes.this.globalMBasis = new Basis(origin1, inX1, inY1, inZ1);
+        ewbik.processing.sceneGraph.Transform3D.this.localMBasis = new Basis(origin1, inX1, inY1, inZ1);
+        ewbik.processing.sceneGraph.Transform3D.this.globalMBasis = new Basis(origin1, inX1, inY1, inZ1);
 
         Vec3f<?> o = origin1.copy();
         o.set(0, 0, 0);
@@ -108,34 +108,34 @@ public class Axes implements ewbik.asj.Saveable {
         this.updateGlobal();
     }
 
-    public Axes(Vec3f<?> origin,
-                Vec3f<?> x,
-                Vec3f<?> y,
-                Vec3f<?> z) {
+    public Transform3D(Vec3f<?> origin,
+                       Vec3f<?> x,
+                       Vec3f<?> y,
+                       Vec3f<?> z) {
         this(origin, x, y, z, true, null);
     }
 
-    public Axes() {
+    public Transform3D() {
         Vec3f<?> origin = new Vector3(0, 0, 0);
         Vec3f<?> inX = new Vector3(1, 0, 0);
         Vec3f<?> inY = new Vector3(0, 1, 0);
         Vec3f<?> inZ = new Vector3(0, 0, 1);
-        if ((Axes) null == null)
+        if ((ewbik.processing.sceneGraph.Transform3D) null == null)
             this.areGlobal = true;
         createTempVars(origin);
 
-        Axes.this.areGlobal = true;
+        ewbik.processing.sceneGraph.Transform3D.this.areGlobal = true;
 
-        Axes.this.localMBasis = new Basis(origin, inX, inY, inZ);
-        Axes.this.globalMBasis = new Basis(origin, inX, inY, inZ);
+        ewbik.processing.sceneGraph.Transform3D.this.localMBasis = new Basis(origin, inX, inY, inZ);
+        ewbik.processing.sceneGraph.Transform3D.this.globalMBasis = new Basis(origin, inX, inY, inZ);
 
         Vec3f<?> o = origin.copy();
         o.set(0, 0, 0);
         Vec3f<?> i = o.copy();
         i.set(1, 1, 1);
 
-        if ((Axes) null != null) {
-            this.setParent((Axes) null);
+        if ((ewbik.processing.sceneGraph.Transform3D) null != null) {
+            this.setParent((ewbik.processing.sceneGraph.Transform3D) null);
         } else {
             this.areGlobal = true;
         }
@@ -143,15 +143,15 @@ public class Axes implements ewbik.asj.Saveable {
         this.updateGlobal();
     }
 
-    public Axes(Vec3f<?> origin, Vec3f<?> x, Vec3f<?> y, Vec3f<?> z, boolean forceOrthoNormality, Axes parent) {
+    public Transform3D(Vec3f<?> origin, Vec3f<?> x, Vec3f<?> y, Vec3f<?> z, boolean forceOrthoNormality, ewbik.processing.sceneGraph.Transform3D parent) {
         if (parent == null)
             this.areGlobal = true;
         createTempVars(origin);
 
-        Axes.this.areGlobal = true;
+        ewbik.processing.sceneGraph.Transform3D.this.areGlobal = true;
 
-        Axes.this.localMBasis = new Basis(origin, x, y, z);
-        Axes.this.globalMBasis = new Basis(origin, x, y, z);
+        ewbik.processing.sceneGraph.Transform3D.this.localMBasis = new Basis(origin, x, y, z);
+        ewbik.processing.sceneGraph.Transform3D.this.globalMBasis = new Basis(origin, x, y, z);
 
         Vec3f<?> o = origin.copy();
         o.set(0, 0, 0);
@@ -209,9 +209,9 @@ public class Axes implements ewbik.asj.Saveable {
          *
          * @return
          */
-    public Axes getGlobalCopy() {
+    public ewbik.processing.sceneGraph.Transform3D getGlobalCopy() {
         this.updateGlobal();
-        return new Axes(getGlobalMBasis(), this.getParentAxes());
+        return new ewbik.processing.sceneGraph.Transform3D(getGlobalMBasis(), this.getParentAxes());
     }
 
     public PVector getGlobalOf(PVector local_input) {
@@ -414,7 +414,7 @@ public class Axes implements ewbik.asj.Saveable {
         return this.getGlobalMBasis().getZRay();
     }
 
-    public <A extends Axes> boolean equals(A ax) {
+    public <A extends ewbik.processing.sceneGraph.Transform3D> boolean equals(A ax) {
         this.updateGlobal();
         ax.updateGlobal();
 
@@ -424,11 +424,11 @@ public class Axes implements ewbik.asj.Saveable {
         return composedRotationsAreEquivalent && originsAreEquivalent;
     }
 
-    public Axes relativeTo(Axes in) {
+    public ewbik.processing.sceneGraph.Transform3D relativeTo(ewbik.processing.sceneGraph.Transform3D in) {
         return null;
     }
 
-    public Axes getLocalOf(Axes input) {
+    public ewbik.processing.sceneGraph.Transform3D getLocalOf(ewbik.processing.sceneGraph.Transform3D input) {
         return null;
     }
 
@@ -438,9 +438,9 @@ public class Axes implements ewbik.asj.Saveable {
      * @param slipAware
      * @return
      */
-    public Axes attachedCopy(boolean slipAware) {
+    public ewbik.processing.sceneGraph.Transform3D attachedCopy(boolean slipAware) {
         this.updateGlobal();
-        Axes copy = new Axes(getGlobalMBasis(),
+        ewbik.processing.sceneGraph.Transform3D copy = new ewbik.processing.sceneGraph.Transform3D(getGlobalMBasis(),
                 this.getParentAxes());
         if (!slipAware) copy.setSlipType(IGNORE);
         copy.getLocalMBasis().adoptValues(this.localMBasis);
@@ -459,7 +459,7 @@ public class Axes implements ewbik.asj.Saveable {
         tempOrigin = type.copy();
     }
 
-    public Axes getParentAxes() {
+    public ewbik.processing.sceneGraph.Transform3D getParentAxes() {
         if (this.parent == null)
             return null;
         else
@@ -494,7 +494,7 @@ public class Axes implements ewbik.asj.Saveable {
      *
      * @param par the new parent Axes
      **/
-    public void setParent(Axes par) {
+    public void setParent(ewbik.processing.sceneGraph.Transform3D par) {
         setParent(par, null);
     }
 
@@ -507,9 +507,9 @@ public class Axes implements ewbik.asj.Saveable {
      * @param requestedBy    the object making thisRequest, will be passed on to parentChangeWarning
      *                       for any AxisDependancy objects registered with this Axes  (can be null if not important)
      **/
-    public void setParent(Axes intendedParent, Object requestedBy) {
+    public void setParent(ewbik.processing.sceneGraph.Transform3D intendedParent, Object requestedBy) {
         this.updateGlobal();
-        Axes oldParent = this.getParentAxes();
+        ewbik.processing.sceneGraph.Transform3D oldParent = this.getParentAxes();
 		/*for(DependencyReference<AxisDependency> ad : this.dependentsRegistry) {
 			ad.get().parentChangeWarning(this, oldParent, intendedParent, requestedBy);
 		}*/
@@ -522,13 +522,13 @@ public class Axes implements ewbik.asj.Saveable {
             intendedParent.getGlobalMBasis().setToLocalOf(globalMBasis, localMBasis);
 
             if (oldParent != null) oldParent.disown(this);
-            this.parent = new DependencyReference<Axes>(intendedParent);
+            this.parent = new DependencyReference<ewbik.processing.sceneGraph.Transform3D>(intendedParent);
 
             this.getParentAxes().registerDependent(this);
             this.areGlobal = false;
         } else {
             if (oldParent != null) oldParent.disown(this);
-            this.parent = new DependencyReference<Axes>(null);
+            this.parent = new DependencyReference<ewbik.processing.sceneGraph.Transform3D>(null);
             this.areGlobal = true;
         }
         this.markDirty();
@@ -548,10 +548,10 @@ public class Axes implements ewbik.asj.Saveable {
      *
      * @param r
      */
-    public void forEachDependent(Consumer<DependencyReference<Axes>> action) {
-        Iterator<DependencyReference<Axes>> i = dependentsRegistry.iterator();
+    public void forEachDependent(Consumer<DependencyReference<ewbik.processing.sceneGraph.Transform3D>> action) {
+        Iterator<DependencyReference<ewbik.processing.sceneGraph.Transform3D>> i = dependentsRegistry.iterator();
         while (i.hasNext()) {
-            DependencyReference<Axes> dr = i.next();
+            DependencyReference<ewbik.processing.sceneGraph.Transform3D> dr = i.next();
             if (dr.get() != null) {
                 action.accept(dr);
             } else {
@@ -604,9 +604,9 @@ public class Axes implements ewbik.asj.Saveable {
      * parent is set to this Axes' parent, prior to this axes setting the input axes
      * as its parent.
      **/
-    public void setRelativeToParent(Axes par) {
+    public void setRelativeToParent(ewbik.processing.sceneGraph.Transform3D par) {
         if (this.getParentAxes() != null) this.getParentAxes().disown(this);
-        this.parent = new DependencyReference<Axes>(par);
+        this.parent = new DependencyReference<ewbik.processing.sceneGraph.Transform3D>(par);
         this.areGlobal = false;
         this.getParentAxes().registerDependent(this);
         this.markDirty();
@@ -738,7 +738,7 @@ public class Axes implements ewbik.asj.Saveable {
     public void translateTo(Vec3f<?> translate, boolean slip) {
         this.updateGlobal();
         if (slip) {
-            Axes tempTransform3D = this.getGlobalCopy();
+            ewbik.processing.sceneGraph.Transform3D tempTransform3D = this.getGlobalCopy();
             tempTransform3D.translateTo(translate);
             this.slipTo(tempTransform3D);
         } else {
@@ -827,10 +827,10 @@ public class Axes implements ewbik.asj.Saveable {
      * If the axes on which this function is called are orthonormal,
      * this function normalizes and orthogonalizes them regardless of whether the targetAxes are orthonormal.
      *
-     * @param targetAxes the Axes to make this Axis identical to
+     * @param targetTransform3D the Axes to make this Axis identical to
      */
-    public void alignLocalsTo(Axes targetAxes) {
-        this.getLocalMBasis().adoptValues(targetAxes.localMBasis);
+    public void alignLocalsTo(ewbik.processing.sceneGraph.Transform3D targetTransform3D) {
+        this.getLocalMBasis().adoptValues(targetTransform3D.localMBasis);
         this.markDirty();
     }
 
@@ -860,28 +860,28 @@ public class Axes implements ewbik.asj.Saveable {
      * but its gx, gy, and gz headings should be identical unless this
      * axis is orthonormalized and the target axes are not.
      *
-     * @param targetAxes
+     * @param targetTransform3D
      */
-    public void alignGlobalsTo(Axes targetAxes) {
-        targetAxes.updateGlobal();
+    public void alignGlobalsTo(ewbik.processing.sceneGraph.Transform3D targetTransform3D) {
+        targetTransform3D.updateGlobal();
         this.updateGlobal();
         if (this.getParentAxes() != null) {
-            getParentAxes().getGlobalMBasis().setToLocalOf(targetAxes.globalMBasis, localMBasis);
+            getParentAxes().getGlobalMBasis().setToLocalOf(targetTransform3D.globalMBasis, localMBasis);
         } else {
-            this.getLocalMBasis().adoptValues(targetAxes.globalMBasis);
+            this.getLocalMBasis().adoptValues(targetTransform3D.globalMBasis);
         }
         this.markDirty();
         this.updateGlobal();
     }
 
-    public void alignOrientationTo(Axes targetAxes) {
-        targetAxes.updateGlobal();
+    public void alignOrientationTo(ewbik.processing.sceneGraph.Transform3D targetTransform3D) {
+        targetTransform3D.updateGlobal();
         this.updateGlobal();
         if (this.getParentAxes() != null) {
-            this.getGlobalMBasis().rotateTo(targetAxes.getGlobalMBasis().rotation);
+            this.getGlobalMBasis().rotateTo(targetTransform3D.getGlobalMBasis().rotation);
             getParentAxes().getGlobalMBasis().setToLocalOf(this.globalMBasis, this.localMBasis);
         } else {
-            this.getLocalMBasis().rotateTo(targetAxes.getGlobalMBasis().rotation);
+            this.getLocalMBasis().rotateTo(targetTransform3D.getGlobalMBasis().rotation);
         }
         this.markDirty();
     }
@@ -903,21 +903,21 @@ public class Axes implements ewbik.asj.Saveable {
         this.markDirty();
     }
 
-    public void registerDependent(Axes newDependent) {
+    public void registerDependent(ewbik.processing.sceneGraph.Transform3D newDependent) {
         //Make sure we don't hit a dependency loop
-        if (Axes.class.isAssignableFrom(newDependent.getClass())) {
-            if (((Axes) newDependent).isAncestorOf(this)) {
-                this.transferToParent(((Axes) newDependent).getParentAxes());
+        if (ewbik.processing.sceneGraph.Transform3D.class.isAssignableFrom(newDependent.getClass())) {
+            if (((ewbik.processing.sceneGraph.Transform3D) newDependent).isAncestorOf(this)) {
+                this.transferToParent(((ewbik.processing.sceneGraph.Transform3D) newDependent).getParentAxes());
             }
         }
         if (dependentsRegistry.indexOf(newDependent) == -1) {
-            dependentsRegistry.add(new DependencyReference<Axes>(newDependent));
+            dependentsRegistry.add(new DependencyReference<ewbik.processing.sceneGraph.Transform3D>(newDependent));
         }
     }
 
-    public boolean isAncestorOf(Axes potentialDescendent) {
+    public boolean isAncestorOf(ewbik.processing.sceneGraph.Transform3D potentialDescendent) {
         boolean result = false;
-        Axes cursor = potentialDescendent.getParentAxes();
+        ewbik.processing.sceneGraph.Transform3D cursor = potentialDescendent.getParentAxes();
         while (cursor != null) {
             if (cursor == this) {
                 result = true;
@@ -937,7 +937,7 @@ public class Axes implements ewbik.asj.Saveable {
      * @param newParent
      */
 
-    public void transferToParent(Axes newParent) {
+    public void transferToParent(ewbik.processing.sceneGraph.Transform3D newParent) {
         this.emancipate();
         this.setParent(newParent);
     }
@@ -949,23 +949,23 @@ public class Axes implements ewbik.asj.Saveable {
     public void emancipate() {
         if (this.getParentAxes() != null) {
             this.updateGlobal();
-            Axes oldParent = this.getParentAxes();
-            for (DependencyReference<Axes> ad : this.dependentsRegistry) {
+            ewbik.processing.sceneGraph.Transform3D oldParent = this.getParentAxes();
+            for (DependencyReference<ewbik.processing.sceneGraph.Transform3D> ad : this.dependentsRegistry) {
                 ad.get().parentChangeWarning(this, this.getParentAxes(), null, null);
             }
             this.getLocalMBasis().adoptValues(this.globalMBasis);
             this.getParentAxes().disown(this);
-            this.parent = new DependencyReference<Axes>(null);
+            this.parent = new DependencyReference<ewbik.processing.sceneGraph.Transform3D>(null);
             this.areGlobal = true;
             this.markDirty();
             this.updateGlobal();
-            for (DependencyReference<Axes> ad : this.dependentsRegistry) {
+            for (DependencyReference<ewbik.processing.sceneGraph.Transform3D> ad : this.dependentsRegistry) {
                 ad.get().parentChangeCompletionNotice(this, oldParent, null, null);
             }
         }
     }
 
-    public void disown(Axes child) {
+    public void disown(ewbik.processing.sceneGraph.Transform3D child) {
         dependentsRegistry.remove(child);
     }
 
@@ -1008,33 +1008,33 @@ public class Axes implements ewbik.asj.Saveable {
         return thisAxes;
     }
 
-    public void axisSlipWarning(Axes globalPriorToSlipping, Axes globalAfterSlipping, Axes actualAxis, ArrayList<Object> dontWarn) {
+    public void axisSlipWarning(ewbik.processing.sceneGraph.Transform3D globalPriorToSlipping, ewbik.processing.sceneGraph.Transform3D globalAfterSlipping, ewbik.processing.sceneGraph.Transform3D actualAxis, ArrayList<Object> dontWarn) {
         this.updateGlobal();
         if (this.slipType == NORMAL) {
             if (this.getParentAxes() != null) {
-                Axes globalVals = globalPriorToSlipping;
+                ewbik.processing.sceneGraph.Transform3D globalVals = globalPriorToSlipping;
                 this.getLocalMBasis().adoptValues(globalMBasis);
                 this.markDirty();
             }
         } else if (this.slipType == FORWARD) {
-            Axes globalAfterVals = this.relativeTo(globalAfterSlipping);
+            ewbik.processing.sceneGraph.Transform3D globalAfterVals = this.relativeTo(globalAfterSlipping);
             this.notifyDependentsOfSlip(globalAfterVals, dontWarn);
         }
     }
 
-    public void axisSlipWarning(Axes globalPriorToSlipping, Axes globalAfterSlipping, Axes actualAxis) {
+    public void axisSlipWarning(ewbik.processing.sceneGraph.Transform3D globalPriorToSlipping, ewbik.processing.sceneGraph.Transform3D globalAfterSlipping, ewbik.processing.sceneGraph.Transform3D actualAxis) {
 
     }
 
-    public void axisSlipCompletionNotice(Axes globalPriorToSlipping, Axes globalAfterSlipping, Axes thisAxis) {
+    public void axisSlipCompletionNotice(ewbik.processing.sceneGraph.Transform3D globalPriorToSlipping, ewbik.processing.sceneGraph.Transform3D globalAfterSlipping, ewbik.processing.sceneGraph.Transform3D thisAxis) {
 
     }
 
-    public void slipTo(Axes newAxisGlobal) {
+    public void slipTo(ewbik.processing.sceneGraph.Transform3D newAxisGlobal) {
         this.updateGlobal();
-        Axes originalGlobal = this.getGlobalCopy();
+        ewbik.processing.sceneGraph.Transform3D originalGlobal = this.getGlobalCopy();
         notifyDependentsOfSlip(newAxisGlobal);
-        Axes newVals = newAxisGlobal.freeCopy();
+        ewbik.processing.sceneGraph.Transform3D newVals = newAxisGlobal.freeCopy();
 
         if (this.getParentAxes() != null) {
             newVals = getParentAxes().getLocalOf(newVals);
@@ -1046,9 +1046,9 @@ public class Axes implements ewbik.asj.Saveable {
         notifyDependentsOfSlipCompletion(originalGlobal);
     }
 
-    public Axes freeCopy() {
-        Axes freeCopy =
-                new Axes(this.getLocalMBasis(),
+    public ewbik.processing.sceneGraph.Transform3D freeCopy() {
+        ewbik.processing.sceneGraph.Transform3D freeCopy =
+                new ewbik.processing.sceneGraph.Transform3D(this.getLocalMBasis(),
                         null);
         freeCopy.getLocalMBasis().adoptValues(this.localMBasis);
         freeCopy.markDirty();
@@ -1061,7 +1061,7 @@ public class Axes implements ewbik.asj.Saveable {
      *
      * @return
      */
-    protected DependencyReference<Axes> getWeakRefToParent() {
+    protected DependencyReference<ewbik.processing.sceneGraph.Transform3D> getWeakRefToParent() {
         return this.parent;
     }
 
@@ -1070,15 +1070,15 @@ public class Axes implements ewbik.asj.Saveable {
      *
      * @return
      */
-    protected void setWeakRefToParent(DependencyReference<Axes> parentRef) {
+    protected void setWeakRefToParent(DependencyReference<ewbik.processing.sceneGraph.Transform3D> parentRef) {
         this.parent = parentRef;
     }
 
-    public void slipTo(Axes newAxisGlobal, ArrayList<Object> dontWarn) {
+    public void slipTo(ewbik.processing.sceneGraph.Transform3D newAxisGlobal, ArrayList<Object> dontWarn) {
         this.updateGlobal();
-        Axes originalGlobal = this.getGlobalCopy();
+        ewbik.processing.sceneGraph.Transform3D originalGlobal = this.getGlobalCopy();
         notifyDependentsOfSlip(newAxisGlobal, dontWarn);
-        Axes newVals = newAxisGlobal.getGlobalCopy();
+        ewbik.processing.sceneGraph.Transform3D newVals = newAxisGlobal.getGlobalCopy();
 
         if (this.getParentAxes() != null) {
             newVals = getParentAxes().getLocalOf(newAxisGlobal);
@@ -1090,15 +1090,15 @@ public class Axes implements ewbik.asj.Saveable {
         notifyDependentsOfSlipCompletion(originalGlobal, dontWarn);
     }
 
-    public void notifyDependentsOfSlip(Axes newAxisGlobal, ArrayList<Object> dontWarn) {
+    public void notifyDependentsOfSlip(ewbik.processing.sceneGraph.Transform3D newAxisGlobal, ArrayList<Object> dontWarn) {
         for (int i = 0; i < dependentsRegistry.size(); i++) {
             if (!dontWarn.contains(dependentsRegistry.get(i))) {
-                Axes dependant = dependentsRegistry.get(i).get();
+                ewbik.processing.sceneGraph.Transform3D dependant = dependentsRegistry.get(i).get();
 
                 //First we check if the dependent extends Axes
                 //so we know whether or not to pass the dontWarn list
                 if (this.getClass().isAssignableFrom(dependant.getClass())) {
-                    ((Axes) dependant).axisSlipWarning(this.getGlobalCopy(), newAxisGlobal, this, dontWarn);
+                    ((ewbik.processing.sceneGraph.Transform3D) dependant).axisSlipWarning(this.getGlobalCopy(), newAxisGlobal, this, dontWarn);
                 } else {
                     dependant.axisSlipWarning(this.getGlobalCopy(), newAxisGlobal, this);
                 }
@@ -1108,7 +1108,7 @@ public class Axes implements ewbik.asj.Saveable {
         }
     }
 
-    public void notifyDependentsOfSlipCompletion(Axes globalAxisPriorToSlipping, ArrayList<Object> dontWarn) {
+    public void notifyDependentsOfSlipCompletion(ewbik.processing.sceneGraph.Transform3D globalAxisPriorToSlipping, ArrayList<Object> dontWarn) {
         for (int i = 0; i < dependentsRegistry.size(); i++) {
             if (!dontWarn.contains(dependentsRegistry.get(i)))
                 dependentsRegistry.get(i).get().axisSlipCompletionNotice(globalAxisPriorToSlipping, this.getGlobalCopy(), this);
@@ -1117,13 +1117,13 @@ public class Axes implements ewbik.asj.Saveable {
         }
     }
 
-    public void notifyDependentsOfSlip(Axes newAxisGlobal) {
+    public void notifyDependentsOfSlip(ewbik.processing.sceneGraph.Transform3D newAxisGlobal) {
         for (int i = 0; i < dependentsRegistry.size(); i++) {
             dependentsRegistry.get(i).get().axisSlipWarning(this.getGlobalCopy(), newAxisGlobal, this);
         }
     }
 
-    public void notifyDependentsOfSlipCompletion(Axes globalAxisPriorToSlipping) {
+    public void notifyDependentsOfSlipCompletion(ewbik.processing.sceneGraph.Transform3D globalAxisPriorToSlipping) {
         for (int i = 0; i < dependentsRegistry.size(); i++) {//AxisDependancy dependent : dependentsRegistry) {
             dependentsRegistry.get(i).get().axisSlipCompletionNotice(globalAxisPriorToSlipping, this.getGlobalCopy(), this);
         }
@@ -1182,10 +1182,10 @@ public class Axes implements ewbik.asj.Saveable {
                 });
     }
 
-    public void parentChangeWarning(Axes warningBy, Axes oldParent, Axes intendedParent, Object requestedBy) {
+    public void parentChangeWarning(ewbik.processing.sceneGraph.Transform3D warningBy, ewbik.processing.sceneGraph.Transform3D oldParent, ewbik.processing.sceneGraph.Transform3D intendedParent, Object requestedBy) {
     }
 
-    public void parentChangeCompletionNotice(Axes warningBy, Axes oldParent, Axes intendedParent, Object requestedBy) {
+    public void parentChangeCompletionNotice(ewbik.processing.sceneGraph.Transform3D warningBy, ewbik.processing.sceneGraph.Transform3D oldParent, ewbik.processing.sceneGraph.Transform3D intendedParent, Object requestedBy) {
     }
 
     public void loadFromJSONObject(ewbik.asj.data.JSONObject j, ewbik.asj.LoadManager l) {
@@ -1194,9 +1194,9 @@ public class Axes implements ewbik.asj.Saveable {
         this.getLocalMBasis().translate = origin;
         this.getLocalMBasis().rotation = rotation;
         this.getLocalMBasis().refreshPrecomputed();
-        Axes par;
+        ewbik.processing.sceneGraph.Transform3D par;
         try {
-            par = l.getObjectFor(Axes.class, j, "parent");
+            par = l.getObjectFor(ewbik.processing.sceneGraph.Transform3D.class, j, "parent");
             if (par != null)
                 this.setRelativeToParent(par);
             this.setSlipType(j.getInt("slipType"));

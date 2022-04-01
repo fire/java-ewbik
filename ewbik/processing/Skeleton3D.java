@@ -27,7 +27,6 @@ import ewbik.math.*;
 import ewbik.math.MathUtils;
 import ewbik.math.Vec3f;
 import ewbik.math.Vector3;
-import ewbik.processing.sceneGraph.Axes;
 import ik.Bone;
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -44,12 +43,12 @@ import java.util.HashMap;
  */
 public class Skeleton3D implements Saveable {
 
-    public Axes localAxes;
+    public ewbik.processing.sceneGraph.Transform3D localTransform3D;
     public HashMap<Bone, SegmentedArmature> boneSegmentMap = new HashMap<Bone, SegmentedArmature>();
     public SegmentedArmature segmentedArmature;
     public float IKSolverStability = 0f;
     public int defaultStabilizingPassCount = 1;
-    protected Axes tempWorkingAxes;
+    protected ewbik.processing.sceneGraph.Transform3D tempWorkingTransform3D;
     protected ArrayList<Bone> bones = new ArrayList<Bone>();
     protected HashMap<String, Bone> tagBoneMap = new HashMap<String, Bone>();
     protected Bone rootBone;
@@ -57,7 +56,7 @@ public class Skeleton3D implements Saveable {
     protected int IKIterations = 15;
     protected float dampening = MathUtils.toRadians(5f);
     PerformanceStats performance = new PerformanceStats();
-    Axes fauxParent;
+    ewbik.processing.sceneGraph.Transform3D fauxParent;
     boolean debug = true;
     Bone lastDebugBone = null;
     // debug code -- use to set a minimum distance an effector must move
@@ -73,11 +72,11 @@ public class Skeleton3D implements Saveable {
 
     public Skeleton3D(String name) {
 
-        this.localAxes = (Axes) new Axes(
+        this.localTransform3D = (ewbik.processing.sceneGraph.Transform3D) new ewbik.processing.sceneGraph.Transform3D(
                 new PVector(0, 0, 0), new PVector(1, 0, 0), new PVector(0, 1, 0), new PVector(0, 0, 1), null);
-        this.tempWorkingAxes = Skeleton3D.this.localAxes.getGlobalCopy();
+        this.tempWorkingTransform3D = Skeleton3D.this.localTransform3D.getGlobalCopy();
         this.tag = name;
-        Skeleton3D.this.createRootBone(Skeleton3D.this.localAxes.y_().heading(), Skeleton3D.this.localAxes.z_().heading(), Skeleton3D.this.tag + " : rootBone", 1f,
+        Skeleton3D.this.createRootBone(Skeleton3D.this.localTransform3D.y_().heading(), Skeleton3D.this.localTransform3D.z_().heading(), Skeleton3D.this.tag + " : rootBone", 1f,
                 Bone.frameType.GLOBAL);
     }
 
@@ -126,8 +125,8 @@ public class Skeleton3D implements Saveable {
     /**
      * @return a reference to the Axes serving as this Armature's coordinate system.
      */
-    public Axes localAxes() {
-        return (Axes) this.localAxes;
+    public ewbik.processing.sceneGraph.Transform3D localAxes() {
+        return (ewbik.processing.sceneGraph.Transform3D) this.localTransform3D;
     }
 
     /**
@@ -501,7 +500,7 @@ public class Skeleton3D implements Saveable {
      * @param b
      * @return
      */
-    public ewbik.math.Quaternion getRotationBetween(Axes a, Axes b) {
+    public ewbik.math.Quaternion getRotationBetween(ewbik.processing.sceneGraph.Transform3D a, ewbik.processing.sceneGraph.Transform3D b) {
         return new ewbik.math.Quaternion(a.x_().heading(), a.y_().heading(), b.x_().heading(), b.y_().heading());
     }
 
@@ -556,7 +555,7 @@ public class Skeleton3D implements Saveable {
 
     public void loadFromJSONObject(ewbik.asj.data.JSONObject j, LoadManager l) {
         try {
-            this.localAxes = l.getObjectFor(Axes.class, j, "localAxes");
+            this.localTransform3D = l.getObjectFor(ewbik.processing.sceneGraph.Transform3D.class, j, "localAxes");
             this.rootBone = l.getObjectFor(Bone.class, j, "rootBone");
             this.IKIterations = j.getInt("defaultIterations");
             this.dampening = j.getFloat("dampening");
