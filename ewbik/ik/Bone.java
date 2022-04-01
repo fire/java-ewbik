@@ -54,10 +54,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
     // default constructor required for file loader to work.
     public Bone() {
-        this.lastRotation = new Quaternion(MRotation.IDENTITY);
+        this.lastRotation = new Quaternion();
     }
-
-    ;
 
     /**
      * @param par             the parent bone for this bone
@@ -79,7 +77,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         Vector3 tipHeading1 = Axes.toVector3(tipHeading);
         Vector3 rollHeading1 = Axes.toVector3(rollHeading);
 
-        this.lastRotation = new Quaternion(MRotation.IDENTITY);
+        this.lastRotation = new Quaternion();
         if (par != null) {
             if (inputTag == null || inputTag == "") {
                 this.tag = Integer.toString(System.identityHashCode(this));
@@ -160,7 +158,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             frameType coordinateType)
             throws NullParentForBoneException {
 
-        this.lastRotation = new Quaternion(MRotation.IDENTITY);
+        this.lastRotation = new Quaternion();
         if (parArma != null) {
             if (inputTag == null || inputTag == "") {
                 this.tag = Integer.toString(System.identityHashCode(this));
@@ -246,7 +244,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
                 float inputBoneHeight // bone length
     ) {
 
-        this.lastRotation = new Quaternion(MRotation.IDENTITY);
+        this.lastRotation = new Quaternion();
         if (par != null) {
             if (inputTag == null || inputTag == "") {
                 this.tag = Integer.toString(System.identityHashCode(this));
@@ -256,7 +254,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             this.boneHeight = inputBoneHeight;
 
             AbstractAxes tempAxes = par.localAxes().getGlobalCopy();
-            Quaternion newRot = new Quaternion(new MRotation(RotationOrder.XZY, xAngle, yAngle, zAngle));
+            Quaternion newRot = new Quaternion(RotationOrder.XZY, xAngle, yAngle, zAngle);
             tempAxes.rotateBy(newRot);
 
             this.parent = par;
@@ -285,7 +283,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
                 String inputTag, // some user specified name for the bone, if desired
                 float inputBoneHeight // bone length
     ) {
-        this.lastRotation = new Quaternion(MRotation.IDENTITY);
+        this.lastRotation = new Quaternion();
         if (par != null) {
             if (inputTag == null || inputTag == "") {
                 this.tag = Integer.toString(System.identityHashCode(this));
@@ -295,7 +293,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             this.boneHeight = inputBoneHeight;
 
             AbstractAxes tempAxes = par.localAxes().getGlobalCopy();
-            Quaternion newRot = new Quaternion(MRotation.IDENTITY);
+            Quaternion newRot = new Quaternion();
             tempAxes.rotateBy(newRot);
 
             this.parent = par;
@@ -565,7 +563,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             AbstractAxes result = this.localAxes().getGlobalCopy();
             this.getMajorRotationAxes().updateGlobal();
             this.getMajorRotationAxes().globalMBasis.setToLocalOf(result.globalMBasis, result.globalMBasis);
-            return result.globalMBasis.rotation.rotation.getAngles(RotationOrder.XYZ);
+            return result.globalMBasis.rotation.getAngles(RotationOrder.XYZ);
         } else {
             return null;
         }

@@ -421,9 +421,9 @@ public class SegmentedArmature {
 
         if (dampening != -1) {
             boneDamp = dampening;
-            qcpRot.rotation.clampToAngle(boneDamp);
+            qcpRot.clampToAngle(boneDamp);
         } else {
-            qcpRot.rotation.clampToQuadranceAngle(boneDamp);
+            qcpRot.clampToQuadranceAngle(boneDamp);
         }
         sb.simLocalAxes.rotateBy(qcpRot);
 

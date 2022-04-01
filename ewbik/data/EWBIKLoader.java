@@ -7,7 +7,6 @@ import ewbik.asj.data.JSONObject;
 import ewbik.asj.data.StringFuncs;
 import ewbik.ik.*;
 import ewbik.math.AbstractAxes;
-import ewbik.math.MRotation;
 import ewbik.math.Quaternion;
 import ik.Bone;
 import ik.IKPin;
@@ -160,8 +159,6 @@ public class EWBIKLoader {
                 list.add((T) new ewbik.math.Vector3(jsonArray.getJSONArray(i)));
             else if (c == Quaternion.class)
                 list.add((T) new Quaternion(jsonArray.getJSONArray(i)));
-            else if (c == MRotation.class)
-                list.add((T) new Quaternion(jsonArray.getJSONArray(i)).rotation);
             else if (c.getName().startsWith("java.lang"))
                 list.add((T) parsePrimitive(c, "" + jsonArray.get(i)));
             else {

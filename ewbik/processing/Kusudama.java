@@ -168,7 +168,7 @@ public class Kusudama implements Saveable {
         p.fill(0, 150, 0, 120);
         p.vertex(0, 0, 0);
         for (float i = 0; i <= pieces + (3 * granularity); i++) {
-            MRotation interp = Quaternion.slerp(i * granularity, minRot.rotation, maxRot.rotation);
+            ewbik.math.Quaternion interp = new ewbik.math.Quaternion(i * granularity, minRot, minRot);
             current = interp.applyTo(min);
             p.vertex((float) current.x, (float) current.y, (float) (current.z));
         }
@@ -369,7 +369,7 @@ public class Kusudama implements Saveable {
                 inPoint.sub(origin);
                 pathPoint.sub(origin);
                 Quaternion toClamp = new Quaternion(inPoint, pathPoint);
-                toClamp.rotation.clampToQuadranceAngle(cosHalfReturnfullness);
+                toClamp.clampToQuadranceAngle(cosHalfReturnfullness);
                 toSet.rotateBy(toClamp);
             }
             if (axiallyConstrained) {
