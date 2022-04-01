@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 import ewbik.math.AbstractBasis;
 import  ewbik.math.Vector3;
 import ewbik.math.Quaternion;
+import ewbik.math.Basis;
 
 public class Transform3D implements ewbik.asj.Saveable {
 
@@ -24,8 +25,8 @@ public class Transform3D implements ewbik.asj.Saveable {
     public static final int Y = 1;
     public static final int Z = 2;
     public boolean debug = false;
-    public AbstractBasis localMBasis;
-    public AbstractBasis globalMBasis;
+    public Basis localMBasis;
+    public Basis globalMBasis;
     public boolean dirty = true;
     public LinkedList<DependencyReference<Transform3D>> dependentsRegistry = new LinkedList<DependencyReference<Transform3D>>();
     protected Vec3f<?> workingVector;
@@ -689,12 +690,12 @@ public class Transform3D implements ewbik.asj.Saveable {
         dependentsRegistry.remove(child);
     }
 
-    public AbstractBasis getGlobalMBasis() {
+    public Basis getGlobalMBasis() {
         this.updateGlobal();
         return globalMBasis;
     }
 
-    public AbstractBasis getLocalMBasis() {
+    public Basis getLocalMBasis() {
         return localMBasis;
     }
 

@@ -29,7 +29,7 @@ public class Axes extends ewbik.math.Transform3D {
     float[][] outMatLocal = new float[4][4];
     float[][] outMatGlobal = new float[4][4];
 
-    public Axes(ewbik.math.AbstractBasis b, ewbik.math.Transform3D parent) {
+    public Axes(ewbik.math.Basis b, ewbik.math.Transform3D parent) {
         super(b, parent);
     }
 
@@ -218,7 +218,7 @@ public class Axes extends ewbik.math.Transform3D {
         );
     }
 
-    private void updateMatrix(AbstractBasis b, float[][] outputMatrix) {
+    private void updateMatrix(Basis b, float[][] outputMatrix) {
         b.refreshPrecomputed();
 
         Vec3f<?> x = b.getXHeading();
