@@ -6,7 +6,7 @@
         {
             "label": "Run",
             "type": "shell",
-            "command": "${workspaceFolder}/build/install/ewbik-workspace/bin/ewbik-workspace",
+            "command": "${workspaceFolder}/build/install/java-ewbik/bin/java-ewbik",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -19,7 +19,7 @@
         {
             "label": "Build",
             "type": "shell",
-            "command": "gradle installDist",
+            "command": "./gradlew installDist",
             "problemMatcher": []
         }
     ]
