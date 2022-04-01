@@ -25,6 +25,7 @@ import ewbik.math.MRotation;
 import ewbik.math.Quaternion;
 import ewbik.math.Vec3f;
 import ewbik.processing.sceneGraph.Axes;
+import ik.Bone;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PMatrix;

@@ -6,6 +6,7 @@ import ewbik.asj.Saveable;
 import ewbik.asj.data.JSONObject;
 import ewbik.math.AbstractAxes;
 import ewbik.math.Vec3f;
+import ik.Bone;
 
 import java.util.ArrayList;
 
@@ -13,7 +14,7 @@ public abstract class AbstractIKPin implements Saveable {
 
     protected boolean isEnabled;
     protected AbstractAxes axes;
-    protected AbstractBone forBone;
+    protected Bone forBone;
     protected AbstractIKPin parentPin;
     protected ArrayList<AbstractIKPin> childPins = new ArrayList<>();
     float pinWeight = 1;
@@ -26,14 +27,14 @@ public abstract class AbstractIKPin implements Saveable {
     public AbstractIKPin() {
     }
 
-    public AbstractIKPin(AbstractAxes inAxes, boolean enabled, AbstractBone bone) {
+    public AbstractIKPin(AbstractAxes inAxes, boolean enabled, Bone bone) {
         this.isEnabled = enabled;
         this.axes = inAxes;
         this.forBone = bone;
         setTargetPriorities(xPriority, yPriority, zPriority);
     }
 
-    public AbstractIKPin(AbstractAxes inAxes, AbstractBone bone) {
+    public AbstractIKPin(AbstractAxes inAxes, Bone bone) {
         this.axes = inAxes;
         this.forBone = bone;
         this.isEnabled = false;
@@ -240,7 +241,7 @@ public abstract class AbstractIKPin implements Saveable {
         return axes.origin_();
     }
 
-    public AbstractBone forBone() {
+    public Bone forBone() {
         return this.forBone;
 
     }
@@ -361,7 +362,7 @@ public abstract class AbstractIKPin implements Saveable {
         this.axes = (AbstractAxes) l.getObjectFromClassMaps(AbstractAxes.class, j.getString("axes"));
         this.isEnabled = j.getBoolean("isEnabled");
         this.pinWeight = j.getFloat("pinWeight");
-        this.forBone = (AbstractBone) l.getObjectFromClassMaps(AbstractBone.class, j.getString("forBone"));
+        this.forBone = (Bone) l.getObjectFromClassMaps(Bone.class, j.getString("forBone"));
         if (j.hasKey("priorities")) {
             JSONObject priorities = j.getJSONObject("priorities");
             xPriority = priorities.getFloat("x");

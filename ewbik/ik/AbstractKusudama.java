@@ -9,6 +9,7 @@ import ewbik.asj.Saveable;
 import ewbik.asj.data.JSONObject;
 import ewbik.ik.SegmentedArmature.WorkingBone;
 import ewbik.math.*;
+import ik.Bone;
 
 import java.util.ArrayList;
 
@@ -54,12 +55,12 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
     // soft constraint violations.
     protected Float strength = 1f;
 
-    protected AbstractBone attachedTo;
+    protected Bone attachedTo;
 
     public AbstractKusudama() {
     }
 
-    public AbstractKusudama(AbstractBone forBone) {
+    public AbstractKusudama(Bone forBone) {
         this.attachedTo = forBone;
         this.limitingAxes = forBone.getMajorRotationAxes();
         this.attachedTo.addConstraint(this);
@@ -490,7 +491,7 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
 
     // public float softLimit
 
-    public AbstractBone attachedTo() {
+    public Bone attachedTo() {
         return this.attachedTo;
     }
 
@@ -706,7 +707,7 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
      *
      * @param forBone the bone to which to attach this Kusudama.
      */
-    public void attachTo(AbstractBone forBone) {
+    public void attachTo(Bone forBone) {
         this.attachedTo = forBone;
         if (this.limitingAxes == null)
             this.limitingAxes = forBone.getMajorRotationAxes();
@@ -767,7 +768,7 @@ public abstract class AbstractKusudama implements Constraint, Saveable {
     }
 
     public void loadFromJSONObject(JSONObject j, LoadManager l) {
-        this.attachedTo = l.getObjectFor(AbstractBone.class, j, "attachedTo");
+        this.attachedTo = l.getObjectFor(Bone.class, j, "attachedTo");
         this.limitingAxes = l.getObjectFor(AbstractAxes.class, j, "limitAxes");
         limitCones = new ArrayList<>();
         l.arrayListFromJSONArray(j.getJSONArray("limitCones"), limitCones, AbstractLimitCone.class);

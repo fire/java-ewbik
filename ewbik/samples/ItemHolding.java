@@ -1,9 +1,9 @@
 package samples;
 
 import ewbik.processing.sceneGraph.Axes;
-import ewbik.processing.singlePrecision.Bone;
-import ewbik.processing.singlePrecision.IKPin;
-import ewbik.processing.singlePrecision.Kusudama;
+import ik.Bone;
+import ik.IKPin;
+import processing.Skeleton3D;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class ItemHolding extends PApplet {
 
-    ewbik.processing.Skeleton3D loadedArmature;
+    Skeleton3D loadedArmature;
     ArrayList<IKPin> pins = new ArrayList<>();
     UI ui;
     IKPin activePin;

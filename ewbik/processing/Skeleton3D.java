@@ -17,11 +17,12 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
 
-package ewbik.processing;
+package processing;
 
-import ewbik.ik.AbstractBone.frameType;
+import ewbik.math.AbstractAxes;
 import ewbik.math.Vec3f;
 import ewbik.processing.sceneGraph.Axes;
+import ik.Bone;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
@@ -50,8 +51,8 @@ public class Skeleton3D extends ewbik.ik.AbstractSkeleton3D {
             Vec3f<?> rollHeading,
             String inputTag,
             float boneHeight,
-            frameType coordinateType) {
-        this.rootBone = new ewbik.processing.singlePrecision.Bone(armature,
+            Bone.frameType coordinateType) {
+        this.rootBone = new Bone(armature.getRootBone(),
                 new PVector(tipHeading.x, tipHeading.y, tipHeading.z),
                 new PVector(rollHeading.x, rollHeading.y, rollHeading.z),
                 inputTag,
@@ -72,13 +73,13 @@ public class Skeleton3D extends ewbik.ik.AbstractSkeleton3D {
     }
 
     @Override
-    public ewbik.processing.singlePrecision.Bone getRootBone() {
-        return (ewbik.processing.singlePrecision.Bone) rootBone;
+    public Bone getRootBone() {
+        return (Bone) rootBone;
     }
 
     @Override
-    public ewbik.processing.singlePrecision.Bone getBoneTagged(String tag) {
-        return (ewbik.processing.singlePrecision.Bone) tagBoneMap.get(tag);
+    public Bone getBoneTagged(String tag) {
+        return (Bone) tagBoneMap.get(tag);
     }
 
     @Override

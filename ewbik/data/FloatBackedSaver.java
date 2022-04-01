@@ -7,6 +7,7 @@ import ewbik.asj.data.JSONObject;
 import ewbik.asj.data.StringFuncs;
 import ewbik.ik.*;
 import ewbik.math.AbstractAxes;
+import ik.Bone;
 
 import java.io.File;
 import java.io.IOException;
@@ -78,7 +79,7 @@ public class FloatBackedSaver extends SaveManager {
                     axesJSON.append(jsonObj);
                 if (AbstractSkeleton3D.class.isAssignableFrom(s.getClass()))
                     armaturesJSON.append(jsonObj);
-                if (AbstractBone.class.isAssignableFrom(s.getClass()))
+                if (Bone.class.isAssignableFrom(s.getClass()))
                     bonesJSON.append(jsonObj);
                 if (AbstractKusudama.class.isAssignableFrom(s.getClass()))
                     kusudamaJSON.append(jsonObj);

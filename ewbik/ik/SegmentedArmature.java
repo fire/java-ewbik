@@ -23,19 +23,20 @@ import ewbik.math.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
+import ik.Bone;
+/**s
  * @author Eron Gjoni
  */
 public class SegmentedArmature {
-    public AbstractBone segmentRoot;
-    public AbstractBone segmentTip;
+    public Bone segmentRoot;
+    public Bone segmentTip;
 
     public ArrayList<SegmentedArmature> childSegments = new ArrayList<SegmentedArmature>();
     public ArrayList<SegmentedArmature> pinnedDescendants = new ArrayList<SegmentedArmature>();
     WorkingBone[] pinnedBones;
 
-    HashMap<AbstractBone, WorkingBone> simulatedBones = new HashMap<>();
-    ArrayList<AbstractBone> segmentBoneList = new ArrayList<AbstractBone>();
+    public HashMap<Bone, WorkingBone> simulatedBones = new HashMap<>();
+    ArrayList<Bone> segmentBoneList = new ArrayList<Bone>();
 
     private SegmentedArmature parentSegment = null;
     private boolean basePinned = false;
@@ -54,13 +55,13 @@ public class SegmentedArmature {
     Vector3[] localizedTipHeadings;
     float[] weights;
 
-    public SegmentedArmature(AbstractBone rootBone) {
+    public SegmentedArmature(Bone rootBone) {
         segmentRoot = armatureRootBone(rootBone);
         generateArmatureSegments();
         ensureAxesHeirarchy();
     }
 
-    public SegmentedArmature(SegmentedArmature inputParentSegment, AbstractBone inputSegmentRoot) {
+    public SegmentedArmature(SegmentedArmature inputParentSegment, Bone inputSegmentRoot) {
         this.segmentRoot = inputSegmentRoot;
         this.setParentSegment(inputParentSegment);
         this.distanceToRoot = this.getParentSegment().distanceToRoot + 1;
@@ -76,11 +77,11 @@ public class SegmentedArmature {
         else
             this.setBasePinned(false);
 
-        AbstractBone tempSegmentTip = this.segmentRoot;
+        Bone tempSegmentTip = this.segmentRoot;
         this.chainLength = -1;
         while (true) {
             this.chainLength++;
-            ArrayList<AbstractBone> childrenWithPinnedDescendants = tempSegmentTip
+            ArrayList<Bone> childrenWithPinnedDescendants = tempSegmentTip
                     .returnChildrenWithPinnedDescendants();
 
             if (childrenWithPinnedDescendants.size() > 1 || (tempSegmentTip.isPinned())) {
@@ -89,7 +90,7 @@ public class SegmentedArmature {
                 // else tipPinned = false;
                 this.segmentTip = tempSegmentTip;
 
-                for (AbstractBone childBone : childrenWithPinnedDescendants) {
+                for (Bone childBone : childrenWithPinnedDescendants) {
                     this.childSegments.add(new SegmentedArmature(this, childBone));
                 }
 
@@ -206,13 +207,13 @@ public class SegmentedArmature {
         recursivelyEnsureAxesHeirarchyFor(rootStrand.segmentRoot, rootStrand.segmentRoot.parentArmature.localAxes());
     }
 
-    private void recursivelyEnsureAxesHeirarchyFor(AbstractBone b, AbstractAxes parentTo) {
+    private void recursivelyEnsureAxesHeirarchyFor(Bone b, AbstractAxes parentTo) {
         SegmentedArmature chain = getChainFor(b);
         if (chain != null) {
             WorkingBone sb = chain.simulatedBones.get(b);
             sb.simLocalAxes.setParent(parentTo);
             sb.simConstraintAxes.setParent(parentTo);
-            for (AbstractBone c : b.getChildren()) {
+            for (Bone c : b.getChildren()) {
                 chain.recursivelyEnsureAxesHeirarchyFor(c, sb.simLocalAxes);
             }
         }
@@ -235,8 +236,8 @@ public class SegmentedArmature {
         simulatedBones.clear();
         segmentBoneList.clear();
 
-        AbstractBone currentBone = segmentTip;
-        AbstractBone stopOn = segmentRoot;
+        Bone currentBone = segmentTip;
+        Bone stopOn = segmentRoot;
         while (currentBone != null) {
             WorkingBone sb = simulatedBones.get(currentBone);
             if (sb == null) {
@@ -251,12 +252,12 @@ public class SegmentedArmature {
         }
     }
 
-    public ArrayList<AbstractBone> getStrandFromTip(AbstractBone pinnedBone) {
-        ArrayList<AbstractBone> result = new ArrayList<AbstractBone>();
+    public ArrayList<Bone> getStrandFromTip(Bone pinnedBone) {
+        ArrayList<Bone> result = new ArrayList<Bone>();
 
         if (pinnedBone.isPinned()) {
             result.add(pinnedBone);
-            AbstractBone currBone = pinnedBone.getParent();
+            Bone currBone = pinnedBone.getParent();
             // note to self -- try removing the currbone.parent != null condition
             while (currBone != null && currBone.getParent() != null) {
                 result.add(currBone);
@@ -322,7 +323,7 @@ public class SegmentedArmature {
      *                            potentially significant computation cost).
      */
     public void updateOptimalRotationToPinnedDescendants(
-            AbstractBone forBone,
+            Bone forBone,
             float dampening,
             boolean translate,
             int stabilizationPasses,
@@ -511,8 +512,8 @@ public class SegmentedArmature {
      * @return returns the segment chain (pinned or unpinned, doesn't matter) to
      * which the inputBone belongs.
      */
-    public SegmentedArmature getChainFor(AbstractBone chainMember) {
-        // AbstractBone candidate = this.segmentTip;
+    public SegmentedArmature getChainFor(Bone chainMember) {
+        // Bone candidate = this.segmentTip;
         SegmentedArmature result = null;
         if (this.segmentBoneList.contains(chainMember))
             return this;
@@ -523,7 +524,7 @@ public class SegmentedArmature {
         return result;
     }
 
-    public SegmentedArmature getChildSegmentContaining(AbstractBone b) {
+    public SegmentedArmature getChildSegmentContaining(Bone b) {
         if (segmentBoneList.contains(b)) {
             return this;
         } else {
@@ -536,7 +537,7 @@ public class SegmentedArmature {
         return null;
     }
 
-    public SegmentedArmature getAncestorSegmentContaining(AbstractBone b) {
+    public SegmentedArmature getAncestorSegmentContaining(Bone b) {
         if (segmentBoneList.contains(b))
             return this;
         else if (this.parentSegment != null)
@@ -566,8 +567,8 @@ public class SegmentedArmature {
 
     }
 
-    public AbstractBone armatureRootBone(AbstractBone rootBone2) {
-        AbstractBone rootBone = rootBone2;
+    public Bone armatureRootBone(Bone rootBone2) {
+        Bone rootBone = rootBone2;
         while (rootBone.getParent() != null) {
             rootBone = rootBone.getParent();
         }
@@ -613,7 +614,7 @@ public class SegmentedArmature {
         }
     }
 
-    public void recursivelyAlignSimAxesOutwardFrom(AbstractBone b, boolean forceGlobal) {
+    public void recursivelyAlignSimAxesOutwardFrom(Bone b, boolean forceGlobal) {
         SegmentedArmature bChain = getChildSegmentContaining(b);
         if (bChain != null) {
             WorkingBone sb = bChain.simulatedBones.get(b);
@@ -630,7 +631,7 @@ public class SegmentedArmature {
                 bAxes.alignLocalsTo(b.localAxes());
                 cAxes.alignLocalsTo(b.getMajorRotationAxes());
             }
-            for (AbstractBone bc : b.getChildren()) {
+            for (Bone bc : b.getChildren()) {
                 bChain.recursivelyAlignSimAxesOutwardFrom(bc, false);
             }
         }
@@ -642,17 +643,17 @@ public class SegmentedArmature {
      *
      * @param b bone to start from
      */
-    public void recursivelyAlignBonesToSimAxesFrom(AbstractBone b) {
+    public void recursivelyAlignBonesToSimAxesFrom(Bone b) {
         SegmentedArmature chain = b.parentArmature.boneSegmentMap.get(b); // getChainFor(b);
         if (chain != null) {
             WorkingBone sb = chain.simulatedBones.get(b);
             AbstractAxes simulatedLocalAxes = sb.simLocalAxes;
-            if (b.parent != null) {
+            if (b.getParent() != null) {
                 b.localAxes().alignOrientationTo(simulatedLocalAxes);
             } else {
                 b.localAxes().alignLocalsTo(simulatedLocalAxes);
             }
-            for (AbstractBone bc : b.getChildren()) {
+            for (Bone bc : b.getChildren()) {
                 recursivelyAlignBonesToSimAxesFrom(bc);
             }
             chain.simAligned = false;
@@ -698,8 +699,8 @@ public class SegmentedArmature {
      *
      * @author Eron Gjoni
      */
-    class WorkingBone {
-        AbstractBone forBone;
+    public class WorkingBone {
+        Bone forBone;
         AbstractAxes simLocalAxes;
         AbstractAxes simConstraintAxes;
         float cosHalfDampen = 0f;
@@ -707,7 +708,7 @@ public class SegmentedArmature {
         float halfReturnfullnessDampened[];
         boolean springy = false;
 
-        public WorkingBone(AbstractBone toSimulate) {
+        public WorkingBone(Bone toSimulate) {
             forBone = toSimulate;
             simLocalAxes = forBone.localAxes().getGlobalCopy();
             simConstraintAxes = forBone.getMajorRotationAxes().getGlobalCopy();

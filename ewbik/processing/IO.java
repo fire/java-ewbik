@@ -3,6 +3,9 @@ package ewbik.processing;
 import ewbik.data.EWBIKLoader;
 import ewbik.data.EWBIKSaver;
 import ewbik.processing.sceneGraph.Axes;
+import ik.Bone;
+import ik.IKPin;
+import processing.Skeleton3D;
 
 import java.util.Collection;
 
@@ -15,12 +18,12 @@ public final class IO {
      * @param path
      * @return the Armature, or null if the file does not specify an armature
      */
-    public static ewbik.processing.Skeleton3D LoadArmature_singlePrecision(String path) {
+    public static Skeleton3D LoadArmature_singlePrecision(String path) {
         EWBIKLoader newLoader = new EWBIKLoader();
         @SuppressWarnings("unchecked")
-        Collection<ewbik.processing.Skeleton3D> ArmatureList = (Collection<ewbik.processing.Skeleton3D>) newLoader.importSinglePrecisionArmatures(path,
-                Axes.class, ewbik.processing.singlePrecision.Bone.class, ewbik.processing.Skeleton3D.class, ewbik.processing.singlePrecision.Kusudama.class, ewbik.processing.singlePrecision.LimitCone.class, ewbik.processing.singlePrecision.IKPin.class);
-        for (ewbik.processing.Skeleton3D a : ArmatureList) {
+        Collection<Skeleton3D> ArmatureList = (Collection<Skeleton3D>) newLoader.importSinglePrecisionArmatures(path,
+                Axes.class, Bone.class, Skeleton3D.class, ewbik.processing.singlePrecision.Kusudama.class, ewbik.processing.singlePrecision.LimitCone.class, IKPin.class);
+        for (Skeleton3D a : ArmatureList) {
             return a;
         }
         return null;

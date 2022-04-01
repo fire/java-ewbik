@@ -15,6 +15,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import ewbik.processing.singlePrecision.*;
+import ik.Bone;
 
 public final class FloatBackedLoader extends LoadManager {
 
@@ -27,7 +29,7 @@ public final class FloatBackedLoader extends LoadManager {
     public HashMap<String, AbstractSkeleton3D> armatureLoadObjects = new HashMap<>();
 
     public HashMap<String, JSONObject> boneJSONObjects = new HashMap<>();
-    public HashMap<String, AbstractBone> boneLoadObjects = new HashMap<>();
+    public HashMap<String, Bone> boneLoadObjects = new HashMap<>();
 
     public HashMap<String, Constraint> kusudamaLoadObjects = new HashMap<>();
     public HashMap<String, JSONObject> kusudamaJSONObjects = new HashMap<>();
@@ -50,7 +52,7 @@ public final class FloatBackedLoader extends LoadManager {
 
     public Collection<? extends AbstractSkeleton3D> importFile(File selection,
                                                              Class<? extends AbstractAxes> AxesClass,
-                                                             Class<? extends AbstractBone> BoneClass,
+                                                             Class<? extends Bone> BoneClass,
                                                              Class<? extends AbstractSkeleton3D> ArmatureClass,
                                                              Class<? extends Constraint> KusudamaClass,
                                                              Class<? extends AbstractLimitCone> LimitConeClass,
@@ -69,7 +71,7 @@ public final class FloatBackedLoader extends LoadManager {
 
     public Collection<? extends AbstractSkeleton3D> loadJSON(JSONObject loadFile,
                                                            Class<? extends AbstractAxes> AxesClass,
-                                                           Class<? extends AbstractBone> BoneClass,
+                                                           Class<? extends Bone> BoneClass,
                                                            Class<? extends AbstractSkeleton3D> ArmatureClass,
                                                            Class<? extends Constraint> KusudamaClass,
                                                            Class<? extends AbstractLimitCone> LimitConeClass,
@@ -77,7 +79,7 @@ public final class FloatBackedLoader extends LoadManager {
         clearCurrentLoadObjects();
 
         AxesClass = AxesClass == null ? AbstractAxes.class : AxesClass;
-        BoneClass = BoneClass == null ? AbstractBone.class : BoneClass;
+        BoneClass = BoneClass == null ? Bone.class : BoneClass;
         ArmatureClass = ArmatureClass == null ? AbstractSkeleton3D.class : ArmatureClass;
         KusudamaClass = KusudamaClass == null ? Constraint.class : KusudamaClass;
         LimitConeClass = LimitConeClass == null ? AbstractLimitCone.class : LimitConeClass;
@@ -282,7 +284,7 @@ public final class FloatBackedLoader extends LoadManager {
             result = (Saveable) axesLoadObjects.get(identityHash);
         else if (AbstractSkeleton3D.class.isAssignableFrom(keyClass))
             result = (Saveable) armatureLoadObjects.get(identityHash);
-        else if (AbstractBone.class.isAssignableFrom(keyClass))
+        else if (Bone.class.isAssignableFrom(keyClass))
             result = (Saveable) boneLoadObjects.get(identityHash);
         else if (Constraint.class.isAssignableFrom(keyClass))
             result = (Saveable) kusudamaLoadObjects.get(identityHash);

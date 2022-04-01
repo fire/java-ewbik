@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import ik.Bone;
 
 public class EWBIKLoader {
     FloatBackedLoader floatBackedLoader = new FloatBackedLoader();
@@ -25,8 +26,8 @@ public class EWBIKLoader {
      * @param filePath       location of file to import
      * @param AxesClass      the class object you've used to extend the AbstractAxes
      *                       class. If null, AbstractAxes will be used.
-     * @param BoneClass      the class object you've used to extend the AbstractBone
-     *                       class. If null, AbstractBone will be used.
+     * @param BoneClass      the class object you've used to extend the Bone
+     *                       class. If null, Bone will be used.
      * @param ArmatureClass  the class object you've used to extend the
      *                       AbstractSkeleton3D class. If null, AbstractSkeleton3D will
      *                       be used.
@@ -44,7 +45,7 @@ public class EWBIKLoader {
 
     public Collection<? extends AbstractSkeleton3D> importSinglePrecisionArmatures(String filepath,
                                                                                  Class<? extends AbstractAxes> AxesClass,
-                                                                                 Class<? extends AbstractBone> BoneClass,
+                                                                                 Class<? extends Bone> BoneClass,
                                                                                  Class<? extends AbstractSkeleton3D> ArmatureClass,
                                                                                  Class<? extends Constraint> KusudamaClass,
                                                                                  Class<? extends AbstractLimitCone> LimitConeClass,

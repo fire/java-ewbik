@@ -1,14 +1,13 @@
 package samples;
 
 import ewbik.processing.sceneGraph.Axes;
-import ewbik.processing.singlePrecision.Bone;
-import ewbik.processing.singlePrecision.IKPin;
+import ik.IKPin;
 import ewbik.processing.singlePrecision.Kusudama;
+import processing.Skeleton3D;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import processing.opengl.PShader;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -128,7 +127,7 @@ public class UI {
 
     }
 
-    public void drawPass(float drawSize, Runnable preArmatureDraw, PGraphics buffer, ewbik.processing.Skeleton3D armature) {
+    public void drawPass(float drawSize, Runnable preArmatureDraw, PGraphics buffer, Skeleton3D armature) {
         if (preArmatureDraw != null)
             preArmatureDraw.run();
         armature.drawMe(buffer, 100, drawSize);
@@ -144,7 +143,7 @@ public class UI {
 
     public void drawScene(float zoomScalar, float drawSize,
                           Runnable additionalDraw,
-                          ewbik.processing.Skeleton3D armature,
+                          Skeleton3D armature,
                           String usageInstructions,
                           IKPin activePin, Axes cubeAxes, boolean cubeEnabled) {
         currentDrawSurface = display;

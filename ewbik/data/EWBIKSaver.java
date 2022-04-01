@@ -11,6 +11,7 @@ import ewbik.math.AbstractAxes;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.WeakHashMap;
+import ik.Bone;
 
 public class EWBIKSaver extends SaveManager {
 
@@ -66,7 +67,7 @@ public class EWBIKSaver extends SaveManager {
                     axesJSON.append(jsonObj);
                 if (AbstractSkeleton3D.class.isAssignableFrom(s.getClass()))
                     armaturesJSON.append(jsonObj);
-                if (AbstractBone.class.isAssignableFrom(s.getClass()))
+                if (Bone.class.isAssignableFrom(s.getClass()))
                     bonesJSON.append(jsonObj);
                 if (AbstractKusudama.class.isAssignableFrom(s.getClass()))
                     kusudamaJSON.append(jsonObj);

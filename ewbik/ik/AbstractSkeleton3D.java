@@ -21,6 +21,8 @@ import ewbik.asj.SaveManager;
 import ewbik.asj.Saveable;
 import ewbik.asj.data.JSONObject;
 import ewbik.math.*;
+import ewbik.math.AbstractAxes;
+import ik.Bone;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,12 +36,12 @@ import java.util.HashMap;
  */
 public abstract class AbstractSkeleton3D implements Saveable {
 
-    protected AbstractAxes localAxes;
-    protected AbstractAxes tempWorkingAxes;
-    protected ArrayList<AbstractBone> bones = new ArrayList<AbstractBone>();
-    protected HashMap<String, AbstractBone> tagBoneMap = new HashMap<String, AbstractBone>();
-    protected HashMap<AbstractBone, SegmentedArmature> boneSegmentMap = new HashMap<AbstractBone, SegmentedArmature>();
-    protected AbstractBone rootBone;
+    public ewbik.processing.sceneGraph.Axes localAxes;
+    protected ewbik.processing.sceneGraph.Axes tempWorkingAxes;
+    protected ArrayList<Bone> bones = new ArrayList<Bone>();
+    protected HashMap<String, Bone> tagBoneMap = new HashMap<String, Bone>();
+    public HashMap<Bone, SegmentedArmature> boneSegmentMap = new HashMap<Bone, SegmentedArmature>();
+    protected Bone rootBone;
     public SegmentedArmature segmentedArmature;
     protected String tag;
 
@@ -64,13 +66,13 @@ public abstract class AbstractSkeleton3D implements Saveable {
      * @param inputOrigin Desired location and orientation of the rootBone.
      * @param name        A human readable name for this armature
      */
-    public AbstractSkeleton3D(AbstractAxes inputOrigin, String name) {
+    public AbstractSkeleton3D(ewbik.processing.sceneGraph.Axes inputOrigin, String name) {
 
-        this.localAxes = (AbstractAxes) inputOrigin;
+        this.localAxes = (ewbik.processing.sceneGraph.Axes) inputOrigin;
         this.tempWorkingAxes = localAxes.getGlobalCopy();
         this.tag = name;
         createRootBone(localAxes.y_().heading(), localAxes.z_().heading(), tag + " : rootBone", 1f,
-                AbstractBone.frameType.GLOBAL);
+                Bone.frameType.GLOBAL);
     }
 
     /**
@@ -79,7 +81,7 @@ public abstract class AbstractSkeleton3D implements Saveable {
      * @param inputBone
      * @return
      */
-    public AbstractBone createRootBone(AbstractBone inputBone) {
+    public Bone createRootBone(Bone inputBone) {
         this.rootBone = inputBone;
         this.segmentedArmature = new SegmentedArmature(rootBone);
         fauxParent = rootBone.localAxes().getGlobalCopy();
@@ -87,8 +89,8 @@ public abstract class AbstractSkeleton3D implements Saveable {
         return rootBone;
     }
 
-    private <V extends Vec3f<?>> AbstractBone createRootBone(V tipHeading, V rollHeading, String inputTag,
-                                                             float boneHeight, AbstractBone.frameType coordinateType) {
+    private <V extends Vec3f<?>> Bone createRootBone(V tipHeading, V rollHeading, String inputTag,
+                                                             float boneHeight, Bone.frameType coordinateType) {
         initializeRootBone(this, tipHeading, rollHeading, inputTag, boneHeight, coordinateType);
         this.segmentedArmature = new SegmentedArmature(rootBone);
         fauxParent = rootBone.localAxes().getGlobalCopy();
@@ -100,7 +102,7 @@ public abstract class AbstractSkeleton3D implements Saveable {
                                                Vec3f<?> tipHeading, Vec3f<?> rollHeading,
                                                String inputTag,
                                                float boneHeight,
-                                               AbstractBone.frameType coordinateType);
+                                               Bone.frameType coordinateType);
 
     /**
      * The default number of iterations to run over this armature whenever
@@ -141,7 +143,7 @@ public abstract class AbstractSkeleton3D implements Saveable {
     /**
      * @return the rootBone of this armature.
      */
-    public AbstractBone getRootBone() {
+    public Bone getRootBone() {
         return rootBone;
     }
 
@@ -150,7 +152,7 @@ public abstract class AbstractSkeleton3D implements Saveable {
      *
      * @return all bones belonging to this armature.
      */
-    public ArrayList<? extends AbstractBone> getBoneList() {
+    public ArrayList<? extends Bone> getBoneList() {
         this.bones.clear();
         rootBone.addDescendantsToArmature();
         return bones;
@@ -166,7 +168,7 @@ public abstract class AbstractSkeleton3D implements Saveable {
      * @param previousTag
      * @param newTag
      */
-    protected void updateBoneTag(AbstractBone bone, String previousTag, String newTag) {
+    public void updateBoneTag(Bone bone, String previousTag, String newTag) {
         tagBoneMap.remove(previousTag);
         tagBoneMap.put(newTag, bone);
     }
@@ -178,10 +180,10 @@ public abstract class AbstractSkeleton3D implements Saveable {
      *
      * @param bone
      */
-    protected void addToBoneList(AbstractBone abstractBone) {
-        if (!bones.contains(abstractBone)) {
-            bones.add(abstractBone);
-            tagBoneMap.put(abstractBone.getTag(), abstractBone);
+    public void addToBoneList(Bone Bone) {
+        if (!bones.contains(Bone)) {
+            bones.add(Bone);
+            tagBoneMap.put(Bone.getTag(), Bone);
         }
     }
 
@@ -190,10 +192,10 @@ public abstract class AbstractSkeleton3D implements Saveable {
      * is
      * to know it no longer exists
      */
-    protected void removeFromBoneList(AbstractBone abstractBone) {
-        if (bones.contains(abstractBone)) {
-            bones.remove(abstractBone);
-            tagBoneMap.remove(abstractBone);
+    public void removeFromBoneList(Bone Bone) {
+        if (bones.contains(Bone)) {
+            bones.remove(Bone);
+            tagBoneMap.remove(Bone);
             this.updateArmatureSegments();
         }
     }
@@ -203,7 +205,7 @@ public abstract class AbstractSkeleton3D implements Saveable {
      * @return the bone object corresponding to this tag
      */
 
-    public AbstractBone getBoneTagged(String tag) {
+    public Bone getBoneTagged(String tag) {
         return tagBoneMap.get(tag);
     }
 
@@ -239,7 +241,7 @@ public abstract class AbstractSkeleton3D implements Saveable {
     }
 
     private void recursivelyUpdateBoneSegmentMapFrom(SegmentedArmature startFrom) {
-        for (AbstractBone b : startFrom.segmentBoneList) {
+        for (Bone b : startFrom.segmentBoneList) {
             boneSegmentMap.put(b, startFrom);
         }
         for (SegmentedArmature c : startFrom.childSegments) {
@@ -255,11 +257,11 @@ public abstract class AbstractSkeleton3D implements Saveable {
      * to index all of the pins on the armature.
      */
     public void refreshArmaturePins() {
-        AbstractBone rootBone = this.getRootBone();
-        ArrayList<AbstractBone> pinnedBones = new ArrayList<>();
+        Bone rootBone = this.getRootBone();
+        ArrayList<Bone> pinnedBones = new ArrayList<>();
         rootBone.addSelfIfPinned(pinnedBones);
 
-        for (AbstractBone b : pinnedBones) {
+        for (Bone b : pinnedBones) {
             b.notifyAncestorsOfPin(false);
             updateArmatureSegments();
         }
@@ -277,7 +279,7 @@ public abstract class AbstractSkeleton3D implements Saveable {
      *
      * @param bone
      */
-    public void IKSolver(AbstractBone bone) {
+    public void IKSolver(Bone bone) {
         IKSolver(bone, -1, -1, -1);
     }
 
@@ -293,7 +295,7 @@ public abstract class AbstractSkeleton3D implements Saveable {
      * @param stabilizingPasses number of stabilization passes to run. Set this to
      *                          -1 if you want to use the armature's default.
      */
-    public void IKSolver(AbstractBone bone, float dampening, int iterations, int stabilizingPasses) {
+    public void IKSolver(Bone bone, float dampening, int iterations, int stabilizingPasses) {
         performance.startPerformanceMonitor();
         iteratedImprovedSolver(bone, dampening, iterations, stabilizingPasses);// (bone, dampening, iterations);
         performance.solveFinished(iterations == -1 ? this.IKIterations : iterations);
@@ -344,12 +346,12 @@ public abstract class AbstractSkeleton3D implements Saveable {
     /**
      * @return a reference to the Axes serving as this Armature's coordinate system.
      */
-    public AbstractAxes localAxes() {
+    public ewbik.processing.sceneGraph.Axes localAxes() {
         return this.localAxes;
     }
 
     private void recursivelyNotifyBonesOfCompletedIKSolution(SegmentedArmature startFrom) {
-        for (AbstractBone b : startFrom.segmentBoneList) {
+        for (Bone b : startFrom.segmentBoneList) {
             b.IKUpdateNotification();
         }
         for (SegmentedArmature s : startFrom.childSegments) {
@@ -363,7 +365,7 @@ public abstract class AbstractSkeleton3D implements Saveable {
      * @param iterations
      */
 
-    public void iteratedImprovedSolver(AbstractBone startFrom, float dampening, int iterations,
+    public void iteratedImprovedSolver(Bone startFrom, float dampening, int iterations,
                                        int stabilizationPasses) {
         SegmentedArmature armature = boneSegmentMap.get(startFrom);
 
@@ -425,7 +427,7 @@ public abstract class AbstractSkeleton3D implements Saveable {
     }
 
     boolean debug = true;
-    AbstractBone lastDebugBone = null;
+    Bone lastDebugBone = null;
 
     private void QCPSolver(
             SegmentedArmature chain,
@@ -436,10 +438,10 @@ public abstract class AbstractSkeleton3D implements Saveable {
             float totalIterations) {
 
         debug = false;
-        AbstractBone startFrom = debug && lastDebugBone != null ? lastDebugBone : chain.segmentTip;
-        AbstractBone stopAfter = chain.segmentRoot;
+        Bone startFrom = debug && lastDebugBone != null ? lastDebugBone : chain.segmentTip;
+        Bone stopAfter = chain.segmentRoot;
 
-        AbstractBone currentBone = startFrom;
+        Bone currentBone = startFrom;
 
         if (debug && chain.simulatedBones.size() < 2) {
         } else {
@@ -461,7 +463,7 @@ public abstract class AbstractSkeleton3D implements Saveable {
         }
     }
 
-    void rootwardlyUpdateFalloffCacheFrom(AbstractBone forBone) {
+    void rootwardlyUpdateFalloffCacheFrom(Bone forBone) {
         SegmentedArmature current = boneSegmentMap.get(forBone);
         while (current != null) {
             current.createHeadingArrays();
@@ -594,7 +596,7 @@ public abstract class AbstractSkeleton3D implements Saveable {
     public void loadFromJSONObject(JSONObject j, LoadManager l) {
         try {
             this.localAxes = l.getObjectFor(AbstractAxes.class, j, "localAxes");
-            this.rootBone = l.getObjectFor(AbstractBone.class, j, "rootBone");
+            this.rootBone = l.getObjectFor(Bone.class, j, "rootBone");
             this.IKIterations = j.getInt("defaultIterations");
             this.dampening = j.getFloat("dampening");
             this.tag = j.getString("tag");

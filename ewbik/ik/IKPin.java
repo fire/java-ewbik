@@ -1,7 +1,8 @@
-package ewbik.processing.singlePrecision;
+package ik;
 
 import ewbik.ik.AbstractIKPin;
 import ewbik.processing.sceneGraph.Axes;
+import ik.Bone;
 import processing.core.PVector;
 
 public class IKPin extends AbstractIKPin {
@@ -10,11 +11,11 @@ public class IKPin extends AbstractIKPin {
     public IKPin() {
     }
 
-    public IKPin(Axes inAxes, boolean enabled, ewbik.processing.singlePrecision.Bone bone) {
+    public IKPin(Axes inAxes, boolean enabled, Bone bone) {
         super(inAxes, enabled, bone);
     }
 
-    public IKPin(Axes inAxes, ewbik.processing.singlePrecision.Bone bone) {
+    public IKPin(Axes inAxes, Bone bone) {
         super(inAxes, bone);
     }
 
