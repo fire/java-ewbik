@@ -566,7 +566,7 @@ public abstract class AbstractAxes implements Saveable {
      * its shear, translate and scale attributes.
      */
     public void rotateToParent() {
-        this.getLocalMBasis().rotateTo(new Quaternion(MRotation.IDENTITY));
+        this.getLocalMBasis().rotateTo(new Quaternion());
         this.markDirty();
     }
 
