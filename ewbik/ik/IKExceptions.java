@@ -7,11 +7,11 @@ public final class IKExceptions extends Exception {
     }
 
     public static class NullParentForBoneException extends NullPointerException {
+        private static final long serialVersionUID = 24957056215695010L;
+
         public NullParentForBoneException() {
             super();
         }
-
-        private static final long serialVersionUID = 24957056215695010L;
     }
 
 }

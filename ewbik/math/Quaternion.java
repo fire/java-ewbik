@@ -73,6 +73,178 @@ public class Quaternion {
         // }
     }
 
+    /*
+     * interpolate between two rotations (SLERP)
+     *
+     */
+    public Quaternion(float amount, Quaternion v1, Quaternion v2) {
+        rotation = slerp(amount, v1.rotation, v2.rotation);
+    }
+
+    /**
+     * loads a rotation from a JSON array of quaternion values.
+     * <p>
+     * where
+     * jarray[0] = q0 = w;
+     * jarray[1] = q1 = x;
+     * jarray[2] = q2 = y;
+     * jarray[3] = q3 = z;
+     *
+     * @param jarray
+     */
+    public Quaternion(JSONArray jarray) {
+        rotation = new MRotation(jarray.getFloat(0), jarray.getFloat(1), jarray.getFloat(2), jarray.getFloat(3), true);
+    }
+
+    public static MRotation slerp(float amount, MRotation value1, MRotation value2) {
+
+        if (Float.isNaN(amount)) {
+            return new MRotation(value1.getQ0(), value1.getQ1(), value1.getQ2(), value1.getQ3());
+        }
+        if (amount < 0.0f)
+            return value1;
+        else if (amount > 1.0f)
+            return value2;
+
+        float dot = value1.dotProduct(value2);
+        float x2, y2, z2, w2;
+        /*
+         * if (dot < 0.0f)
+         * {
+         * dot = 0.0f - dot;
+         * x2 = 0.0f - value2.getQ1();
+         * y2 = 0.0f - value2.getQ2();
+         * z2 = 0.0f - value2.getQ3();
+         * w2 = 0.0f - value2.getQ0();
+         * }
+         * else
+         * {
+         */
+        x2 = value2.getQ1();
+        y2 = value2.getQ2();
+        z2 = value2.getQ3();
+        w2 = value2.getQ0();
+        // }
+
+        float t1, t2;
+
+        final float EPSILON = 0.0001f;
+        if ((1.0f - dot) > EPSILON) // standard case (slerp)
+        {
+            float angle = MathUtils.acos(dot);
+            float sinAngle = MathUtils.sin(angle);
+            t1 = MathUtils.sin((1.0f - amount) * angle) / sinAngle;
+            t2 = MathUtils.sin(amount * angle) / sinAngle;
+        } else // just lerp
+        {
+            t1 = 1.0f - amount;
+            t2 = amount;
+        }
+
+        return new MRotation(
+                (value1.getQ0() * t1) + (w2 * t2),
+                (value1.getQ1() * t1) + (x2 * t2),
+                (value1.getQ2() * t1) + (y2 * t2),
+                (value1.getQ3() * t1) + (z2 * t2));
+    }
+
+    public static Quaternion nlerp(Quaternion[] rotations, float[] weights) {
+
+        if (weights == null) {
+            return nlerp(rotations);
+        } else {
+            float q0 = 0f;
+            float q1 = 0f;
+            float q2 = 0f;
+            float q3 = 0f;
+            float total = 0f;
+
+            for (int i = 0; i < rotations.length; i++) {
+                MRotation r = rotations[i].rotation;
+                float weight = weights[i];
+                q0 += r.getQ0() * weight;
+                q1 += r.getQ1() * weight;
+                q2 += r.getQ2() * weight;
+                q3 += r.getQ3() * weight;
+                total += weight;
+            }
+
+            q0 /= total;
+            q1 /= total;
+            q2 /= total;
+            q3 /= total;
+
+            return new Quaternion(q0, q1, q2, q3, true);
+        }
+    }
+
+    public static Quaternion nlerp(Quaternion[] rotations) {
+        float q0 = 0f;
+        float q1 = 0f;
+        float q2 = 0f;
+        float q3 = 0f;
+        float total = rotations.length;
+
+        for (int i = 0; i < rotations.length; i++) {
+            MRotation r = rotations[i].rotation;
+            q0 += r.getQ0();
+            q1 += r.getQ1();
+            q2 += r.getQ2();
+            q3 += r.getQ3();
+        }
+        q0 /= total;
+        q1 /= total;
+        q2 /= total;
+        q3 /= total;
+
+        return new Quaternion(q0, q1, q2, q3, true);
+    }
+
+    /**
+     * finds the instantaneous (optionally weighted) average of the given rotations
+     * in an order-agnostic manner. Conceptually, this is equivalent to breaking
+     * down
+     * each rotation into an infinitesimal sequence of rotations, and then applying
+     * the rotations
+     * in alternation.
+     *
+     * @param rots
+     * @param weights if this parameter receives null, equal weights are assumed for
+     *                all rotations. Otherwise,
+     *                every element in this array is treated as a weight on the
+     *                corresponding element of the rots array.
+     * @return the weighted average Rotation. If the total weights are 0, then
+     * returns null.
+     */
+    public static Quaternion instantaneousAvg(Quaternion[] rots, float[] weights) {
+        Vector3 accumulatedAxisAngle = new Vector3();
+        float totalWeight = rots.length;
+        if (weights != null) {
+            totalWeight = 0f;
+            for (int i = 0; i < weights.length; i++) {
+                totalWeight += weights[i];
+            }
+        }
+
+        if (totalWeight == 0) {
+            return null;
+        }
+
+        for (int i = 0; i < rots.length; i++) {
+            Vector3 axis = rots[i].getAxis();
+            float angle = rots[i].getAngle();
+            angle /= totalWeight;
+            if (weights != null) {
+                angle *= weights[i];
+            }
+            axis.mult(angle);
+            accumulatedAxisAngle.add(axis);
+        }
+        float extractAngle = accumulatedAxisAngle.mag();
+        accumulatedAxisAngle.div(extractAngle);
+        return new Quaternion(accumulatedAxisAngle, extractAngle);
+    }
+
     public Quaternion copy() {
         return new Quaternion(new MRotation(rotation.getQ0(), rotation.getQ1(), rotation.getQ2(), rotation.getQ3(), false));
     }
@@ -277,14 +449,6 @@ public class Quaternion {
         rotation.revert(r.rotation);
     }
 
-    /*
-     * interpolate between two rotations (SLERP)
-     *
-     */
-    public Quaternion(float amount, Quaternion v1, Quaternion v2) {
-        rotation = slerp(amount, v1.rotation, v2.rotation);
-    }
-
     /**
      * Get the swing rotation and twist rotation for the specified axis. The twist
      * rotation represents the rotation around the
@@ -323,155 +487,6 @@ public class Quaternion {
         return result;
     }
 
-    public static MRotation slerp(float amount, MRotation value1, MRotation value2) {
-
-        if (Float.isNaN(amount)) {
-            return new MRotation(value1.getQ0(), value1.getQ1(), value1.getQ2(), value1.getQ3());
-        }
-        if (amount < 0.0f)
-            return value1;
-        else if (amount > 1.0f)
-            return value2;
-
-        float dot = value1.dotProduct(value2);
-        float x2, y2, z2, w2;
-        /*
-         * if (dot < 0.0f)
-         * {
-         * dot = 0.0f - dot;
-         * x2 = 0.0f - value2.getQ1();
-         * y2 = 0.0f - value2.getQ2();
-         * z2 = 0.0f - value2.getQ3();
-         * w2 = 0.0f - value2.getQ0();
-         * }
-         * else
-         * {
-         */
-        x2 = value2.getQ1();
-        y2 = value2.getQ2();
-        z2 = value2.getQ3();
-        w2 = value2.getQ0();
-        // }
-
-        float t1, t2;
-
-        final float EPSILON = 0.0001f;
-        if ((1.0f - dot) > EPSILON) // standard case (slerp)
-        {
-            float angle = MathUtils.acos(dot);
-            float sinAngle = MathUtils.sin(angle);
-            t1 = MathUtils.sin((1.0f - amount) * angle) / sinAngle;
-            t2 = MathUtils.sin(amount * angle) / sinAngle;
-        } else // just lerp
-        {
-            t1 = 1.0f - amount;
-            t2 = amount;
-        }
-
-        return new MRotation(
-                (value1.getQ0() * t1) + (w2 * t2),
-                (value1.getQ1() * t1) + (x2 * t2),
-                (value1.getQ2() * t1) + (y2 * t2),
-                (value1.getQ3() * t1) + (z2 * t2));
-    }
-
-    public static Quaternion nlerp(Quaternion[] rotations, float[] weights) {
-
-        if (weights == null) {
-            return nlerp(rotations);
-        } else {
-            float q0 = 0f;
-            float q1 = 0f;
-            float q2 = 0f;
-            float q3 = 0f;
-            float total = 0f;
-
-            for (int i = 0; i < rotations.length; i++) {
-                MRotation r = rotations[i].rotation;
-                float weight = weights[i];
-                q0 += r.getQ0() * weight;
-                q1 += r.getQ1() * weight;
-                q2 += r.getQ2() * weight;
-                q3 += r.getQ3() * weight;
-                total += weight;
-            }
-
-            q0 /= total;
-            q1 /= total;
-            q2 /= total;
-            q3 /= total;
-
-            return new Quaternion(q0, q1, q2, q3, true);
-        }
-    }
-
-    public static Quaternion nlerp(Quaternion[] rotations) {
-        float q0 = 0f;
-        float q1 = 0f;
-        float q2 = 0f;
-        float q3 = 0f;
-        float total = rotations.length;
-
-        for (int i = 0; i < rotations.length; i++) {
-            MRotation r = rotations[i].rotation;
-            q0 += r.getQ0();
-            q1 += r.getQ1();
-            q2 += r.getQ2();
-            q3 += r.getQ3();
-        }
-        q0 /= total;
-        q1 /= total;
-        q2 /= total;
-        q3 /= total;
-
-        return new Quaternion(q0, q1, q2, q3, true);
-    }
-
-    /**
-     * finds the instantaneous (optionally weighted) average of the given rotations
-     * in an order-agnostic manner. Conceptually, this is equivalent to breaking
-     * down
-     * each rotation into an infinitesimal sequence of rotations, and then applying
-     * the rotations
-     * in alternation.
-     *
-     * @param rots
-     * @param weights if this parameter receives null, equal weights are assumed for
-     *                all rotations. Otherwise,
-     *                every element in this array is treated as a weight on the
-     *                corresponding element of the rots array.
-     * @return the weighted average Rotation. If the total weights are 0, then
-     * returns null.
-     */
-    public static Quaternion instantaneousAvg(Quaternion[] rots, float[] weights) {
-        Vector3 accumulatedAxisAngle = new Vector3();
-        float totalWeight = rots.length;
-        if (weights != null) {
-            totalWeight = 0f;
-            for (int i = 0; i < weights.length; i++) {
-                totalWeight += weights[i];
-            }
-        }
-
-        if (totalWeight == 0) {
-            return null;
-        }
-
-        for (int i = 0; i < rots.length; i++) {
-            Vector3 axis = rots[i].getAxis();
-            float angle = rots[i].getAngle();
-            angle /= totalWeight;
-            if (weights != null) {
-                angle *= weights[i];
-            }
-            axis.mult(angle);
-            accumulatedAxisAngle.add(axis);
-        }
-        float extractAngle = accumulatedAxisAngle.mag();
-        accumulatedAxisAngle.div(extractAngle);
-        return new Quaternion(accumulatedAxisAngle, extractAngle);
-    }
-
     public String toString() {
         return rotation.toString();// "\n axis: "+ this.getAxis().toVec3f() +", \n angle:
         // "+((float)MathUtils.toDegrees(this.getAngle()));
@@ -479,21 +494,6 @@ public class Quaternion {
 
     public boolean equalTo(Quaternion m) {
         return MRotation.distance(this.rotation, m.rotation) < MathUtils.DOUBLE_ROUNDING_ERROR;
-    }
-
-    /**
-     * loads a rotation from a JSON array of quaternion values.
-     * <p>
-     * where
-     * jarray[0] = q0 = w;
-     * jarray[1] = q1 = x;
-     * jarray[2] = q2 = y;
-     * jarray[3] = q3 = z;
-     *
-     * @param jarray
-     */
-    public Quaternion(JSONArray jarray) {
-        rotation = new MRotation(jarray.getFloat(0), jarray.getFloat(1), jarray.getFloat(2), jarray.getFloat(3), true);
     }
 
     public JSONArray toJsonArray() {

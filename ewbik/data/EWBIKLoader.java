@@ -9,17 +9,40 @@ import ewbik.ik.*;
 import ewbik.math.AbstractAxes;
 import ewbik.math.MRotation;
 import ewbik.math.Quaternion;
+import ik.Bone;
+import ik.IKPin;
+import processing.Skeleton3D;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import ik.Bone;
-import ik.IKPin;
-import processing.Skeleton3D;
 
 public class EWBIKLoader {
     FloatBackedLoader floatBackedLoader = new FloatBackedLoader();
+
+    public static Object parsePrimitive(Class keyClass, String toParse) {
+        if (keyClass == String.class)
+            return toParse;
+        if (keyClass == Float.class)
+            return Float.parseFloat(toParse);
+        if (keyClass == Double.class)
+            return Double.parseDouble(toParse);
+        if (keyClass == Long.class)
+            return Long.parseLong(toParse);
+        if (keyClass == Boolean.class)
+            return Boolean.parseBoolean(toParse);
+        if (keyClass == Integer.class)
+            return Integer.parseInt(toParse);
+        if (keyClass == Byte.class)
+            return Byte.parseByte(toParse);
+        else
+            return null;
+    }
+
+    public static void setTempLoadDirectory(String tempLoadDirectory) {
+        tempLoadDirectory = tempLoadDirectory;
+    }
 
     /**
      * NOTE: in order to load custom (extended classes), those classes MUST have a
@@ -90,38 +113,6 @@ public class EWBIKLoader {
         return floatBackedLoader.hashMapFromJSON(json, result, ti);
     }
 
-    /**
-     * takes a JSONObject and parses it into the format specified by the
-     * TypeIdentifier.
-     * The Value parameter can be another hashmap, and this
-     * will nest hashmaps from jsonObjects accordingly.
-     *
-     * @param json
-     * @param result
-     */
-    public <T extends Object, V extends Object> HashMap<T, V> hashMapFromJSON(JSONObject json, TypeIdentifier ti) {
-        return floatBackedLoader.hashMapFromJSON(json, ti);
-    }
-
-    public static Object parsePrimitive(Class keyClass, String toParse) {
-        if (keyClass == String.class)
-            return toParse;
-        if (keyClass == Float.class)
-            return Float.parseFloat(toParse);
-        if (keyClass == Double.class)
-            return Double.parseDouble(toParse);
-        if (keyClass == Long.class)
-            return Long.parseLong(toParse);
-        if (keyClass == Boolean.class)
-            return Boolean.parseBoolean(toParse);
-        if (keyClass == Integer.class)
-            return Integer.parseInt(toParse);
-        if (keyClass == Byte.class)
-            return Byte.parseByte(toParse);
-        else
-            return null;
-    }
-
     /*
      * public Object parsePrimitive(Class keyClass, String toParse) {
      * if(keyClass == String.class) return toParse;
@@ -136,6 +127,19 @@ public class EWBIKLoader {
      */
 
     /**
+     * takes a JSONObject and parses it into the format specified by the
+     * TypeIdentifier.
+     * The Value parameter can be another hashmap, and this
+     * will nest hashmaps from jsonObjects accordingly.
+     *
+     * @param json
+     * @param result
+     */
+    public <T extends Object, V extends Object> HashMap<T, V> hashMapFromJSON(JSONObject json, TypeIdentifier ti) {
+        return floatBackedLoader.hashMapFromJSON(json, ti);
+    }
+
+    /**
      * returns the appropriate object from the load hashmaps based on the
      * identityHash and keyClass.
      * if the object is not found, returns null
@@ -147,10 +151,6 @@ public class EWBIKLoader {
 
     public Saveable getObjectFromClassMaps(Class keyClass, String identityHash) {
         return floatBackedLoader.getObjectFromClassMaps(keyClass, identityHash);
-    }
-
-    public static void setTempLoadDirectory(String tempLoadDirectory) {
-        tempLoadDirectory = tempLoadDirectory;
     }
 
     public <T extends Object> void arrayListFromJSONArray(JSONArray jsonArray, ArrayList<T> list, Class c) {

@@ -22,13 +22,9 @@ package ewbik.processing.singlePrecision;
 import ewbik.asj.LoadManager;
 import ewbik.asj.SaveManager;
 import ewbik.asj.Saveable;
+import ewbik.math.*;
 import ewbik.processing.sceneGraph.Axes;
 import processing.core.PVector;
-import ewbik.math.Vec3f;
-import ewbik.math.Vector3;
-import ewbik.math.Ray3;
-import ewbik.math.Quaternion;
-import ewbik.math.MathUtils;
 
 public class LimitCone implements Saveable {
 
@@ -446,15 +442,15 @@ public class LimitCone implements Saveable {
         return radius;
     }
 
-    public float getRadiusCosine() {
-        return this.radiusCosine;
-    }
-
     public void setRadius(float radius) {
         this.radius = MathUtils.max(Float.MIN_VALUE, radius);
         this.radiusCosine = MathUtils.cos(this.radius);
         if (this.parentKusudama != null)
             this.parentKusudama.constraintUpdateNotification();
+    }
+
+    public float getRadiusCosine() {
+        return this.radiusCosine;
     }
 
     public ewbik.processing.singlePrecision.Kusudama getParentKusudama() {

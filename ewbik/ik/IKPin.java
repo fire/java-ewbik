@@ -10,9 +10,9 @@ public class IKPin implements ewbik.asj.Saveable {
     public static final short XDir = 1;
     public static final short YDir = 2;
     public static final short ZDir = 4;
+    public Bone forBone;
     protected boolean isEnabled;
     protected ewbik.math.AbstractAxes axes;
-    public Bone forBone;
     protected IKPin parentPin;
     protected ArrayList<IKPin> childPins = new ArrayList<>();
     protected float xPriority = 1f;
@@ -102,6 +102,10 @@ public class IKPin implements ewbik.asj.Saveable {
         this.isEnabled = false;
     }
 
+    public float getDepthFalloff() {
+        return depthFalloff;
+    }
+
     /**
      * Pins can be ultimate targets, or intermediary targets.
      * By default, each pin is treated as an ultimate target, meaning
@@ -136,10 +140,6 @@ public class IKPin implements ewbik.asj.Saveable {
     public void setDepthFalloff(float depth) {
         this.depthFalloff = depth;
         this.forBone.parentArmature.rootwardlyUpdateFalloffCacheFrom(forBone);
-    }
-
-    public float getDepthFalloff() {
-        return depthFalloff;
     }
 
     /**
@@ -256,8 +256,7 @@ public class IKPin implements ewbik.asj.Saveable {
         ewbik.math.AbstractAxes armAxes = this.forBone().parentArmature.localAxes().getParentAxes();
         if (armAxes == null) {
             this.axes.translateTo(location);
-        }
-        else {
+        } else {
             this.axes.translateTo(armAxes.getLocalOf(location));
         }
     }
@@ -289,22 +288,6 @@ public class IKPin implements ewbik.asj.Saveable {
         }
     }
 
-    public void setParentPin(IKPin parent) {
-        if (this.parentPin != null) {
-            this.parentPin.removeChildPin(this);
-        }
-        // set the parent to the global axes if the user
-        // tries to set the pin to be its own parent
-
-        if (parent == this || parent == null) {
-            this.axes.setParent(null);
-        } else if (parent != null) {
-            this.axes.setParent(parent.axes);
-            parent.addChildPin(this);
-            this.parentPin = parent;
-        }
-    }
-
     public void solveIKForThisAndChildren() {
 
         try {
@@ -331,6 +314,22 @@ public class IKPin implements ewbik.asj.Saveable {
 
     public IKPin getParentPin() {
         return this.parentPin;
+    }
+
+    public void setParentPin(IKPin parent) {
+        if (this.parentPin != null) {
+            this.parentPin.removeChildPin(this);
+        }
+        // set the parent to the global axes if the user
+        // tries to set the pin to be its own parent
+
+        if (parent == this || parent == null) {
+            this.axes.setParent(null);
+        } else if (parent != null) {
+            this.axes.setParent(parent.axes);
+            parent.addChildPin(this);
+            this.parentPin = parent;
+        }
     }
 
     public boolean isAncestorOf(IKPin potentialDescendent) {

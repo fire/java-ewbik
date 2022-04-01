@@ -16,8 +16,6 @@
 
 package ewbik.math;
 
-import java.util.Random;
-
 /**
  * Utility and fast math functions.
  * <p>
@@ -36,16 +34,6 @@ public final class MathUtils {
     static public final float HALF_PI = (float) (Math.PI / 2d);
 
     static public final float E = (float) Math.E;
-
-    static private final int SIN_BITS = 9; // Adjust for accuracy (eats memory).
-    static private final int SIN_MASK = ~(-1 << SIN_BITS);
-    static private final int SIN_COUNT = SIN_MASK + 1;
-
-    static private final float radFull = PI * 2;
-    static private final float degFull = 360;
-    static private final float radToIndex = SIN_COUNT / radFull;
-    static private final float degToIndex = SIN_COUNT / degFull;
-
     /**
      * multiply by this to convert from radians to degrees
      */
@@ -56,17 +44,19 @@ public final class MathUtils {
      */
     static public final float degreesToRadians = PI / 180f;
     static public final float degRad = degreesToRadians;
+    static private final int SIN_BITS = 9; // Adjust for accuracy (eats memory).
+    static private final int SIN_MASK = ~(-1 << SIN_BITS);
+    static private final int SIN_COUNT = SIN_MASK + 1;
+    static private final float degFull = 360;
+    static private final float degToIndex = SIN_COUNT / degFull;
+    static private final float radFull = PI * 2;
+    static private final float radToIndex = SIN_COUNT / radFull;
+    static private final int BIG_ENOUGH_INT = 16 * 1024;
+    static private final double BIG_ENOUGH_FLOOR = BIG_ENOUGH_INT;
+    static private final double CEIL = 0.9999999;
+    static private final double BIG_ENOUGH_ROUND = BIG_ENOUGH_INT + 0.5f;
 
-
-    static private class Sin {
-        static final float[] table = new float[SIN_COUNT];
-
-        static {
-            for (int i = 0; i < SIN_COUNT; i++)
-                table[i] = (float) Math.sin((float) (i) / SIN_COUNT * radFull);
-        }
-    }
-
+    // ---
 
     /**
      * Returns the sine in radians from a lookup table.
@@ -75,6 +65,8 @@ public final class MathUtils {
         return (float) Math.sin((double) radians);
     }
 
+    // ---
+
     /**
      * Returns the cosine in radians from a lookup table.
      */
@@ -82,6 +74,7 @@ public final class MathUtils {
         return (float) Math.cos(radians);
     }
 
+    // ---
 
     /**
      * Returns the cosine in radians from a lookup table.
@@ -89,8 +82,6 @@ public final class MathUtils {
     static public float cosDeg(float degrees) {
         return Sin.table[(int) ((degrees + 90) * degToIndex) & SIN_MASK];
     }
-
-    // ---
 
     /**
      * Returns atan2 in radians, faster but less accurate than Math.atan2. Average error of 0.00231 radians (0.1323 degrees),
@@ -118,8 +109,6 @@ public final class MathUtils {
         return (1 - t) * a + t * b;
     }
 
-    // ---
-
     /**
      * Returns the next power of two. Returns the specified value if the value is already a power of two.
      */
@@ -138,8 +127,6 @@ public final class MathUtils {
         return value != 0 && (value & value - 1) == 0;
     }
 
-    // ---
-
     static public short clamp(short value, short min, short max) {
         if (value < min) return min;
         if (value > max) return max;
@@ -151,6 +138,8 @@ public final class MathUtils {
         if (value > max) return max;
         return value;
     }
+
+    // ---
 
     static public long clamp(long value, long min, long max) {
         if (value < min) return min;
@@ -206,13 +195,6 @@ public final class MathUtils {
         double delta = ((toDegrees - fromDegrees + 360 + 180) % 360) - 180;
         return (fromDegrees + delta * progress + 360) % 360;
     }
-
-    // ---
-
-    static private final int BIG_ENOUGH_INT = 16 * 1024;
-    static private final double BIG_ENOUGH_FLOOR = BIG_ENOUGH_INT;
-    static private final double CEIL = 0.9999999;
-    static private final double BIG_ENOUGH_ROUND = BIG_ENOUGH_INT + 0.5f;
 
     /**
      * Returns the largest integer less than or equal to the specified double. This method will only properly floor doubles from
@@ -340,7 +322,6 @@ public final class MathUtils {
         return radians * degreesToRadians;
     }
 
-
     public static float max(float a, float b) {
         return a > b ? a : b;
     }
@@ -356,5 +337,14 @@ public final class MathUtils {
         x = Float.intBitsToFloat(i);
         x *= (1.5f - xhalf * x * x);
         return x;
+    }
+
+    static private class Sin {
+        static final float[] table = new float[SIN_COUNT];
+
+        static {
+            for (int i = 0; i < SIN_COUNT; i++)
+                table[i] = (float) Math.sin((float) (i) / SIN_COUNT * radFull);
+        }
     }
 }

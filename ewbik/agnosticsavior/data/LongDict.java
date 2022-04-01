@@ -166,18 +166,6 @@ public class LongDict {
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-
-    public class Entry {
-        public String key;
-        public long value;
-
-        Entry(String key, long value) {
-            this.key = key;
-            this.value = value;
-        }
-    }
-
-
     public Iterable<Entry> entries() {
         return new Iterable<Entry>() {
 
@@ -186,7 +174,6 @@ public class LongDict {
             }
         };
     }
-
 
     public Iterator<Entry> entryIterator() {
         return new Iterator<Entry>() {
@@ -209,14 +196,12 @@ public class LongDict {
         };
     }
 
-
-    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-
-
     public String key(int index) {
         return keys[index];
     }
 
+
+    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
     protected void crop() {
         if (count != keys.length) {
@@ -224,7 +209,6 @@ public class LongDict {
             values = StringFuncs.subset(values, 0, count);
         }
     }
-
 
     public Iterable<String> keys() {
         return new Iterable<String>() {
@@ -235,7 +219,6 @@ public class LongDict {
             }
         };
     }
-
 
     // Use this to iterate when you want to be able to remove elements along the way
     public Iterator<String> keyIterator() {
@@ -257,7 +240,6 @@ public class LongDict {
         };
     }
 
-
     /**
      * Return a copy of the internal keys array. This array can be modified.
      *
@@ -269,7 +251,6 @@ public class LongDict {
         return keyArray(null);
     }
 
-
     public String[] keyArray(String[] outgoing) {
         if (outgoing == null || outgoing.length != count) {
             outgoing = new String[count];
@@ -278,11 +259,9 @@ public class LongDict {
         return outgoing;
     }
 
-
     public long value(int index) {
         return values[index];
     }
-
 
     /**
      * @webref intdict:method
@@ -297,7 +276,6 @@ public class LongDict {
             }
         };
     }
-
 
     public Iterator<Long> valueIterator() {
         return new Iterator<Long>() {
@@ -318,7 +296,6 @@ public class LongDict {
         };
     }
 
-
     /**
      * Create a new array and copy each of the values into it.
      *
@@ -329,7 +306,6 @@ public class LongDict {
         crop();
         return valueArray(null);
     }
-
 
     /**
      * Fill an already-allocated array with the values (more efficient than
@@ -346,7 +322,6 @@ public class LongDict {
         return array;
     }
 
-
     /**
      * Return a value for the specified key.
      *
@@ -361,13 +336,11 @@ public class LongDict {
         return values[index];
     }
 
-
     public long get(String key, long alternate) {
         int index = index(key);
         if (index == -1) return alternate;
         return values[index];
     }
-
 
     /**
      * Create a new key/value pair or change the value of one.
@@ -384,7 +357,6 @@ public class LongDict {
         }
     }
 
-
     public void setIndex(int index, String key, long value) {
         if (index < 0 || index >= count) {
             throw new ArrayIndexOutOfBoundsException(index);
@@ -393,7 +365,6 @@ public class LongDict {
         values[index] = value;
     }
 
-
     /**
      * @webref intdict:method
      * @brief Check if a key is a part of the data structure
@@ -401,7 +372,6 @@ public class LongDict {
     public boolean hasKey(String key) {
         return index(key) != -1;
     }
-
 
     /**
      * Increase the value associated with a specific key by 1.
@@ -413,7 +383,6 @@ public class LongDict {
         add(key, 1);
     }
 
-
     /**
      * Merge another dictionary into this one. Calling this increment()
      * since it doesn't make sense in practice for the other dictionary types,
@@ -424,7 +393,6 @@ public class LongDict {
             add(dict.key(i), dict.value(i));
         }
     }
-
 
     /**
      * @webref intdict:method
@@ -439,7 +407,6 @@ public class LongDict {
         }
     }
 
-
     /**
      * @webref intdict:method
      * @brief Subtract from a value
@@ -447,7 +414,6 @@ public class LongDict {
     public void sub(String key, long amount) {
         add(key, -amount);
     }
-
 
     /**
      * @webref intdict:method
@@ -460,7 +426,6 @@ public class LongDict {
         }
     }
 
-
     /**
      * @webref intdict:method
      * @brief Divide a value
@@ -472,7 +437,6 @@ public class LongDict {
         }
     }
 
-
     private void checkMinMax(String functionName) {
         if (count == 0) {
             String msg =
@@ -481,7 +445,6 @@ public class LongDict {
             throw new RuntimeException(msg);
         }
     }
-
 
     // return the index of the minimum value
     public int minIndex() {
@@ -499,7 +462,6 @@ public class LongDict {
         return index;
     }
 
-
     // return the key for the minimum value
     public String minKey() {
         checkMinMax("minKey");
@@ -510,13 +472,11 @@ public class LongDict {
         return keys[index];
     }
 
-
     // return the minimum value, or throw an error if there are no values
     public long minValue() {
         checkMinMax("minValue");
         return values[minIndex()];
     }
-
 
     // return the index of the max value
     public int maxIndex() {
@@ -535,7 +495,6 @@ public class LongDict {
         return index;
     }
 
-
     /**
      * return the key corresponding to the maximum value or null if no entries
      */
@@ -548,13 +507,11 @@ public class LongDict {
         return keys[index];
     }
 
-
     // return the maximum value or throw an error if zero length
     public long maxValue() {
         checkMinMax("maxIndex");
         return values[maxIndex()];
     }
-
 
     public long sum() {
         long sum = 0;
@@ -564,12 +521,10 @@ public class LongDict {
         return sum;
     }
 
-
     public int index(String what) {
         Integer found = indices.get(what);
         return (found == null) ? -1 : found.intValue();
     }
-
 
     protected void create(String what, long much) {
         if (count == keys.length) {
@@ -581,7 +536,6 @@ public class LongDict {
         values[count] = much;
         count++;
     }
-
 
     /**
      * @webref intdict:method
@@ -596,7 +550,6 @@ public class LongDict {
         removeIndex(index);
         return value;
     }
-
 
     public long removeIndex(int index) {
         if (index < 0 || index >= count) {
@@ -615,7 +568,6 @@ public class LongDict {
         return value;
     }
 
-
     public void swap(int a, int b) {
         String tkey = keys[a];
         long tvalue = values[a];
@@ -627,7 +579,6 @@ public class LongDict {
 //    indices.put(keys[a], Integer.valueOf(a));
 //    indices.put(keys[b], Integer.valueOf(b));
     }
-
 
     /**
      * Sort the keys alphabetically (ignoring case). Uses the value as a
@@ -651,7 +602,6 @@ public class LongDict {
         sortImpl(true, true, true);
     }
 
-
     /**
      * Sort by values in ascending order. The smallest value will be at [0].
      *
@@ -661,7 +611,6 @@ public class LongDict {
     public void sortValues() {
         sortValues(true);
     }
-
 
     /**
      * Set true to ensure that the order returned is identical. Slightly
@@ -673,7 +622,6 @@ public class LongDict {
         sortImpl(false, false, stable);
     }
 
-
     /**
      * Sort by values in descending order. The largest value will be at [0].
      *
@@ -684,11 +632,9 @@ public class LongDict {
         sortValuesReverse(true);
     }
 
-
     public void sortValuesReverse(boolean stable) {
         sortImpl(false, true, stable);
     }
-
 
     protected void sortImpl(final boolean useKeys, final boolean reverse,
                             final boolean stable) {
@@ -732,7 +678,6 @@ public class LongDict {
         resetIndices();
     }
 
-
     /**
      * Sum all of the values in this dictionary, then return a new FloatDict of
      * each key, divided by the total sum. The total for all values will be ~1.0.
@@ -749,7 +694,6 @@ public class LongDict {
         return outgoing;
     }
 
-
     /**
      * Returns a duplicate copy of this object.
      */
@@ -764,13 +708,11 @@ public class LongDict {
         return outgoing;
     }
 
-
     public void print() {
         for (int i = 0; i < size(); i++) {
             System.out.println(keys[i] + " = " + values[i]);
         }
     }
-
 
     /**
      * Save tab-delimited entries to a file (TSV format, UTF-8 encoding)
@@ -781,7 +723,6 @@ public class LongDict {
         writer.close();
     }
 
-
     /**
      * Write tab-delimited entries to a PrintWriter
      */
@@ -791,7 +732,6 @@ public class LongDict {
         }
         writer.flush();
     }
-
 
     /**
      * Return this dictionary as a String in JSON format.
@@ -804,9 +744,18 @@ public class LongDict {
         return "{ " + items.join(", ") + " }";
     }
 
-
     @Override
     public String toString() {
         return getClass().getSimpleName() + " size=" + size() + " " + toJSON();
+    }
+
+    public class Entry {
+        public String key;
+        public long value;
+
+        Entry(String key, long value) {
+            this.key = key;
+            this.value = value;
+        }
     }
 }

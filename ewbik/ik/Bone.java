@@ -19,10 +19,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package ik;
 
+import ewbik.ik.*;
 import ewbik.ik.IKExceptions.NullParentForBoneException;
 import ewbik.ik.SegmentedArmature;
-import ewbik.math.AbstractAxes;
-import ewbik.math.Vec3f;
+import ewbik.math.*;
 import ewbik.processing.sceneGraph.Axes;
 import ewbik.processing.singlePrecision.Kusudama;
 import processing.Skeleton3D;
@@ -30,13 +30,8 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
 import processing.core.PVector;
-import ewbik.math.*;
-import ewbik.ik.*;
-import ewbik.math.Vector3;
 
 import java.util.ArrayList;
-
-import ewbik.math.Ray3;
 
 public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     public static boolean drawKusudamas = false;
@@ -165,58 +160,58 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             frameType coordinateType)
             throws NullParentForBoneException {
 
-            this.lastRotation = new Quaternion(MRotation.IDENTITY);
-            if (parArma != null) {
-                if (inputTag == null || inputTag == "") {
-                    this.tag = Integer.toString(System.identityHashCode(this));
-                } else
-                    this.tag = inputTag;
+        this.lastRotation = new Quaternion(MRotation.IDENTITY);
+        if (parArma != null) {
+            if (inputTag == null || inputTag == "") {
+                this.tag = Integer.toString(System.identityHashCode(this));
+            } else
+                this.tag = inputTag;
 
-                Ray3 tipHeadingRay;
-                tipHeadingRay = new Ray3(parArma.localAxes.origin_(), tipHeading);
-                tipHeadingRay.getRayScaledTo(inputBoneHeight);
-                Ray3 rollHeadingRay = new Ray3(parArma.localAxes.origin_(), rollHeading);
-                Vec3f<?> tempTip = tipHeading.copy();
-                Vec3f<?> tempRoll = rollHeading.copy();
-                Vec3f<?> tempX = tempTip.copy();
+            Ray3 tipHeadingRay;
+            tipHeadingRay = new Ray3(parArma.localAxes.origin_(), tipHeading);
+            tipHeadingRay.getRayScaledTo(inputBoneHeight);
+            Ray3 rollHeadingRay = new Ray3(parArma.localAxes.origin_(), rollHeading);
+            Vec3f<?> tempTip = tipHeading.copy();
+            Vec3f<?> tempRoll = rollHeading.copy();
+            Vec3f<?> tempX = tempTip.copy();
 
-                if (coordinateType == frameType.GLOBAL) {
-                    tempTip = tipHeadingRay.heading();
-                    tempRoll = rollHeadingRay.heading();
-                } else if (coordinateType == frameType.RELATIVE) {
-                    tempTip = parArma.localAxes.getGlobalOf(tipHeadingRay.heading());
-                    tempRoll = parArma.localAxes.getGlobalOf(rollHeadingRay.heading());
-                } else {
-                    System.out.println("WOAH WOAH WOAH");
-                }
-
-                tempX = tempTip.crossCopy(tempRoll);
-                // TODO: this commented out one is correct. Using old version test chirality
-                // code.
-                tempRoll = tempX.crossCopy(tempTip);
-                // tempRoll = tempTip.crossCopy(tempX);
-
-                tempX.normalize();
-                tempTip.normalize();
-                tempRoll.normalize();
-
-                this.parentArmature = parArma;
-                parentArmature.addToBoneList(this);
-
-                generateAxes(parentArmature.localAxes.origin_(), tempX, tempTip, tempRoll);
-                localAxes.setParent(parentArmature.localAxes);
-                previousOrientation = localAxes.attachedCopy(true);
-
-                majorRotationAxes = parentArmature.localAxes().getGlobalCopy();
-                majorRotationAxes.setParent(parentArmature.localAxes());
-
-                this.boneHeight = inputBoneHeight;
-                this.updateAncestorCount();
+            if (coordinateType == frameType.GLOBAL) {
+                tempTip = tipHeadingRay.heading();
+                tempRoll = rollHeadingRay.heading();
+            } else if (coordinateType == frameType.RELATIVE) {
+                tempTip = parArma.localAxes.getGlobalOf(tipHeadingRay.heading());
+                tempRoll = parArma.localAxes.getGlobalOf(rollHeadingRay.heading());
             } else {
-                throw new NullParentForBoneException();
+                System.out.println("WOAH WOAH WOAH");
             }
 
+            tempX = tempTip.crossCopy(tempRoll);
+            // TODO: this commented out one is correct. Using old version test chirality
+            // code.
+            tempRoll = tempX.crossCopy(tempTip);
+            // tempRoll = tempTip.crossCopy(tempX);
+
+            tempX.normalize();
+            tempTip.normalize();
+            tempRoll.normalize();
+
+            this.parentArmature = parArma;
+            parentArmature.addToBoneList(this);
+
+            generateAxes(parentArmature.localAxes.origin_(), tempX, tempTip, tempRoll);
+            localAxes.setParent(parentArmature.localAxes);
+            previousOrientation = localAxes.attachedCopy(true);
+
+            majorRotationAxes = parentArmature.localAxes().getGlobalCopy();
+            majorRotationAxes.setParent(parentArmature.localAxes());
+
+            this.boneHeight = inputBoneHeight;
+            this.updateAncestorCount();
+        } else {
+            throw new NullParentForBoneException();
         }
+
+    }
 
     /**
      * Creates a new bone of specified length emerging from the parentBone.
@@ -324,6 +319,10 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         }
     }
 
+    public static void setDrawKusudamas(boolean draw) {
+        drawKusudamas = draw;
+    }
+
     protected void generateAxes(Vec3f<?> origin, Vec3f<?> x, Vec3f<?> y, Vec3f<?> z) {
         this.localAxes = new Axes(origin, x, y, z);
     }
@@ -429,12 +428,12 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     }
 
     /**
-         * Get the Axes relative to which this bone's rotations are defined. (If the
-         * bone has constraints, this will be the
-         * constraint Axes)
-         *
-         * @return
-         */
+     * Get the Axes relative to which this bone's rotations are defined. (If the
+     * bone has constraints, this will be the
+     * constraint Axes)
+     *
+     * @return
+     */
     @SuppressWarnings("unchecked")
     public Axes getMajorRotationAxes() {
         return (Axes) this.majorRotationAxes;
@@ -445,8 +444,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         return (ArrayList<Bone>) (ArrayList<? extends Bone>) children;
     }
 
-    public static void setDrawKusudamas(boolean draw) {
-        drawKusudamas = draw;
+    public void setChildren(ArrayList<? extends Bone> children) {
+        this.children = (ArrayList<Bone>) children;
     }
 
     private void updateAncestorCount() {
@@ -968,13 +967,13 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         this.parentArmature.updateArmatureSegments();
     }
 
+    public String getTag() {
+        return this.tag;
+    }
+
     public void setTag(String newTag) {
         parentArmature.updateBoneTag(this, this.tag, newTag);
         this.tag = newTag;
-    }
-
-    public String getTag() {
-        return this.tag;
     }
 
     public Vec3f<?> getBase_() {
@@ -983,14 +982,6 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
     public Vec3f<?> getTip_() {
         return localAxes.y_().getScaledTo(boneHeight);
-    }
-
-    public void setBoneHeight(float inBoneHeight) {
-        this.boneHeight = inBoneHeight;
-        for (Bone child : this.getChildren()) {
-            child.localAxes().translateTo(this.getTip_());
-            child.majorRotationAxes.translateTo(this.getTip_());
-        }
     }
 
     /**
@@ -1025,6 +1016,14 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         return this.boneHeight;
     }
 
+    public void setBoneHeight(float inBoneHeight) {
+        this.boneHeight = inBoneHeight;
+        for (Bone child : this.getChildren()) {
+            child.localAxes().translateTo(this.getTip_());
+            child.majorRotationAxes.translateTo(this.getTip_());
+        }
+    }
+
     public boolean hasPinnedDescendant() {
         if (this.isPinned())
             return true;
@@ -1041,6 +1040,10 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
     }
 
+    public boolean getIKOrientationLock() {
+        return this.orientationLock;
+    }
+
     /**
      * if set to true, the IK system will not rotate this bone
      * as it solves the IK chain.
@@ -1049,10 +1052,6 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      */
     public void setIKOrientationLock(boolean val) {
         this.orientationLock = val;
-    }
-
-    public boolean getIKOrientationLock() {
-        return this.orientationLock;
     }
 
     public void addChild(Bone bone) {
@@ -1081,10 +1080,6 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             parentArmature.addToBoneList(b);
             b.addDescendantsToArmature();
         }
-    }
-
-    public void setChildren(ArrayList<? extends Bone> children) {
-        this.children = (ArrayList<Bone>) children;
     }
 
     /**

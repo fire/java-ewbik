@@ -26,24 +26,15 @@ public abstract class AbstractAxes implements Saveable {
 
     public AbstractBasis localMBasis;
     public AbstractBasis globalMBasis;
-    private DependencyReference<AbstractAxes> parent = null;
-
-    private int slipType = 0;
     public boolean dirty = true;
-
-    //public boolean forceOrthoNormality = true;
-
-
     public LinkedList<DependencyReference<AbstractAxes>> dependentsRegistry = new LinkedList<DependencyReference<AbstractAxes>>();
-
     protected Vec3f<?> workingVector;
 
+    //public boolean forceOrthoNormality = true;
     protected boolean areGlobal = true;
-
-    public <V extends Vec3f<?>> void createTempVars(V type) {
-        workingVector = type.copy();
-        tempOrigin = type.copy();
-    }
+    Vec3f<?> tempOrigin;
+    private DependencyReference<AbstractAxes> parent = null;
+    private int slipType = 0;
 
 
     /**
@@ -85,6 +76,10 @@ public abstract class AbstractAxes implements Saveable {
         //this.updateChiralities();
     }
 
+    public <V extends Vec3f<?>> void createTempVars(V type) {
+        workingVector = type.copy();
+        tempOrigin = type.copy();
+    }
 
     public AbstractAxes getParentAxes() {
         if (this.parent == null)
@@ -105,13 +100,10 @@ public abstract class AbstractAxes implements Saveable {
         dirty = false;
     }
 
-    public void debugCall() {
-    }
-
     ;
 
-
-    Vec3f<?> tempOrigin;
+    public void debugCall() {
+    }
 
     public Vec3f<?> origin_() {
         this.updateGlobal();
@@ -463,6 +455,10 @@ public abstract class AbstractAxes implements Saveable {
      */
     public abstract AbstractAxes attachedCopy(boolean slipAware);
 
+    public int getSlipType() {
+        return this.slipType;
+    }
+
     public void setSlipType(int type) {
         if (this.getParentAxes() != null) {
             if (type == IGNORE) {
@@ -472,10 +468,6 @@ public abstract class AbstractAxes implements Saveable {
             }
         }
         this.slipType = type;
-    }
-
-    public int getSlipType() {
-        return this.slipType;
     }
 
     public void rotateAboutX(float angle, boolean orthonormalized) {
@@ -911,15 +903,15 @@ public abstract class AbstractAxes implements Saveable {
     }
 
     @Override
-    public void setLoading(boolean loading) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public boolean isLoading() {
 
         return false;
+    }
+
+    @Override
+    public void setLoading(boolean loading) {
+        // TODO Auto-generated method stub
+
     }
 
     @Override

@@ -1,8 +1,8 @@
 package samples;
 
 import ewbik.processing.sceneGraph.Axes;
-import ik.IKPin;
 import ewbik.processing.singlePrecision.Kusudama;
+import ik.IKPin;
 import processing.Skeleton3D;
 import processing.core.PApplet;
 import processing.core.PConstants;
@@ -15,6 +15,12 @@ import java.io.IOException;
 public class UI {
     PApplet pa;
     PGraphics display;
+    PVector mouse = new PVector(0, 0, 0);
+    PVector cameraPosition = new PVector(0, 0, 70);
+    PVector lookAt = new PVector(0, 0, 0);
+    PVector up = new PVector(0, 1, 0);
+    float orthoHeight, orthoWidth;
+    private PGraphics currentDrawSurface;
 
     public UI(PApplet p) {
         try {
@@ -139,8 +145,6 @@ public class UI {
                 (pg.screenY(pt.x, pt.y, pt.z) * zoomScalar) - orthoHeight / 2f);
     }
 
-    private PGraphics currentDrawSurface;
-
     public void drawScene(float zoomScalar, float drawSize,
                           Runnable additionalDraw,
                           Skeleton3D armature,
@@ -169,11 +173,6 @@ public class UI {
 
     }
 
-    PVector mouse = new PVector(0, 0, 0);
-    PVector cameraPosition = new PVector(0, 0, 70);
-    PVector lookAt = new PVector(0, 0, 0);
-    PVector up = new PVector(0, 1, 0);
-
     public void camera(PVector cp, PVector so, PVector up, PGraphics pg) {
         pg.camera(cp.x, cp.y, cp.z, so.x, so.y, so.z, up.x, up.y, up.z);
     }
@@ -190,8 +189,6 @@ public class UI {
         pg.directionalLight(48, 48, 48, -100, -10, -100);
 
     }
-
-    float orthoHeight, orthoWidth;
 
     public void setCamera(PGraphics pg, float zoomScalar) {
         pg.clear();

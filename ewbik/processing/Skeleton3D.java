@@ -22,17 +22,17 @@ package processing;
 import ewbik.asj.LoadManager;
 import ewbik.asj.SaveManager;
 import ewbik.asj.Saveable;
-import ewbik.math.AbstractAxes;
-import ewbik.math.Vec3f;
-import ewbik.processing.sceneGraph.Axes;
 import ewbik.ik.SegmentedArmature;
+import ewbik.math.AbstractAxes;
+import ewbik.math.MathUtils;
+import ewbik.math.Vec3f;
+import ewbik.math.Vector3;
+import ewbik.processing.sceneGraph.Axes;
 import ik.Bone;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
 import processing.core.PVector;
-import ewbik.math.Vector3;
-import ewbik.math.MathUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -109,23 +109,23 @@ public class Skeleton3D implements Saveable {
     }
 
     /**
-         * @return the rootBone of this armature.
-         */
+     * @return the rootBone of this armature.
+     */
     public Bone getRootBone() {
         return (Bone) rootBone;
     }
 
     /**
-         * @param tag the tag of the bone object you wish to retrieve
-         * @return the bone object corresponding to this tag
-         */
+     * @param tag the tag of the bone object you wish to retrieve
+     * @return the bone object corresponding to this tag
+     */
     public Bone getBoneTagged(String tag) {
         return (Bone) tagBoneMap.get(tag);
     }
 
     /**
-         * @return a reference to the Axes serving as this Armature's coordinate system.
-         */
+     * @return a reference to the Axes serving as this Armature's coordinate system.
+     */
     public Axes localAxes() {
         return (Axes) this.localAxes;
     }
@@ -151,20 +151,6 @@ public class Skeleton3D implements Saveable {
         fauxParent = rootBone.localAxes().getGlobalCopy();
 
         return rootBone;
-    }
-
-    /**
-     * The default number of iterations to run over this armature whenever
-     * IKSolver() is called.
-     * The higher this value, the more likely the Armature is to have converged on a
-     * solution when
-     * by the time it returns. However, it will take longer to return (linear cost)
-     *
-     * @param iter
-     */
-    public void setDefaultIterations(int iter) {
-        this.IKIterations = iter;
-        updateArmatureSegments();
     }
 
     /**
@@ -494,6 +480,10 @@ public class Skeleton3D implements Saveable {
         }
     }
 
+    public boolean getAbilityBiasing() {
+        return abilityBiasing;
+    }
+
     /**
      * currently unused
      *
@@ -501,10 +491,6 @@ public class Skeleton3D implements Saveable {
      */
     public void setAbilityBiasing(boolean enabled) {
         abilityBiasing = enabled;
-    }
-
-    public boolean getAbilityBiasing() {
-        return abilityBiasing;
     }
 
     /**
@@ -521,6 +507,20 @@ public class Skeleton3D implements Saveable {
 
     public int getDefaultIterations() {
         return IKIterations;
+    }
+
+    /**
+     * The default number of iterations to run over this armature whenever
+     * IKSolver() is called.
+     * The higher this value, the more likely the Armature is to have converged on a
+     * solution when
+     * by the time it returns. However, it will take longer to return (linear cost)
+     *
+     * @param iter
+     */
+    public void setDefaultIterations(int iter) {
+        this.IKIterations = iter;
+        updateArmatureSegments();
     }
 
     public float getDampening() {

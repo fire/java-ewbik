@@ -19,10 +19,9 @@ import java.util.WeakHashMap;
 
 public class FloatBackedSaver extends SaveManager {
 
-    WeakHashMap<Saveable, Boolean> saveables = new WeakHashMap<Saveable, Boolean>();
-
     public static String currentFilePath;
     public static String tempDir;
+    WeakHashMap<Saveable, Boolean> saveables = new WeakHashMap<Saveable, Boolean>();
 
     public FloatBackedSaver() {
 

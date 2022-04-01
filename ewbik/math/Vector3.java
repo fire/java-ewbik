@@ -20,9 +20,6 @@ import ewbik.asj.CanLoad;
 import ewbik.asj.data.JSONArray;
 import ewbik.asj.data.JSONObject;
 
-//import com.badlogic.gdx.utils.GdxRuntimeException;
-//import com.badlogic.gdx.utils.NumberUtils;
-
 /**
  * Encapsulates a 3D vector. Allows chaining operations by returning a reference
  * to itself in all modification methods.
@@ -45,15 +42,6 @@ public class Vector3 extends Vec3f<ewbik.math.Vector3> implements CanLoad {
         super(i, j, k);
     }
 
-    @Override
-    public CanLoad populateSelfFromJSON(JSONObject j) {
-        JSONArray components = j.getJSONArray("vec");
-        this.x = components.getFloat(0);
-        this.y = components.getFloat(1);
-        this.z = components.getFloat(2);
-        return this;
-    }
-
     public Vector3(JSONObject j) {
         JSONArray components = j.getJSONArray("vec");
         this.x = components.getFloat(0);
@@ -65,6 +53,15 @@ public class Vector3 extends Vec3f<ewbik.math.Vector3> implements CanLoad {
         this.x = j.getFloat(0);
         this.y = j.getFloat(1);
         this.z = j.getFloat(2);
+    }
+
+    @Override
+    public CanLoad populateSelfFromJSON(JSONObject j) {
+        JSONArray components = j.getJSONArray("vec");
+        this.x = components.getFloat(0);
+        this.y = components.getFloat(1);
+        this.z = components.getFloat(2);
+        return this;
     }
 
     @Override

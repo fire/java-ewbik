@@ -4,12 +4,11 @@ package ewbik.numerical;
 public final class Precision {
 
     public static final double SAFE_MIN_DOUBLE;
-    private static final long EXPONENT_OFFSET_DOUBLE = 1023l;
     public static final double EPSILON_DOUBLE;
-
     public static final double SAFE_MIN_FLOAT;
-    private static final long EXPONENT_OFFSET_FLOAT = 127;
     public static final double EPSILON_FLOAT;
+    private static final long EXPONENT_OFFSET_DOUBLE = 1023l;
+    private static final long EXPONENT_OFFSET_FLOAT = 127;
 
     static {
         EPSILON_DOUBLE = Double.longBitsToDouble((EXPONENT_OFFSET_DOUBLE - 53l) << 52);
@@ -150,22 +149,6 @@ public final class Precision {
         return equals(x, y, 1) || Math.abs(y - x) <= eps;
     }
 
-
-    public class MathArithmeticException extends Exception {
-
-        public MathArithmeticException(String zERO_NORM_FOR_ROTATION_DEFINING_VECTOR) {
-            // TODO Auto-generated constructor stub
-        }
-
-    }
-
-    public class MathIllegalArgumentException extends Exception {
-        public MathIllegalArgumentException(String zeroNormForRotationAxis) {
-
-        }
-
-    }
-
     public static class ZeroException extends Exception {
 
         public ZeroException(String nORM, float squareNorm) {
@@ -174,7 +157,6 @@ public final class Precision {
 
     }
 
-
     public static class CardanEulerSingularityException extends Exception {
 
         public CardanEulerSingularityException(boolean b) {
@@ -182,7 +164,6 @@ public final class Precision {
         }
 
     }
-
 
     public static class NotARotationMatrixException extends Exception {
 
@@ -543,6 +524,21 @@ public final class Precision {
          */
         public String getSourceString() {
             return sourceFormat;
+        }
+
+    }
+
+    public class MathArithmeticException extends Exception {
+
+        public MathArithmeticException(String zERO_NORM_FOR_ROTATION_DEFINING_VECTOR) {
+            // TODO Auto-generated constructor stub
+        }
+
+    }
+
+    public class MathIllegalArgumentException extends Exception {
+        public MathIllegalArgumentException(String zeroNormForRotationAxis) {
+
         }
 
     }

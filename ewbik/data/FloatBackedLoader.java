@@ -10,15 +10,15 @@ import ewbik.ik.*;
 import ewbik.math.AbstractAxes;
 import ewbik.math.MRotation;
 import ewbik.math.Quaternion;
+import ewbik.processing.singlePrecision.*;
+import ik.Bone;
+import ik.IKPin;
+import processing.Skeleton3D;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import ewbik.processing.singlePrecision.*;
-import ik.Bone;
-import ik.IKPin;
-import processing.Skeleton3D;
 
 public final class FloatBackedLoader extends LoadManager {
 
@@ -52,14 +52,33 @@ public final class FloatBackedLoader extends LoadManager {
 
     }
 
+    public static Object parsePrimitive(Class keyClass, String toParse) {
+        if (keyClass == String.class)
+            return toParse;
+        if (keyClass == Float.class)
+            return Float.parseFloat(toParse);
+        if (keyClass == Double.class)
+            return Double.parseDouble(toParse);
+        if (keyClass == Long.class)
+            return Long.parseLong(toParse);
+        if (keyClass == Boolean.class)
+            return Boolean.parseBoolean(toParse);
+        if (keyClass == Integer.class)
+            return Integer.parseInt(toParse);
+        if (keyClass == Byte.class)
+            return Byte.parseByte(toParse);
+        else
+            return null;
+    }
+
     public Collection<? extends Skeleton3D> importFile(File selection,
-                                                             Class<? extends AbstractAxes> AxesClass,
-                                                             Class<? extends Bone> BoneClass,
-                                                             Class<? extends Skeleton3D> ArmatureClass,
-                                                             Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
-                                                             Class<? extends LimitCone> LimitConeClass,
-                                                             Class<? extends IKPin> IKPinClass,
-                                                             EWBIKLoader loader) {
+                                                       Class<? extends AbstractAxes> AxesClass,
+                                                       Class<? extends Bone> BoneClass,
+                                                       Class<? extends Skeleton3D> ArmatureClass,
+                                                       Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
+                                                       Class<? extends LimitCone> LimitConeClass,
+                                                       Class<? extends IKPin> IKPinClass,
+                                                       EWBIKLoader loader) {
         JSONObject loadFile = StringFuncs.loadJSONObject(selection);
         clearCurrentLoadObjects();
         return loadJSON(loadFile,
@@ -72,12 +91,12 @@ public final class FloatBackedLoader extends LoadManager {
     }
 
     public Collection<? extends Skeleton3D> loadJSON(JSONObject loadFile,
-                                                           Class<? extends AbstractAxes> AxesClass,
-                                                           Class<? extends Bone> BoneClass,
-                                                           Class<? extends Skeleton3D> ArmatureClass,
-                                                           Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
-                                                           Class<? extends LimitCone> LimitConeClass,
-                                                           Class<? extends IKPin> IKPinClass) {
+                                                     Class<? extends AbstractAxes> AxesClass,
+                                                     Class<? extends Bone> BoneClass,
+                                                     Class<? extends Skeleton3D> ArmatureClass,
+                                                     Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
+                                                     Class<? extends LimitCone> LimitConeClass,
+                                                     Class<? extends IKPin> IKPinClass) {
         clearCurrentLoadObjects();
 
         AxesClass = AxesClass == null ? AbstractAxes.class : AxesClass;
@@ -236,25 +255,6 @@ public final class FloatBackedLoader extends LoadManager {
             return result;
         }
         return result;
-    }
-
-    public static Object parsePrimitive(Class keyClass, String toParse) {
-        if (keyClass == String.class)
-            return toParse;
-        if (keyClass == Float.class)
-            return Float.parseFloat(toParse);
-        if (keyClass == Double.class)
-            return Double.parseDouble(toParse);
-        if (keyClass == Long.class)
-            return Long.parseLong(toParse);
-        if (keyClass == Boolean.class)
-            return Boolean.parseBoolean(toParse);
-        if (keyClass == Integer.class)
-            return Integer.parseInt(toParse);
-        if (keyClass == Byte.class)
-            return Byte.parseByte(toParse);
-        else
-            return null;
     }
 
     /*

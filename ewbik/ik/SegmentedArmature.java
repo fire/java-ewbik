@@ -19,15 +19,16 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 package ewbik.ik;
 
 import ewbik.math.*;
+import ewbik.processing.singlePrecision.Kusudama;
+import ik.Bone;
+import ik.IKPin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import ik.Bone;
-import ik.IKPin;
-import ewbik.processing.singlePrecision.Kusudama;
-
-/**s
+/**
+ * s
+ *
  * @author Eron Gjoni
  */
 public class SegmentedArmature {
@@ -36,27 +37,23 @@ public class SegmentedArmature {
 
     public ArrayList<SegmentedArmature> childSegments = new ArrayList<SegmentedArmature>();
     public ArrayList<SegmentedArmature> pinnedDescendants = new ArrayList<SegmentedArmature>();
-    WorkingBone[] pinnedBones;
-
     public HashMap<Bone, WorkingBone> simulatedBones = new HashMap<>();
     public ArrayList<Bone> segmentBoneList = new ArrayList<Bone>();
-
+    public int distanceToRoot = 0;
+    public int chainLength = 0;
+    public AbstractAxes debugTipAxes;
+    public AbstractAxes debugTargetAxes;
+    WorkingBone[] pinnedBones;
+    boolean includeInIK = true;
+    int pinDepth = 1;
+    Vector3[] localizedTargetHeadings;
+    Vector3[] localizedTipHeadings;
+    float[] weights;
     private SegmentedArmature parentSegment = null;
     private boolean basePinned = false;
     private boolean tipPinned = false;
     private boolean processed = false;
-    public int distanceToRoot = 0;
-
-    public int chainLength = 0;
-    boolean includeInIK = true;
-    int pinDepth = 1;
-
-    public AbstractAxes debugTipAxes;
-    public AbstractAxes debugTargetAxes;
-
-    Vector3[] localizedTargetHeadings;
-    Vector3[] localizedTipHeadings;
-    float[] weights;
+    private boolean simAligned = false;
 
     public SegmentedArmature(Bone rootBone) {
         segmentRoot = armatureRootBone(rootBone);
@@ -69,6 +66,18 @@ public class SegmentedArmature {
         this.setParentSegment(inputParentSegment);
         this.distanceToRoot = this.getParentSegment().distanceToRoot + 1;
         generateArmatureSegments();
+    }
+
+    /**
+     * calculates the total number of bases the immediate effectors emanating from
+     * this
+     * segment reach for (based on modecode set in the IKPin)
+     */
+    public static void recursivelyCreateHeadingArraysFor(SegmentedArmature s) {
+        s.createHeadingArrays();
+        for (SegmentedArmature c : s.childSegments) {
+            recursivelyCreateHeadingArraysFor(c);
+        }
     }
 
     private void generateArmatureSegments() {
@@ -107,18 +116,6 @@ public class SegmentedArmature {
         }
         updatePinnedDescendants();
         generateSegmentMaps();
-    }
-
-    /**
-     * calculates the total number of bases the immediate effectors emanating from
-     * this
-     * segment reach for (based on modecode set in the IKPin)
-     */
-    public static void recursivelyCreateHeadingArraysFor(SegmentedArmature s) {
-        s.createHeadingArrays();
-        for (SegmentedArmature c : s.childSegments) {
-            recursivelyCreateHeadingArraysFor(c);
-        }
     }
 
     public void createHeadingArrays() {
@@ -403,6 +400,7 @@ public class SegmentedArmature {
             thisBoneAxes.markDirty();
         }
     }
+
     private void updateOptimalRotationToPinnedDescendants(
             WorkingBone sb,
             float dampening,
@@ -694,8 +692,6 @@ public class SegmentedArmature {
             }
         }
     }
-
-    private boolean simAligned = false;
 
     /**
      * Holds working information for the given bone.

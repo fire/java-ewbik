@@ -2,6 +2,7 @@ package ewbik.math;
 
 public class QCP {
 
+    public Vec3f<?>[] target;
     /**
      * Implementation of the Quaternionff-Based Characteristic Polynomial algorithm
      * for RMSD and Superposition calculations.
@@ -86,8 +87,6 @@ public class QCP {
     private float evec_prec = (float) 1E-6;
     private float eval_prec = (float) 1E-11;
     private int max_iterations = 5;
-
-    public Vec3f<?>[] target;
     private Vec3f<?>[] moved;
 
     private float[] weight;
@@ -121,6 +120,12 @@ public class QCP {
     public QCP(float evec_prec, float eval_prec) {
         this.evec_prec = evec_prec;
         this.eval_prec = eval_prec;
+    }
+
+    public static <V extends Vec3f<?>> void translate(V trans, V[] x) {
+        for (V p : x) {
+            p.add(trans);
+        }
     }
 
     /**
@@ -245,7 +250,6 @@ public class QCP {
             calcRmsd(wsum);
         }
     }
-
 
     /**
      * Calculates the inner product between two coordinate sets x and y
@@ -476,13 +480,6 @@ public class QCP {
     public float getRmsd(Vector3[] fixed, Vector3[] moved) {
         set(moved, fixed);
         return getRmsd();
-    }
-
-
-    public static <V extends Vec3f<?>> void translate(V trans, V[] x) {
-        for (V p : x) {
-            p.add(trans);
-        }
     }
 
     public <V extends Vec3f<?>> V moveToWeightedCenter(V[] toCenter, float[] weight, V center) {

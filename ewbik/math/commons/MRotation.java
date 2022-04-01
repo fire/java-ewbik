@@ -124,100 +124,6 @@ public class MRotation {
     }
 
     /**
-     * modify this rotation to have the specified axis,
-     * without changing the angle.
-     *
-     * @param angle
-     * @throws Exception
-     */
-    public <T extends Vector3> void setAxis(T newAxis) throws Exception {
-
-        float angle = this.getAngle();
-        float norm = newAxis.mag();
-        if (norm == 0) {
-            try {
-                throw new Exception("Zero Norm for Rotation Axis");
-            } catch (MathIllegalArgumentException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace(System.out);
-            }
-        }
-
-        float halfAngle = -0.5f * angle;
-        float coeff = MathUtils.sin(halfAngle) / norm;
-
-        q0 = MathUtils.cos(halfAngle);
-        q1 = coeff * newAxis.x;
-        q2 = coeff * newAxis.y;
-        q3 = coeff * newAxis.z;
-
-        if (Float.isNaN(q0) || Float.isNaN(q1) || Float.isNaN(q2) || Float.isNaN(q3) || !(Float.isFinite(q0) && Float.isFinite(q1) && Float.isFinite(q2) && Float.isFinite(q3))) {
-            System.out.println("errror");
-        }
-    }
-
-    /**
-     * modify this rotation to have the specified angle,
-     * without changing the axis.
-     *
-     * @param angle
-     */
-    public void setAngle(float newAngle) {
-        float squaredSine = q1 * q1 + q2 * q2 + q3 * q3;
-        if (squaredSine != 0) {
-            float halfAngle = -0.5f * newAngle;
-            float cosHalfAngle = MathUtils.cos(halfAngle);
-
-            float inverseCoeff = MathUtils.sqrt(((1f - (cosHalfAngle * cosHalfAngle)) / squaredSine));
-            inverseCoeff = newAngle < 0 ? -inverseCoeff : inverseCoeff;
-
-            q0 = q0 < 0 ? -cosHalfAngle : cosHalfAngle;
-            q1 = inverseCoeff * q1;
-            q2 = inverseCoeff * q2;
-            q3 = inverseCoeff * q3;
-        }
-    }
-
-    /**
-     * Modify this rotation to have the specified cos(angle/2) representation,
-     * without changing the axis.
-     *
-     * @param angle
-     */
-    public void setQuadranceAngle(float cosHalfAngle) {
-        float squaredSine = q1 * q1 + q2 * q2 + q3 * q3;
-        if (squaredSine != 0) {
-            float inverseCoeff = MathUtils.sqrt(((1 - (cosHalfAngle * cosHalfAngle)) / squaredSine));
-            //inverseCoeff = cosHalfAngle < 0 ? -inverseCoeff : inverseCoeff;
-            q0 = q0 < 0 ? -cosHalfAngle : cosHalfAngle;
-            q1 = inverseCoeff * q1;
-            q2 = inverseCoeff * q2;
-            q3 = inverseCoeff * q3;
-        }
-    }
-
-
-    public void clampToAngle(float angle) {
-        float cosHalfAngle = MathUtils.cos(0.5f * angle);
-        clampToQuadranceAngle(cosHalfAngle);
-    }
-
-    public void clampToQuadranceAngle(float cosHalfAngle) {
-        float newCoeff = 1f - (cosHalfAngle * cosHalfAngle);
-        float currentCoeff = q1 * q1 + q2 * q2 + q3 * q3;
-        if (newCoeff > currentCoeff)
-            return;
-        else {
-            q0 = q0 < 0 ? -cosHalfAngle : cosHalfAngle;
-            float compositeCoeff = MathUtils.sqrt(newCoeff / currentCoeff);
-            q1 *= compositeCoeff;
-            q2 *= compositeCoeff;
-            q3 *= compositeCoeff;
-        }
-    }
-
-
-    /**
      * Build a rotation from a 3X3 given as a 1f array with 9 elements,
      * or 4x4 matrix given as a 1f array with 16 elements.
      * This constructor will detect the appropriate case based on the length
@@ -553,6 +459,7 @@ public class MRotation {
 
     }
 
+
     /**
      * Build one of the rotations that transform one vector into another one.
      * <p>Except for a possible scale factor, if the instance were
@@ -639,14 +546,6 @@ public class MRotation {
         }
     }
 
-
-    /**
-     * @return a copy of this MRotation
-     */
-    public MRotation copy() {
-        return new MRotation(getQ0(), getQ1(), getQ2(), getQ3());
-    }
-
     /**
      * Convert an orthogonal rotation matrix to a quaternion.
      *
@@ -710,6 +609,117 @@ public class MRotation {
 
     }
 
+    public static MRotation multiply(final MRotation q1, final MRotation q2) {
+        // Components of the first quaternion.
+        final float q1a = q1.getQ0();
+        final float q1b = q1.getQ1();
+        final float q1c = q1.getQ2();
+        final float q1f = q1.getQ3();
+
+        // Components of the second quaternion.
+        final float q2a = q2.getQ0();
+        final float q2b = q2.getQ1();
+        final float q2c = q2.getQ2();
+        final float q2f = q2.getQ3();
+
+        // Components of the product.
+        final float w = q1a * q2a - q1b * q2b - q1c * q2c - q1f * q2f;
+        final float x = q1a * q2b + q1b * q2a + q1c * q2f - q1f * q2c;
+        final float y = q1a * q2c - q1b * q2f + q1c * q2a + q1f * q2b;
+        final float z = q1a * q2f + q1b * q2c - q1c * q2b + q1f * q2a;
+
+        return new MRotation(w, x, y, z);
+    }
+
+    /**
+     * Computes the dot-product of two quaternions.
+     *
+     * @param q1 Quaternionf.
+     * @param q2 Quaternionf.
+     * @return the dot product of {@code q1} and {@code q2}.
+     */
+    public static float dotProduct(final MRotation q1,
+                                   final MRotation q2) {
+        return q1.getQ0() * q2.getQ0() +
+                q1.getQ1() * q2.getQ1() +
+                q1.getQ2() * q2.getQ2() +
+                q1.getQ3() * q2.getQ3();
+    }
+
+    /**
+     * Compute the <i>distance</i> between two rotations.
+     * <p>The <i>distance</i> is intended here as a way to check if two
+     * rotations are almost similar (i.e. they transform vectors the same way)
+     * or very different. It is mathematically defined as the angle of
+     * the rotation r that prepended to one of the rotations gives the other
+     * one:</p>
+     * <pre>
+     *        r<sub>1</sub>(r) = r<sub>2</sub>
+     * </pre>
+     * <p>This distance is an angle between 0 and &pi;. Its value is the smallest
+     * possible upper bound of the angle in radians between r<sub>1</sub>(v)
+     * and r<sub>2</sub>(v) for all possible vectors v. This upper bound is
+     * reached for some v. The distance is equal to 0 if and only if the two
+     * rotations are identical.</p>
+     * <p>Comparing two rotations should always be done using this value rather
+     * than for example comparing the components of the quaternions. It is much
+     * more stable, and has a geometric meaning. Also comparing quaternions
+     * components is error prone since for example quaternions (0.36, 0.48, -0.48, -0.64)
+     * and (-0.36, -0.48, 0.48, 0.64) represent exactly the same rotation despite
+     * their components are different (they are exact opposites).</p>
+     *
+     * @param r1 first rotation
+     * @param r2 second rotation
+     * @return <i>distance</i> between r1 and r2
+     */
+    public static float distance(MRotation r1, MRotation r2) {
+        return r1.applyInverseTo(r2).getAngle();
+    }
+
+    /**
+     * Modify this rotation to have the specified cos(angle/2) representation,
+     * without changing the axis.
+     *
+     * @param angle
+     */
+    public void setQuadranceAngle(float cosHalfAngle) {
+        float squaredSine = q1 * q1 + q2 * q2 + q3 * q3;
+        if (squaredSine != 0) {
+            float inverseCoeff = MathUtils.sqrt(((1 - (cosHalfAngle * cosHalfAngle)) / squaredSine));
+            //inverseCoeff = cosHalfAngle < 0 ? -inverseCoeff : inverseCoeff;
+            q0 = q0 < 0 ? -cosHalfAngle : cosHalfAngle;
+            q1 = inverseCoeff * q1;
+            q2 = inverseCoeff * q2;
+            q3 = inverseCoeff * q3;
+        }
+    }
+
+    public void clampToAngle(float angle) {
+        float cosHalfAngle = MathUtils.cos(0.5f * angle);
+        clampToQuadranceAngle(cosHalfAngle);
+    }
+
+    public void clampToQuadranceAngle(float cosHalfAngle) {
+        float newCoeff = 1f - (cosHalfAngle * cosHalfAngle);
+        float currentCoeff = q1 * q1 + q2 * q2 + q3 * q3;
+        if (newCoeff > currentCoeff)
+            return;
+        else {
+            q0 = q0 < 0 ? -cosHalfAngle : cosHalfAngle;
+            float compositeCoeff = MathUtils.sqrt(newCoeff / currentCoeff);
+            q1 *= compositeCoeff;
+            q2 *= compositeCoeff;
+            q3 *= compositeCoeff;
+        }
+    }
+
+    /**
+     * @return a copy of this MRotation
+     */
+    public MRotation copy() {
+        return new MRotation(getQ0(), getQ1(), getQ2(), getQ3());
+    }
+
     /**
      * Revert a rotation.
      * Build a rotation which reverse the effect of another
@@ -722,7 +732,6 @@ public class MRotation {
     public MRotation revert() {
         return new MRotation(-q0, q1, q2, q3, false);
     }
-
 
     /**
      * sets the values of the given rotation equal to the inverse of this rotation
@@ -788,6 +797,39 @@ public class MRotation {
     }
 
     /**
+     * modify this rotation to have the specified axis,
+     * without changing the angle.
+     *
+     * @param angle
+     * @throws Exception
+     */
+    public <T extends Vector3> void setAxis(T newAxis) throws Exception {
+
+        float angle = this.getAngle();
+        float norm = newAxis.mag();
+        if (norm == 0) {
+            try {
+                throw new Exception("Zero Norm for Rotation Axis");
+            } catch (MathIllegalArgumentException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace(System.out);
+            }
+        }
+
+        float halfAngle = -0.5f * angle;
+        float coeff = MathUtils.sin(halfAngle) / norm;
+
+        q0 = MathUtils.cos(halfAngle);
+        q1 = coeff * newAxis.x;
+        q2 = coeff * newAxis.y;
+        q3 = coeff * newAxis.z;
+
+        if (Float.isNaN(q0) || Float.isNaN(q1) || Float.isNaN(q2) || Float.isNaN(q3) || !(Float.isFinite(q0) && Float.isFinite(q1) && Float.isFinite(q2) && Float.isFinite(q3))) {
+            System.out.println("errror");
+        }
+    }
+
+    /**
      * Get the normalized axis of the rotation.
      *
      * @return normalized axis of the rotation
@@ -807,7 +849,6 @@ public class MRotation {
         v.set(q1 * inverse, q2 * inverse, q3 * inverse);
     }
 
-
     public MRotation getInverse() {
         final float squareNorm = q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3;
         if (squareNorm < Precision.SAFE_MIN_DOUBLE) {
@@ -824,7 +865,6 @@ public class MRotation {
                 -q3 / squareNorm);
     }
 
-
     /**
      * Get the angle of the rotation.
      *
@@ -838,6 +878,28 @@ public class MRotation {
             return 2 * MathUtils.acos(-q0);
         }
         return 2 * MathUtils.acos(q0);
+    }
+
+    /**
+     * modify this rotation to have the specified angle,
+     * without changing the axis.
+     *
+     * @param angle
+     */
+    public void setAngle(float newAngle) {
+        float squaredSine = q1 * q1 + q2 * q2 + q3 * q3;
+        if (squaredSine != 0) {
+            float halfAngle = -0.5f * newAngle;
+            float cosHalfAngle = MathUtils.cos(halfAngle);
+
+            float inverseCoeff = MathUtils.sqrt(((1f - (cosHalfAngle * cosHalfAngle)) / squaredSine));
+            inverseCoeff = newAngle < 0 ? -inverseCoeff : inverseCoeff;
+
+            q0 = q0 < 0 ? -cosHalfAngle : cosHalfAngle;
+            q1 = inverseCoeff * q1;
+            q2 = inverseCoeff * q2;
+            q3 = inverseCoeff * q3;
+        }
     }
 
     /**
@@ -1288,7 +1350,6 @@ public class MRotation {
         return result;
     }
 
-
     /**
      * Multiplies the instance by a scalar.
      *
@@ -1302,7 +1363,6 @@ public class MRotation {
                 alpha * q3);
     }
 
-
     /**
      * Returns the Hamilton product of the instance by a quaternion.
      *
@@ -1311,44 +1371,6 @@ public class MRotation {
      */
     public MRotation multiply(final MRotation q) {
         return multiply(this, q);
-    }
-
-    public static MRotation multiply(final MRotation q1, final MRotation q2) {
-        // Components of the first quaternion.
-        final float q1a = q1.getQ0();
-        final float q1b = q1.getQ1();
-        final float q1c = q1.getQ2();
-        final float q1f = q1.getQ3();
-
-        // Components of the second quaternion.
-        final float q2a = q2.getQ0();
-        final float q2b = q2.getQ1();
-        final float q2c = q2.getQ2();
-        final float q2f = q2.getQ3();
-
-        // Components of the product.
-        final float w = q1a * q2a - q1b * q2b - q1c * q2c - q1f * q2f;
-        final float x = q1a * q2b + q1b * q2a + q1c * q2f - q1f * q2c;
-        final float y = q1a * q2c - q1b * q2f + q1c * q2a + q1f * q2b;
-        final float z = q1a * q2f + q1b * q2c - q1c * q2b + q1f * q2a;
-
-        return new MRotation(w, x, y, z);
-    }
-
-
-    /**
-     * Computes the dot-product of two quaternions.
-     *
-     * @param q1 Quaternionf.
-     * @param q2 Quaternionf.
-     * @return the dot product of {@code q1} and {@code q2}.
-     */
-    public static float dotProduct(final MRotation q1,
-                                   final MRotation q2) {
-        return q1.getQ0() * q2.getQ0() +
-                q1.getQ1() * q2.getQ1() +
-                q1.getQ2() * q2.getQ2() +
-                q1.getQ3() * q2.getQ3();
     }
 
     /**
@@ -1467,7 +1489,6 @@ public class MRotation {
                 false);
     }
 
-
     /**
      * Apply the instance to another rotation. Store the result in the specified rotation
      * Applying the instance to a rotation is computing the composition
@@ -1510,7 +1531,6 @@ public class MRotation {
                 false);
     }
 
-
     public MRotation setToConjugate() {
         q1 = -q1;
         q2 = -q2;
@@ -1537,7 +1557,6 @@ public class MRotation {
         q2 *= inv;
         q3 *= inv;
     }
-
 
     /**
      * Computes the norm of the quaternion.
@@ -1729,37 +1748,6 @@ public class MRotation {
         }
         return null;
     }
-
-    /**
-     * Compute the <i>distance</i> between two rotations.
-     * <p>The <i>distance</i> is intended here as a way to check if two
-     * rotations are almost similar (i.e. they transform vectors the same way)
-     * or very different. It is mathematically defined as the angle of
-     * the rotation r that prepended to one of the rotations gives the other
-     * one:</p>
-     * <pre>
-     *        r<sub>1</sub>(r) = r<sub>2</sub>
-     * </pre>
-     * <p>This distance is an angle between 0 and &pi;. Its value is the smallest
-     * possible upper bound of the angle in radians between r<sub>1</sub>(v)
-     * and r<sub>2</sub>(v) for all possible vectors v. This upper bound is
-     * reached for some v. The distance is equal to 0 if and only if the two
-     * rotations are identical.</p>
-     * <p>Comparing two rotations should always be done using this value rather
-     * than for example comparing the components of the quaternions. It is much
-     * more stable, and has a geometric meaning. Also comparing quaternions
-     * components is error prone since for example quaternions (0.36, 0.48, -0.48, -0.64)
-     * and (-0.36, -0.48, 0.48, 0.64) represent exactly the same rotation despite
-     * their components are different (they are exact opposites).</p>
-     *
-     * @param r1 first rotation
-     * @param r2 second rotation
-     * @return <i>distance</i> between r1 and r2
-     */
-    public static float distance(MRotation r1, MRotation r2) {
-        return r1.applyInverseTo(r2).getAngle();
-    }
-
 
     public boolean equalTo(MRotation m) {
         return distance(this, m) < MathUtils.DOUBLE_ROUNDING_ERROR;

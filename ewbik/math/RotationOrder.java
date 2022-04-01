@@ -133,7 +133,7 @@ public final class RotationOrder {
      * @param a3   axis of the third rotation
      */
     private <T extends Vector3> RotationOrder(final String name,
-                                               final T a1, final T a2, final T a3) {
+                                              final T a1, final T a2, final T a3) {
         this.name = name;
         this.a1 = a1;
         this.a2 = a2;

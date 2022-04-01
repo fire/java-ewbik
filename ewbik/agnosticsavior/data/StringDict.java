@@ -187,18 +187,6 @@ public class StringDict {
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-
-    public class Entry {
-        public String key;
-        public String value;
-
-        Entry(String key, String value) {
-            this.key = key;
-            this.value = value;
-        }
-    }
-
-
     public Iterable<Entry> entries() {
         return new Iterable<Entry>() {
 
@@ -207,7 +195,6 @@ public class StringDict {
             }
         };
     }
-
 
     public Iterator<Entry> entryIterator() {
         return new Iterator<Entry>() {
@@ -230,14 +217,12 @@ public class StringDict {
         };
     }
 
-
-    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-
-
     public String key(int index) {
         return keys[index];
     }
 
+
+    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
     protected void crop() {
         if (count != keys.length) {
@@ -245,7 +230,6 @@ public class StringDict {
             values = StringFuncs.subset(values, 0, count);
         }
     }
-
 
     public Iterable<String> keys() {
         return new Iterable<String>() {
@@ -256,7 +240,6 @@ public class StringDict {
             }
         };
     }
-
 
     // Use this to iterate when you want to be able to remove elements along the way
     public Iterator<String> keyIterator() {
@@ -278,7 +261,6 @@ public class StringDict {
         };
     }
 
-
     /**
      * Return a copy of the internal keys array. This array can be modified.
      *
@@ -290,7 +272,6 @@ public class StringDict {
         return keyArray(null);
     }
 
-
     public String[] keyArray(String[] outgoing) {
         if (outgoing == null || outgoing.length != count) {
             outgoing = new String[count];
@@ -298,7 +279,6 @@ public class StringDict {
         System.arraycopy(keys, 0, outgoing, 0, count);
         return outgoing;
     }
-
 
     public String value(int index) {
         return values[index];
@@ -317,7 +297,6 @@ public class StringDict {
             }
         };
     }
-
 
     public Iterator<String> valueIterator() {
         return new Iterator<String>() {
@@ -338,7 +317,6 @@ public class StringDict {
         };
     }
 
-
     /**
      * Create a new array and copy each of the values into it.
      *
@@ -349,7 +327,6 @@ public class StringDict {
         crop();
         return valueArray(null);
     }
-
 
     /**
      * Fill an already-allocated array with the values (more efficient than
@@ -364,7 +341,6 @@ public class StringDict {
         return array;
     }
 
-
     /**
      * Return a value for the specified key.
      *
@@ -377,13 +353,11 @@ public class StringDict {
         return values[index];
     }
 
-
     public String get(String key, String alternate) {
         int index = index(key);
         if (index == -1) return alternate;
         return values[index];
     }
-
 
     /**
      * @webref stringdict:method
@@ -398,7 +372,6 @@ public class StringDict {
         }
     }
 
-
     public void setIndex(int index, String key, String value) {
         if (index < 0 || index >= count) {
             throw new ArrayIndexOutOfBoundsException(index);
@@ -407,12 +380,10 @@ public class StringDict {
         values[index] = value;
     }
 
-
     public int index(String what) {
         Integer found = indices.get(what);
         return (found == null) ? -1 : found.intValue();
     }
-
 
     /**
      * @webref stringdict:method
@@ -421,7 +392,6 @@ public class StringDict {
     public boolean hasKey(String key) {
         return index(key) != -1;
     }
-
 
     protected void create(String key, String value) {
         if (count == keys.length) {
@@ -448,7 +418,6 @@ public class StringDict {
         return value;
     }
 
-
     public String removeIndex(int index) {
         if (index < 0 || index >= count) {
             throw new ArrayIndexOutOfBoundsException(index);
@@ -466,7 +435,6 @@ public class StringDict {
         return value;
     }
 
-
     public void swap(int a, int b) {
         String tkey = keys[a];
         String tvalue = values[a];
@@ -478,7 +446,6 @@ public class StringDict {
 //    indices.put(keys[a], Integer.valueOf(a));
 //    indices.put(keys[b], Integer.valueOf(b));
     }
-
 
     /**
      * Sort the keys alphabetically (ignoring case). Uses the value as a
@@ -499,7 +466,6 @@ public class StringDict {
         sortImpl(true, true);
     }
 
-
     /**
      * Sort by values in descending order (largest value will be at [0]).
      *
@@ -510,7 +476,6 @@ public class StringDict {
         sortImpl(false, false);
     }
 
-
     /**
      * @webref stringdict:method
      * @brief Sort by values in descending order
@@ -518,7 +483,6 @@ public class StringDict {
     public void sortValuesReverse() {
         sortImpl(false, true);
     }
-
 
     protected void sortImpl(final boolean useKeys, final boolean reverse) {
         Sort s = new Sort() {
@@ -555,7 +519,6 @@ public class StringDict {
         resetIndices();
     }
 
-
     /**
      * Returns a duplicate copy of this object.
      */
@@ -570,13 +533,11 @@ public class StringDict {
         return outgoing;
     }
 
-
     public void print() {
         for (int i = 0; i < size(); i++) {
             System.out.println(keys[i] + " = " + values[i]);
         }
     }
-
 
     /**
      * Save tab-delimited entries to a file (TSV format, UTF-8 encoding)
@@ -587,7 +548,6 @@ public class StringDict {
         writer.close();
     }
 
-
     /**
      * Write tab-delimited entries to a PrintWriter
      */
@@ -597,7 +557,6 @@ public class StringDict {
         }
         writer.flush();
     }
-
 
     /**
      * Return this dictionary as a String in JSON format.
@@ -610,9 +569,18 @@ public class StringDict {
         return "{ " + items.join(", ") + " }";
     }
 
-
     @Override
     public String toString() {
         return getClass().getSimpleName() + " size=" + size() + " " + toJSON();
+    }
+
+    public class Entry {
+        public String key;
+        public String value;
+
+        Entry(String key, String value) {
+            this.key = key;
+            this.value = value;
+        }
     }
 }

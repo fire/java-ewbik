@@ -182,18 +182,6 @@ public class DoubleDict {
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-
-    public class Entry {
-        public String key;
-        public double value;
-
-        Entry(String key, double value) {
-            this.key = key;
-            this.value = value;
-        }
-    }
-
-
     public Iterable<Entry> entries() {
         return new Iterable<Entry>() {
 
@@ -202,7 +190,6 @@ public class DoubleDict {
             }
         };
     }
-
 
     public Iterator<Entry> entryIterator() {
         return new Iterator<Entry>() {
@@ -225,14 +212,12 @@ public class DoubleDict {
         };
     }
 
-
-    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-
-
     public String key(int index) {
         return keys[index];
     }
 
+
+    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
     protected void crop() {
         if (count != keys.length) {
@@ -240,7 +225,6 @@ public class DoubleDict {
             values = StringFuncs.subset(values, 0, count);
         }
     }
-
 
     public Iterable<String> keys() {
         return new Iterable<String>() {
@@ -251,7 +235,6 @@ public class DoubleDict {
             }
         };
     }
-
 
     // Use this to iterate when you want to be able to remove elements along the way
     public Iterator<String> keyIterator() {
@@ -273,7 +256,6 @@ public class DoubleDict {
         };
     }
 
-
     /**
      * Return a copy of the internal keys array. This array can be modified.
      *
@@ -285,7 +267,6 @@ public class DoubleDict {
         return keyArray(null);
     }
 
-
     public String[] keyArray(String[] outgoing) {
         if (outgoing == null || outgoing.length != count) {
             outgoing = new String[count];
@@ -294,11 +275,9 @@ public class DoubleDict {
         return outgoing;
     }
 
-
     public double value(int index) {
         return values[index];
     }
-
 
     /**
      * @webref doubledict:method
@@ -313,7 +292,6 @@ public class DoubleDict {
             }
         };
     }
-
 
     public Iterator<Double> valueIterator() {
         return new Iterator<Double>() {
@@ -334,7 +312,6 @@ public class DoubleDict {
         };
     }
 
-
     /**
      * Create a new array and copy each of the values into it.
      *
@@ -345,7 +322,6 @@ public class DoubleDict {
         crop();
         return valueArray(null);
     }
-
 
     /**
      * Fill an already-allocated array with the values (more efficient than
@@ -359,7 +335,6 @@ public class DoubleDict {
         System.arraycopy(values, 0, array, 0, count);
         return array;
     }
-
 
     /**
      * Return a value for the specified key.
@@ -375,7 +350,6 @@ public class DoubleDict {
         return values[index];
     }
 
-
     public double get(String key, double alternate) {
         int index = index(key);
         if (index == -1) {
@@ -383,7 +357,6 @@ public class DoubleDict {
         }
         return values[index];
     }
-
 
     /**
      * @webref doubledict:method
@@ -398,7 +371,6 @@ public class DoubleDict {
         }
     }
 
-
     public void setIndex(int index, String key, double value) {
         if (index < 0 || index >= count) {
             throw new ArrayIndexOutOfBoundsException(index);
@@ -407,7 +379,6 @@ public class DoubleDict {
         values[index] = value;
     }
 
-
     /**
      * @webref doubledict:method
      * @brief Check if a key is a part of the data structure
@@ -415,7 +386,6 @@ public class DoubleDict {
     public boolean hasKey(String key) {
         return index(key) != -1;
     }
-
 
     /**
      * @webref doubledict:method
@@ -430,7 +400,6 @@ public class DoubleDict {
         }
     }
 
-
     /**
      * @webref doubledict:method
      * @brief Subtract from a value
@@ -438,7 +407,6 @@ public class DoubleDict {
     public void sub(String key, double amount) {
         add(key, -amount);
     }
-
 
     /**
      * @webref doubledict:method
@@ -451,7 +419,6 @@ public class DoubleDict {
         }
     }
 
-
     /**
      * @webref doubledict:method
      * @brief Divide a value
@@ -463,7 +430,6 @@ public class DoubleDict {
         }
     }
 
-
     private void checkMinMax(String functionName) {
         if (count == 0) {
             String msg =
@@ -472,7 +438,6 @@ public class DoubleDict {
             throw new RuntimeException(msg);
         }
     }
-
 
     /**
      * @webref doublelist:method
@@ -505,7 +470,6 @@ public class DoubleDict {
         return mi;
     }
 
-
     // return the key for the minimum value
     public String minKey() {
         checkMinMax("minKey");
@@ -516,7 +480,6 @@ public class DoubleDict {
         return keys[index];
     }
 
-
     // return the minimum value, or throw an error if there are no values
     public double minValue() {
         checkMinMax("minValue");
@@ -526,7 +489,6 @@ public class DoubleDict {
         }
         return values[index];
     }
-
 
     /**
      * @webref doublelist:method
@@ -561,7 +523,6 @@ public class DoubleDict {
         return mi;
     }
 
-
     /**
      * The key for a max value; null if empty or everything is NaN (no max).
      */
@@ -573,7 +534,6 @@ public class DoubleDict {
         }
         return keys[index];
     }
-
 
     /**
      * The max value. (Or NaN if no entries or they're all NaN.)
@@ -587,7 +547,6 @@ public class DoubleDict {
         return values[index];
     }
 
-
     public double sum() {
         double sum = 0;
         for (int i = 0; i < count; i++) {
@@ -596,12 +555,10 @@ public class DoubleDict {
         return sum;
     }
 
-
     public int index(String what) {
         Integer found = indices.get(what);
         return (found == null) ? -1 : found.intValue();
     }
-
 
     protected void create(String what, double much) {
         if (count == keys.length) {
@@ -613,7 +570,6 @@ public class DoubleDict {
         values[count] = much;
         count++;
     }
-
 
     /**
      * @webref doubledict:method
@@ -628,7 +584,6 @@ public class DoubleDict {
         removeIndex(index);
         return value;
     }
-
 
     public double removeIndex(int index) {
         if (index < 0 || index >= count) {
@@ -647,7 +602,6 @@ public class DoubleDict {
         return value;
     }
 
-
     public void swap(int a, int b) {
         String tkey = keys[a];
         double tvalue = values[a];
@@ -660,7 +614,6 @@ public class DoubleDict {
 //    indices.put(keys[b], Integer.valueOf(b));
     }
 
-
     /**
      * Sort the keys alphabetically (ignoring case). Uses the value as a
      * tie-breaker (only really possible with a key that has a case change).
@@ -672,7 +625,6 @@ public class DoubleDict {
         sortImpl(true, false, true);
     }
 
-
     /**
      * @webref doubledict:method
      * @brief Sort the keys alphabetically in reverse
@@ -680,7 +632,6 @@ public class DoubleDict {
     public void sortKeysReverse() {
         sortImpl(true, true, true);
     }
-
 
     /**
      * Sort by values in descending order (largest value will be at [0]).
@@ -692,7 +643,6 @@ public class DoubleDict {
         sortValues(true);
     }
 
-
     /**
      * Set true to ensure that the order returned is identical. Slightly
      * slower because the tie-breaker for identical values compares the keys.
@@ -703,7 +653,6 @@ public class DoubleDict {
         sortImpl(false, false, stable);
     }
 
-
     /**
      * @webref doubledict:method
      * @brief Sort by values in descending order
@@ -712,11 +661,9 @@ public class DoubleDict {
         sortValuesReverse(true);
     }
 
-
     public void sortValuesReverse(boolean stable) {
         sortImpl(false, true, stable);
     }
-
 
     protected void sortImpl(final boolean useKeys, final boolean reverse,
                             final boolean stable) {
@@ -781,7 +728,6 @@ public class DoubleDict {
         resetIndices();
     }
 
-
     /**
      * Sum all of the values in this dictionary, then return a new FloatDict of
      * each key, divided by the total sum. The total for all values will be ~1.0.
@@ -798,7 +744,6 @@ public class DoubleDict {
         return outgoing;
     }
 
-
     /**
      * Returns a duplicate copy of this object.
      */
@@ -813,13 +758,11 @@ public class DoubleDict {
         return outgoing;
     }
 
-
     public void print() {
         for (int i = 0; i < size(); i++) {
             System.out.println(keys[i] + " = " + values[i]);
         }
     }
-
 
     /**
      * Save tab-delimited entries to a file (TSV format, UTF-8 encoding)
@@ -829,7 +772,6 @@ public class DoubleDict {
         write(writer);
         writer.close();
     }
-
 
     /**
      * Write tab-delimited entries out to
@@ -843,7 +785,6 @@ public class DoubleDict {
         writer.flush();
     }
 
-
     /**
      * Return this dictionary as a String in JSON format.
      */
@@ -855,9 +796,18 @@ public class DoubleDict {
         return "{ " + items.join(", ") + " }";
     }
 
-
     @Override
     public String toString() {
         return getClass().getSimpleName() + " size=" + size() + " " + toJSON();
+    }
+
+    public class Entry {
+        public String key;
+        public double value;
+
+        Entry(String key, double value) {
+            this.key = key;
+            this.value = value;
+        }
     }
 }

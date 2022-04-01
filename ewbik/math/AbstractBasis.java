@@ -9,14 +9,11 @@ package ewbik.math;
 public abstract class AbstractBasis {
     public static final int LEFT = -1;
     public static final int RIGHT = 1;
-
-    public int chirality = RIGHT;
-
     public static final int NONE = -1;
     public static final int X = 0;
     public static final int Y = 1;
     public static final int Z = 2;
-
+    public int chirality = RIGHT;
     public Quaternion rotation = new Quaternion();
     public Quaternion inverseRotation = new Quaternion();
     /**

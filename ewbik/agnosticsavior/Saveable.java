@@ -19,9 +19,9 @@ public interface Saveable {
     default void notifyOfLoadCompletion() {
     }
 
-    public void setLoading(boolean loading);
-
     public boolean isLoading();
+
+    public void setLoading(boolean loading);
 
     public void makeSaveable(SaveManager saveManager);
 

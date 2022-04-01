@@ -166,18 +166,6 @@ public class IntDict {
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-
-    public class Entry {
-        public String key;
-        public int value;
-
-        Entry(String key, int value) {
-            this.key = key;
-            this.value = value;
-        }
-    }
-
-
     public Iterable<Entry> entries() {
         return new Iterable<Entry>() {
 
@@ -186,7 +174,6 @@ public class IntDict {
             }
         };
     }
-
 
     public Iterator<Entry> entryIterator() {
         return new Iterator<Entry>() {
@@ -209,14 +196,12 @@ public class IntDict {
         };
     }
 
-
-    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-
-
     public String key(int index) {
         return keys[index];
     }
 
+
+    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
     protected void crop() {
         if (count != keys.length) {
@@ -224,7 +209,6 @@ public class IntDict {
             values = StringFuncs.subset(values, 0, count);
         }
     }
-
 
     public Iterable<String> keys() {
         return new Iterable<String>() {
@@ -235,7 +219,6 @@ public class IntDict {
             }
         };
     }
-
 
     // Use this to iterate when you want to be able to remove elements along the way
     public Iterator<String> keyIterator() {
@@ -257,7 +240,6 @@ public class IntDict {
         };
     }
 
-
     /**
      * Return a copy of the internal keys array. This array can be modified.
      *
@@ -269,7 +251,6 @@ public class IntDict {
         return keyArray(null);
     }
 
-
     public String[] keyArray(String[] outgoing) {
         if (outgoing == null || outgoing.length != count) {
             outgoing = new String[count];
@@ -278,11 +259,9 @@ public class IntDict {
         return outgoing;
     }
 
-
     public int value(int index) {
         return values[index];
     }
-
 
     /**
      * @webref intdict:method
@@ -297,7 +276,6 @@ public class IntDict {
             }
         };
     }
-
 
     public Iterator<Integer> valueIterator() {
         return new Iterator<Integer>() {
@@ -318,7 +296,6 @@ public class IntDict {
         };
     }
 
-
     /**
      * Create a new array and copy each of the values into it.
      *
@@ -329,7 +306,6 @@ public class IntDict {
         crop();
         return valueArray(null);
     }
-
 
     /**
      * Fill an already-allocated array with the values (more efficient than
@@ -346,7 +322,6 @@ public class IntDict {
         return array;
     }
 
-
     /**
      * Return a value for the specified key.
      *
@@ -361,13 +336,11 @@ public class IntDict {
         return values[index];
     }
 
-
     public int get(String key, int alternate) {
         int index = index(key);
         if (index == -1) return alternate;
         return values[index];
     }
-
 
     /**
      * Create a new key/value pair or change the value of one.
@@ -384,7 +357,6 @@ public class IntDict {
         }
     }
 
-
     public void setIndex(int index, String key, int value) {
         if (index < 0 || index >= count) {
             throw new ArrayIndexOutOfBoundsException(index);
@@ -393,7 +365,6 @@ public class IntDict {
         values[index] = value;
     }
 
-
     /**
      * @webref intdict:method
      * @brief Check if a key is a part of the data structure
@@ -401,7 +372,6 @@ public class IntDict {
     public boolean hasKey(String key) {
         return index(key) != -1;
     }
-
 
     /**
      * Increase the value associated with a specific key by 1.
@@ -413,7 +383,6 @@ public class IntDict {
         add(key, 1);
     }
 
-
     /**
      * Merge another dictionary into this one. Calling this increment()
      * since it doesn't make sense in practice for the other dictionary types,
@@ -424,7 +393,6 @@ public class IntDict {
             add(dict.key(i), dict.value(i));
         }
     }
-
 
     /**
      * @webref intdict:method
@@ -439,7 +407,6 @@ public class IntDict {
         }
     }
 
-
     /**
      * @webref intdict:method
      * @brief Subtract from a value
@@ -447,7 +414,6 @@ public class IntDict {
     public void sub(String key, int amount) {
         add(key, -amount);
     }
-
 
     /**
      * @webref intdict:method
@@ -460,7 +426,6 @@ public class IntDict {
         }
     }
 
-
     /**
      * @webref intdict:method
      * @brief Divide a value
@@ -472,7 +437,6 @@ public class IntDict {
         }
     }
 
-
     private void checkMinMax(String functionName) {
         if (count == 0) {
             String msg =
@@ -481,7 +445,6 @@ public class IntDict {
             throw new RuntimeException(msg);
         }
     }
-
 
     // return the index of the minimum value
     public int minIndex() {
@@ -499,7 +462,6 @@ public class IntDict {
         return index;
     }
 
-
     // return the key for the minimum value
     public String minKey() {
         checkMinMax("minKey");
@@ -510,13 +472,11 @@ public class IntDict {
         return keys[index];
     }
 
-
     // return the minimum value, or throw an error if there are no values
     public int minValue() {
         checkMinMax("minValue");
         return values[minIndex()];
     }
-
 
     // return the index of the max value
     public int maxIndex() {
@@ -535,7 +495,6 @@ public class IntDict {
         return index;
     }
 
-
     /**
      * return the key corresponding to the maximum value or null if no entries
      */
@@ -548,13 +507,11 @@ public class IntDict {
         return keys[index];
     }
 
-
     // return the maximum value or throw an error if zero length
     public int maxValue() {
         checkMinMax("maxIndex");
         return values[maxIndex()];
     }
-
 
     public int sum() {
         long amount = sumLong();
@@ -567,7 +524,6 @@ public class IntDict {
         return (int) amount;
     }
 
-
     public long sumLong() {
         long sum = 0;
         for (int i = 0; i < count; i++) {
@@ -576,12 +532,10 @@ public class IntDict {
         return sum;
     }
 
-
     public int index(String what) {
         Integer found = indices.get(what);
         return (found == null) ? -1 : found.intValue();
     }
-
 
     protected void create(String what, int much) {
         if (count == keys.length) {
@@ -608,7 +562,6 @@ public class IntDict {
         return value;
     }
 
-
     public int removeIndex(int index) {
         if (index < 0 || index >= count) {
             throw new ArrayIndexOutOfBoundsException(index);
@@ -626,7 +579,6 @@ public class IntDict {
         return value;
     }
 
-
     public void swap(int a, int b) {
         String tkey = keys[a];
         int tvalue = values[a];
@@ -638,7 +590,6 @@ public class IntDict {
 //    indices.put(keys[a], Integer.valueOf(a));
 //    indices.put(keys[b], Integer.valueOf(b));
     }
-
 
     /**
      * Sort the keys alphabetically (ignoring case). Uses the value as a
@@ -662,7 +613,6 @@ public class IntDict {
         sortImpl(true, true, true);
     }
 
-
     /**
      * Sort by values in ascending order. The smallest value will be at [0].
      *
@@ -672,7 +622,6 @@ public class IntDict {
     public void sortValues() {
         sortValues(true);
     }
-
 
     /**
      * Set true to ensure that the order returned is identical. Slightly
@@ -684,7 +633,6 @@ public class IntDict {
         sortImpl(false, false, stable);
     }
 
-
     /**
      * Sort by values in descending order. The largest value will be at [0].
      *
@@ -695,11 +643,9 @@ public class IntDict {
         sortValuesReverse(true);
     }
 
-
     public void sortValuesReverse(boolean stable) {
         sortImpl(false, true, stable);
     }
-
 
     protected void sortImpl(final boolean useKeys, final boolean reverse,
                             final boolean stable) {
@@ -737,7 +683,6 @@ public class IntDict {
         resetIndices();
     }
 
-
     /**
      * Sum all of the values in this dictionary, then return a new FloatDict of
      * each key, divided by the total sum. The total for all values will be ~1.0.
@@ -754,7 +699,6 @@ public class IntDict {
         return outgoing;
     }
 
-
     /**
      * Returns a duplicate copy of this object.
      */
@@ -769,13 +713,11 @@ public class IntDict {
         return outgoing;
     }
 
-
     public void print() {
         for (int i = 0; i < size(); i++) {
             System.out.println(keys[i] + " = " + values[i]);
         }
     }
-
 
     /**
      * Save tab-delimited entries to a file (TSV format, UTF-8 encoding)
@@ -786,7 +728,6 @@ public class IntDict {
         writer.close();
     }
 
-
     /**
      * Write tab-delimited entries to a PrintWriter
      */
@@ -796,7 +737,6 @@ public class IntDict {
         }
         writer.flush();
     }
-
 
     /**
      * Return this dictionary as a String in JSON format.
@@ -809,9 +749,18 @@ public class IntDict {
         return "{ " + items.join(", ") + " }";
     }
 
-
     @Override
     public String toString() {
         return getClass().getSimpleName() + " size=" + size() + " " + toJSON();
+    }
+
+    public class Entry {
+        public String key;
+        public int value;
+
+        Entry(String key, int value) {
+            this.key = key;
+            this.value = value;
+        }
     }
 }

@@ -4,8 +4,8 @@ import ewbik.asj.CanLoad;
 
 public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
 
+    public final static int X = 0, Y = 1, Z = 2;
     private static final long serialVersionUID = 3840054589595372522L;
-
     /**
      * the x-component of this vector
      **/
@@ -18,8 +18,6 @@ public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
      * the z-component of this vector
      **/
     public float z;
-
-    public final static int X = 0, Y = 1, Z = 2;
 
     /**
      * Constructs a vector at (0,0,0)
@@ -55,6 +53,193 @@ public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
      */
     public Vec3f(final float[] values) {
         this.set(values[0], values[1], values[2]);
+    }
+
+    /**
+     * @return The euclidean length
+     */
+    public static float mag(final float x, final float y, final float z) {
+        return (float) MathUtils.sqrt(x * x + y * y + z * z);
+    }
+
+    /**
+     * @return The squared euclidean length
+     */
+    public static float magSq(final float x, final float y, final float z) {
+        return x * x + y * y + z * z;
+    }
+
+    /**
+     * @return The euclidean distance between the two specified vectors
+     */
+    public static float dst(final float x1, final float y1, final float z1, final float x2, final float y2,
+                            final float z2) {
+        final float a = x2 - x1;
+        final float b = y2 - y1;
+        final float c = z2 - z1;
+        return (float) MathUtils.sqrt(a * a + b * b + c * c);
+    }
+
+    /**
+     * @return the squared distance between the given points
+     */
+    public static float dst2(final float x1, final float y1, final float z1, final float x2, final float y2,
+                             final float z2) {
+        final float a = x2 - x1;
+        final float b = y2 - y1;
+        final float c = z2 - z1;
+        return a * a + b * b + c * c;
+    }
+
+    /**
+     * @return The dot product between the two vectors
+     */
+    public static float dot(float x1, float y1, float z1, float x2, float y2, float z2) {
+        return x1 * x2 + y1 * y2 + z1 * z2;
+    }
+
+    public static float dot(Vector3 u, Vector3 v) {
+        return u.dot(v);
+    }
+
+    public static <V extends Vec3f<?>> V add(V v1, V v2) {
+        return add(v1, v2, null);
+    }
+
+    public static <V extends Vec3f<?>> V add(V v1, V v2, V target) {
+        if (target == null) {
+            target = (V) v1.copy();
+            v1.set(
+                    v1.x + v2.x,
+                    v1.y + v2.y,
+                    v1.z + v2.z);
+        } else {
+            target.set(v1.x + v2.x,
+                    v1.y + v2.y,
+                    v1.z + v2.z);
+        }
+        return target;
+    }
+
+    /**
+     * Subtract one vector from another and store in another vector
+     *
+     * @param target Vector3 in which to store the result
+     */
+    static public <V extends Vec3f<?>> V sub(V v1, V v2) {
+        return sub(v1, v2, (V) null);
+    }
+
+    static public <V extends Vec3f<?>> V mult(V v, float n) {
+        return mult(v, n, null);
+    }
+
+    static public <V extends Vec3f<?>> V mult(V v, float n, V target) {
+        if (target == null) {
+            target = (V) v.copy();
+        }
+        target.set(v.x * n, v.y * n, v.z * n);
+        return target;
+    }
+
+    static public <V extends Vec3f<?>> V div(V v, float n) {
+        return div(v, n, null);
+    }
+
+    static public <V extends Vec3f<?>> V div(V v, float n, V target) {
+        if (target == null) {
+            target = (V) v.copy();
+        }
+        target.set(v.x / n, v.y / n, v.z / n);
+
+        return target;
+    }
+
+    /**
+     * Subtract v3 from v1 and store in target
+     *
+     * @param target Vector3 in which to store the result
+     * @return
+     */
+    static public <V extends Vec3f<?>> V sub(V v1, V v2, V target) {
+        if (target == null) {
+            target = (V) v1.copy();
+        }
+        target.set(v1.x - v2.x,
+                v1.y - v2.y,
+                v1.z - v2.z);
+
+        return target;
+    }
+
+    /**
+     * @param v1     any variable of type Vector3
+     * @param v2     any variable of type Vector3
+     * @param target Vector3 to store the result
+     */
+    public static <V extends Vec3f<?>> V cross(V v1, V v2, V target) {
+        float crossX = v1.y * v2.z - v2.y * v1.z;
+        float crossY = v1.z * v2.x - v2.z * v1.x;
+        float crossZ = v1.x * v2.y - v2.x * v1.y;
+
+        if (target == null) {
+            target = (V) v1.copy();
+        }
+        target.set(crossX, crossY, crossZ);
+
+        return target;
+    }
+
+    /**
+     * Linear interpolate between two vectors (returns a new Vector3 object)
+     *
+     * @param v1 the vector to start from
+     * @param v2 the vector to lerp to
+     */
+    public static <V extends Vec3f> V lerp(V v1, V v2, float amt) {
+        V v = (V) v1.copy();
+        v.lerp(v2, amt);
+        return v;
+    }
+
+    /**
+     * ( begin auto-generated from SGVec_3f_angleBetween.xml )
+     * <p>
+     * Calculates and returns the angle (in radians) between two vectors.
+     * <p>
+     * ( end auto-generated )
+     *
+     * @param v1 the x, y, and z components of a Vector3
+     * @param v2 the x, y, and z components of a Vector3
+     * @webref Vector3:method
+     * @usage web_application
+     * @brief Calculate and return the angle between two vectors
+     */
+    static public float angleBetween(Vec3f<?> v1, Vec3f<?> v2) {
+
+        // We get NaN if we pass in a zero vector which can cause problems
+        // Zero seems like a reasonable angle between a (0,0,0) vector and something
+        // else
+        if (v1.x == 0 && v1.y == 0 && v1.z == 0)
+            return 0.0f;
+        if (v2.x == 0 && v2.y == 0 && v2.z == 0)
+            return 0.0f;
+
+        float dot = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+        float v1mag = MathUtils.sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z);
+        float v2mag = MathUtils.sqrt(v2.x * v2.x + v2.y * v2.y + v2.z * v2.z);
+        // This should be a number between -1 and 1, since it's "normalized"
+        float amt = dot / (v1mag * v2mag);
+        // But if it's not due to rounding error, then we need to fix it
+        // http://code.google.com/p/processing/issues/detail?id=340
+        // Otherwise if outside the range, acos() will return NaN
+        // http://www.cppreference.com/wiki/c/math/acos
+        if (amt <= -1) {
+            return MathUtils.PI;
+        } else if (amt >= 1) {
+            return 0;
+        }
+        return (float) MathUtils.acos(amt);
     }
 
     /**
@@ -234,23 +419,9 @@ public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
         return (T) this;
     }
 
-    /**
-     * @return The euclidean length
-     */
-    public static float mag(final float x, final float y, final float z) {
-        return (float) MathUtils.sqrt(x * x + y * y + z * z);
-    }
-
     @Override
     public float mag() {
         return (float) MathUtils.sqrt(x * x + y * y + z * z);
-    }
-
-    /**
-     * @return The squared euclidean length
-     */
-    public static float magSq(final float x, final float y, final float z) {
-        return x * x + y * y + z * z;
     }
 
     @Override
@@ -264,17 +435,6 @@ public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
      */
     public boolean idt(final Vec3f vector) {
         return x == vector.x && y == vector.y && z == vector.z;
-    }
-
-    /**
-     * @return The euclidean distance between the two specified vectors
-     */
-    public static float dst(final float x1, final float y1, final float z1, final float x2, final float y2,
-                            final float z2) {
-        final float a = x2 - x1;
-        final float b = y2 - y1;
-        final float c = z2 - z1;
-        return (float) MathUtils.sqrt(a * a + b * b + c * c);
     }
 
     @Override
@@ -293,17 +453,6 @@ public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
         final float b = y - this.y;
         final float c = z - this.z;
         return (float) MathUtils.sqrt(a * a + b * b + c * c);
-    }
-
-    /**
-     * @return the squared distance between the given points
-     */
-    public static float dst2(final float x1, final float y1, final float z1, final float x2, final float y2,
-                             final float z2) {
-        final float a = x2 - x1;
-        final float b = y2 - y1;
-        final float c = z2 - z1;
-        return a * a + b * b + c * c;
     }
 
     @Override
@@ -335,13 +484,6 @@ public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
         if (len2 == 0f || len2 == 1f)
             return (T) this;
         return this.mult(1f / (float) len2);
-    }
-
-    /**
-     * @return The dot product between the two vectors
-     */
-    public static float dot(float x1, float y1, float z1, float x2, float y2, float z2) {
-        return x1 * x2 + y1 * y2 + z1 * z2;
     }
 
     @Override
@@ -696,150 +838,6 @@ public abstract class Vec3f<T extends Vec3f<T>> implements Vecf<T>, CanLoad {
         }
 
         return result;
-    }
-
-    public static float dot(Vector3 u, Vector3 v) {
-        return u.dot(v);
-    }
-
-    public static <V extends Vec3f<?>> V add(V v1, V v2) {
-        return add(v1, v2, null);
-    }
-
-    public static <V extends Vec3f<?>> V add(V v1, V v2, V target) {
-        if (target == null) {
-            target = (V) v1.copy();
-            v1.set(
-                    v1.x + v2.x,
-                    v1.y + v2.y,
-                    v1.z + v2.z);
-        } else {
-            target.set(v1.x + v2.x,
-                    v1.y + v2.y,
-                    v1.z + v2.z);
-        }
-        return target;
-    }
-
-    /**
-     * Subtract one vector from another and store in another vector
-     *
-     * @param target Vector3 in which to store the result
-     */
-    static public <V extends Vec3f<?>> V sub(V v1, V v2) {
-        return sub(v1, v2, (V) null);
-    }
-
-    static public <V extends Vec3f<?>> V mult(V v, float n) {
-        return mult(v, n, null);
-    }
-
-    static public <V extends Vec3f<?>> V mult(V v, float n, V target) {
-        if (target == null) {
-            target = (V) v.copy();
-        }
-        target.set(v.x * n, v.y * n, v.z * n);
-        return target;
-    }
-
-    static public <V extends Vec3f<?>> V div(V v, float n) {
-        return div(v, n, null);
-    }
-
-    static public <V extends Vec3f<?>> V div(V v, float n, V target) {
-        if (target == null) {
-            target = (V) v.copy();
-        }
-        target.set(v.x / n, v.y / n, v.z / n);
-
-        return target;
-    }
-
-    /**
-     * Subtract v3 from v1 and store in target
-     *
-     * @param target Vector3 in which to store the result
-     * @return
-     */
-    static public <V extends Vec3f<?>> V sub(V v1, V v2, V target) {
-        if (target == null) {
-            target = (V) v1.copy();
-        }
-        target.set(v1.x - v2.x,
-                v1.y - v2.y,
-                v1.z - v2.z);
-
-        return target;
-    }
-
-    /**
-     * @param v1     any variable of type Vector3
-     * @param v2     any variable of type Vector3
-     * @param target Vector3 to store the result
-     */
-    public static <V extends Vec3f<?>> V cross(V v1, V v2, V target) {
-        float crossX = v1.y * v2.z - v2.y * v1.z;
-        float crossY = v1.z * v2.x - v2.z * v1.x;
-        float crossZ = v1.x * v2.y - v2.x * v1.y;
-
-        if (target == null) {
-            target = (V) v1.copy();
-        }
-        target.set(crossX, crossY, crossZ);
-
-        return target;
-    }
-
-    /**
-     * Linear interpolate between two vectors (returns a new Vector3 object)
-     *
-     * @param v1 the vector to start from
-     * @param v2 the vector to lerp to
-     */
-    public static <V extends Vec3f> V lerp(V v1, V v2, float amt) {
-        V v = (V) v1.copy();
-        v.lerp(v2, amt);
-        return v;
-    }
-
-    /**
-     * ( begin auto-generated from SGVec_3f_angleBetween.xml )
-     * <p>
-     * Calculates and returns the angle (in radians) between two vectors.
-     * <p>
-     * ( end auto-generated )
-     *
-     * @param v1 the x, y, and z components of a Vector3
-     * @param v2 the x, y, and z components of a Vector3
-     * @webref Vector3:method
-     * @usage web_application
-     * @brief Calculate and return the angle between two vectors
-     */
-    static public float angleBetween(Vec3f<?> v1, Vec3f<?> v2) {
-
-        // We get NaN if we pass in a zero vector which can cause problems
-        // Zero seems like a reasonable angle between a (0,0,0) vector and something
-        // else
-        if (v1.x == 0 && v1.y == 0 && v1.z == 0)
-            return 0.0f;
-        if (v2.x == 0 && v2.y == 0 && v2.z == 0)
-            return 0.0f;
-
-        float dot = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
-        float v1mag = MathUtils.sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z);
-        float v2mag = MathUtils.sqrt(v2.x * v2.x + v2.y * v2.y + v2.z * v2.z);
-        // This should be a number between -1 and 1, since it's "normalized"
-        float amt = dot / (v1mag * v2mag);
-        // But if it's not due to rounding error, then we need to fix it
-        // http://code.google.com/p/processing/issues/detail?id=340
-        // Otherwise if outside the range, acos() will return NaN
-        // http://www.cppreference.com/wiki/c/math/acos
-        if (amt <= -1) {
-            return MathUtils.PI;
-        } else if (amt >= 1) {
-            return 0;
-        }
-        return (float) MathUtils.acos(amt);
     }
 
     @Override

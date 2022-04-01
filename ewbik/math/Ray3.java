@@ -30,6 +30,12 @@ public class Ray3 implements CanLoad {
     public static final int X = 0, Y = 1, Z = 2;
     protected Vec3f<?> p1;
     protected Vec3f<?> p2;
+    protected Vec3f<?> workingVector;
+    Vec3f<?> tta, ttb, ttc;
+    Vec3f<?> I, u, v, n, dir, w0;
+    boolean inUse = false;
+    Vec3f<?> m, at, bt, ct, pt;
+    Vec3f<?> bc, ca, ac;
 
     public Ray3() {
         workingVector = new Vector3();
@@ -48,6 +54,50 @@ public class Ray3 implements CanLoad {
             this.p2 = p2.copy();
     }
 
+    /**
+     * Given two planes specified by a1,a2,a3 and b1,b2,b3 returns a
+     * ray representing the line along which the two planes intersect
+     *
+     * @param a1 the first vertex of a triangle on the first plane
+     * @param a2 the second vertex of a triangle on the first plane
+     * @param a3 the third vertex od a triangle on the first plane
+     * @param b1 the first vertex of a triangle on the second plane
+     * @param b2 the second vertex of a triangle on the second plane
+     * @param b3 the third vertex od a triangle on the second plane
+     * @return a sgRay along the line of intersection of these two planes, or null if inputs are coplanar
+     */
+    public static <V extends Vec3f<?>> ewbik.math.Ray3 planePlaneIntersect(V a1, V a2, V a3, V b1, V b2, V b3) {
+        ewbik.math.Ray3 a1a2 = new ewbik.math.Ray3(a1, a2);
+        ewbik.math.Ray3 a1a3 = new ewbik.math.Ray3(a1, a3);
+        ewbik.math.Ray3 a2a3 = new ewbik.math.Ray3(a2, a3);
+
+        Vec3f<?> interceptsa1a2 = a1a2.intersectsPlane(b1, b2, b3);
+        Vec3f<?> interceptsa1a3 = a1a3.intersectsPlane(b1, b2, b3);
+        Vec3f<?> interceptsa2a3 = a2a3.intersectsPlane(b1, b2, b3);
+
+        Vec3f<?>[] notNullCandidates = {interceptsa1a2, interceptsa1a3, interceptsa2a3};
+        Vec3f<?> notNull1 = null;
+        Vec3f<?> notNull2 = null;
+
+        for (int i = 0; i < notNullCandidates.length; i++) {
+            if (notNullCandidates[i] != null) {
+                if (notNull1 == null)
+                    notNull1 = notNullCandidates[i];
+                else {
+                    notNull2 = notNullCandidates[i];
+                    break;
+                }
+            }
+        }
+        if (notNull1 != null && notNull2 != null)
+            return new ewbik.math.Ray3(notNull1, notNull2);
+        else
+            return null;
+    }
+
+    public static float triArea2D(float x1, float y1, float x2, float y2, float x3, float y3) {
+        return (x1 - x2) * (y2 - y3) - (x2 - x3) * (y1 - y2);
+    }
 
     public <V extends Vec3f<?>> float distTo(V point) {
 
@@ -80,7 +130,6 @@ public class Ray3 implements CanLoad {
         }
 
     }
-
 
     /**
      * returns the distance between this ray treated as a line and the input ray treated as a line.
@@ -179,7 +228,6 @@ public class Ray3 implements CanLoad {
         p2.add(newHead);
     }
 
-
     /**
      * sets the input vector equal to this sgRay's heading.
      *
@@ -189,7 +237,6 @@ public class Ray3 implements CanLoad {
         setTo.set(p2);
         setTo.sub(this.p1);
     }
-
 
     /**
      * @return a copy of this ray with its z-component set to 0;
@@ -239,7 +286,6 @@ public class Ray3 implements CanLoad {
         this.heading(dir);
     }
 
-
     /**
      * Returns the scalar projection of the input vector on this
      * ray. In other words, if this ray goes from (5, 0) to (10, 0),
@@ -273,10 +319,6 @@ public class Ray3 implements CanLoad {
             return (workingVector.dot(heading) / (headingMag * workingVectorMag)) * (workingVectorMag / headingMag);
     }
 
-
-    protected Vec3f<?> workingVector;
-
-
     /**
      * divides the ray by the amount specified by divisor, such that the
      * base of the ray remains where it is, and the tip
@@ -290,7 +332,6 @@ public class Ray3 implements CanLoad {
         p2.add(p1);
     }
 
-
     /**
      * multiples the ray by the amount specified by scalar, such that the
      * base of the ray remains where it is, and the tip
@@ -303,7 +344,6 @@ public class Ray3 implements CanLoad {
         p2.mult(scalar);
         p2.add(p1);
     }
-
 
     /**
      * Returns a Vector3 representing where the tip
@@ -320,7 +360,6 @@ public class Ray3 implements CanLoad {
         return result;
     }
 
-
     /**
      * Returns a Vector3 representing where the tip
      * of this ray would be if div() was called on the ray
@@ -335,7 +374,6 @@ public class Ray3 implements CanLoad {
         result.add(p1);
         return result;
     }
-
 
     /**
      * Returns a Vector3 representing where the tip
@@ -353,7 +391,6 @@ public class Ray3 implements CanLoad {
         return result;
     }
 
-
     /**
      * adds the specified length to the ray in both directions.
      */
@@ -367,7 +404,6 @@ public class Ray3 implements CanLoad {
         this.p1.set((Vec3f) p1Heading.addCopy(p1Add).addCopy(midPoint));
         this.p2.set((Vec3f) p2Heading.addCopy(p2Add).addCopy(midPoint));
     }
-
 
     public ewbik.math.Ray3 copy() {
         return new ewbik.math.Ray3(this.p1, this.p2);
@@ -404,6 +440,29 @@ public class Ray3 implements CanLoad {
         return new ewbik.math.Ray3(p1, this.getMultipledBy(scalar));
     }
 
+	/*public Vec3f<?> intercepts2D(sgRay r) {
+		Vector3 result = new Vector3();
+
+		float a1 = p2.y - p1.y;
+		float b1 = p1.x - p2.x;
+		float c1 = a1*p1.x + b1*p1.y;
+
+		float a2 = r.p2.y - r.p1.y;
+		float b2 = r.p1.x - r.p2.y;
+		float c2 = a2* + b2* r.p1.y;
+
+		float det = a1*b2 - a2*b1;
+		if(det == 0){
+			// Lines are parallel
+			return null;
+		}
+		else {
+			result.x = (b2*c1 - b1*c2)/det;
+			result.y = (a1*c2 - a2*c1)/det;
+		}   
+		return result;
+	}*/
+
     /**
      * sets the values of the given vector to where the
      * tip of this Ray would be if the ray were inverted
@@ -417,6 +476,10 @@ public class Ray3 implements CanLoad {
         vec.z = (p1.z - p2.z) + p1.z;
         return vec;
     }
+
+	/*public Vec3f<?> closestPointToSegment3DStrict(sgRay r) {
+
+	}*/
 
     public void contractTo(float percent) {
         //contracts both ends of a ray toward its center such that the total length of the ray
@@ -446,7 +509,6 @@ public class Ray3 implements CanLoad {
         p1.add(toAdd);
         p2.add(toAdd);
     }
-
 
     public void normalize() {
         this.mag(1);
@@ -482,29 +544,6 @@ public class Ray3 implements CanLoad {
         //return null; // No collision
     }
 
-	/*public Vec3f<?> intercepts2D(sgRay r) {
-		Vector3 result = new Vector3();
-
-		float a1 = p2.y - p1.y;
-		float b1 = p1.x - p2.x;
-		float c1 = a1*p1.x + b1*p1.y;
-
-		float a2 = r.p2.y - r.p1.y;
-		float b2 = r.p1.x - r.p2.y;
-		float c2 = a2* + b2* r.p1.y;
-
-		float det = a1*b2 - a2*b1;
-		if(det == 0){
-			// Lines are parallel
-			return null;
-		}
-		else {
-			result.x = (b2*c1 - b1*c2)/det;
-			result.y = (a1*c2 - a2*c1)/det;
-		}   
-		return result;
-	}*/
-
     /**
      * If the closest point to this sgRay on the input sgRay lies
      * beyond the bounds of that input sgRay, this returns closest point
@@ -517,10 +556,6 @@ public class Ray3 implements CanLoad {
         Vec3f<?> closestToThis = r.closestPointToRay3DStrict(this);
         return this.closestPointTo(closestToThis);
     }
-
-	/*public Vec3f<?> closestPointToSegment3DStrict(sgRay r) {
-
-	}*/
 
     /**
      * returns the point on this ray which is closest to the input ray
@@ -671,47 +706,6 @@ public class Ray3 implements CanLoad {
     }
 
     /**
-     * Given two planes specified by a1,a2,a3 and b1,b2,b3 returns a
-     * ray representing the line along which the two planes intersect
-     *
-     * @param a1 the first vertex of a triangle on the first plane
-     * @param a2 the second vertex of a triangle on the first plane
-     * @param a3 the third vertex od a triangle on the first plane
-     * @param b1 the first vertex of a triangle on the second plane
-     * @param b2 the second vertex of a triangle on the second plane
-     * @param b3 the third vertex od a triangle on the second plane
-     * @return a sgRay along the line of intersection of these two planes, or null if inputs are coplanar
-     */
-    public static <V extends Vec3f<?>> ewbik.math.Ray3 planePlaneIntersect(V a1, V a2, V a3, V b1, V b2, V b3) {
-        ewbik.math.Ray3 a1a2 = new ewbik.math.Ray3(a1, a2);
-        ewbik.math.Ray3 a1a3 = new ewbik.math.Ray3(a1, a3);
-        ewbik.math.Ray3 a2a3 = new ewbik.math.Ray3(a2, a3);
-
-        Vec3f<?> interceptsa1a2 = a1a2.intersectsPlane(b1, b2, b3);
-        Vec3f<?> interceptsa1a3 = a1a3.intersectsPlane(b1, b2, b3);
-        Vec3f<?> interceptsa2a3 = a2a3.intersectsPlane(b1, b2, b3);
-
-        Vec3f<?>[] notNullCandidates = {interceptsa1a2, interceptsa1a3, interceptsa2a3};
-        Vec3f<?> notNull1 = null;
-        Vec3f<?> notNull2 = null;
-
-        for (int i = 0; i < notNullCandidates.length; i++) {
-            if (notNullCandidates[i] != null) {
-                if (notNull1 == null)
-                    notNull1 = notNullCandidates[i];
-                else {
-                    notNull2 = notNullCandidates[i];
-                    break;
-                }
-            }
-        }
-        if (notNull1 != null && notNull2 != null)
-            return new ewbik.math.Ray3(notNull1, notNull2);
-        else
-            return null;
-    }
-
-    /**
      * @param ta the first vertex of a triangle on the plane
      * @param tb the second vertex of a triangle on the plane
      * @param tc the third vertex of a triangle on the plane
@@ -721,9 +715,6 @@ public class Ray3 implements CanLoad {
         float[] uvw = new float[3];
         return intersectsPlane(ta, tb, tc, uvw);
     }
-
-
-    Vec3f<?> tta, ttb, ttc;
 
     public <V extends Vec3f<?>> Vec3f<?> intersectsPlane(V ta, V tb, V tc, float[] uvw) {
         if (tta == null) {
@@ -754,7 +745,6 @@ public class Ray3 implements CanLoad {
         result.set(intersectsPlane(ta, tb, tc, uvw));
     }
 
-
     /**
      * Similar to intersectsPlane, but returns false if intersection does not occur on the triangle strictly defined by ta, tb, and tc
      *
@@ -771,9 +761,6 @@ public class Ray3 implements CanLoad {
         else
             return true;
     }
-
-    Vec3f<?> I, u, v, n, dir, w0;
-    boolean inUse = false;
 
     private <V extends Vec3f<?>> V planeIntersectTest(V ta, V tb, V tc, float[] uvw) {
 
@@ -810,7 +797,7 @@ public class Ray3 implements CanLoad {
 
         return (V) I.copy();
     }
-
+    ;
 
     /* Find where this ray intersects a sphere
      * @param Vector3 the center of the sphere to test against.
@@ -867,10 +854,6 @@ public class Ray3 implements CanLoad {
         return result;
     }
 
-    Vec3f<?> m, at, bt, ct, pt;
-    ;
-    Vec3f<?> bc, ca, ac;
-
     public <V extends Vec3f<?>> void barycentric(V a, V b, V c, V p, float[] uvw) {
         if (m == null) {
             //m=a.copy();
@@ -926,11 +909,6 @@ public class Ray3 implements CanLoad {
                 + "(" + (float) this.p1.z + " ->  " + (float) this.p2.z + ") \n ";
         return result;
     }
-
-    public static float triArea2D(float x1, float y1, float x2, float y2, float x3, float y3) {
-        return (x1 - x2) * (y2 - y3) - (x2 - x3) * (y1 - y2);
-    }
-
 
     public <V extends Vec3f<?>> void p1(V in) {
         this.p1 = in.copy();

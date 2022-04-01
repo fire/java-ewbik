@@ -26,6 +26,9 @@ import processing.core.PMatrix3D;
 import processing.core.PVector;
 
 public class Axes extends Transform3D {
+    float[][] outMatLocal = new float[4][4];
+    float[][] outMatGlobal = new float[4][4];
+
     public Axes(AbstractBasis b, AbstractAxes parent) {
         super(b, parent);
     }
@@ -60,7 +63,6 @@ public class Axes extends Transform3D {
         this(origin, x, y, z, true, null);
     }
 
-
     public Axes() {
         super(
                 new Vector3(0, 0, 0),
@@ -84,6 +86,8 @@ public class Axes extends Transform3D {
         return new PVector(sv.x, sv.y, sv.z);
     }
 
+    //////////////////// END OF CONVERSION FUNCTIONS
+
     public static void toDVector(Vec3f<?> sv, PVector storeIn) {
         storeIn.x = sv.x;
         storeIn.y = sv.y;
@@ -91,27 +95,30 @@ public class Axes extends Transform3D {
     }
 
 
+    ///WRAPPER FUNCTIONS. Basically just find + replace these with the appropriate class names and conversion functions above if you need them
+    //and you should be good to go.
+
     public static Vector3 toVector3(PVector ev) {
         return new Vector3(ev.x, ev.y, ev.z);
     }
 
-    //////////////////// END OF CONVERSION FUNCTIONS
+    public static void drawRay(PGraphics p, Ray3 r) {
+        p.line(r.p1().x, r.p1().y, r.p1().z, r.p2().x, r.p2().y, r.p2().z);
+    }
+
+    public static void drawPoint(PGraphics p, Vector3 pt) {
+        p.point(pt.x, pt.y, pt.z);
+    }
 
     public PVector origin() {
         return toPVector(this.origin_());
     }
-
-
-    ///WRAPPER FUNCTIONS. Basically just find + replace these with the appropriate class names and conversion functions above if you need them
-    //and you should be good to go.
-
 
     @Override
     public Axes getGlobalCopy() {
         this.updateGlobal();
         return new Axes(getGlobalMBasis(), this.getParentAxes());
     }
-
 
     public PVector getGlobalOf(PVector local_input) {
         return toPVector(
@@ -175,6 +182,8 @@ public class Axes extends Transform3D {
         super.rotateAboutZ(radians, true);
     }
 
+    //////////////////////// End of wrapper functions
+
     public PVector getOrigin() {
         return toPVector(origin_());
     }
@@ -209,11 +218,6 @@ public class Axes extends Transform3D {
         );
     }
 
-    //////////////////////// End of wrapper functions
-
-    float[][] outMatLocal = new float[4][4];
-    float[][] outMatGlobal = new float[4][4];
-
     private void updateMatrix(AbstractBasis b, float[][] outputMatrix) {
         b.refreshPrecomputed();
 
@@ -243,7 +247,6 @@ public class Axes extends Transform3D {
 
     }
 
-
     public PMatrix getLocalPMatrix() {
         updateMatrix(getLocalMBasis(), outMatLocal);
         float[][] m = outMatLocal;
@@ -267,7 +270,6 @@ public class Axes extends Transform3D {
         return result;
     }
 
-
     public void drawMe(PGraphics pg, float size) {
         pg.noStroke();
         updateGlobal();
@@ -290,14 +292,6 @@ public class Axes extends Transform3D {
         pg.box(size / 10f, size / 10f, size);
         pg.popMatrix();
         pg.popMatrix();
-    }
-
-    public static void drawRay(PGraphics p, Ray3 r) {
-        p.line(r.p1().x, r.p1().y, r.p1().z, r.p2().x, r.p2().y, r.p2().z);
-    }
-
-    public static void drawPoint(PGraphics p, Vector3 pt) {
-        p.point(pt.x, pt.y, pt.z);
     }
 
 

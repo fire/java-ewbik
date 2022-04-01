@@ -7,20 +7,19 @@ import ewbik.asj.data.JSONObject;
 import ewbik.asj.data.StringFuncs;
 import ewbik.ik.*;
 import ewbik.math.AbstractAxes;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.WeakHashMap;
 import ik.Bone;
 import ik.IKPin;
 import processing.Skeleton3D;
 
-public class EWBIKSaver extends SaveManager {
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.WeakHashMap;
 
-    WeakHashMap<Saveable, Boolean> saveables = new WeakHashMap<Saveable, Boolean>();
+public class EWBIKSaver extends SaveManager {
 
     public static String currentFilePath;
     public static String tempDir;
+    WeakHashMap<Saveable, Boolean> saveables = new WeakHashMap<Saveable, Boolean>();
 
     public void saveArmature(Skeleton3D toSave, String path) {
         clearSaveState();

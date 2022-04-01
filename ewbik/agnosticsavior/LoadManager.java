@@ -14,6 +14,10 @@ public abstract class LoadManager {
     public HashMap<Class, HashMap<String, Saveable>> classObjects = new HashMap<>();
     public ArrayList<Saveable> allLoadedObjects = new ArrayList<>();
 
+    public static TypeIdentifier getNewTypeIdentifier(Object k, Object v) {
+        return new TypeIdentifier(k, v);
+    }
+
     public <T extends Saveable> T getObjectFor(Class objectClass, JSONObject j, String hashKey) {
         if (j.hasKey(hashKey)) {
             return (T) getObjectFromClassMaps(objectClass, j.getString(hashKey));
@@ -73,10 +77,6 @@ public abstract class LoadManager {
             }
             return null;
         }
-    }
-
-    public static TypeIdentifier getNewTypeIdentifier(Object k, Object v) {
-        return new TypeIdentifier(k, v);
     }
 
     /**

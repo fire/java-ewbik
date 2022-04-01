@@ -190,18 +190,19 @@ public class JSONArray {
 
 
     /**
-     * Construct a JSONArray from a source JSON text.
+     * Construct a JSONArray from an array
      *
-     * @param source A string that begins with
-     *               <code>[</code>&nbsp;<small>(left bracket)</small>
-     *               and ends with <code>]</code>&nbsp;<small>(right bracket)</small>.
-     * @return {@code null} if there is a syntax error.
+     * @throws RuntimeException If not an array.
      */
-    static public JSONArray parse(String source) {
-        try {
-            return new JSONArray(new JSONTokener(source));
-        } catch (Exception e) {
-            return null;
+    protected JSONArray(Object array) {
+        this();
+        if (array.getClass().isArray()) {
+            int length = Array.getLength(array);
+            for (int i = 0; i < length; i += 1) {
+                this.append(JSONObject.wrap(Array.get(array, i)));
+            }
+        } else {
+            throw new RuntimeException("JSONArray initial value should be a string or collection or array.");
         }
     }
 
@@ -224,22 +225,20 @@ public class JSONArray {
     // TODO not decided whether we keep this one, but used heavily by JSONObject
 
     /**
-     * Construct a JSONArray from an array
+     * Construct a JSONArray from a source JSON text.
      *
-     * @throws RuntimeException If not an array.
+     * @param source A string that begins with
+     *               <code>[</code>&nbsp;<small>(left bracket)</small>
+     *               and ends with <code>]</code>&nbsp;<small>(right bracket)</small>.
+     * @return {@code null} if there is a syntax error.
      */
-    protected JSONArray(Object array) {
-        this();
-        if (array.getClass().isArray()) {
-            int length = Array.getLength(array);
-            for (int i = 0; i < length; i += 1) {
-                this.append(JSONObject.wrap(Array.get(array, i)));
-            }
-        } else {
-            throw new RuntimeException("JSONArray initial value should be a string or collection or array.");
+    static public JSONArray parse(String source) {
+        try {
+            return new JSONArray(new JSONTokener(source));
+        } catch (Exception e) {
+            return null;
         }
     }
-
 
     /**
      * Get the optional object value associated with an index.

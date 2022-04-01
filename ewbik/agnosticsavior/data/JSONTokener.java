@@ -80,23 +80,6 @@ class JSONTokener {
         this(new StringReader(s));
     }
 
-
-    /**
-     * Back up one character. This provides a sort of lookahead capability,
-     * so that you can test for a digit or letter before attempting to parse
-     * the next number or identifier.
-     */
-    public void back() {
-        if (this.usePrevious || this.index <= 0) {
-            throw new RuntimeException("Stepping back two steps is not supported");
-        }
-        this.index -= 1;
-        this.character -= 1;
-        this.usePrevious = true;
-        this.eof = false;
-    }
-
-
     /**
      * Get the hex value of a character (base16).
      *
@@ -115,6 +98,21 @@ class JSONTokener {
             return c - ('a' - 10);
         }
         return -1;
+    }
+
+    /**
+     * Back up one character. This provides a sort of lookahead capability,
+     * so that you can test for a digit or letter before attempting to parse
+     * the next number or identifier.
+     */
+    public void back() {
+        if (this.usePrevious || this.index <= 0) {
+            throw new RuntimeException("Stepping back two steps is not supported");
+        }
+        this.index -= 1;
+        this.character -= 1;
+        this.usePrevious = true;
+        this.eof = false;
     }
 
     public boolean end() {

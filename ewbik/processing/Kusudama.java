@@ -23,9 +23,7 @@ import ewbik.asj.LoadManager;
 import ewbik.asj.SaveManager;
 import ewbik.asj.Saveable;
 import ewbik.ik.SegmentedArmature;
-import ewbik.math.MRotation;
-import ewbik.math.Quaternion;
-import ewbik.math.Vec3f;
+import ewbik.math.*;
 import ewbik.processing.sceneGraph.Axes;
 import ik.Bone;
 import processing.core.PConstants;
@@ -36,10 +34,6 @@ import processing.opengl.PGraphicsOpenGL;
 import processing.opengl.PShader;
 
 import java.util.ArrayList;
-import  ewbik.math.Ray3;
-import ewbik.math.AbstractAxes;
-import ewbik.math.Vector3;
-import ewbik.math.MathUtils;
 
 /**
  * Note, this class is a concrete implementation of the abstract class
@@ -246,9 +240,9 @@ public class Kusudama implements Saveable {
     }
 
     /**
-         * @return the limitingAxes of this Kusudama (these are just its parentBone's
-         *         majorRotationAxes)
-         */
+     * @return the limitingAxes of this Kusudama (these are just its parentBone's
+     * majorRotationAxes)
+     */
     @SuppressWarnings("unchecked")
     public Axes limitingAxes() {
         // if(inverted) return inverseLimitingAxes;
@@ -280,7 +274,7 @@ public class Kusudama implements Saveable {
      * rotations are computed
      * so as to minimize the potential for undesirable twist rotations due to
      * antipodal singularities.
-     *
+     * <p>
      * In general, auto-optimization attempts to point the y-component of the
      * constraint
      * axes in the direction that places it within an oreintation allowed by the
@@ -387,6 +381,16 @@ public class Kusudama implements Saveable {
     }
 
     /**
+     * @return A value between (ideally between 0 and 1) dictating
+     * how much the bone to which this kusudama belongs
+     * prefers to be away from the edges of the kusudama
+     * if it can.
+     */
+    public float getPainfullness() {
+        return painfullness;
+    }
+
+    /**
      * A value between (ideally between 0 and 1) dictating
      * how much the bone to which this kusudama belongs
      * prefers to be away from the edges of the kusudama
@@ -410,16 +414,6 @@ public class Kusudama implements Saveable {
                 }
             }
         }
-    }
-
-    /**
-     * @return A value between (ideally between 0 and 1) dictating
-     *         how much the bone to which this kusudama belongs
-     *         prefers to be away from the edges of the kusudama
-     *         if it can.
-     */
-    public float getPainfullness() {
-        return painfullness;
     }
 
     public <V extends Vec3f<?>> boolean isInLimits_(V globalPoint) {
@@ -492,11 +486,10 @@ public class Kusudama implements Saveable {
     }
 
     /**
-     *
      * @param toSet
      * @param limitingAxes
      * @return radians of twist required to snap bone into twist limits (0 if bone
-     *         is already in twist limits)
+     * is already in twist limits)
      */
     public float snapToTwistLimits(AbstractAxes toSet, AbstractAxes limitingAxes) {
 
@@ -602,7 +595,7 @@ public class Kusudama implements Saveable {
      *                the point is outside of the boundary, but does not signify
      *                anything about how far from the boundary the point is.
      * @return the original point, if it's in limits, or the closest point which is
-     *         in limits.
+     * in limits.
      */
     public <V extends Vec3f<?>> Vec3f<?> pointInLimits(V inPoint, float[] inBounds) {
 
@@ -717,7 +710,7 @@ public class Kusudama implements Saveable {
      * Adds a LimitCone to the Kusudama. LimitCones are reach cones which can be
      * arranged sequentially. The Kusudama will infer
      * a smooth path leading from one LimitCone to the next.
-     *
+     * <p>
      * Using a single LimitCone is functionally equivalent to a classic reachCone
      * constraint.
      *
@@ -761,7 +754,6 @@ public class Kusudama implements Saveable {
     }
 
     /**
-     *
      * @return the lower bound on the axial constraint
      */
     public float minAxialAngle() {
@@ -829,17 +821,17 @@ public class Kusudama implements Saveable {
     }
 
     /**
-         * @return a measure of the rotational freedom afforded by this constraint.
-         * with 0 meaning no rotational freedom (the bone is essentially
-         * stationary in relation to its parent)
-         * and 1 meaning full rotational freedom (the bone is completely
-         * unconstrained).
-         * <p>
-         * This should be computed as ratio between orientations a bone can be
-         * in and orientations
-         * a bone cannot be in as defined by its representation as a point on
-         * the surface of a hypersphere.
-         */
+     * @return a measure of the rotational freedom afforded by this constraint.
+     * with 0 meaning no rotational freedom (the bone is essentially
+     * stationary in relation to its parent)
+     * and 1 meaning full rotational freedom (the bone is completely
+     * unconstrained).
+     * <p>
+     * This should be computed as ratio between orientations a bone can be
+     * in and orientations
+     * a bone cannot be in as defined by its representation as a point on
+     * the surface of a hypersphere.
+     */
     public float getRotationalFreedom() {
 
         // computation cached from updateRotationalFreedom
@@ -865,7 +857,7 @@ public class Kusudama implements Saveable {
      * kusudama has its own limiting axes specified,
      * replaces the bone's major rotation
      * axes with the Kusudamas limiting axes.
-     *
+     * <p>
      * otherwise, this function will set the kusudama's
      * limiting axes to the major rotation axes specified by the bone.
      *
@@ -886,12 +878,9 @@ public class Kusudama implements Saveable {
      * orientation and the constrained orientation for this bone
      * per iteration. This should help stabilize solutions somewhat by allowing for
      * soft constraint violations.
-     *
-     * @param strength a value between 0 and 1. Any other value will be clamped to
-     *                 this range.
      **/
-    public void setStrength(float newStrength) {
-        this.strength = MathUtils.max(0f, MathUtils.min(1f, newStrength));
+    public float getStrength() {
+        return this.strength;
     }
 
     /**
@@ -899,9 +888,12 @@ public class Kusudama implements Saveable {
      * orientation and the constrained orientation for this bone
      * per iteration. This should help stabilize solutions somewhat by allowing for
      * soft constraint violations.
+     *
+     * @param strength a value between 0 and 1. Any other value will be clamped to
+     *                 this range.
      **/
-    public float getStrength() {
-        return this.strength;
+    public void setStrength(float newStrength) {
+        this.strength = MathUtils.max(0f, MathUtils.min(1f, newStrength));
     }
 
     @Override
