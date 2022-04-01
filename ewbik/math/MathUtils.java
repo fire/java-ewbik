@@ -32,7 +32,6 @@ public final class MathUtils {
     static public final float PI = (float) Math.PI;
     static public final float PI2 = PI * 2f;
     static public final float HALF_PI = (float) (Math.PI / 2d);
-
     static public final float E = (float) Math.E;
     /**
      * multiply by this to convert from radians to degrees
@@ -44,10 +43,10 @@ public final class MathUtils {
      */
     static public final float degreesToRadians = PI / 180f;
     static public final float degRad = degreesToRadians;
+    static private final float degFull = 360;
     static private final int SIN_BITS = 9; // Adjust for accuracy (eats memory).
     static private final int SIN_MASK = ~(-1 << SIN_BITS);
     static private final int SIN_COUNT = SIN_MASK + 1;
-    static private final float degFull = 360;
     static private final float degToIndex = SIN_COUNT / degFull;
     static private final float radFull = PI * 2;
     static private final float radToIndex = SIN_COUNT / radFull;

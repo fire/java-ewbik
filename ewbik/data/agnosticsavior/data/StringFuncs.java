@@ -770,7 +770,6 @@ public class StringFuncs implements Constants {
 
     //  public String inputPath(String where) {
     //  }
-
     static public String[] sort(String list[]) {
         return sort(list, list.length);
     }
@@ -1088,7 +1087,6 @@ public class StringFuncs implements Constants {
 		    return ((what == 't') || (what == 'T') || (what == '1'));
 		  }
 		  */
-
     static final public char[] parseChar(byte what[]) {
         char outgoing[] = new char[what.length];
         for (int i = 0; i < what.length; i++) {
@@ -1130,6 +1128,7 @@ public class StringFuncs implements Constants {
      * Convert a byte array to a boolean array. Each element will be
      * evaluated identical to the integer case, where a byte equal
      * to zero will return false, and any other value will return true.
+     *
      * @return array of boolean elements
      */
 		  /*
@@ -1141,7 +1140,6 @@ public class StringFuncs implements Constants {
 		    return outgoing;
 		  }
 		  */
-
     static final public int parseInt(boolean what) {
         return what ? 1 : 0;
     }

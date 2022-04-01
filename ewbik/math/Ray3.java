@@ -797,6 +797,7 @@ public class Ray3 implements CanLoad {
 
         return (V) I.copy();
     }
+
     ;
 
     /* Find where this ray intersects a sphere

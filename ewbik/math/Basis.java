@@ -117,7 +117,6 @@ public class Basis {
     }
 
 
-
     public Basis copy() {
         return new ewbik.math.Basis(this);
     }

@@ -8,10 +8,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.function.Consumer;
-import ewbik.math.Basis;
-import  ewbik.math.Vector3;
-import ewbik.math.Quaternion;
-import ewbik.math.Basis;
 
 public class Transform3D implements ewbik.asj.Saveable {
 
@@ -75,10 +71,10 @@ public class Transform3D implements ewbik.asj.Saveable {
     }
 
     /**
-         * return a ray / segment representing this Axes global x basis position and direction and magnitude
-         *
-         * @return a ray / segment representing this Axes global x basis position and direction and magnitude
-         */
+     * return a ray / segment representing this Axes global x basis position and direction and magnitude
+     *
+     * @return a ray / segment representing this Axes global x basis position and direction and magnitude
+     */
     public Ray3 x_() {
         this.updateGlobal();
         return this.getGlobalMBasis().getXRay();
@@ -86,20 +82,20 @@ public class Transform3D implements ewbik.asj.Saveable {
 
 
     /**
-         * return a ray / segment representing this Axes global y basis position and direction and magnitude
-         *
-         * @return a ray / segment representing this Axes global y basis position and direction and magnitude
-         */
+     * return a ray / segment representing this Axes global y basis position and direction and magnitude
+     *
+     * @return a ray / segment representing this Axes global y basis position and direction and magnitude
+     */
     public Ray3 y_() {
         this.updateGlobal();
         return this.getGlobalMBasis().getYRay();
     }
 
     /**
-         * return a ray / segment representing this Axes global z basis position and direction and magnitude
-         *
-         * @return a ray / segment representing this Axes global z basis position and direction and magnitude
-         */
+     * return a ray / segment representing this Axes global z basis position and direction and magnitude
+     *
+     * @return a ray / segment representing this Axes global z basis position and direction and magnitude
+     */
     public Ray3 z_() {
         this.updateGlobal();
         return this.getGlobalMBasis().getZRay();
@@ -116,10 +112,10 @@ public class Transform3D implements ewbik.asj.Saveable {
     }
 
     /**
-         * Make a GlobalCopy of these Axes.
-         *
-         * @return
-         */
+     * Make a GlobalCopy of these Axes.
+     *
+     * @return
+     */
     public ewbik.math.Transform3D getGlobalCopy() {
         return new ewbik.math.Transform3D(getGlobalMBasis(), this.getParentAxes());
     }
@@ -133,11 +129,11 @@ public class Transform3D implements ewbik.asj.Saveable {
     }
 
     /**
-         * Creates an exact copy of this Axes object. Attached to the same parent as this Axes object
-         *
-         * @param slipAware
-         * @return
-         */
+     * Creates an exact copy of this Axes object. Attached to the same parent as this Axes object
+     *
+     * @param slipAware
+     * @return
+     */
     public ewbik.math.Transform3D attachedCopy(boolean slipAware) {
         this.updateGlobal();
         ewbik.math.Transform3D copy = new ewbik.math.Transform3D(getGlobalMBasis(),
@@ -909,21 +905,6 @@ public class Transform3D implements ewbik.asj.Saveable {
     public void parentChangeCompletionNotice(Transform3D warningBy, Transform3D oldParent, Transform3D intendedParent, Object requestedBy) {
     }
 
-    /**
-     * custom Weakreference extension for garbage collection
-     */
-    public class DependencyReference<E> extends WeakReference<E> {
-        public DependencyReference(E referent) {
-            super(referent);
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (o == this) return true;
-            if (o == this.get()) return true;
-            else return false;
-        }
-    }
     public void loadFromJSONObject(JSONObject j, LoadManager l) {
         Vector3 origin = new Vector3(j.getJSONArray("translation"));
         Quaternion rotation = new Quaternion(j.getJSONArray("rotation"));
@@ -940,5 +921,21 @@ public class Transform3D implements ewbik.asj.Saveable {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * custom Weakreference extension for garbage collection
+     */
+    public class DependencyReference<E> extends WeakReference<E> {
+        public DependencyReference(E referent) {
+            super(referent);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o == this) return true;
+            if (o == this.get()) return true;
+            else return false;
+        }
     }
 }

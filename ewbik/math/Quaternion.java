@@ -2270,6 +2270,7 @@ public class Quaternion {
     public void clampToAngle(float angle) {
         rotation.clampToAngle(angle);
     }
+
     public void clampToQuadranceAngle(float cosHalfAngle) {
         rotation.clampToQuadranceAngle(cosHalfAngle);
     }
