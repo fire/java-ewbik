@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.WeakHashMap;
 import ik.Bone;
+import ik.IKPin;
 
 public class EWBIKSaver extends SaveManager {
 
@@ -73,7 +74,7 @@ public class EWBIKSaver extends SaveManager {
                     kusudamaJSON.append(jsonObj);
                 if (AbstractLimitCone.class.isAssignableFrom(s.getClass()))
                     limitConeJSON.append(jsonObj);
-                if (AbstractIKPin.class.isAssignableFrom(s.getClass()))
+                if (IKPin.class.isAssignableFrom(s.getClass()))
                     IKPinsJSON.append(jsonObj);
             }
         }

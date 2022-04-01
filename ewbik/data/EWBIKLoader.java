@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import ik.Bone;
+import ik.IKPin;
 
 public class EWBIKLoader {
     FloatBackedLoader floatBackedLoader = new FloatBackedLoader();
@@ -38,7 +39,7 @@ public class EWBIKLoader {
      *                       AbstractLimitCone class. If null, AbstractLimitCone
      *                       will be used.
      * @param IKPinClass     the class object you've used to extend the
-     *                       AbstractIKPin class. If null, AbstractIKPin will be
+     *                       IKPin class. If null, IKPin will be
      *                       used.
      * @return a list of all instantiated armatures specified by the input file.
      */
@@ -49,7 +50,7 @@ public class EWBIKLoader {
                                                                                  Class<? extends AbstractSkeleton3D> ArmatureClass,
                                                                                  Class<? extends Constraint> KusudamaClass,
                                                                                  Class<? extends AbstractLimitCone> LimitConeClass,
-                                                                                 Class<? extends AbstractIKPin> IKPinClass) {
+                                                                                 Class<? extends IKPin> IKPinClass) {
         File selection = new File(filepath);
         JSONObject loadFile = StringFuncs.loadJSONObject(selection);
         clearCurrentLoadObjects();

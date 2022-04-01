@@ -55,7 +55,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     protected ArrayList<Bone> children = new ArrayList<>();
     protected ArrayList<Bone> freeChildren = new ArrayList<>();
     protected ArrayList<Bone> effectoredChildren = new ArrayList<>();
-    protected AbstractIKPin pin = null;
+    protected IKPin pin = null;
     protected boolean orientationLock = false;
     protected float stiffnessScalar = 0f;
 
@@ -1140,7 +1140,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         if (j.hasKey("constraints"))
             this.constraints = (Constraint) l.getObjectFromClassMaps(Constraint.class, j.getString("constraints"));
         if (j.hasKey("IKPin"))
-            this.pin = (AbstractIKPin) l.getObjectFromClassMaps(AbstractIKPin.class, j.getString("IKPin"));
+            this.pin = (IKPin) l.getObjectFromClassMaps(IKPin.class, j.getString("IKPin"));
         this.tag = j.getString("tag");
     }
 

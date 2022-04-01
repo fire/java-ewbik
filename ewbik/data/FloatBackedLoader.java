@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import ewbik.processing.singlePrecision.*;
 import ik.Bone;
+import ik.IKPin;
 
 public final class FloatBackedLoader extends LoadManager {
 
@@ -37,7 +38,7 @@ public final class FloatBackedLoader extends LoadManager {
     public HashMap<String, AbstractLimitCone> limitConeLoadObjects = new HashMap<>();
     public HashMap<String, JSONObject> limitConeJSONObjects = new HashMap<>();
 
-    public HashMap<String, AbstractIKPin> IKPinLoadObjects = new HashMap<>();
+    public HashMap<String, IKPin> IKPinLoadObjects = new HashMap<>();
     public HashMap<String, JSONObject> IKPinJSONObjects = new HashMap<>();
 
     public boolean fileCorruptionDetected = false;
@@ -56,7 +57,7 @@ public final class FloatBackedLoader extends LoadManager {
                                                              Class<? extends AbstractSkeleton3D> ArmatureClass,
                                                              Class<? extends Constraint> KusudamaClass,
                                                              Class<? extends AbstractLimitCone> LimitConeClass,
-                                                             Class<? extends AbstractIKPin> IKPinClass,
+                                                             Class<? extends IKPin> IKPinClass,
                                                              EWBIKLoader loader) {
         JSONObject loadFile = StringFuncs.loadJSONObject(selection);
         clearCurrentLoadObjects();
@@ -75,7 +76,7 @@ public final class FloatBackedLoader extends LoadManager {
                                                            Class<? extends AbstractSkeleton3D> ArmatureClass,
                                                            Class<? extends Constraint> KusudamaClass,
                                                            Class<? extends AbstractLimitCone> LimitConeClass,
-                                                           Class<? extends AbstractIKPin> IKPinClass) {
+                                                           Class<? extends IKPin> IKPinClass) {
         clearCurrentLoadObjects();
 
         AxesClass = AxesClass == null ? AbstractAxes.class : AxesClass;
@@ -83,7 +84,7 @@ public final class FloatBackedLoader extends LoadManager {
         ArmatureClass = ArmatureClass == null ? AbstractSkeleton3D.class : ArmatureClass;
         KusudamaClass = KusudamaClass == null ? Constraint.class : KusudamaClass;
         LimitConeClass = LimitConeClass == null ? AbstractLimitCone.class : LimitConeClass;
-        IKPinClass = IKPinClass == null ? AbstractIKPin.class : IKPinClass;
+        IKPinClass = IKPinClass == null ? IKPin.class : IKPinClass;
 
         createEmptyLoadMaps(axesJSONObjects, axesLoadObjects, loadFile.getJSONArray("axes"), AxesClass);
         createEmptyLoadMaps(boneJSONObjects, boneLoadObjects, loadFile.getJSONArray("bones"), BoneClass);
@@ -290,7 +291,7 @@ public final class FloatBackedLoader extends LoadManager {
             result = (Saveable) kusudamaLoadObjects.get(identityHash);
         else if (AbstractLimitCone.class.isAssignableFrom(keyClass))
             result = (Saveable) limitConeLoadObjects.get(identityHash);
-        else if (AbstractIKPin.class.isAssignableFrom(keyClass))
+        else if (IKPin.class.isAssignableFrom(keyClass))
             result = (Saveable) IKPinLoadObjects.get(identityHash);
 
         return result;

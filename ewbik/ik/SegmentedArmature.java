@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import ik.Bone;
+import ik.IKPin;
+
 /**s
  * @author Eron Gjoni
  */
@@ -149,36 +151,36 @@ public class SegmentedArmature {
         if (currentFalloff == 0) {
             return;
         } else {
-            AbstractIKPin pin = from.segmentTip.getIKPin();
+            IKPin pin = from.segmentTip.getIKPin();
             if (pin != null) {
                 ArrayList<Float> innerWeightArray = new ArrayList<Float>();
                 weightArray.add(innerWeightArray);
                 byte modeCode = pin.getModeCode();
                 innerWeightArray.add(pin.getPinWeight() * currentFalloff);
                 float maxPinWeight = 0f;
-                if ((modeCode & AbstractIKPin.XDir) != 0)
-                    maxPinWeight = MathUtils.max(maxPinWeight, pin.getXPriority());
-                if ((modeCode & AbstractIKPin.YDir) != 0)
-                    maxPinWeight = MathUtils.max(maxPinWeight, pin.getYPriority());
-                if ((modeCode & AbstractIKPin.ZDir) != 0)
-                    maxPinWeight = MathUtils.max(maxPinWeight, pin.getZPriority());
+                if ((modeCode & IKPin.XDir) != 0)
+                    maxPinWeight = ewbik.math.MathUtils.max(maxPinWeight, pin.getXPriority());
+                if ((modeCode & IKPin.YDir) != 0)
+                    maxPinWeight = ewbik.math.MathUtils.max(maxPinWeight, pin.getYPriority());
+                if ((modeCode & IKPin.ZDir) != 0)
+                    maxPinWeight = ewbik.math.MathUtils.max(maxPinWeight, pin.getZPriority());
 
                 if (maxPinWeight == 0f)
                     maxPinWeight = 1f;
 
                 maxPinWeight = 1f;
 
-                if ((modeCode & AbstractIKPin.XDir) != 0) {
+                if ((modeCode & IKPin.XDir) != 0) {
                     float subTargetWeight = pin.getPinWeight() * (pin.getXPriority() / maxPinWeight) * currentFalloff;
                     innerWeightArray.add(subTargetWeight);
                     innerWeightArray.add(subTargetWeight);
                 }
-                if ((modeCode & AbstractIKPin.YDir) != 0) {
+                if ((modeCode & IKPin.YDir) != 0) {
                     float subTargetWeight = pin.getPinWeight() * (pin.getYPriority() / maxPinWeight) * currentFalloff;
                     innerWeightArray.add(subTargetWeight);
                     innerWeightArray.add(subTargetWeight);
                 }
-                if ((modeCode & AbstractIKPin.ZDir) != 0) {
+                if ((modeCode & IKPin.ZDir) != 0) {
                     float subTargetWeight = pin.getPinWeight() * (pin.getZPriority() / maxPinWeight) * currentFalloff;
                     innerWeightArray.add(subTargetWeight);
                     innerWeightArray.add(subTargetWeight);
@@ -439,7 +441,7 @@ public class SegmentedArmature {
         int hdx = 0;
         for (int i = 0; i < pinnedBones.length; i++) {
             WorkingBone sb = pinnedBones[i];
-            AbstractIKPin pin = sb.forBone.getIKPin();
+            IKPin pin = sb.forBone.getIKPin();
             AbstractAxes targetAxes = pin.forBone.getPinnedAxes();
             targetAxes.updateGlobal();
             Vec3f<?> origin = thisBoneAxes.origin_();
@@ -447,19 +449,19 @@ public class SegmentedArmature {
             byte modeCode = pin.getModeCode();
             hdx++;
 
-            if ((modeCode & AbstractIKPin.XDir) != 0) {
+            if ((modeCode & IKPin.XDir) != 0) {
                 Ray3 xTarget = targetAxes.x_().getRayScaledBy(weights[hdx]);
                 localizedTargetHeadings[hdx].set(xTarget.p2()).sub(origin);
                 xTarget.setToInvertedTip(localizedTargetHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
-            if ((modeCode & AbstractIKPin.YDir) != 0) {
+            if ((modeCode & IKPin.YDir) != 0) {
                 Ray3 yTarget = targetAxes.y_().getRayScaledBy(weights[hdx]);
                 localizedTargetHeadings[hdx] = Vec3f.sub(yTarget.p2(), origin);
                 yTarget.setToInvertedTip(localizedTargetHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
-            if ((modeCode & AbstractIKPin.ZDir) != 0) {
+            if ((modeCode & IKPin.ZDir) != 0) {
                 Ray3 zTarget = targetAxes.z_().getRayScaledBy(weights[hdx]);
                 localizedTargetHeadings[hdx] = Vec3f.sub(zTarget.p2(), origin);
                 zTarget.setToInvertedTip(localizedTargetHeadings[hdx + 1]).sub(origin);
@@ -474,7 +476,7 @@ public class SegmentedArmature {
 
         for (int i = 0; i < pinnedBones.length; i++) {
             WorkingBone sb = pinnedBones[i];
-            AbstractIKPin pin = sb.forBone.getIKPin();
+            IKPin pin = sb.forBone.getIKPin();
             AbstractAxes tipAxes = sb.simLocalAxes;
             tipAxes.updateGlobal();
             Vec3f<?> origin = thisBoneAxes.origin_();
@@ -485,19 +487,19 @@ public class SegmentedArmature {
             float scaleBy = thisBoneAxes.origin_().dist(targetAxes.origin_());
             hdx++;
 
-            if ((modeCode & AbstractIKPin.XDir) != 0) {
+            if ((modeCode & IKPin.XDir) != 0) {
                 Ray3 xTip = tipAxes.x_().getRayScaledBy(scaleBy);
                 localizedTipHeadings[hdx].set(xTip.p2()).sub(origin);
                 xTip.setToInvertedTip(localizedTipHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
-            if ((modeCode & AbstractIKPin.YDir) != 0) {
+            if ((modeCode & IKPin.YDir) != 0) {
                 Ray3 yTip = tipAxes.y_().getRayScaledBy(scaleBy);
                 localizedTipHeadings[hdx].set(yTip.p2()).sub(origin);
                 yTip.setToInvertedTip(localizedTipHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
-            if ((modeCode & AbstractIKPin.ZDir) != 0) {
+            if ((modeCode & IKPin.ZDir) != 0) {
                 Ray3 zTip = tipAxes.z_().getRayScaledBy(scaleBy);
                 localizedTipHeadings[hdx].set(zTip.p2()).sub(origin);
                 zTip.setToInvertedTip(localizedTipHeadings[hdx + 1]).sub(origin);

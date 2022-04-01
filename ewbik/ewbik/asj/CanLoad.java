@@ -1,7 +1,5 @@
 package ewbik.asj;
 
-import ewbik.asj.data.JSONObject;
-
 /**
  * This interface defines objects which can self populate from JSONObjects but don't
  * need to register themselves with the savestate tracker.
@@ -13,8 +11,8 @@ public interface CanLoad {
      * @param j
      * @return should return an instance of itself for chaining
      */
-    public CanLoad populateSelfFromJSON(JSONObject j);
+    public CanLoad populateSelfFromJSON(ewbik.asj.data.JSONObject j);
 
-    public JSONObject toJSONObject();
+    public ewbik.asj.data.JSONObject toJSONObject();
 
 }

@@ -8,6 +8,7 @@ import ewbik.asj.data.StringFuncs;
 import ewbik.ik.*;
 import ewbik.math.AbstractAxes;
 import ik.Bone;
+import ik.IKPin;
 
 import java.io.File;
 import java.io.IOException;
@@ -85,7 +86,7 @@ public class FloatBackedSaver extends SaveManager {
                     kusudamaJSON.append(jsonObj);
                 if (AbstractLimitCone.class.isAssignableFrom(s.getClass()))
                     limitConeJSON.append(jsonObj);
-                if (AbstractIKPin.class.isAssignableFrom(s.getClass()))
+                if (IKPin.class.isAssignableFrom(s.getClass()))
                     IKPinsJSON.append(jsonObj);
             }
         }

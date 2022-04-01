@@ -463,7 +463,7 @@ public abstract class AbstractSkeleton3D implements Saveable {
         }
     }
 
-    void rootwardlyUpdateFalloffCacheFrom(Bone forBone) {
+    public void rootwardlyUpdateFalloffCacheFrom(Bone forBone) {
         SegmentedArmature current = boneSegmentMap.get(forBone);
         while (current != null) {
             current.createHeadingArrays();
