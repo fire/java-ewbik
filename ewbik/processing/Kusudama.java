@@ -44,7 +44,7 @@ public class Kusudama implements Saveable {
     public static final float PI = MathUtils.PI;
     public static PShader kusudamaShader;
     public static PShader currentShader;
-    protected ewbik.processing.sceneGraph.Transform3D limitingTransform3D;
+    protected ewbik.processing.sceneGraph.Node3D limitingNode3D;
     protected float painfullness;
     /**
      * An array containing all of the Kusudama's limitCones. The kusudama is built
@@ -109,7 +109,7 @@ public class Kusudama implements Saveable {
      */
     public Kusudama(Bone forBone) {
         this.attachedTo = forBone;
-        this.limitingTransform3D = forBone.getMajorRotationAxes();
+        this.limitingNode3D = forBone.getMajorRotationAxes();
         this.attachedTo.addConstraint(this);
         this.enable();
     }
@@ -118,7 +118,7 @@ public class Kusudama implements Saveable {
      * {@inheritDoc}
      **/
     public ewbik.processing.singlePrecision.LimitCone createLimitConeForIndex(int insertAt, Vector3 newPoint, float radius) {
-        return new LimitCone(ewbik.processing.sceneGraph.Transform3D.toPVector(newPoint), radius, this);
+        return new LimitCone(ewbik.processing.sceneGraph.Node3D.toPVector(newPoint), radius, this);
     }
 
     /**
@@ -138,12 +138,12 @@ public class Kusudama implements Saveable {
      * @param radius   the radius of the limitCone
      */
     public void addLimitConeAtIndex(int insertAt, PVector newPoint, float radius) {
-        addLimitConeAtIndex(insertAt, ewbik.processing.sceneGraph.Transform3D.toVec3f(newPoint), radius);
+        addLimitConeAtIndex(insertAt, ewbik.processing.sceneGraph.Node3D.toVec3f(newPoint), radius);
     }
 
     public boolean isInLimits(PVector inPoint) {
         return isInLimits_(
-                ewbik.processing.sceneGraph.Transform3D.toVec3f(inPoint));
+                ewbik.processing.sceneGraph.Node3D.toVec3f(inPoint));
     }
 
     public void drawMe(PGraphics p, int boneCol, float pinSize) {
@@ -185,7 +185,7 @@ public class Kusudama implements Saveable {
         p.sphereDetail(30);
         p.sphere((float) attachedTo().getBoneHeight() / 3.5f);
         p.resetShader();
-        Quaternion alignRot = limitingTransform3D.getGlobalMBasis().getInverseRotation()
+        Quaternion alignRot = limitingNode3D.getGlobalMBasis().getInverseRotation()
                 .applyTo(attachedTo().localAxes().getGlobalMBasis().rotation);
 
         Quaternion[] decomposition = alignRot.getSwingTwist(new ewbik.math.Vector3(0, 1, 0));
@@ -209,9 +209,9 @@ public class Kusudama implements Saveable {
 
         int idx = 0;
         for (LimitCone lc : getLimitCones()) {
-            PVector controlPoint = ewbik.processing.sceneGraph.Transform3D.toPVector(lc.getControlPoint());
-            PVector leftTangent = ewbik.processing.sceneGraph.Transform3D.toPVector(lc.tangentCircleCenterNext1);
-            PVector rightTangent = ewbik.processing.sceneGraph.Transform3D.toPVector(lc.tangentCircleCenterNext2);
+            PVector controlPoint = ewbik.processing.sceneGraph.Node3D.toPVector(lc.getControlPoint());
+            PVector leftTangent = ewbik.processing.sceneGraph.Node3D.toPVector(lc.tangentCircleCenterNext1);
+            PVector rightTangent = ewbik.processing.sceneGraph.Node3D.toPVector(lc.tangentCircleCenterNext2);
             leftTangent = leftTangent.normalize();
             controlPoint = controlPoint.normalize();
             rightTangent = rightTangent.normalize();
@@ -242,9 +242,9 @@ public class Kusudama implements Saveable {
      * majorRotationAxes)
      */
     @SuppressWarnings("unchecked")
-    public ewbik.processing.sceneGraph.Transform3D limitingAxes() {
+    public ewbik.processing.sceneGraph.Node3D limitingAxes() {
         // if(inverted) return inverseLimitingAxes;
-        return (ewbik.processing.sceneGraph.Transform3D) (ewbik.processing.sceneGraph.Transform3D) limitingTransform3D;
+        return (ewbik.processing.sceneGraph.Node3D) (ewbik.processing.sceneGraph.Node3D) limitingNode3D;
     }
 
     public void updateTangentRadii() {
@@ -281,7 +281,7 @@ public class Kusudama implements Saveable {
      * constraint.
      */
     public void optimizeLimitingAxes() {
-        ewbik.processing.sceneGraph.Transform3D originalLimitingTransform3D = limitingTransform3D.getGlobalCopy();
+        ewbik.processing.sceneGraph.Node3D originalLimitingNode3D = limitingNode3D.getGlobalCopy();
 
         ArrayList<Vector3> directions = new ArrayList<>();
         if (getLimitCones().size() == 1) {
@@ -314,12 +314,12 @@ public class Kusudama implements Saveable {
 
         Ray3 newYRay = new Ray3(new Vector3(0, 0, 0), newY);
 
-        Quaternion oldYtoNewY = new Quaternion(limitingTransform3D.y_().heading(), originalLimitingTransform3D.getGlobalOf(newYRay).heading());
-        limitingTransform3D.rotateBy(oldYtoNewY);
+        Quaternion oldYtoNewY = new Quaternion(limitingNode3D.y_().heading(), originalLimitingNode3D.getGlobalOf(newYRay).heading());
+        limitingNode3D.rotateBy(oldYtoNewY);
 
         for (ewbik.processing.singlePrecision.LimitCone lc : getLimitCones()) {
-            originalLimitingTransform3D.setToGlobalOf(lc.getControlPoint(), lc.getControlPoint());
-            limitingTransform3D.setToLocalOf(lc.getControlPoint(), lc.getControlPoint());
+            originalLimitingNode3D.setToGlobalOf(lc.getControlPoint(), lc.getControlPoint());
+            limitingNode3D.setToLocalOf(lc.getControlPoint(), lc.getControlPoint());
             lc.getControlPoint().normalize();
         }
 
@@ -333,10 +333,10 @@ public class Kusudama implements Saveable {
     public void snapToLimits() {
         // System.out.println("snapping to limits");
         if (orientationallyConstrained) {
-            setAxesToOrientationSnap(attachedTo().localAxes(), limitingTransform3D, 0);
+            setAxesToOrientationSnap(attachedTo().localAxes(), limitingNode3D, 0);
         }
         if (axiallyConstrained) {
-            snapToTwistLimits(attachedTo().localAxes(), limitingTransform3D);
+            snapToTwistLimits(attachedTo().localAxes(), limitingNode3D);
         }
     }
 
@@ -346,24 +346,24 @@ public class Kusudama implements Saveable {
      *
      * @param toSet
      */
-    public void setAxesToSnapped(ewbik.processing.sceneGraph.Transform3D toSet, ewbik.processing.sceneGraph.Transform3D limitingTransform3D, float cosHalfAngleDampen) {
-        if (limitingTransform3D != null) {
+    public void setAxesToSnapped(ewbik.processing.sceneGraph.Node3D toSet, ewbik.processing.sceneGraph.Node3D limitingNode3D, float cosHalfAngleDampen) {
+        if (limitingNode3D != null) {
             if (orientationallyConstrained) {
-                setAxesToOrientationSnap(toSet, limitingTransform3D, cosHalfAngleDampen);
+                setAxesToOrientationSnap(toSet, limitingNode3D, cosHalfAngleDampen);
             }
             if (axiallyConstrained) {
-                snapToTwistLimits(toSet, limitingTransform3D);
+                snapToTwistLimits(toSet, limitingNode3D);
             }
         }
     }
 
-    public void setAxesToReturnfulled(ewbik.processing.sceneGraph.Transform3D toSet, ewbik.processing.sceneGraph.Transform3D limitingTransform3D, float cosHalfReturnfullness,
+    public void setAxesToReturnfulled(ewbik.processing.sceneGraph.Node3D toSet, ewbik.processing.sceneGraph.Node3D limitingNode3D, float cosHalfReturnfullness,
                                       float angleReturnfullness) {
-        if (limitingTransform3D != null && painfullness > 0f) {
+        if (limitingNode3D != null && painfullness > 0f) {
             if (orientationallyConstrained) {
                 Vector3 origin = toSet.origin_();
                 Vector3 inPoint = toSet.y_().p2().copy();
-                Vector3 pathPoint = pointOnPathSequence(inPoint, limitingTransform3D);
+                Vector3 pathPoint = pointOnPathSequence(inPoint, limitingNode3D);
                 inPoint.sub(origin);
                 pathPoint.sub(origin);
                 Quaternion toClamp = new Quaternion(inPoint, pathPoint);
@@ -371,7 +371,7 @@ public class Kusudama implements Saveable {
                 toSet.rotateBy(toClamp);
             }
             if (axiallyConstrained) {
-                float angleToTwistMid = angleToTwistCenter(toSet, limitingTransform3D);
+                float angleToTwistMid = angleToTwistCenter(toSet, limitingNode3D);
                 float clampedAngle = MathUtils.clamp(angleToTwistMid, -angleReturnfullness, angleReturnfullness);
                 toSet.rotateAboutY(clampedAngle, false);
             }
@@ -418,7 +418,7 @@ public class Kusudama implements Saveable {
         float[] inBounds = {1f};
         // boneRay.p1.set(toSet.origin());
         // boneRay.p2.set(toSet.y().getScaledTo(attachedTo.boneHeight));
-        Vector3 inLimits = this.pointInLimits(limitingTransform3D.getLocalOf(globalPoint), inBounds);
+        Vector3 inLimits = this.pointInLimits(limitingNode3D.getLocalOf(globalPoint), inBounds);
         return inBounds[0] > 0f;
     }
 
@@ -428,28 +428,28 @@ public class Kusudama implements Saveable {
      *
      * @param toSet
      */
-    public void setAxesToOrientationSnap(ewbik.processing.sceneGraph.Transform3D toSet, ewbik.processing.sceneGraph.Transform3D limitingTransform3D, float cosHalfAngleDampen) {
+    public void setAxesToOrientationSnap(ewbik.processing.sceneGraph.Node3D toSet, ewbik.processing.sceneGraph.Node3D limitingNode3D, float cosHalfAngleDampen) {
         float[] inBounds = {1f};
-        limitingTransform3D.updateGlobal();
-        boneRay.p1().set(limitingTransform3D.origin_());
+        limitingNode3D.updateGlobal();
+        boneRay.p1().set(limitingNode3D.origin_());
         boneRay.p2().set(toSet.y_().p2());
-        Vector3 bonetip = limitingTransform3D.getLocalOf(toSet.y_().p2());
+        Vector3 bonetip = limitingNode3D.getLocalOf(toSet.y_().p2());
         Vector3 inLimits = this.pointInLimits(bonetip, inBounds);
 
         if (inBounds[0] == -1 && inLimits != null) {
             constrainedRay.p1().set(boneRay.p1());
-            constrainedRay.p2().set(limitingTransform3D.getGlobalOf(inLimits));
+            constrainedRay.p2().set(limitingNode3D.getGlobalOf(inLimits));
             Quaternion rectifiedRot = new Quaternion(boneRay.heading(), constrainedRay.heading());
             toSet.rotateBy(rectifiedRot);
             toSet.updateGlobal();
         }
     }
 
-    public boolean isInOrientationLimits(ewbik.processing.sceneGraph.Transform3D globalTransform3D, ewbik.processing.sceneGraph.Transform3D limitingTransform3D) {
+    public boolean isInOrientationLimits(ewbik.processing.sceneGraph.Node3D globalNode3D, ewbik.processing.sceneGraph.Node3D limitingNode3D) {
         float[] inBounds = {1f};
         // boneRay.p1().set(globalAxes.origin_());
         // boneRay.p2().set(globalAxes.y_().getScaledTo(attachedTo.boneHeight));
-        Vector3 inLimits = this.pointInLimits(limitingTransform3D.getLocalOf(globalTransform3D.y_().p2()), inBounds);
+        Vector3 inLimits = this.pointInLimits(limitingNode3D.getLocalOf(globalNode3D.y_().p2()), inBounds);
         if (inBounds[0] == -1l) {
             return false;
         } else {
@@ -485,16 +485,16 @@ public class Kusudama implements Saveable {
 
     /**
      * @param toSet
-     * @param limitingTransform3D
+     * @param limitingNode3D
      * @return radians of twist required to snap bone into twist limits (0 if bone
      * is already in twist limits)
      */
-    public float snapToTwistLimits(ewbik.processing.sceneGraph.Transform3D toSet, ewbik.processing.sceneGraph.Transform3D limitingTransform3D) {
+    public float snapToTwistLimits(ewbik.processing.sceneGraph.Node3D toSet, ewbik.processing.sceneGraph.Node3D limitingNode3D) {
 
         if (!axiallyConstrained)
             return 0f;
 
-        Quaternion alignRot = limitingTransform3D.getGlobalMBasis().getInverseRotation().applyTo(toSet.getGlobalMBasis().rotation);
+        Quaternion alignRot = limitingNode3D.getGlobalMBasis().getInverseRotation().applyTo(toSet.getGlobalMBasis().rotation);
         Quaternion[] decomposition = alignRot.getSwingTwist(new Vector3(0, 1, 0));
         float angleDelta2 = decomposition[1].getAngle() * decomposition[1].getAxis().y * -1f;
         angleDelta2 = toTau(angleDelta2);
@@ -506,7 +506,7 @@ public class Kusudama implements Saveable {
             float turnDiff = 1f;
             // uncomment the next line for reflectable axis support (removed for performance
             // reasons)
-            turnDiff *= limitingTransform3D.getGlobalChirality();
+            turnDiff *= limitingNode3D.getGlobalChirality();
             if (distToMin < distToMax) {
                 turnDiff = turnDiff * (fromMinToAngleDelta);
                 toSet.rotateAboutY(turnDiff, true);
@@ -521,12 +521,12 @@ public class Kusudama implements Saveable {
         // return 0;
     }
 
-    public float angleToTwistCenter(ewbik.processing.sceneGraph.Transform3D toSet, ewbik.processing.sceneGraph.Transform3D limitingTransform3D) {
+    public float angleToTwistCenter(ewbik.processing.sceneGraph.Node3D toSet, ewbik.processing.sceneGraph.Node3D limitingNode3D) {
 
         if (!axiallyConstrained)
             return 0f;
 
-        Quaternion alignRot = limitingTransform3D.getGlobalMBasis().getInverseRotation().applyTo(toSet.getGlobalMBasis().rotation);
+        Quaternion alignRot = limitingNode3D.getGlobalMBasis().getInverseRotation().applyTo(toSet.getGlobalMBasis().rotation);
         Quaternion[] decomposition = alignRot.getSwingTwist(new Vector3(0, 1, 0));
         float angleDelta2 = decomposition[1].getAngle() * decomposition[1].getAxis().y * -1f;
         angleDelta2 = toTau(angleDelta2);
@@ -536,16 +536,16 @@ public class Kusudama implements Saveable {
 
     }
 
-    public boolean inTwistLimits(ewbik.processing.sceneGraph.Transform3D boneTransform3D, ewbik.processing.sceneGraph.Transform3D limitingTransform3D) {
+    public boolean inTwistLimits(ewbik.processing.sceneGraph.Node3D boneNode3D, ewbik.processing.sceneGraph.Node3D limitingNode3D) {
 
-        limitingTransform3D.updateGlobal();
-        Quaternion alignRot = limitingTransform3D.getGlobalMBasis().getInverseRotation().applyTo(boneTransform3D.globalMBasis.rotation);
+        limitingNode3D.updateGlobal();
+        Quaternion alignRot = limitingNode3D.getGlobalMBasis().getInverseRotation().applyTo(boneNode3D.globalMBasis.rotation);
         Quaternion[] decomposition = alignRot.getSwingTwist(new Vector3(0, 1, 0));
 
         float angleDelta = decomposition[1].getAngle() * decomposition[1].getAxis().y * -1;
         // uncomment the next line for reflectable axis support (removed for performance
         // reasons)
-        angleDelta *= limitingTransform3D.getGlobalChirality() * (limitingTransform3D.isGlobalAxisFlipped(ewbik.processing.sceneGraph.Transform3D.Y) ? -1 : 1);
+        angleDelta *= limitingNode3D.getGlobalChirality() * (limitingNode3D.isGlobalAxisFlipped(ewbik.processing.sceneGraph.Node3D.Y) ? -1 : 1);
         ;
 
         angleDelta = toTau(angleDelta);
@@ -645,9 +645,9 @@ public class Kusudama implements Saveable {
         }
     }
 
-    public <V extends Vector3> Vector3 pointOnPathSequence(V inPoint, ewbik.processing.sceneGraph.Transform3D limitingTransform3D) {
+    public <V extends Vector3> Vector3 pointOnPathSequence(V inPoint, ewbik.processing.sceneGraph.Node3D limitingNode3D) {
         float closestPointDot = 0f;
-        Vector3 point = limitingTransform3D.getLocalOf(inPoint);
+        Vector3 point = limitingNode3D.getLocalOf(inPoint);
         point.normalize();
         Vector3 result = (Vector3) point.copy();
 
@@ -665,7 +665,7 @@ public class Kusudama implements Saveable {
             }
         }
 
-        return limitingTransform3D.getGlobalOf(result);
+        return limitingNode3D.getGlobalOf(result);
     }
 
     public Bone attachedTo() {
@@ -863,11 +863,11 @@ public class Kusudama implements Saveable {
      */
     public void attachTo(Bone forBone) {
         this.attachedTo = forBone;
-        if (this.limitingTransform3D == null)
-            this.limitingTransform3D = forBone.getMajorRotationAxes();
+        if (this.limitingNode3D == null)
+            this.limitingNode3D = forBone.getMajorRotationAxes();
         else {
-            forBone.setFrameofRotation(this.limitingTransform3D);
-            this.limitingTransform3D = forBone.getMajorRotationAxes();
+            forBone.setFrameofRotation(this.limitingNode3D);
+            this.limitingNode3D = forBone.getMajorRotationAxes();
         }
     }
 
@@ -919,7 +919,7 @@ public class Kusudama implements Saveable {
 
     public void loadFromJSONObject(ewbik.asj.data.JSONObject j, LoadManager l) {
         this.attachedTo = l.getObjectFor(Bone.class, j, "attachedTo");
-        this.limitingTransform3D = l.getObjectFor(ewbik.processing.sceneGraph.Transform3D.class, j, "limitAxes");
+        this.limitingNode3D = l.getObjectFor(ewbik.processing.sceneGraph.Node3D.class, j, "limitAxes");
         limitCones = new ArrayList<>();
         l.arrayListFromJSONArray(j.getJSONArray("limitCones"), limitCones, ewbik.processing.singlePrecision.LimitCone.class);
         this.minAxialAngle = j.getFloat("minAxialAngle");

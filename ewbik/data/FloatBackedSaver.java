@@ -75,7 +75,7 @@ public class FloatBackedSaver extends SaveManager {
         for (Saveable s : sk) {
             JSONObject jsonObj = s.getSaveJSON(this);
             if (jsonObj != null) {
-                if (ewbik.processing.sceneGraph.Transform3D.class.isAssignableFrom(s.getClass()))
+                if (ewbik.processing.sceneGraph.Node3D.class.isAssignableFrom(s.getClass()))
                     axesJSON.append(jsonObj);
                 if (Skeleton3D.class.isAssignableFrom(s.getClass()))
                     armaturesJSON.append(jsonObj);

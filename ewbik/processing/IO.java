@@ -21,7 +21,7 @@ public final class IO {
         EWBIKLoader newLoader = new EWBIKLoader();
         @SuppressWarnings("unchecked")
         Collection<Skeleton3D> ArmatureList = (Collection<Skeleton3D>) newLoader.importSinglePrecisionArmatures(path,
-                ewbik.processing.sceneGraph.Transform3D.class, Bone.class, Skeleton3D.class, ewbik.processing.singlePrecision.Kusudama.class, ewbik.processing.singlePrecision.LimitCone.class, IKPin.class);
+                ewbik.processing.sceneGraph.Node3D.class, Bone.class, Skeleton3D.class, ewbik.processing.singlePrecision.Kusudama.class, ewbik.processing.singlePrecision.LimitCone.class, IKPin.class);
         for (Skeleton3D a : ArmatureList) {
             return a;
         }

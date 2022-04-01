@@ -73,27 +73,27 @@ public class UI {
 
     public void drawPins(PGraphics pg, IKPin activePin,
                          float zoomScalar, float drawSize,
-                         boolean cubeMode, ewbik.processing.sceneGraph.Transform3D cubeTransform3D) {
+                         boolean cubeMode, ewbik.processing.sceneGraph.Node3D cubeNode3D) {
 
         if (activePin != null) {
-            ewbik.processing.sceneGraph.Transform3D ellipseAx;
-            ellipseAx = cubeMode ? cubeTransform3D : activePin.getAxes();
+            ewbik.processing.sceneGraph.Node3D ellipseAx;
+            ellipseAx = cubeMode ? cubeNode3D : activePin.getAxes();
             PVector pinLoc = screenOf(pg, ellipseAx.origin(), zoomScalar);
-            PVector pinX = screenOf(pg, ewbik.processing.sceneGraph.Transform3D.toPVector(ellipseAx.x_().getScaledTo(drawSize)), zoomScalar);
-            PVector pinY = screenOf(pg, ewbik.processing.sceneGraph.Transform3D.toPVector(ellipseAx.y_().getScaledTo(drawSize)), zoomScalar);
-            PVector pinZ = screenOf(pg, ewbik.processing.sceneGraph.Transform3D.toPVector(ellipseAx.z_().getScaledTo(drawSize)), zoomScalar);
+            PVector pinX = screenOf(pg, ewbik.processing.sceneGraph.Node3D.toPVector(ellipseAx.x_().getScaledTo(drawSize)), zoomScalar);
+            PVector pinY = screenOf(pg, ewbik.processing.sceneGraph.Node3D.toPVector(ellipseAx.y_().getScaledTo(drawSize)), zoomScalar);
+            PVector pinZ = screenOf(pg, ewbik.processing.sceneGraph.Node3D.toPVector(ellipseAx.z_().getScaledTo(drawSize)), zoomScalar);
             pg.fill(255, 255, 255, 150);
             pg.stroke(255, 0, 255);
             float totalPriorities = activePin.getXPriority() + activePin.getYPriority()
                     + activePin.getZPriority();
             pg.ellipse(pinLoc.x, pinLoc.y, zoomScalar * 50, zoomScalar * 50);
 
-            PVector effectorO = screenOf(pg, ewbik.processing.sceneGraph.Transform3D.toPVector(activePin.forBone().localAxes().origin_()), zoomScalar);
-            PVector effectorX = screenOf(pg, ewbik.processing.sceneGraph.Transform3D.toPVector(activePin.forBone().localAxes().x_().getScaledTo(drawSize)),
+            PVector effectorO = screenOf(pg, ewbik.processing.sceneGraph.Node3D.toPVector(activePin.forBone().localAxes().origin_()), zoomScalar);
+            PVector effectorX = screenOf(pg, ewbik.processing.sceneGraph.Node3D.toPVector(activePin.forBone().localAxes().x_().getScaledTo(drawSize)),
                     zoomScalar);
-            PVector effectorY = screenOf(pg, ewbik.processing.sceneGraph.Transform3D.toPVector(activePin.forBone().localAxes().y_().getScaledTo(drawSize)),
+            PVector effectorY = screenOf(pg, ewbik.processing.sceneGraph.Node3D.toPVector(activePin.forBone().localAxes().y_().getScaledTo(drawSize)),
                     zoomScalar);
-            PVector effectorZ = screenOf(pg, ewbik.processing.sceneGraph.Transform3D.toPVector(activePin.forBone().localAxes().z_().getScaledTo(drawSize)),
+            PVector effectorZ = screenOf(pg, ewbik.processing.sceneGraph.Node3D.toPVector(activePin.forBone().localAxes().z_().getScaledTo(drawSize)),
                     zoomScalar);
             pg.stroke(255, 255, 255, 150);
 
@@ -148,7 +148,7 @@ public class UI {
                           Runnable additionalDraw,
                           Skeleton3D armature,
                           String usageInstructions,
-                          IKPin activePin, ewbik.processing.sceneGraph.Transform3D cubeTransform3D, boolean cubeEnabled) {
+                          IKPin activePin, ewbik.processing.sceneGraph.Node3D cubeNode3D, boolean cubeEnabled) {
         currentDrawSurface = display;
         display.beginDraw();
         setSceneAndCamera(display, zoomScalar);
@@ -161,13 +161,13 @@ public class UI {
         pa.imageMode(PConstants.CENTER);
         pa.image(display, 0, 0, orthoWidth, orthoHeight);
         pa.resetMatrix();
-        drawPins(pa.g, activePin, zoomScalar, drawSize, cubeEnabled, cubeTransform3D);
+        drawPins(pa.g, activePin, zoomScalar, drawSize, cubeEnabled, cubeNode3D);
         pa.resetMatrix();
         float cx = pa.width;
         float cy = pa.height;
         pa.ortho(-cx / 2f, cx / 2f, -cy / 2f, cy / 2f, -1000, 1000);
         drawInstructions(pa.g, usageInstructions);
-        drawPins(pa.g, activePin, drawSize, zoomScalar, cubeEnabled, cubeTransform3D);
+        drawPins(pa.g, activePin, drawSize, zoomScalar, cubeEnabled, cubeNode3D);
         drawInstructions(pa.g, usageInstructions);
 
     }

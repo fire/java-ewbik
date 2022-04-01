@@ -41,8 +41,8 @@ public class ShadowSkeleton3D {
     public ArrayList<Bone> segmentBoneList = new ArrayList<Bone>();
     public int distanceToRoot = 0;
     public int chainLength = 0;
-    public ewbik.processing.sceneGraph.Transform3D debugTipTransform3D;
-    public ewbik.processing.sceneGraph.Transform3D debugTargetTransform3D;
+    public ewbik.processing.sceneGraph.Node3D debugTipNode3D;
+    public ewbik.processing.sceneGraph.Node3D debugTargetNode3D;
     WorkingBone[] pinnedBones;
     boolean includeInIK = true;
     int pinDepth = 1;
@@ -207,14 +207,14 @@ public class ShadowSkeleton3D {
         recursivelyEnsureAxesHeirarchyFor(rootStrand.segmentRoot, rootStrand.segmentRoot.parentArmature.localAxes());
     }
 
-    private void recursivelyEnsureAxesHeirarchyFor(Bone b, ewbik.processing.sceneGraph.Transform3D parentTo) {
+    private void recursivelyEnsureAxesHeirarchyFor(Bone b, ewbik.processing.sceneGraph.Node3D parentTo) {
         ewbik.ik.ShadowSkeleton3D chain = getChainFor(b);
         if (chain != null) {
             WorkingBone sb = chain.simulatedBones.get(b);
-            sb.simLocalTransform3D.setParent(parentTo);
-            sb.simConstraintTransform3D.setParent(parentTo);
+            sb.simLocalNode3D.setParent(parentTo);
+            sb.simConstraintNode3D.setParent(parentTo);
             for (Bone c : b.getChildren()) {
-                chain.recursivelyEnsureAxesHeirarchyFor(c, sb.simLocalTransform3D);
+                chain.recursivelyEnsureAxesHeirarchyFor(c, sb.simLocalNode3D);
             }
         }
     }
@@ -230,8 +230,8 @@ public class ShadowSkeleton3D {
 
     public void generateSegmentMaps() {
         for (WorkingBone b : simulatedBones.values()) {
-            b.simConstraintTransform3D.emancipate();
-            b.simLocalTransform3D.emancipate();
+            b.simConstraintNode3D.emancipate();
+            b.simLocalNode3D.emancipate();
         }
         simulatedBones.clear();
         segmentBoneList.clear();
@@ -331,10 +331,10 @@ public class ShadowSkeleton3D {
             float totalIterations) {
 
         WorkingBone sb = simulatedBones.get(forBone);
-        ewbik.processing.sceneGraph.Transform3D thisBoneTransform3D = sb.simLocalTransform3D;
-        thisBoneTransform3D.updateGlobal();
+        ewbik.processing.sceneGraph.Node3D thisBoneNode3D = sb.simLocalNode3D;
+        thisBoneNode3D.updateGlobal();
 
-        Quaternion bestOrientation = new Quaternion(thisBoneTransform3D.getGlobalMBasis().rotation.rotation);
+        Quaternion bestOrientation = new Quaternion(thisBoneNode3D.getGlobalMBasis().rotation.rotation);
         float newDampening = -1;
         if (forBone.getParent() == null || localizedTargetHeadings.length == 1)
             stabilizationPasses = 0;
@@ -342,8 +342,8 @@ public class ShadowSkeleton3D {
             newDampening = MathUtils.PI;
         }
 
-        updateTargetHeadings(localizedTargetHeadings, weights, thisBoneTransform3D);
-        upateTipHeadings(localizedTipHeadings, thisBoneTransform3D);
+        updateTargetHeadings(localizedTargetHeadings, weights, thisBoneNode3D);
+        upateTipHeadings(localizedTipHeadings, thisBoneNode3D);
 
         float bestRMSD = 0f;
         QCP qcpConvergenceCheck = new QCP(MathUtils.FLOAT_ROUNDING_ERROR, MathUtils.FLOAT_ROUNDING_ERROR);
@@ -365,7 +365,7 @@ public class ShadowSkeleton3D {
 
             if (stabilizationPasses > 0) {
                 // newDampening = dampening == -1 ? sb.forBone.parentArmature.dampening
-                upateTipHeadings(localizedTipHeadings, thisBoneTransform3D);
+                upateTipHeadings(localizedTipHeadings, thisBoneNode3D);
                 newRMSD = getManualMSD(localizedTipHeadings, localizedTargetHeadings, weights);
 
                 if (bestRMSD >= newRMSD) {
@@ -377,17 +377,17 @@ public class ShadowSkeleton3D {
                             float scaledDampenedAngle = dampenedAngle
                                     * ((totaliterationssq - (iteration * iteration)) / totaliterationssq);
                             float cosHalfAngle = MathUtils.cos(0.5f * scaledDampenedAngle);
-                            sb.forBone.setAxesToReturnfulled(sb.simLocalTransform3D, sb.simConstraintTransform3D, cosHalfAngle,
+                            sb.forBone.setAxesToReturnfulled(sb.simLocalNode3D, sb.simConstraintNode3D, cosHalfAngle,
                                     scaledDampenedAngle);
                         } else {
-                            sb.forBone.setAxesToReturnfulled(sb.simLocalTransform3D, sb.simConstraintTransform3D,
+                            sb.forBone.setAxesToReturnfulled(sb.simLocalNode3D, sb.simConstraintNode3D,
                                     sb.cosHalfReturnfullnessDampened[iteration],
                                     sb.halfReturnfullnessDampened[iteration]);
                         }
-                        upateTipHeadings(localizedTipHeadings, thisBoneTransform3D);
+                        upateTipHeadings(localizedTipHeadings, thisBoneNode3D);
                         newRMSD = getManualMSD(localizedTipHeadings, localizedTargetHeadings, weights);
                     }
-                    bestOrientation.set(thisBoneTransform3D.getGlobalMBasis().rotation.rotation);
+                    bestOrientation.set(thisBoneNode3D.getGlobalMBasis().rotation.rotation);
                     bestRMSD = newRMSD;
                     break;
                 }
@@ -396,8 +396,8 @@ public class ShadowSkeleton3D {
             }
         }
         if (stabilizationPasses > 0) {
-            thisBoneTransform3D.setGlobalOrientationTo(bestOrientation);
-            thisBoneTransform3D.markDirty();
+            thisBoneNode3D.setGlobalOrientationTo(bestOrientation);
+            thisBoneNode3D.markDirty();
         }
     }
 
@@ -425,43 +425,43 @@ public class ShadowSkeleton3D {
         } else {
             qcpRot.clampToQuadranceAngle(boneDamp);
         }
-        sb.simLocalTransform3D.rotateBy(qcpRot);
+        sb.simLocalNode3D.rotateBy(qcpRot);
 
-        sb.simLocalTransform3D.updateGlobal();
+        sb.simLocalNode3D.updateGlobal();
 
-        sb.forBone.setAxesToSnapped(sb.simLocalTransform3D, sb.simConstraintTransform3D, boneDamp);
-        sb.simLocalTransform3D.translateByGlobal(translateBy);
-        sb.simConstraintTransform3D.translateByGlobal(translateBy);
+        sb.forBone.setAxesToSnapped(sb.simLocalNode3D, sb.simConstraintNode3D, boneDamp);
+        sb.simLocalNode3D.translateByGlobal(translateBy);
+        sb.simConstraintNode3D.translateByGlobal(translateBy);
 
     }
 
-    public void updateTargetHeadings(Vector3[] localizedTargetHeadings, float[] weights, ewbik.processing.sceneGraph.Transform3D thisBoneTransform3D) {
+    public void updateTargetHeadings(Vector3[] localizedTargetHeadings, float[] weights, ewbik.processing.sceneGraph.Node3D thisBoneNode3D) {
 
         int hdx = 0;
         for (int i = 0; i < pinnedBones.length; i++) {
             WorkingBone sb = pinnedBones[i];
             IKPin pin = sb.forBone.getIKPin();
-            ewbik.processing.sceneGraph.Transform3D targetTransform3D = pin.forBone.getPinnedAxes();
-            targetTransform3D.updateGlobal();
-            Vector3 origin = thisBoneTransform3D.origin_();
-            localizedTargetHeadings[hdx].set(targetTransform3D.origin_()).sub(origin);
+            ewbik.processing.sceneGraph.Node3D targetNode3D = pin.forBone.getPinnedAxes();
+            targetNode3D.updateGlobal();
+            Vector3 origin = thisBoneNode3D.origin_();
+            localizedTargetHeadings[hdx].set(targetNode3D.origin_()).sub(origin);
             byte modeCode = pin.getModeCode();
             hdx++;
 
             if ((modeCode & IKPin.XDir) != 0) {
-                Ray3 xTarget = targetTransform3D.x_().getRayScaledBy(weights[hdx]);
+                Ray3 xTarget = targetNode3D.x_().getRayScaledBy(weights[hdx]);
                 localizedTargetHeadings[hdx].set(xTarget.p2()).sub(origin);
                 xTarget.setToInvertedTip(localizedTargetHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
             if ((modeCode & IKPin.YDir) != 0) {
-                Ray3 yTarget = targetTransform3D.y_().getRayScaledBy(weights[hdx]);
+                Ray3 yTarget = targetNode3D.y_().getRayScaledBy(weights[hdx]);
                 localizedTargetHeadings[hdx] = Vector3.sub(yTarget.p2(), origin);
                 yTarget.setToInvertedTip(localizedTargetHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
             if ((modeCode & IKPin.ZDir) != 0) {
-                Ray3 zTarget = targetTransform3D.z_().getRayScaledBy(weights[hdx]);
+                Ray3 zTarget = targetNode3D.z_().getRayScaledBy(weights[hdx]);
                 localizedTargetHeadings[hdx] = Vector3.sub(zTarget.p2(), origin);
                 zTarget.setToInvertedTip(localizedTargetHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
@@ -470,36 +470,36 @@ public class ShadowSkeleton3D {
 
     }
 
-    public void upateTipHeadings(Vector3[] localizedTipHeadings, ewbik.processing.sceneGraph.Transform3D thisBoneTransform3D) {
+    public void upateTipHeadings(Vector3[] localizedTipHeadings, ewbik.processing.sceneGraph.Node3D thisBoneNode3D) {
         int hdx = 0;
 
         for (int i = 0; i < pinnedBones.length; i++) {
             WorkingBone sb = pinnedBones[i];
             IKPin pin = sb.forBone.getIKPin();
-            ewbik.processing.sceneGraph.Transform3D tipTransform3D = sb.simLocalTransform3D;
-            tipTransform3D.updateGlobal();
-            Vector3 origin = thisBoneTransform3D.origin_();
+            ewbik.processing.sceneGraph.Node3D tipNode3D = sb.simLocalNode3D;
+            tipNode3D.updateGlobal();
+            Vector3 origin = thisBoneNode3D.origin_();
             byte modeCode = pin.getModeCode();
 
-            ewbik.processing.sceneGraph.Transform3D targetTransform3D = pin.forBone.getPinnedAxes();
-            targetTransform3D.updateGlobal();
-            float scaleBy = thisBoneTransform3D.origin_().dist(targetTransform3D.origin_());
+            ewbik.processing.sceneGraph.Node3D targetNode3D = pin.forBone.getPinnedAxes();
+            targetNode3D.updateGlobal();
+            float scaleBy = thisBoneNode3D.origin_().dist(targetNode3D.origin_());
             hdx++;
 
             if ((modeCode & IKPin.XDir) != 0) {
-                Ray3 xTip = tipTransform3D.x_().getRayScaledBy(scaleBy);
+                Ray3 xTip = tipNode3D.x_().getRayScaledBy(scaleBy);
                 localizedTipHeadings[hdx].set(xTip.p2()).sub(origin);
                 xTip.setToInvertedTip(localizedTipHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
             if ((modeCode & IKPin.YDir) != 0) {
-                Ray3 yTip = tipTransform3D.y_().getRayScaledBy(scaleBy);
+                Ray3 yTip = tipNode3D.y_().getRayScaledBy(scaleBy);
                 localizedTipHeadings[hdx].set(yTip.p2()).sub(origin);
                 yTip.setToInvertedTip(localizedTipHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
             if ((modeCode & IKPin.ZDir) != 0) {
-                Ray3 zTip = tipTransform3D.z_().getRayScaledBy(scaleBy);
+                Ray3 zTip = tipNode3D.z_().getRayScaledBy(scaleBy);
                 localizedTipHeadings[hdx].set(zTip.p2()).sub(origin);
                 zTip.setToInvertedTip(localizedTipHeadings[hdx + 1]).sub(origin);
                 ;
@@ -619,18 +619,18 @@ public class ShadowSkeleton3D {
         ewbik.ik.ShadowSkeleton3D bChain = getChildSegmentContaining(b);
         if (bChain != null) {
             WorkingBone sb = bChain.simulatedBones.get(b);
-            ewbik.processing.sceneGraph.Transform3D bTransform3D = sb.simLocalTransform3D;
-            ewbik.processing.sceneGraph.Transform3D cTransform3D = sb.simConstraintTransform3D;
+            ewbik.processing.sceneGraph.Node3D bNode3D = sb.simLocalNode3D;
+            ewbik.processing.sceneGraph.Node3D cNode3D = sb.simConstraintNode3D;
             if (forceGlobal) {
-                bTransform3D.alignGlobalsTo(b.localAxes());
-                bTransform3D.markDirty();
-                bTransform3D.updateGlobal();
-                cTransform3D.alignGlobalsTo(b.getMajorRotationAxes());
-                cTransform3D.markDirty();
-                cTransform3D.updateGlobal();
+                bNode3D.alignGlobalsTo(b.localAxes());
+                bNode3D.markDirty();
+                bNode3D.updateGlobal();
+                cNode3D.alignGlobalsTo(b.getMajorRotationAxes());
+                cNode3D.markDirty();
+                cNode3D.updateGlobal();
             } else {
-                bTransform3D.alignLocalsTo(b.localAxes());
-                cTransform3D.alignLocalsTo(b.getMajorRotationAxes());
+                bNode3D.alignLocalsTo(b.localAxes());
+                cNode3D.alignLocalsTo(b.getMajorRotationAxes());
             }
             for (Bone bc : b.getChildren()) {
                 bChain.recursivelyAlignSimAxesOutwardFrom(bc, false);
@@ -648,11 +648,11 @@ public class ShadowSkeleton3D {
         ewbik.ik.ShadowSkeleton3D chain = b.parentArmature.boneSegmentMap.get(b); // getChainFor(b);
         if (chain != null) {
             WorkingBone sb = chain.simulatedBones.get(b);
-            ewbik.processing.sceneGraph.Transform3D simulatedLocalTransform3D = sb.simLocalTransform3D;
+            ewbik.processing.sceneGraph.Node3D simulatedLocalNode3D = sb.simLocalNode3D;
             if (b.getParent() != null) {
-                b.localAxes().alignOrientationTo(simulatedLocalTransform3D);
+                b.localAxes().alignOrientationTo(simulatedLocalNode3D);
             } else {
-                b.localAxes().alignLocalsTo(simulatedLocalTransform3D);
+                b.localAxes().alignLocalsTo(simulatedLocalNode3D);
             }
             for (Bone bc : b.getChildren()) {
                 recursivelyAlignBonesToSimAxesFrom(bc);
@@ -700,8 +700,8 @@ public class ShadowSkeleton3D {
      */
     public class WorkingBone {
         Bone forBone;
-        ewbik.processing.sceneGraph.Transform3D simLocalTransform3D;
-        ewbik.processing.sceneGraph.Transform3D simConstraintTransform3D;
+        ewbik.processing.sceneGraph.Node3D simLocalNode3D;
+        ewbik.processing.sceneGraph.Node3D simConstraintNode3D;
         float cosHalfDampen = 0f;
         float cosHalfReturnfullnessDampened[];
         float halfReturnfullnessDampened[];
@@ -709,8 +709,8 @@ public class ShadowSkeleton3D {
 
         public WorkingBone(Bone toSimulate) {
             forBone = toSimulate;
-            simLocalTransform3D = forBone.localAxes().getGlobalCopy();
-            simConstraintTransform3D = forBone.getMajorRotationAxes().getGlobalCopy();
+            simLocalNode3D = forBone.localAxes().getGlobalCopy();
+            simConstraintNode3D = forBone.getMajorRotationAxes().getGlobalCopy();
             float predamp = 1f - forBone.getStiffness();
             float defaultDampening = forBone.parentArmature.getDampening();
             float dampening = forBone.getParent() == null ? MathUtils.PI : predamp * defaultDampening;

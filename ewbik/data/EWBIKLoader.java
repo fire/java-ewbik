@@ -67,7 +67,7 @@ public class EWBIKLoader {
      */
 
     public Collection<? extends Skeleton3D> importSinglePrecisionArmatures(String filepath,
-                                                                           Class<? extends ewbik.processing.sceneGraph.Transform3D> AxesClass,
+                                                                           Class<? extends ewbik.processing.sceneGraph.Node3D> AxesClass,
                                                                            Class<? extends Bone> BoneClass,
                                                                            Class<? extends Skeleton3D> ArmatureClass,
                                                                            Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,

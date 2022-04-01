@@ -60,7 +60,7 @@ public class LimitCone implements Saveable {
     }
 
     public LimitCone(PVector location, float rad, ewbik.processing.singlePrecision.Kusudama attachedTo) {
-        Vector3 location1 = ewbik.processing.sceneGraph.Transform3D.toVec3f(location);
+        Vector3 location1 = ewbik.processing.sceneGraph.Node3D.toVec3f(location);
         setControlPoint(location1);
         LimitCone.this.tangentCircleCenterNext1 = location1.getOrthogonal();
         LimitCone.this.tangentCircleCenterNext2 = Vector3.mult(LimitCone.this.tangentCircleCenterNext1, -1);

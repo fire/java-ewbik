@@ -18,7 +18,7 @@ public class ItemHolding extends PApplet {
     ArrayList<IKPin> pins = new ArrayList<>();
     UI ui;
     IKPin activePin;
-    ewbik.processing.sceneGraph.Transform3D worldTransform3D, cubeTransform3D;
+    ewbik.processing.sceneGraph.Node3D worldNode3D, cubeNode3D;
     float zoomScalar = 200f / height;
     boolean cubeMode = true;
 
@@ -42,13 +42,13 @@ public class ItemHolding extends PApplet {
             e.printStackTrace();
         }
         loadedArmature = ewbik.processing.IO.LoadArmature_singlePrecision("Humanoid_Holding_Item.arm");
-        worldTransform3D = (ewbik.processing.sceneGraph.Transform3D) loadedArmature.localAxes().getParentAxes();
-        if (worldTransform3D == null) {
-            worldTransform3D = new ewbik.processing.sceneGraph.Transform3D();
-            loadedArmature.localAxes().setParent(worldTransform3D);
+        worldNode3D = (ewbik.processing.sceneGraph.Node3D) loadedArmature.localAxes().getParentAxes();
+        if (worldNode3D == null) {
+            worldNode3D = new ewbik.processing.sceneGraph.Node3D();
+            loadedArmature.localAxes().setParent(worldNode3D);
         }
         updatePinList();
-        cubeTransform3D = new ewbik.processing.sceneGraph.Transform3D();
+        cubeNode3D = new ewbik.processing.sceneGraph.Node3D();
 
         activePin = pins.get(pins.size() - 1);
 
@@ -62,16 +62,16 @@ public class ItemHolding extends PApplet {
          * a box. So all we need to do is , first
          * move our box into the appropriate position
          */
-        cubeTransform3D.translateTo(new PVector(-13, -27, 32));
-        cubeTransform3D.setRelativeToParent(worldTransform3D);
+        cubeNode3D.translateTo(new PVector(-13, -27, 32));
+        cubeNode3D.setRelativeToParent(worldNode3D);
         /**
          * and then specify that the transformations of the left hand and right hand
          * pins
          * should be computed relative to the axes of the cube we're drawing,
          * Thereby, any time we transform the parent cube's axes, the pins will follow.
          */
-        loadedArmature.getBoneTagged("left hand").getIKPin().getAxes().setParent(cubeTransform3D);
-        loadedArmature.getBoneTagged("right hand").getIKPin().getAxes().setParent(cubeTransform3D);
+        loadedArmature.getBoneTagged("left hand").getIKPin().getAxes().setParent(cubeNode3D);
+        loadedArmature.getBoneTagged("right hand").getIKPin().getAxes().setParent(cubeNode3D);
 
     }
 
@@ -79,19 +79,19 @@ public class ItemHolding extends PApplet {
 
         if (mousePressed) {
             if (cubeMode) {
-                cubeTransform3D.translateTo(new PVector(ui.mouse.x, ui.mouse.y, cubeTransform3D.origin_().z));
+                cubeNode3D.translateTo(new PVector(ui.mouse.x, ui.mouse.y, cubeNode3D.origin_().z));
             } else {
                 activePin.translateTo(new PVector(ui.mouse.x, ui.mouse.y, activePin.getLocation_().z));
             }
             loadedArmature.IKSolver(loadedArmature.getRootBone());
         } else {
-            worldTransform3D.rotateAboutY(PI / 500f, true);
+            worldNode3D.rotateAboutY(PI / 500f, true);
         }
         String additionalInstructions = "Hit the 'C' key to select or deselect the cube";
         additionalInstructions += "\n HIT THE S KEY TO SAVE AND HIT THE L KEY TO LOAD THE CURRENT ARMATURE CONFIGURATION.";
         // decrease the numerator to increase the zoom.
         zoomScalar = 200f / height;
-        ui.drawScene(zoomScalar, 12f, () -> drawHoldCube(), loadedArmature, additionalInstructions, activePin, cubeTransform3D,
+        ui.drawScene(zoomScalar, 12f, () -> drawHoldCube(), loadedArmature, additionalInstructions, activePin, cubeNode3D,
                 cubeMode);
     }
 
@@ -107,20 +107,20 @@ public class ItemHolding extends PApplet {
             currentDisplay.noStroke();
         }
         currentDisplay.pushMatrix();
-        currentDisplay.applyMatrix(cubeTransform3D.getGlobalPMatrix());
+        currentDisplay.applyMatrix(cubeNode3D.getGlobalPMatrix());
         currentDisplay.box(40, 20, 20);
         currentDisplay.popMatrix();
     }
 
     public void mouseWheel(MouseEvent event) {
         float e = event.getCount();
-        ewbik.processing.sceneGraph.Transform3D transform3D = cubeMode ? cubeTransform3D : (ewbik.processing.sceneGraph.Transform3D) activePin.getAxes();
+        ewbik.processing.sceneGraph.Node3D node3D = cubeMode ? cubeNode3D : (ewbik.processing.sceneGraph.Node3D) activePin.getAxes();
         if (event.isShiftDown()) {
-            transform3D.rotateAboutZ(e / TAU, true);
+            node3D.rotateAboutZ(e / TAU, true);
         } else if (event.isControlDown()) {
-            transform3D.rotateAboutX(e / TAU, true);
+            node3D.rotateAboutX(e / TAU, true);
         } else {
-            transform3D.rotateAboutY(e / TAU, true);
+            node3D.rotateAboutY(e / TAU, true);
         }
         activePin.solveIKForThisAndChildren();
     }

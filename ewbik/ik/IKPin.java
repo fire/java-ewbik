@@ -11,7 +11,7 @@ public class IKPin implements ewbik.asj.Saveable {
     public static final short ZDir = 4;
     public Bone forBone;
     protected boolean isEnabled;
-    protected ewbik.processing.sceneGraph.Transform3D transform3D;
+    protected ewbik.processing.sceneGraph.Node3D node3D;
     protected IKPin parentPin;
     protected ArrayList<IKPin> childPins = new ArrayList<>();
     protected float xPriority = 1f;
@@ -26,55 +26,55 @@ public class IKPin implements ewbik.asj.Saveable {
     public IKPin() {
     }
 
-    public IKPin(ewbik.processing.sceneGraph.Transform3D inTransform3D, boolean enabled, Bone bone) {
+    public IKPin(ewbik.processing.sceneGraph.Node3D inNode3D, boolean enabled, Bone bone) {
         this.isEnabled = enabled;
-        this.transform3D = (ewbik.processing.sceneGraph.Transform3D) inTransform3D;
+        this.node3D = (ewbik.processing.sceneGraph.Node3D) inNode3D;
         this.forBone = bone;
         setTargetPriorities(IKPin.this.xPriority, IKPin.this.yPriority, IKPin.this.zPriority);
     }
 
-    public IKPin(ewbik.processing.sceneGraph.Transform3D inTransform3D, Bone bone) {
-        this.transform3D = (ewbik.processing.sceneGraph.Transform3D) inTransform3D;
+    public IKPin(ewbik.processing.sceneGraph.Node3D inNode3D, Bone bone) {
+        this.node3D = (ewbik.processing.sceneGraph.Node3D) inNode3D;
         this.forBone = bone;
         this.isEnabled = false;
         setTargetPriorities(IKPin.this.xPriority, IKPin.this.yPriority, IKPin.this.zPriority);
     }
 
     public PVector getLocation() {
-        return ewbik.processing.sceneGraph.Transform3D.toPVector(getLocation_());
+        return ewbik.processing.sceneGraph.Node3D.toPVector(getLocation_());
     }
 
     public void translateTo(PVector v) {
-        translateTo_(ewbik.processing.sceneGraph.Transform3D.toVec3f(v));
+        translateTo_(ewbik.processing.sceneGraph.Node3D.toVec3f(v));
     }
 
     public void translateBy(PVector v) {
-        translateBy_(ewbik.processing.sceneGraph.Transform3D.toVec3f(v));
+        translateBy_(ewbik.processing.sceneGraph.Node3D.toVec3f(v));
     }
 
     /**
      * rotate this pin about its X axis
      **/
     public void rotateAboutX(float radians) {
-        transform3D.rotateAboutX(radians, true);
+        node3D.rotateAboutX(radians, true);
     }
 
     /**
      * rotate this pin about its X axis
      **/
     public void rotateAboutY(float radians) {
-        transform3D.rotateAboutY(radians, true);
+        node3D.rotateAboutY(radians, true);
     }
 
     /**
      * rotate this pin about its X axis
      **/
     public void rotateAboutZ(float radians) {
-        transform3D.rotateAboutZ(radians, true);
+        node3D.rotateAboutZ(radians, true);
     }
 
-    public ewbik.processing.sceneGraph.Transform3D getAxes() {
-        return (ewbik.processing.sceneGraph.Transform3D) transform3D;
+    public ewbik.processing.sceneGraph.Node3D getAxes() {
+        return (ewbik.processing.sceneGraph.Node3D) node3D;
     }
 
     public Bone forBone() {
@@ -229,10 +229,10 @@ public class IKPin implements ewbik.asj.Saveable {
      * and orientation of the input Axes. The orientation
      * is only relevant for orientation aware solvers.
      *
-     * @param inTransform3D
+     * @param inNode3D
      */
-    public void alignToAxes(ewbik.processing.sceneGraph.Transform3D inTransform3D) {
-        this.transform3D.alignGlobalsTo(inTransform3D);
+    public void alignToAxes(ewbik.processing.sceneGraph.Node3D inNode3D) {
+        this.node3D.alignGlobalsTo(inNode3D);
     }
 
     /**
@@ -241,7 +241,7 @@ public class IKPin implements ewbik.asj.Saveable {
      * @param location
      */
     public void translateTo_(ewbik.math.Vector3 location) {
-        this.transform3D.translateTo(location);
+        this.node3D.translateTo(location);
     }
 
     /**
@@ -252,11 +252,11 @@ public class IKPin implements ewbik.asj.Saveable {
      * @param location
      */
     public void translateToArmatureLocal_(ewbik.math.Vector3 location) {
-        ewbik.processing.sceneGraph.Transform3D armTransform3D = this.forBone().parentArmature.localAxes().getParentAxes();
-        if (armTransform3D == null) {
-            this.transform3D.translateTo(location);
+        ewbik.processing.sceneGraph.Node3D armNode3D = this.forBone().parentArmature.localAxes().getParentAxes();
+        if (armNode3D == null) {
+            this.node3D.translateTo(location);
         } else {
-            this.transform3D.translateTo(armTransform3D.getLocalOf(location));
+            this.node3D.translateTo(armNode3D.getLocalOf(location));
         }
     }
 
@@ -267,14 +267,14 @@ public class IKPin implements ewbik.asj.Saveable {
      * @param location
      */
     public void translateBy_(ewbik.math.Vector3 location) {
-        this.transform3D.translateByLocal(location);
+        this.node3D.translateByLocal(location);
     }
 
     /**
      * @return the pin locationin global coordinates
      */
     public ewbik.math.Vector3 getLocation_() {
-        return transform3D.origin_();
+        return node3D.origin_();
     }
 
     /**
@@ -323,9 +323,9 @@ public class IKPin implements ewbik.asj.Saveable {
         // tries to set the pin to be its own parent
 
         if (parent == this || parent == null) {
-            this.transform3D.setParent(null);
+            this.node3D.setParent(null);
         } else if (parent != null) {
-            this.transform3D.setParent(parent.transform3D);
+            this.node3D.setParent(parent.node3D);
             parent.addChildPin(this);
             this.parentPin = parent;
         }
@@ -390,7 +390,7 @@ public class IKPin implements ewbik.asj.Saveable {
     }
 
     public void loadFromJSONObject(ewbik.asj.data.JSONObject j, ewbik.asj.LoadManager l) {
-        this.transform3D = (ewbik.processing.sceneGraph.Transform3D) l.getObjectFromClassMaps(ewbik.processing.sceneGraph.Transform3D.class, j.getString("axes"));
+        this.node3D = (ewbik.processing.sceneGraph.Node3D) l.getObjectFromClassMaps(ewbik.processing.sceneGraph.Node3D.class, j.getString("axes"));
         this.isEnabled = j.getBoolean("isEnabled");
         this.pinWeight = j.getFloat("pinWeight");
         this.forBone = (Bone) l.getObjectFromClassMaps(Bone.class, j.getString("forBone"));
