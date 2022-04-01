@@ -10,6 +10,7 @@ import ewbik.asj.data.JSONObject;
 import ewbik.ik.SegmentedArmature.WorkingBone;
 import ewbik.math.*;
 import ik.Bone;
+import ewbik.processing.singlePrecision.LimitCone;
 
 import java.util.ArrayList;
 
@@ -31,7 +32,7 @@ public abstract class AbstractKusudama implements Saveable {
      * at the previous element in the array,
      * and the cone at the next element in the array.
      */
-    protected ArrayList<AbstractLimitCone> limitCones = new ArrayList<AbstractLimitCone>();
+    protected ArrayList<LimitCone> limitCones = new ArrayList<LimitCone>();
 
     /**
      * Defined as some Angle in radians about the limitingAxes Y axis, 0 being
@@ -123,10 +124,10 @@ public abstract class AbstractKusudama implements Saveable {
         Quaternion oldYtoNewY = new Quaternion(limitingAxes.y_().heading(), originalLimitingAxes.getGlobalOf(newYRay).heading());
         limitingAxes.rotateBy(oldYtoNewY);
 
-        for (AbstractLimitCone lc : getLimitCones()) {
-            originalLimitingAxes.setToGlobalOf(lc.controlPoint, lc.controlPoint);
-            limitingAxes.setToLocalOf(lc.controlPoint, lc.controlPoint);
-            lc.controlPoint.normalize();
+        for (LimitCone lc : getLimitCones()) {
+            originalLimitingAxes.setToGlobalOf(lc.getControlPoint(), lc.getControlPoint());
+            limitingAxes.setToLocalOf(lc.getControlPoint(), lc.getControlPoint());
+            lc.getControlPoint().normalize();
         }
 
         this.updateTangentRadii();
@@ -135,7 +136,7 @@ public abstract class AbstractKusudama implements Saveable {
     public void updateTangentRadii() {
 
         for (int i = 0; i < limitCones.size(); i++) {
-            AbstractLimitCone next = i < limitCones.size() - 1 ? limitCones.get(i + 1) : null;
+            LimitCone next = i < limitCones.size() - 1 ? limitCones.get(i + 1) : null;
             limitCones.get(i).updateTangentHandles(next);
         }
     }
@@ -429,7 +430,7 @@ public abstract class AbstractKusudama implements Saveable {
             for (int i = 0; i < limitCones.size() - 1; i++) {
                 Vec3f<?> collisionPoint = inPoint.copy();
                 collisionPoint.set(0, 0, 0);
-                AbstractLimitCone nextCone = limitCones.get(i + 1);
+                LimitCone nextCone = limitCones.get(i + 1);
                 boolean inSegBounds = limitCones.get(i).inBoundsFromThisToNext(nextCone, point, collisionPoint);
                 if (inSegBounds == true) {
                     inBounds[0] = 1;
@@ -472,10 +473,10 @@ public abstract class AbstractKusudama implements Saveable {
         Vec3f result = (Vec3f) point.copy();
 
         if (limitCones.size() == 1) {
-            result.set(limitCones.get(0).controlPoint);
+            result.set(limitCones.get(0).getControlPoint());
         } else {
             for (int i = 0; i < limitCones.size() - 1; i++) {
-                AbstractLimitCone nextCone = limitCones.get(i + 1);
+                LimitCone nextCone = limitCones.get(i + 1);
                 Vec3f<?> closestPathPoint = limitCones.get(i).getClosestPathPoint(nextCone, point);
                 float closeDot = closestPathPoint.dot(point);
                 if (closeDot > closestPointDot) {
@@ -507,7 +508,7 @@ public abstract class AbstractKusudama implements Saveable {
      *                 LimitCone is not supposed to be between two existing
      *                 LimitCones)
      */
-    public void addLimitCone(Vector3 newPoint, float radius, AbstractLimitCone previous, AbstractLimitCone next) {
+    public void addLimitCone(Vector3 newPoint, float radius, LimitCone previous, LimitCone next) {
         int insertAt = 0;
 
         if (next == null || limitCones.size() == 0) {
@@ -520,13 +521,13 @@ public abstract class AbstractKusudama implements Saveable {
         addLimitConeAtIndex(insertAt, newPoint, radius);
     }
 
-    public void removeLimitCone(AbstractLimitCone limitCone) {
+    public void removeLimitCone(LimitCone limitCone) {
         this.limitCones.remove(limitCone);
         this.updateTangentRadii();
         this.updateRotationalFreedom();
     }
 
-    public abstract AbstractLimitCone createLimitConeForIndex(int insertAt, Vec3f<?> newPoint, float radius);
+    public abstract LimitCone createLimitConeForIndex(int insertAt, Vec3f<?> newPoint, float radius);
 
     /**
      * Adds a LimitCone to the Kusudama. LimitCones are reach cones which can be
@@ -545,7 +546,7 @@ public abstract class AbstractKusudama implements Saveable {
      * @param radius   the radius of the limitCone
      */
     public void addLimitConeAtIndex(int insertAt, Vector3 newPoint, float radius) {
-        AbstractLimitCone newCone = createLimitConeForIndex(insertAt, newPoint, radius);
+        LimitCone newCone = createLimitConeForIndex(insertAt, newPoint, radius);
         if (insertAt == -1) {
             limitCones.add(newCone);
         } else {
@@ -681,7 +682,7 @@ public abstract class AbstractKusudama implements Saveable {
         float axialConstrainedHyperArea = isAxiallyConstrained() ? (range / TAU) : 1f;
         // quick and dirty solution (should revisit);
         float totalLimitConeSurfaceAreaRatio = 0f;
-        for (AbstractLimitCone l : limitCones) {
+        for (LimitCone l : limitCones) {
             totalLimitConeSurfaceAreaRatio += (l.getRadius() * 2f) / TAU;
         }
         rotationalFreedom = axialConstrainedHyperArea
@@ -733,14 +734,14 @@ public abstract class AbstractKusudama implements Saveable {
         return this.strength;
     }
 
-    public ArrayList<? extends AbstractLimitCone> getLimitCones() {
+    public ArrayList<? extends LimitCone> getLimitCones() {
         return this.limitCones;
     }
 
     @Override
     public void makeSaveable(SaveManager saveManager) {
         saveManager.addToSaveState(this);
-        for (AbstractLimitCone lc : limitCones) {
+        for (LimitCone lc : limitCones) {
             lc.makeSaveable(saveManager);
         }
     }
@@ -764,7 +765,7 @@ public abstract class AbstractKusudama implements Saveable {
         this.attachedTo = l.getObjectFor(Bone.class, j, "attachedTo");
         this.limitingAxes = l.getObjectFor(AbstractAxes.class, j, "limitAxes");
         limitCones = new ArrayList<>();
-        l.arrayListFromJSONArray(j.getJSONArray("limitCones"), limitCones, AbstractLimitCone.class);
+        l.arrayListFromJSONArray(j.getJSONArray("limitCones"), limitCones, LimitCone.class);
         this.minAxialAngle = j.getFloat("minAxialAngle");
         this.range = j.getFloat("axialRange");
         this.axiallyConstrained = j.getBoolean("axiallyConstrained");

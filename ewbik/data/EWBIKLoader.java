@@ -36,7 +36,7 @@ public class EWBIKLoader {
      *                       AbstractKusudama class. If null, AbstractKusudama will
      *                       be used.
      * @param LimitConeClass the class object you've used to extend the
-     *                       AbstractLimitCone class. If null, AbstractLimitCone
+     *                       LimitCone class. If null, LimitCone
      *                       will be used.
      * @param IKPinClass     the class object you've used to extend the
      *                       IKPin class. If null, IKPin will be
@@ -49,7 +49,7 @@ public class EWBIKLoader {
                                                                                  Class<? extends Bone> BoneClass,
                                                                                  Class<? extends AbstractSkeleton3D> ArmatureClass,
                                                                                  Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
-                                                                                 Class<? extends AbstractLimitCone> LimitConeClass,
+                                                                                 Class<? extends ewbik.processing.singlePrecision.LimitCone> LimitConeClass,
                                                                                  Class<? extends IKPin> IKPinClass) {
         File selection = new File(filepath);
         JSONObject loadFile = StringFuncs.loadJSONObject(selection);

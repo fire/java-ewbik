@@ -20,7 +20,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 package ewbik.processing.singlePrecision;
 
 import ewbik.ik.AbstractKusudama;
-import ewbik.ik.AbstractLimitCone;
 import ewbik.math.MRotation;
 import ewbik.math.Quaternion;
 import ewbik.math.Vec3f;
@@ -80,7 +79,7 @@ public class Kusudama extends AbstractKusudama {
      * {@inheritDoc}
      **/
     @Override
-    public AbstractLimitCone createLimitConeForIndex(int insertAt, Vec3f<?> newPoint, float radius) {
+    public ewbik.processing.singlePrecision.LimitCone createLimitConeForIndex(int insertAt, Vec3f<?> newPoint, float radius) {
         return new LimitCone(Axes.toPVector(newPoint), radius, this);
     }
 

@@ -84,7 +84,7 @@ public class FloatBackedSaver extends SaveManager {
                     bonesJSON.append(jsonObj);
                 if (AbstractKusudama.class.isAssignableFrom(s.getClass()))
                     kusudamaJSON.append(jsonObj);
-                if (AbstractLimitCone.class.isAssignableFrom(s.getClass()))
+                if (ewbik.processing.singlePrecision.LimitCone.class.isAssignableFrom(s.getClass()))
                     limitConeJSON.append(jsonObj);
                 if (IKPin.class.isAssignableFrom(s.getClass()))
                     IKPinsJSON.append(jsonObj);
