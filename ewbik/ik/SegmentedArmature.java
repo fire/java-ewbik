@@ -25,6 +25,7 @@ import ik.IKPin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import ewbik.processing.sceneGraph.Axes;
 
 /**
  * s
@@ -41,8 +42,8 @@ public class SegmentedArmature {
     public ArrayList<Bone> segmentBoneList = new ArrayList<Bone>();
     public int distanceToRoot = 0;
     public int chainLength = 0;
-    public Transform3D debugTipAxes;
-    public Transform3D debugTargetAxes;
+    public Axes debugTipAxes;
+    public Axes debugTargetAxes;
     WorkingBone[] pinnedBones;
     boolean includeInIK = true;
     int pinDepth = 1;
@@ -207,7 +208,7 @@ public class SegmentedArmature {
         recursivelyEnsureAxesHeirarchyFor(rootStrand.segmentRoot, rootStrand.segmentRoot.parentArmature.localAxes());
     }
 
-    private void recursivelyEnsureAxesHeirarchyFor(Bone b, Transform3D parentTo) {
+    private void recursivelyEnsureAxesHeirarchyFor(Bone b, Axes parentTo) {
         SegmentedArmature chain = getChainFor(b);
         if (chain != null) {
             WorkingBone sb = chain.simulatedBones.get(b);
@@ -331,7 +332,7 @@ public class SegmentedArmature {
             float totalIterations) {
 
         WorkingBone sb = simulatedBones.get(forBone);
-        Transform3D thisBoneAxes = sb.simLocalAxes;
+        Axes thisBoneAxes = sb.simLocalAxes;
         thisBoneAxes.updateGlobal();
 
         Quaternion bestOrientation = new Quaternion(thisBoneAxes.getGlobalMBasis().rotation.rotation);
@@ -435,13 +436,13 @@ public class SegmentedArmature {
 
     }
 
-    public void updateTargetHeadings(Vec3f<?>[] localizedTargetHeadings, float[] weights, Transform3D thisBoneAxes) {
+    public void updateTargetHeadings(Vec3f<?>[] localizedTargetHeadings, float[] weights, Axes thisBoneAxes) {
 
         int hdx = 0;
         for (int i = 0; i < pinnedBones.length; i++) {
             WorkingBone sb = pinnedBones[i];
             IKPin pin = sb.forBone.getIKPin();
-            Transform3D targetAxes = pin.forBone.getPinnedAxes();
+            Axes targetAxes = pin.forBone.getPinnedAxes();
             targetAxes.updateGlobal();
             Vec3f<?> origin = thisBoneAxes.origin_();
             localizedTargetHeadings[hdx].set(targetAxes.origin_()).sub(origin);
@@ -470,18 +471,18 @@ public class SegmentedArmature {
 
     }
 
-    public void upateTipHeadings(Vec3f<?>[] localizedTipHeadings, Transform3D thisBoneAxes) {
+    public void upateTipHeadings(Vec3f<?>[] localizedTipHeadings, Axes thisBoneAxes) {
         int hdx = 0;
 
         for (int i = 0; i < pinnedBones.length; i++) {
             WorkingBone sb = pinnedBones[i];
             IKPin pin = sb.forBone.getIKPin();
-            Transform3D tipAxes = sb.simLocalAxes;
+            Axes tipAxes = sb.simLocalAxes;
             tipAxes.updateGlobal();
             Vec3f<?> origin = thisBoneAxes.origin_();
             byte modeCode = pin.getModeCode();
 
-            Transform3D targetAxes = pin.forBone.getPinnedAxes();
+            Axes targetAxes = pin.forBone.getPinnedAxes();
             targetAxes.updateGlobal();
             float scaleBy = thisBoneAxes.origin_().dist(targetAxes.origin_());
             hdx++;
@@ -619,8 +620,8 @@ public class SegmentedArmature {
         SegmentedArmature bChain = getChildSegmentContaining(b);
         if (bChain != null) {
             WorkingBone sb = bChain.simulatedBones.get(b);
-            Transform3D bAxes = sb.simLocalAxes;
-            Transform3D cAxes = sb.simConstraintAxes;
+            Axes bAxes = sb.simLocalAxes;
+            Axes cAxes = sb.simConstraintAxes;
             if (forceGlobal) {
                 bAxes.alignGlobalsTo(b.localAxes());
                 bAxes.markDirty();
@@ -648,7 +649,7 @@ public class SegmentedArmature {
         SegmentedArmature chain = b.parentArmature.boneSegmentMap.get(b); // getChainFor(b);
         if (chain != null) {
             WorkingBone sb = chain.simulatedBones.get(b);
-            Transform3D simulatedLocalAxes = sb.simLocalAxes;
+            Axes simulatedLocalAxes = sb.simLocalAxes;
             if (b.getParent() != null) {
                 b.localAxes().alignOrientationTo(simulatedLocalAxes);
             } else {
@@ -700,8 +701,8 @@ public class SegmentedArmature {
      */
     public class WorkingBone {
         Bone forBone;
-        Transform3D simLocalAxes;
-        Transform3D simConstraintAxes;
+        Axes simLocalAxes;
+        Axes simConstraintAxes;
         float cosHalfDampen = 0f;
         float cosHalfReturnfullnessDampened[];
         float halfReturnfullnessDampened[];

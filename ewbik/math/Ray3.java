@@ -39,7 +39,6 @@ public class Ray3 implements CanLoad {
 
     public Ray3() {
         workingVector = new Vector3();
-        //this.p1 = new Vector3();
     }
 
     public Ray3(Vec3f<?> origin) {

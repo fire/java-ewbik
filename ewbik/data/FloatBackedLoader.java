@@ -8,7 +8,7 @@ import ewbik.asj.data.JSONObject;
 import ewbik.asj.data.StringFuncs;
 import ewbik.ik.*;
 import ewbik.math.Quaternion;
-import ewbik.math.Transform3D;
+import ewbik.processing.sceneGraph.Axes;
 import ewbik.processing.singlePrecision.*;
 import ik.Bone;
 import ik.IKPin;
@@ -24,7 +24,7 @@ public final class FloatBackedLoader extends LoadManager {
     public File currentFilePath;
 
     public HashMap<String, JSONObject> axesJSONObjects = new HashMap<>();
-    public HashMap<String, Transform3D> axesLoadObjects = new HashMap<>();
+    public HashMap<String, Axes> axesLoadObjects = new HashMap<>();
 
     public HashMap<String, JSONObject> armatureJSONObjects = new HashMap<>();
     public HashMap<String, Skeleton3D> armatureLoadObjects = new HashMap<>();
@@ -71,7 +71,7 @@ public final class FloatBackedLoader extends LoadManager {
     }
 
     public Collection<? extends Skeleton3D> importFile(File selection,
-                                                       Class<? extends Transform3D> AxesClass,
+                                                       Class<? extends Axes> AxesClass,
                                                        Class<? extends Bone> BoneClass,
                                                        Class<? extends Skeleton3D> ArmatureClass,
                                                        Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
@@ -90,7 +90,7 @@ public final class FloatBackedLoader extends LoadManager {
     }
 
     public Collection<? extends Skeleton3D> loadJSON(JSONObject loadFile,
-                                                     Class<? extends Transform3D> AxesClass,
+                                                     Class<? extends Axes> AxesClass,
                                                      Class<? extends Bone> BoneClass,
                                                      Class<? extends Skeleton3D> ArmatureClass,
                                                      Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
@@ -98,7 +98,7 @@ public final class FloatBackedLoader extends LoadManager {
                                                      Class<? extends IKPin> IKPinClass) {
         clearCurrentLoadObjects();
 
-        AxesClass = AxesClass == null ? Transform3D.class : AxesClass;
+        AxesClass = AxesClass == null ? Axes.class : AxesClass;
         BoneClass = BoneClass == null ? Bone.class : BoneClass;
         ArmatureClass = ArmatureClass == null ? Skeleton3D.class : ArmatureClass;
         KusudamaClass = KusudamaClass == null ? ewbik.processing.singlePrecision.Kusudama.class : KusudamaClass;
@@ -281,7 +281,7 @@ public final class FloatBackedLoader extends LoadManager {
     public Saveable getObjectFromClassMaps(Class keyClass, String identityHash) {
         Saveable result = null;
 
-        if (Transform3D.class.isAssignableFrom(keyClass))
+        if (Axes.class.isAssignableFrom(keyClass))
             result = (Saveable) axesLoadObjects.get(identityHash);
         else if (Skeleton3D.class.isAssignableFrom(keyClass))
             result = (Saveable) armatureLoadObjects.get(identityHash);

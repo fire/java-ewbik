@@ -57,7 +57,7 @@ public class Skeleton3D implements Saveable {
     protected int IKIterations = 15;
     protected float dampening = MathUtils.toRadians(5f);
     PerformanceStats performance = new PerformanceStats();
-    ewbik.math.Transform3D fauxParent;
+    Axes fauxParent;
     boolean debug = true;
     Bone lastDebugBone = null;
     // debug code -- use to set a minimum distance an effector must move
@@ -501,7 +501,7 @@ public class Skeleton3D implements Saveable {
      * @param b
      * @return
      */
-    public ewbik.math.Quaternion getRotationBetween(ewbik.math.Transform3D a, ewbik.math.Transform3D b) {
+    public ewbik.math.Quaternion getRotationBetween(Axes a, Axes b) {
         return new ewbik.math.Quaternion(a.x_().heading(), a.y_().heading(), b.x_().heading(), b.y_().heading());
     }
 
@@ -556,7 +556,7 @@ public class Skeleton3D implements Saveable {
 
     public void loadFromJSONObject(ewbik.asj.data.JSONObject j, LoadManager l) {
         try {
-            this.localAxes = l.getObjectFor(ewbik.math.Transform3D.class, j, "localAxes");
+            this.localAxes = l.getObjectFor(Axes.class, j, "localAxes");
             this.rootBone = l.getObjectFor(Bone.class, j, "rootBone");
             this.IKIterations = j.getInt("defaultIterations");
             this.dampening = j.getFloat("dampening");
