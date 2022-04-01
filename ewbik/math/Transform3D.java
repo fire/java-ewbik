@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.function.Consumer;
+import ewbik.math.AbstractBasis;
+import  ewbik.math.Vector3;
+import ewbik.math.Quaternion;
 import ewbik.math.Basis;
 
 public class Transform3D implements ewbik.asj.Saveable {
@@ -33,7 +36,7 @@ public class Transform3D implements ewbik.asj.Saveable {
     private DependencyReference<Transform3D> parent = null;
     private int slipType = 0;
 
-    public Transform3D(Basis globalBasis, Transform3D parent) {
+    public Transform3D(AbstractBasis globalBasis, Transform3D parent) {
         this.globalMBasis = globalBasis.copy();
         createTempVars(globalBasis.getOrigin());
         if (this.getParentAxes() != null)
@@ -145,10 +148,10 @@ public class Transform3D implements ewbik.asj.Saveable {
         return copy;
     }
 
-    public Basis getLocalOf(Basis input) {
-        Basis newBasis = input;
+    public <B extends AbstractBasis> B getLocalOf(B input) {
+        Basis newBasis = new Basis((Basis) input);
         getGlobalMBasis().setToLocalOf(input, newBasis);
-        return newBasis;
+        return (B) newBasis;
     }
 
     public <V extends Vec3f<?>> void createTempVars(V type) {
@@ -405,7 +408,7 @@ public class Transform3D implements ewbik.asj.Saveable {
         this.setToLocalOf(in.p2(), out.p2());
     }
 
-    public void setToLocalOf(Basis input, Basis output) {
+    public void setToLocalOf(AbstractBasis input, AbstractBasis output) {
         this.updateGlobal();
         this.getGlobalMBasis().setToLocalOf(input, output);
     }

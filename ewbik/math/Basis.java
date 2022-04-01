@@ -1,9 +1,12 @@
 package ewbik.math;
 
-import ewbik.math.Ray3;
-
-public class Basis {
-
+/**
+ * Minimal implementation of basis transformations.
+ * Supports only righthanded orthonormal bases (no scaling, now skewing, no reflections).
+ *
+ * @author Eron Gjoni
+ */
+abstract class AbstractBasis {
     public static final int LEFT = -1;
     public static final int RIGHT = 1;
     public static final int NONE = -1;
@@ -14,52 +17,112 @@ public class Basis {
     public Quaternion rotation = new Quaternion();
     public Quaternion inverseRotation = new Quaternion();
     /**
-     * a vector representing the translation of this basis relative to its parent.
+     * a vector respresnting the translation of this basis relative to its parent.
      */
     public Vec3f<?> translate;
+
+
     protected Vec3f<?> xBase; //= new Vector3(1,0,0);
     protected Vec3f<?> yBase; //= new Vector3(0,1,0);
     protected Vec3f<?> zBase;// = new Vector3(0,0,1);
+
     protected Ray3 xRay;// = new Ray3(new Vector3(0,0,0), new Vector3(1,0,0));
     protected Ray3 yRay;// = new Ray3(new Vector3(0,0,0), new Vector3(0,1,0));
     protected Ray3 zRay;// = new Ray3(new Vector3(0,0,0), new Vector3(0,0,1));
 
-    public Basis(Basis b) {
-        translate =b.translate;
-        xBase = b.xBase;
-        yBase = b.yBase;
-        zBase = b.zBase;
-        xRay = b.xRay;
-        yRay = b.yRay;
-        zRay = b.zRay;
-        refreshPrecomputed();
-    }
-    public Basis(Vec3f<?> origin) {
-        translate = origin;
-        xBase = origin;
-        yBase = origin;
-        zBase = origin;
+
+    /**
+     * Initialize this basis at the origin. The basis will be righthanded by default.
+     *
+     * @param origin
+     */
+    public AbstractBasis(Vec3f<?> origin) {
+        translate = origin.copy();
+        xBase = origin.copy();
+        yBase = origin.copy();
+        zBase = origin.copy();
         xBase.set(1, 0, 0);
         yBase.set(0, 1, 0);
         zBase.set(0, 0, 1);
-        Vec3f<?> zero = origin;
+        Vec3f<?> zero = origin.copy();
         zero.set(0, 0, 0);
-        xRay = new Ray3(zero, xBase);
-        yRay = new Ray3(zero, yBase);
-        zRay = new Ray3(zero, zBase);
+        xRay = new Ray3(zero.copy(), xBase.copy());
+        yRay = new Ray3(zero.copy(), yBase.copy());
+        zRay = new Ray3(zero.copy(), zBase.copy());
         refreshPrecomputed();
     }
 
-    public <V extends Vec3f<?>> Basis(V origin, V inX, V inY, V inZ) {
-        this.translate = origin.copy();
-        Basis.this.xRay = new Ray3(origin.copy(), origin.copy());
-        Basis.this.yRay = new Ray3(origin.copy(), origin.copy());
-        Basis.this.zRay = new Ray3(origin.copy(), origin.copy());
-        this.set(inX.copy(), inY.copy(), inZ.copy());
+    public <T extends AbstractBasis> AbstractBasis(T input) {
+        translate = input.translate.copy();
+        xBase = translate.copy();
+        yBase = translate.copy();
+        zBase = translate.copy();
+        xBase.set(1, 0, 0);
+        yBase.set(0, 1, 0);
+        zBase.set(0, 0, 1);
+        Vec3f<?> zero = translate.copy();
+        zero.set(0, 0, 0);
+        xRay = new Ray3(zero.copy(), xBase.copy());
+        yRay = new Ray3(zero.copy(), yBase.copy());
+        zRay = new Ray3(zero.copy(), zBase.copy());
+        this.adoptValues(input);
+
     }
 
-    public Basis copy() {
-        return new Basis(this);
+
+    /**
+     * Initialize this basis at the origin.
+     * The basis will be backed by a rotation object which presumes right handed chirality.
+     * Therefore, the rotation object will align so its local XY plane aligns with this basis' XY plane
+     * Afterwards, it will check chirality, and if the basis isn't righthanded, this class will assume the
+     * z-axis is the one that's been flipped.
+     * <p>
+     * If you want to manually specify which axis has been flipped
+     * (so that the rotation object aligns with respect to the plane formed
+     * by the other two basis vectors) then use the constructor dedicated for that purpose
+     *
+     * @param origin
+     * @param x      basis vector direction
+     * @param y      basis vector direction
+     * @param z      basis vector direction
+     */
+    public <V extends Vec3f<?>> AbstractBasis(V origin, V x, V y, V z) {
+        this.translate = origin.copy();
+        xRay = new Ray3(origin.copy(), origin.copy());
+        yRay = new Ray3(origin.copy(), origin.copy());
+        zRay = new Ray3(origin.copy(), origin.copy());
+        this.set(x.copy(), y.copy(), z.copy());
+    }
+
+    /**
+     * Initialize this basis at the origin defined by the base of the @param x Ray.
+     * <p>
+     * The basis will be backed by a rotation object which presumes right handed chirality.
+     * Therefore, the rotation object will align so its local XY plane aligns with this basis' XY plane
+     * Afterwards, it will check chirality, and if the basis isn't righthanded, this class will assume the
+     * z-axis is the one that's been flipped.
+     * <p>
+     * If you want to manually specify which axis has been flipped
+     * (so that the rotation object aligns with respect to the plane formed
+     * by the other two basis vectors) then use the constructor dedicated for that purpose
+     *
+     * @param x basis Ray
+     * @param y basis Ray
+     * @param z basis Ray
+     */
+    public <R extends Ray3> AbstractBasis(R x, R y, R z) {
+        this.translate = x.p1().copy();
+        xRay = x.copy();
+        yRay = y.copy();
+        zRay = z.copy();
+        Vec3f<?> xDirNew = x.heading().copy();
+        Vec3f<?> yDirNew = y.heading().copy();
+        Vec3f<?> zDirNew = z.heading().copy();
+        xDirNew.normalize();
+        yDirNew.normalize();
+        zDirNew.normalize();
+        set(xDirNew, yDirNew, zDirNew);
+
     }
 
     private <V extends Vec3f<?>> void set(V x, V y, V z) {
@@ -86,7 +149,7 @@ public class Basis {
      *
      * @param in
      */
-    public <T extends Basis> void adoptValues(T in) {
+    public <T extends AbstractBasis> void adoptValues(T in) {
         this.translate.set(in.translate);
         this.rotation.set(in.rotation);
         xBase = translate.copy();
@@ -116,6 +179,7 @@ public class Basis {
         refreshPrecomputed();
     }
 
+
     private Quaternion createPrioritzedRotation(Vec3f<?> xHeading, Vec3f<?> yHeading, Vec3f<?> zHeading) {
 
         Vec3f<?> tempV = zHeading.copy();
@@ -136,12 +200,13 @@ public class Basis {
 		return rotation;*/
     }
 
+
     public Quaternion getLocalOfRotation(Quaternion inRot) {
         Quaternion resultNew = inverseRotation.applyTo(inRot).applyTo(rotation);
         return resultNew;
     }
 
-    public <B extends Basis> void setToLocalOf(B global_input, B local_output) {
+    public <B extends AbstractBasis> void setToLocalOf(B global_input, B local_output) {
         local_output.translate = this.getLocalOf(global_input.translate);
         inverseRotation.applyTo(global_input.rotation, local_output.rotation);
 
@@ -159,6 +224,7 @@ public class Basis {
         return result;
     }
 
+
     public <V extends Vec3f<?>> void setToLocalOf(V input, V output) {
         output.set(input);
         output.sub(this.translate);
@@ -174,6 +240,7 @@ public class Basis {
         addRotation.applyTo(this.rotation, this.rotation);
         this.refreshPrecomputed();
     }
+
 
     /**
      * the default Basis implementation is orthonormal,
@@ -202,6 +269,7 @@ public class Basis {
         vec.set(zBase);
     }
 
+
     /**
      * sets globalOutput such that the result of
      * this.getLocalOf(globalOutput) == localInput.
@@ -209,11 +277,12 @@ public class Basis {
      * @param localInput
      * @param globalOutput
      */
-    public <T extends Basis> void setToGlobalOf(T localInput, T globalOutput) {
+    public <T extends AbstractBasis> void setToGlobalOf(T localInput, T globalOutput) {
         this.rotation.applyTo(localInput.rotation, globalOutput.rotation);
         this.setToGlobalOf(localInput.translate, globalOutput.translate);
         globalOutput.refreshPrecomputed();
     }
+
 
     public <V extends Vec3f<?>> void setToGlobalOf(V input, V output) {
         try {
@@ -223,6 +292,7 @@ public class Basis {
             e.printStackTrace();
         }
     }
+
 
     public <V extends Vec3f<?>> void translateBy(V transBy) {
         this.translate.x += transBy.x;
@@ -285,6 +355,7 @@ public class Basis {
         return this.inverseRotation;
     }
 
+
     private void updateRays() {
         xRay.setP1(this.translate);
         xRay.p2.set(xBase);
@@ -301,6 +372,8 @@ public class Basis {
         yRay.p2.add(this.translate);
         zRay.p2.add(this.translate);
     }
+
+    public abstract Basis copy();
 
     public String toString() {
         Vec3f xh = xRay.heading().toVec3f();
@@ -325,4 +398,26 @@ public class Basis {
 
         return result;
     }
+
+}
+
+public class Basis extends AbstractBasis {
+
+    public Basis(ewbik.math.Basis basis) {
+        super(basis);
+    }
+
+    public Basis(Vec3f<?> origin) {
+        super(origin);
+    }
+
+    public <V extends Vec3f<?>> Basis(V origin, V inX, V inY, V inZ) {
+        super(origin, inX, inY, inZ);
+    }
+
+    @Override
+    public Basis copy() {
+        return new ewbik.math.Basis(this);
+    }
+
 }
