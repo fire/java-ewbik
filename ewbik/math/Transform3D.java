@@ -18,9 +18,9 @@ public class Transform3D {
     protected Vector3 xBase; //= new Vector3(1,0,0);
     protected Vector3 yBase; //= new Vector3(0,1,0);
     protected Vector3 zBase;// = new Vector3(0,0,1);
-    protected Ray3 xRay;// = new Ray3(new Vector3(0,0,0), new Vector3(1,0,0));
-    protected Ray3 yRay;// = new Ray3(new Vector3(0,0,0), new Vector3(0,1,0));
-    protected Ray3 zRay;// = new Ray3(new Vector3(0,0,0), new Vector3(0,0,1));
+    protected Ray3D xRay;// = new Ray3D(new Vector3(0,0,0), new Vector3(1,0,0));
+    protected Ray3D yRay;// = new Ray3D(new Vector3(0,0,0), new Vector3(0,1,0));
+    protected Ray3D zRay;// = new Ray3D(new Vector3(0,0,0), new Vector3(0,0,1));
 
     /**
      * Initialize this basis at the origin. The basis will be righthanded by default.
@@ -37,9 +37,9 @@ public class Transform3D {
         zBase.set(0, 0, 1);
         Vector3 zero = origin.copy();
         zero.set(0, 0, 0);
-        xRay = new Ray3(zero.copy(), xBase.copy());
-        yRay = new Ray3(zero.copy(), yBase.copy());
-        zRay = new Ray3(zero.copy(), zBase.copy());
+        xRay = new Ray3D(zero.copy(), xBase.copy());
+        yRay = new Ray3D(zero.copy(), yBase.copy());
+        zRay = new Ray3D(zero.copy(), zBase.copy());
         refreshPrecomputed();
     }
 
@@ -53,9 +53,9 @@ public class Transform3D {
         zBase.set(0, 0, 1);
         Vector3 zero = translate.copy();
         zero.set(0, 0, 0);
-        xRay = new Ray3(zero.copy(), xBase.copy());
-        yRay = new Ray3(zero.copy(), yBase.copy());
-        zRay = new Ray3(zero.copy(), zBase.copy());
+        xRay = new Ray3D(zero.copy(), xBase.copy());
+        yRay = new Ray3D(zero.copy(), yBase.copy());
+        zRay = new Ray3D(zero.copy(), zBase.copy());
         this.adoptValues(input);
 
     }
@@ -79,9 +79,9 @@ public class Transform3D {
      */
     public <V extends Vector3> Transform3D(V origin, V x, V y, V z) {
         this.translate = origin.copy();
-        xRay = new Ray3(origin.copy(), origin.copy());
-        yRay = new Ray3(origin.copy(), origin.copy());
-        zRay = new Ray3(origin.copy(), origin.copy());
+        xRay = new Ray3D(origin.copy(), origin.copy());
+        yRay = new Ray3D(origin.copy(), origin.copy());
+        zRay = new Ray3D(origin.copy(), origin.copy());
         this.set(x.copy(), y.copy(), z.copy());
     }
 
@@ -101,7 +101,7 @@ public class Transform3D {
      * @param y basis Ray
      * @param z basis Ray
      */
-    public <R extends Ray3> Transform3D(R x, R y, R z) {
+    public <R extends Ray3D> Transform3D(R x, R y, R z) {
         this.translate = x.p1().copy();
         xRay = x.copy();
         yRay = y.copy();
@@ -297,15 +297,15 @@ public class Transform3D {
         updateRays();
     }
 
-    public Ray3 getXRay() {
+    public Ray3D getXRay() {
         return xRay;
     }
 
-    public Ray3 getYRay() {
+    public Ray3D getYRay() {
         return yRay;
     }
 
-    public Ray3 getZRay() {
+    public Ray3D getZRay() {
         return zRay;
     }
 

@@ -26,7 +26,7 @@ import ewbik.asj.data.JSONObject;
 /**
  * @author Eron Gjoni
  */
-public class Ray3 implements CanLoad {
+public class Ray3D implements CanLoad {
     public static final int X = 0, Y = 1, Z = 2;
     protected Vector3 p1;
     protected Vector3 p2;
@@ -37,16 +37,16 @@ public class Ray3 implements CanLoad {
     Vector3 m, at, bt, ct, pt;
     Vector3 bc, ca, ac;
 
-    public Ray3() {
+    public Ray3D() {
         workingVector = new Vector3();
     }
 
-    public Ray3(Vector3 origin) {
+    public Ray3D(Vector3 origin) {
         this.workingVector = origin.copy();
         this.p1 = origin.copy();
     }
 
-    public Ray3(Vector3 p1, Vector3 p2) {
+    public Ray3D(Vector3 p1, Vector3 p2) {
         this.workingVector = p1.copy();
         this.p1 = p1.copy();
         if (p2 != null)
@@ -65,10 +65,10 @@ public class Ray3 implements CanLoad {
      * @param b3 the third vertex od a triangle on the second plane
      * @return a sgRay along the line of intersection of these two planes, or null if inputs are coplanar
      */
-    public static <V extends Vector3> ewbik.math.Ray3 planePlaneIntersect(V a1, V a2, V a3, V b1, V b2, V b3) {
-        ewbik.math.Ray3 a1a2 = new ewbik.math.Ray3(a1, a2);
-        ewbik.math.Ray3 a1a3 = new ewbik.math.Ray3(a1, a3);
-        ewbik.math.Ray3 a2a3 = new ewbik.math.Ray3(a2, a3);
+    public static <V extends Vector3> ewbik.math.Ray3D planePlaneIntersect(V a1, V a2, V a3, V b1, V b2, V b3) {
+        ewbik.math.Ray3D a1a2 = new ewbik.math.Ray3D(a1, a2);
+        ewbik.math.Ray3D a1a3 = new ewbik.math.Ray3D(a1, a3);
+        ewbik.math.Ray3D a2a3 = new ewbik.math.Ray3D(a2, a3);
 
         Vector3 interceptsa1a2 = a1a2.intersectsPlane(b1, b2, b3);
         Vector3 interceptsa1a3 = a1a3.intersectsPlane(b1, b2, b3);
@@ -89,7 +89,7 @@ public class Ray3 implements CanLoad {
             }
         }
         if (notNull1 != null && notNull2 != null)
-            return new ewbik.math.Ray3(notNull1, notNull2);
+            return new ewbik.math.Ray3D(notNull1, notNull2);
         else
             return null;
     }
@@ -136,7 +136,7 @@ public class Ray3 implements CanLoad {
      * @param r
      * @return
      */
-    public float distTo(ewbik.math.Ray3 r) {
+    public float distTo(ewbik.math.Ray3D r) {
         Vector3 closestOnThis = this.closestPointToRay3D(r);
         return r.distTo(closestOnThis);
     }
@@ -144,7 +144,7 @@ public class Ray3 implements CanLoad {
     /**
      * returns the distance between this ray as a line segment, and the input ray treated as a line segment
      */
-    public float distToStrict(ewbik.math.Ray3 r) {
+    public float distToStrict(ewbik.math.Ray3D r) {
         Vector3 closestOnThis = this.closestPointToSegment3D(r);
         return closestOnThis.dist(r.closestPointToStrict(closestOnThis));
     }
@@ -204,7 +204,7 @@ public class Ray3 implements CanLoad {
      *
      * @param target
      */
-    public void alignTo(ewbik.math.Ray3 target) {
+    public void alignTo(ewbik.math.Ray3D target) {
         p1.set(target.p1);
         p2.set(target.p2);
     }
@@ -234,8 +234,8 @@ public class Ray3 implements CanLoad {
     /**
      * @return a copy of this ray with its z-component set to 0;
      */
-    public ewbik.math.Ray3 get2DCopy() {
-        return this.get2DCopy(ewbik.math.Ray3.Z);
+    public ewbik.math.Ray3D get2DCopy() {
+        return this.get2DCopy(ewbik.math.Ray3D.Z);
     }
 
     /**
@@ -245,17 +245,17 @@ public class Ray3 implements CanLoad {
      * @param collapseOnAxis the axis on which to collapse the ray.
      * @return
      */
-    public ewbik.math.Ray3 get2DCopy(int collapseOnAxis) {
-        ewbik.math.Ray3 result = this.copy();
-        if (collapseOnAxis == ewbik.math.Ray3.X) {
+    public ewbik.math.Ray3D get2DCopy(int collapseOnAxis) {
+        ewbik.math.Ray3D result = this.copy();
+        if (collapseOnAxis == ewbik.math.Ray3D.X) {
             result.p1.setX_(0);
             result.p2.setX_(0);
         }
-        if (collapseOnAxis == ewbik.math.Ray3.Y) {
+        if (collapseOnAxis == ewbik.math.Ray3D.Y) {
             result.p1.setY_(0);
             result.p2.setY_(0);
         }
-        if (collapseOnAxis == ewbik.math.Ray3.Z) {
+        if (collapseOnAxis == ewbik.math.Ray3D.Z) {
             result.p1.setZ_(0);
             result.p2.setZ_(0);
         }
@@ -398,8 +398,8 @@ public class Ray3 implements CanLoad {
         this.p2.set((Vector3) p2Heading.addCopy(p2Add).addCopy(midPoint));
     }
 
-    public ewbik.math.Ray3 copy() {
-        return new ewbik.math.Ray3(this.p1, this.p2);
+    public ewbik.math.Ray3D copy() {
+        return new ewbik.math.Ray3D(this.p1, this.p2);
     }
 
     public void reverse() {
@@ -408,12 +408,12 @@ public class Ray3 implements CanLoad {
         this.p2 = temp;
     }
 
-    public ewbik.math.Ray3 getReversed() {
-        return new ewbik.math.Ray3(this.p2, this.p1);
+    public ewbik.math.Ray3D getReversed() {
+        return new ewbik.math.Ray3D(this.p2, this.p1);
     }
 
-    public ewbik.math.Ray3 getRayScaledTo(float scalar) {
-        return new ewbik.math.Ray3(p1, this.getScaledTo(scalar));
+    public ewbik.math.Ray3D getRayScaledTo(float scalar) {
+        return new ewbik.math.Ray3D(p1, this.getScaledTo(scalar));
     }
 
     /*
@@ -421,7 +421,7 @@ public class Ray3 implements CanLoad {
      * has a positive dot product with the heading of r
      * if dot product is already positive, does nothing.
      */
-    public void pointWith(ewbik.math.Ray3 r) {
+    public void pointWith(ewbik.math.Ray3D r) {
         if (this.heading().dot(r.heading()) < 0) this.reverse();
     }
 
@@ -429,8 +429,8 @@ public class Ray3 implements CanLoad {
         if (this.heading().dot(heading) < 0) this.reverse();
     }
 
-    public ewbik.math.Ray3 getRayScaledBy(float scalar) {
-        return new ewbik.math.Ray3(p1, this.getMultipledBy(scalar));
+    public ewbik.math.Ray3D getRayScaledBy(float scalar) {
+        return new ewbik.math.Ray3D(p1, this.getMultipledBy(scalar));
     }
 
 	/*public Vector3 intercepts2D(sgRay r) {
@@ -507,7 +507,7 @@ public class Ray3 implements CanLoad {
         this.mag(1);
     }
 
-    public Vector3 intercepts2D(ewbik.math.Ray3 r) {
+    public Vector3 intercepts2D(ewbik.math.Ray3D r) {
         Vector3 result = p1.copy();
 
         float p0_x = this.p1.x;
@@ -545,7 +545,7 @@ public class Ray3 implements CanLoad {
      * @param r
      * @return
      */
-    public Vector3 closestPointToSegment3D(ewbik.math.Ray3 r) {
+    public Vector3 closestPointToSegment3D(ewbik.math.Ray3D r) {
         Vector3 closestToThis = r.closestPointToRay3DStrict(this);
         return this.closestPointTo(closestToThis);
     }
@@ -557,7 +557,7 @@ public class Ray3 implements CanLoad {
      * @return
      */
 
-    public Vector3 closestPointToRay3D(ewbik.math.Ray3 r) {
+    public Vector3 closestPointToRay3D(ewbik.math.Ray3D r) {
         Vector3 result = null;
 
         workingVector.set(p2);
@@ -587,7 +587,7 @@ public class Ray3 implements CanLoad {
         return result;
     }
 
-    public Vector3 closestPointToRay3DStrict(ewbik.math.Ray3 r) {
+    public Vector3 closestPointToRay3DStrict(ewbik.math.Ray3D r) {
         Vector3 result = null;
 
         workingVector.set(p2);
@@ -628,7 +628,7 @@ public class Ray3 implements CanLoad {
      * @param r
      * @return
      */
-    public Vector3 closestPointToRay3DBounded(ewbik.math.Ray3 r) {
+    public Vector3 closestPointToRay3DBounded(ewbik.math.Ray3D r) {
         Vector3 result = null;
 
         workingVector.set(p2);
@@ -662,13 +662,13 @@ public class Ray3 implements CanLoad {
     }
 
     //returns a ray perpendicular to this ray on the XY plane;
-    public ewbik.math.Ray3 getPerpendicular2D() {
+    public ewbik.math.Ray3D getPerpendicular2D() {
         Vector3 heading = this.heading();
         workingVector.set(heading.x - 1f, heading.x, 0f);
-        return new ewbik.math.Ray3(this.p1, workingVector.add(this.p1));
+        return new ewbik.math.Ray3D(this.p1, workingVector.add(this.p1));
     }
 
-    public Vector3 intercepts2DStrict(ewbik.math.Ray3 r) {
+    public Vector3 intercepts2DStrict(ewbik.math.Ray3D r) {
         //will also return null if the intersection does not occur on the
         //line segment specified by the ray.
         Vector3 result = p1.copy();
@@ -922,7 +922,7 @@ public class Ray3 implements CanLoad {
         return p2;
     }
 
-    public <R extends ewbik.math.Ray3> void set(R r) {
+    public <R extends ewbik.math.Ray3D> void set(R r) {
         this.p1.set(r.p1);
         this.p2.set(r.p2);
     }

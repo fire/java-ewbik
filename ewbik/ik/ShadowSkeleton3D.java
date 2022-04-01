@@ -449,19 +449,19 @@ public class ShadowSkeleton3D {
             hdx++;
 
             if ((modeCode & IKPin.XDir) != 0) {
-                Ray3 xTarget = targetNode3D.x_().getRayScaledBy(weights[hdx]);
+                Ray3D xTarget = targetNode3D.x_().getRayScaledBy(weights[hdx]);
                 localizedTargetHeadings[hdx].set(xTarget.p2()).sub(origin);
                 xTarget.setToInvertedTip(localizedTargetHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
             if ((modeCode & IKPin.YDir) != 0) {
-                Ray3 yTarget = targetNode3D.y_().getRayScaledBy(weights[hdx]);
+                Ray3D yTarget = targetNode3D.y_().getRayScaledBy(weights[hdx]);
                 localizedTargetHeadings[hdx] = Vector3.sub(yTarget.p2(), origin);
                 yTarget.setToInvertedTip(localizedTargetHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
             if ((modeCode & IKPin.ZDir) != 0) {
-                Ray3 zTarget = targetNode3D.z_().getRayScaledBy(weights[hdx]);
+                Ray3D zTarget = targetNode3D.z_().getRayScaledBy(weights[hdx]);
                 localizedTargetHeadings[hdx] = Vector3.sub(zTarget.p2(), origin);
                 zTarget.setToInvertedTip(localizedTargetHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
@@ -487,19 +487,19 @@ public class ShadowSkeleton3D {
             hdx++;
 
             if ((modeCode & IKPin.XDir) != 0) {
-                Ray3 xTip = tipNode3D.x_().getRayScaledBy(scaleBy);
+                Ray3D xTip = tipNode3D.x_().getRayScaledBy(scaleBy);
                 localizedTipHeadings[hdx].set(xTip.p2()).sub(origin);
                 xTip.setToInvertedTip(localizedTipHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
             if ((modeCode & IKPin.YDir) != 0) {
-                Ray3 yTip = tipNode3D.y_().getRayScaledBy(scaleBy);
+                Ray3D yTip = tipNode3D.y_().getRayScaledBy(scaleBy);
                 localizedTipHeadings[hdx].set(yTip.p2()).sub(origin);
                 yTip.setToInvertedTip(localizedTipHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
             if ((modeCode & IKPin.ZDir) != 0) {
-                Ray3 zTip = tipNode3D.z_().getRayScaledBy(scaleBy);
+                Ray3D zTip = tipNode3D.z_().getRayScaledBy(scaleBy);
                 localizedTipHeadings[hdx].set(zTip.p2()).sub(origin);
                 zTip.setToInvertedTip(localizedTipHeadings[hdx + 1]).sub(origin);
                 ;

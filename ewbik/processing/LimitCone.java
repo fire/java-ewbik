@@ -210,7 +210,7 @@ public class LimitCone implements Saveable {
             Vector3 c1xt1 = controlPoint.crossCopy(tangentCircleCenterNext1);
             Vector3 t1xc2 = tangentCircleCenterNext1.crossCopy(next.controlPoint);
             if (input.dot(c1xt1) > 0 && input.dot(t1xc2) > 0) {
-                Ray3 tan1ToInput = new Ray3(tangentCircleCenterNext1, input);
+                Ray3D tan1ToInput = new Ray3D(tangentCircleCenterNext1, input);
                 Vector3 result = new Vector3();
                 tan1ToInput.intersectsPlane(new Vector3(0, 0, 0), controlPoint, next.controlPoint, result);
                 return result.normalize();
@@ -221,7 +221,7 @@ public class LimitCone implements Saveable {
             Vector3 t2xc1 = tangentCircleCenterNext2.crossCopy(controlPoint);
             Vector3 c2xt2 = next.controlPoint.crossCopy(tangentCircleCenterNext2);
             if (input.dot(t2xc1) > 0 && input.dot(c2xt2) > 0) {
-                Ray3 tan2ToInput = new Ray3(tangentCircleCenterNext2, input);
+                Ray3D tan2ToInput = new Ray3D(tangentCircleCenterNext2, input);
                 Vector3 result = new Vector3();
                 tan2ToInput.intersectsPlane(new Vector3(0, 0, 0), controlPoint, next.controlPoint, result);
                 return result.normalize();
@@ -379,8 +379,8 @@ public class LimitCone implements Saveable {
 
             // ray from scaled center of next cone to half way point between the
             // circumference of this cone and the next cone.
-            Ray3 r1B = new Ray3(planeDir1B, scaledAxisB);
-            Ray3 r2B = new Ray3(planeDir1B, planeDir2B);
+            Ray3D r1B = new Ray3D(planeDir1B, scaledAxisB);
+            Ray3D r2B = new Ray3D(planeDir1B, planeDir2B);
 
             r1B.elongate(99);
             r2B.elongate(99);
@@ -388,7 +388,7 @@ public class LimitCone implements Saveable {
             Vector3 intersection1 = r1B.intersectsPlane(scaledAxisA, planeDir1A, planeDir2A);
             Vector3 intersection2 = r2B.intersectsPlane(scaledAxisA, planeDir1A, planeDir2A);
 
-            Ray3 intersectionRay = new Ray3(intersection1, intersection2);
+            Ray3D intersectionRay = new Ray3D(intersection1, intersection2);
             intersectionRay.elongate(99);
 
             Vector3 sphereIntersect1 = new Vector3();

@@ -2116,24 +2116,24 @@ public class Quaternion {
         return new Quaternion(new MRotation(r.getQ0(), r.getQ1(), r.getQ2(), r.getQ3(), true));
     }
 
-    public Ray3 applyToCopy(Ray3 rIn) {
+    public Ray3D applyToCopy(Ray3D rIn) {
         workingInput[0] = rIn.p2().x - rIn.p1().x;
         workingInput[1] = rIn.p2().y - rIn.p1().y;
         workingInput[2] = rIn.p2().z - rIn.p1().z;
 
         this.rotation.applyTo(workingInput, workingOutput);
-        Ray3 result = rIn.copy();
+        Ray3D result = rIn.copy();
         result.heading(workingOutput);
         return result;
     }
 
-    public Ray3 applyInverseTo(Ray3 rIn) {
+    public Ray3D applyInverseTo(Ray3D rIn) {
         workingInput[0] = rIn.p2().x - rIn.p1().x;
         workingInput[1] = rIn.p2().y - rIn.p1().y;
         workingInput[2] = rIn.p2().z - rIn.p1().z;
 
         this.rotation.applyInverseTo(workingInput, workingOutput);
-        Ray3 result = rIn.copy();
+        Ray3D result = rIn.copy();
         result.p2().add(workingOutput);
         return result;
     }

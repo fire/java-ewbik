@@ -83,8 +83,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
                 this.tag = inputTag;
             this.boneHeight = inputBoneHeight;
 
-            Ray3 tipHeadingRay = new Ray3(((Bone) par).getTip_(), tipHeading1);
-            Ray3 rollHeadingRay = new Ray3(((Bone) par).getTip_(), rollHeading1);
+            Ray3D tipHeadingRay = new Ray3D(((Bone) par).getTip_(), tipHeading1);
+            Ray3D rollHeadingRay = new Ray3D(((Bone) par).getTip_(), rollHeading1);
             Vector3 tempTip = tipHeading1.copy();
             tempTip.set(0, 0, 0);
             Vector3 tempRoll = rollHeading1.copy();
@@ -163,10 +163,10 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             } else
                 this.tag = inputTag;
 
-            Ray3 tipHeadingRay;
-            tipHeadingRay = new Ray3(parArma.localNode3D.origin_(), tipHeading);
+            Ray3D tipHeadingRay;
+            tipHeadingRay = new Ray3D(parArma.localNode3D.origin_(), tipHeading);
             tipHeadingRay.getRayScaledTo(inputBoneHeight);
-            Ray3 rollHeadingRay = new Ray3(parArma.localNode3D.origin_(), rollHeading);
+            Ray3D rollHeadingRay = new Ray3D(parArma.localNode3D.origin_(), rollHeading);
             Vector3 tempTip = tipHeading.copy();
             Vector3 tempRoll = rollHeading.copy();
             Vector3 tempX = tempTip.copy();

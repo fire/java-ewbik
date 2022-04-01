@@ -192,7 +192,7 @@ public class Node3D implements ewbik.asj.Saveable {
         return new Vector3(ev.x, ev.y, ev.z);
     }
 
-    public static void drawRay(PGraphics p, Ray3 r) {
+    public static void drawRay(PGraphics p, Ray3D r) {
         p.line(r.p1().x, r.p1().y, r.p1().z, r.p2().x, r.p2().y, r.p2().z);
     }
 
@@ -389,7 +389,7 @@ public class Node3D implements ewbik.asj.Saveable {
      *
      * @return a ray / segment representing this Axes global x basis position and direction and magnitude
      */
-    public Ray3 x_() {
+    public Ray3D x_() {
         this.updateGlobal();
         return this.getGlobalMBasis().getXRay();
     }
@@ -399,7 +399,7 @@ public class Node3D implements ewbik.asj.Saveable {
      *
      * @return a ray / segment representing this Axes global y basis position and direction and magnitude
      */
-    public Ray3 y_() {
+    public Ray3D y_() {
         this.updateGlobal();
         return this.getGlobalMBasis().getYRay();
     }
@@ -409,7 +409,7 @@ public class Node3D implements ewbik.asj.Saveable {
      *
      * @return a ray / segment representing this Axes global z basis position and direction and magnitude
      */
-    public Ray3 z_() {
+    public Ray3D z_() {
         this.updateGlobal();
         return this.getGlobalMBasis().getZRay();
     }
@@ -656,14 +656,14 @@ public class Node3D implements ewbik.asj.Saveable {
      *
      * @param in
      */
-    public void setToGlobalOf(Ray3 input, Ray3 output) {
+    public void setToGlobalOf(Ray3D input, Ray3D output) {
         this.updateGlobal();
         this.setToGlobalOf(input.p1(), output.p1());
         this.setToGlobalOf(input.p2(), output.p2());
     }
 
-    public Ray3 getGlobalOf(Ray3 in) {
-        return new Ray3(this.getGlobalOf(in.p1()), this.getGlobalOf(in.p2()));
+    public Ray3D getGlobalOf(Ray3D in) {
+        return new Ray3D(this.getGlobalOf(in.p1()), this.getGlobalOf(in.p2()));
     }
 
     public <V extends Vector3> V getLocalOf(V in) {
@@ -703,7 +703,7 @@ public class Node3D implements ewbik.asj.Saveable {
      * @param in
      */
 
-    public void setToLocalOf(Ray3 in, Ray3 out) {
+    public void setToLocalOf(Ray3D in, Ray3D out) {
         this.setToLocalOf(in.p1(), out.p1());
         this.setToLocalOf(in.p2(), out.p2());
     }
@@ -713,8 +713,8 @@ public class Node3D implements ewbik.asj.Saveable {
         this.getGlobalMBasis().setToLocalOf(input, output);
     }
 
-    public Ray3 getLocalOf(Ray3 in) {
-        return new Ray3(this.getLocalOf(in.p1()), this.getLocalOf(in.p2()));
+    public Ray3D getLocalOf(Ray3D in) {
+        return new Ray3D(this.getLocalOf(in.p1()), this.getLocalOf(in.p2()));
     }
 
     public <V extends Vector3> void translateByLocal(V translate) {

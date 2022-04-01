@@ -77,8 +77,8 @@ public class Kusudama implements Saveable {
 
     float[] coneSequence;
     int coneCount;
-    Ray3 boneRay = new Ray3(new Vector3(), new Vector3());
-    Ray3 constrainedRay = new Ray3(new Vector3(), new Vector3());
+    Ray3D boneRay = new Ray3D(new Vector3(), new Vector3());
+    Ray3D constrainedRay = new Ray3D(new Vector3(), new Vector3());
     float unitHyperArea = 2 * MathUtils.pow(MathUtils.PI, 2);
     float unitArea = 4 * MathUtils.PI;
     float rotationalFreedom = 1f;
@@ -312,7 +312,7 @@ public class Kusudama implements Saveable {
             newY = new Vector3(0, 1f, 0);
         }
 
-        Ray3 newYRay = new Ray3(new Vector3(0, 0, 0), newY);
+        Ray3D newYRay = new Ray3D(new Vector3(0, 0, 0), newY);
 
         Quaternion oldYtoNewY = new Quaternion(limitingNode3D.y_().heading(), originalLimitingNode3D.getGlobalOf(newYRay).heading());
         limitingNode3D.rotateBy(oldYtoNewY);
