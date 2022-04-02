@@ -25,6 +25,7 @@ import ewbik.asj.Saveable;
 import ewbik.ik.ShadowNode3D;
 import ewbik.math.*;
 import ik.Bone;
+import processing.Node3D;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
@@ -45,7 +46,7 @@ public class Kusudama implements Saveable {
     public static final float PI = MathUtils.PI;
     public static PShader kusudamaShader;
     public static PShader currentShader;
-    protected ewbik.processing.sceneGraph.Node3D limitingNode3D;
+    protected Node3D limitingNode3D;
     protected float painfullness;
     /**
      * An array containing all of the Kusudama's KusudamaTwists. The kusudama is
@@ -121,7 +122,7 @@ public class Kusudama implements Saveable {
      **/
     public ewbik.processing.singlePrecision.KusudamaTwist createKusudamaTwistForIndex(int insertAt, Vector3 newPoint,
             float radius) {
-        return new KusudamaTwist(ewbik.processing.sceneGraph.Node3D.toPVector(newPoint), radius, this);
+        return new KusudamaTwist(Node3D.toPVector(newPoint), radius, this);
     }
 
     /**
@@ -144,12 +145,12 @@ public class Kusudama implements Saveable {
      * @param radius   the radius of the KusudamaTwist
      */
     public void addKusudamaTwistAtIndex(int insertAt, PVector newPoint, float radius) {
-        addKusudamaTwistAtIndex(insertAt, ewbik.processing.sceneGraph.Node3D.toVec3f(newPoint), radius);
+        addKusudamaTwistAtIndex(insertAt, Node3D.toVec3f(newPoint), radius);
     }
 
     public boolean isInLimits(PVector inPoint) {
         return isInLimits_(
-                ewbik.processing.sceneGraph.Node3D.toVec3f(inPoint));
+                Node3D.toVec3f(inPoint));
     }
 
     public void drawMe(PGraphics p, int boneCol, float pinSize) {
@@ -215,9 +216,9 @@ public class Kusudama implements Saveable {
 
         int idx = 0;
         for (KusudamaTwist lc : getKusudamaTwists()) {
-            PVector controlPoint = ewbik.processing.sceneGraph.Node3D.toPVector(lc.getControlPoint());
-            PVector leftTangent = ewbik.processing.sceneGraph.Node3D.toPVector(lc.tangentCircleCenterNext1);
-            PVector rightTangent = ewbik.processing.sceneGraph.Node3D.toPVector(lc.tangentCircleCenterNext2);
+            PVector controlPoint = Node3D.toPVector(lc.getControlPoint());
+            PVector leftTangent = Node3D.toPVector(lc.tangentCircleCenterNext1);
+            PVector rightTangent = Node3D.toPVector(lc.tangentCircleCenterNext2);
             leftTangent = leftTangent.normalize();
             controlPoint = controlPoint.normalize();
             rightTangent = rightTangent.normalize();
@@ -248,9 +249,9 @@ public class Kusudama implements Saveable {
      *         majorRotationAxes)
      */
     @SuppressWarnings("unchecked")
-    public ewbik.processing.sceneGraph.Node3D limitingAxes() {
+    public Node3D limitingAxes() {
         // if(inverted) return inverseLimitingAxes;
-        return (ewbik.processing.sceneGraph.Node3D) (ewbik.processing.sceneGraph.Node3D) limitingNode3D;
+        return (Node3D) (Node3D) limitingNode3D;
     }
 
     public void updateTangentRadii() {
@@ -289,7 +290,7 @@ public class Kusudama implements Saveable {
      * constraint.
      */
     public void optimizeLimitingAxes() {
-        ewbik.processing.sceneGraph.Node3D originalLimitingNode3D = limitingNode3D.getGlobalCopy();
+        Node3D originalLimitingNode3D = limitingNode3D.getGlobalCopy();
 
         ArrayList<Vector3> directions = new ArrayList<>();
         if (getKusudamaTwists().size() == 1) {
@@ -355,8 +356,8 @@ public class Kusudama implements Saveable {
      *
      * @param toSet
      */
-    public void setAxesToSnapped(ewbik.processing.sceneGraph.Node3D toSet,
-            ewbik.processing.sceneGraph.Node3D limitingNode3D, float cosHalfAngleDampen) {
+    public void setAxesToSnapped(Node3D toSet,
+                                 Node3D limitingNode3D, float cosHalfAngleDampen) {
         if (limitingNode3D != null) {
             if (orientationallyConstrained) {
                 setAxesToOrientationSnap(toSet, limitingNode3D, cosHalfAngleDampen);
@@ -367,9 +368,9 @@ public class Kusudama implements Saveable {
         }
     }
 
-    public void setAxesToReturnfulled(ewbik.processing.sceneGraph.Node3D toSet,
-            ewbik.processing.sceneGraph.Node3D limitingNode3D, float cosHalfReturnfullness,
-            float angleReturnfullness) {
+    public void setAxesToReturnfulled(Node3D toSet,
+                                      Node3D limitingNode3D, float cosHalfReturnfullness,
+                                      float angleReturnfullness) {
         if (limitingNode3D != null && painfullness > 0f) {
             if (orientationallyConstrained) {
                 Vector3 origin = toSet.calculatePosition();
@@ -437,8 +438,8 @@ public class Kusudama implements Saveable {
      *
      * @param toSet
      */
-    public void setAxesToOrientationSnap(ewbik.processing.sceneGraph.Node3D toSet,
-            ewbik.processing.sceneGraph.Node3D limitingNode3D, float cosHalfAngleDampen) {
+    public void setAxesToOrientationSnap(Node3D toSet,
+                                         Node3D limitingNode3D, float cosHalfAngleDampen) {
         float[] inBounds = { 1f };
         limitingNode3D.updateGlobal();
         boneRay.p1().set(limitingNode3D.calculatePosition());
@@ -455,8 +456,8 @@ public class Kusudama implements Saveable {
         }
     }
 
-    public boolean isInOrientationLimits(ewbik.processing.sceneGraph.Node3D globalNode3D,
-            ewbik.processing.sceneGraph.Node3D limitingNode3D) {
+    public boolean isInOrientationLimits(Node3D globalNode3D,
+                                         Node3D limitingNode3D) {
         float[] inBounds = { 1f };
         Vector3 inLimits = this.pointInLimits(limitingNode3D.getLocalOf(globalNode3D.calculateY().p2()), inBounds);
         if (inBounds[0] == -1l) {
@@ -498,8 +499,8 @@ public class Kusudama implements Saveable {
      * @return radians of twist required to snap bone into twist limits (0 if bone
      *         is already in twist limits)
      */
-    public float snapToTwistLimits(ewbik.processing.sceneGraph.Node3D toSet,
-            ewbik.processing.sceneGraph.Node3D limitingNode3D) {
+    public float snapToTwistLimits(Node3D toSet,
+                                   Node3D limitingNode3D) {
 
         if (!axiallyConstrained)
             return 0f;
@@ -531,8 +532,8 @@ public class Kusudama implements Saveable {
         }
     }
 
-    public float angleToTwistCenter(ewbik.processing.sceneGraph.Node3D toSet,
-            ewbik.processing.sceneGraph.Node3D limitingNode3D) {
+    public float angleToTwistCenter(Node3D toSet,
+                                    Node3D limitingNode3D) {
 
         if (!axiallyConstrained)
             return 0f;
@@ -548,8 +549,8 @@ public class Kusudama implements Saveable {
 
     }
 
-    public boolean inTwistLimits(ewbik.processing.sceneGraph.Node3D boneNode3D,
-            ewbik.processing.sceneGraph.Node3D limitingNode3D) {
+    public boolean inTwistLimits(Node3D boneNode3D,
+                                 Node3D limitingNode3D) {
 
         limitingNode3D.updateGlobal();
         Quaternion alignRot = limitingNode3D.getGlobalMBasis().getInverseRotation()
@@ -560,7 +561,7 @@ public class Kusudama implements Saveable {
         // uncomment the next line for reflectable axis support (removed for performance
         // reasons)
         angleDelta *= limitingNode3D.getGlobalChirality()
-                * (limitingNode3D.isGlobalAxisFlipped(ewbik.processing.sceneGraph.Node3D.Y) ? -1 : 1);
+                * (limitingNode3D.isGlobalAxisFlipped(Node3D.Y) ? -1 : 1);
 
         angleDelta = toTau(angleDelta);
         float fromMinToAngleDelta = toTau(signedAngleDifference(angleDelta, TAU - this.minAxialAngle()));
@@ -658,7 +659,7 @@ public class Kusudama implements Saveable {
     }
 
     public <V extends Vector3> Vector3 pointOnPathSequence(V inPoint,
-            ewbik.processing.sceneGraph.Node3D limitingNode3D) {
+            Node3D limitingNode3D) {
         float closestPointDot = 0f;
         Vector3 point = limitingNode3D.getLocalOf(inPoint);
         point.normalize();
@@ -936,7 +937,7 @@ public class Kusudama implements Saveable {
 
     public void loadFromJSONObject(ewbik.asj.data.JSONObject j, LoadManager l) {
         this.attachedTo = l.getObjectFor(Bone.class, j, "attachedTo");
-        this.limitingNode3D = l.getObjectFor(ewbik.processing.sceneGraph.Node3D.class, j, "limitAxes");
+        this.limitingNode3D = l.getObjectFor(Node3D.class, j, "limitAxes");
         kusudamaTwists = new ArrayList<>();
         l.arrayListFromJSONArray(j.getJSONArray("limitCones"), kusudamaTwists,
                 ewbik.processing.singlePrecision.KusudamaTwist.class);

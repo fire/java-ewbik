@@ -8,6 +8,7 @@ import ewbik.asj.data.StringFuncs;
 import ewbik.ik.*;
 import ik.Bone;
 import ik.IKPin;
+import processing.Node3D;
 import processing.Skeleton3D;
 
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class EWBIKSaver extends SaveManager {
         for (Saveable s : sk) {
             JSONObject jsonObj = s.getSaveJSON(this);
             if (jsonObj != null) {
-                if (ewbik.processing.sceneGraph.Node3D.class.isAssignableFrom(s.getClass()))
+                if (Node3D.class.isAssignableFrom(s.getClass()))
                     axesJSON.append(jsonObj);
                 if (Skeleton3D.class.isAssignableFrom(s.getClass()))
                     armaturesJSON.append(jsonObj);

@@ -1,5 +1,6 @@
 import ik.Bone;
 import ik.IKPin;
+import processing.Node3D;
 import processing.Skeleton3D;
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -77,20 +78,20 @@ class UI {
 
     public void drawPins(PGraphics pg, IKPin activePin,
                          float zoomScalar, float drawSize,
-                         boolean cubeMode, ewbik.processing.sceneGraph.Node3D cubeNode3D) {
+                         boolean cubeMode, Node3D cubeNode3D) {
 
         if (activePin != null) {
-            ewbik.processing.sceneGraph.Node3D ellipseAx;
+            Node3D ellipseAx;
             ellipseAx = cubeMode ? cubeNode3D : activePin.getAxes();
             PVector pinLoc = screenOf(pg, ellipseAx.origin(), zoomScalar);
             PVector pinX = screenOf(pg,
-                    ewbik.processing.sceneGraph.Node3D.toPVector(ellipseAx.calculateX().getScaledTo(drawSize)),
+                    Node3D.toPVector(ellipseAx.calculateX().getScaledTo(drawSize)),
                     zoomScalar);
             PVector pinY = screenOf(pg,
-                    ewbik.processing.sceneGraph.Node3D.toPVector(ellipseAx.calculateY().getScaledTo(drawSize)),
+                    Node3D.toPVector(ellipseAx.calculateY().getScaledTo(drawSize)),
                     zoomScalar);
             PVector pinZ = screenOf(pg,
-                    ewbik.processing.sceneGraph.Node3D.toPVector(ellipseAx.calculateZ().getScaledTo(drawSize)),
+                    Node3D.toPVector(ellipseAx.calculateZ().getScaledTo(drawSize)),
                     zoomScalar);
             pg.fill(255, 255, 255, 150);
             pg.stroke(255, 0, 255);
@@ -99,18 +100,18 @@ class UI {
             pg.ellipse(pinLoc.x, pinLoc.y, zoomScalar * 50, zoomScalar * 50);
 
             PVector effectorO = screenOf(pg,
-                    ewbik.processing.sceneGraph.Node3D.toPVector(activePin.forBone().localAxes().calculatePosition()),
+                    Node3D.toPVector(activePin.forBone().localAxes().calculatePosition()),
                     zoomScalar);
             PVector effectorX = screenOf(pg,
-                    ewbik.processing.sceneGraph.Node3D
+                    Node3D
                             .toPVector(activePin.forBone().localAxes().calculateX().getScaledTo(drawSize)),
                     zoomScalar);
             PVector effectorY = screenOf(pg,
-                    ewbik.processing.sceneGraph.Node3D
+                    Node3D
                             .toPVector(activePin.forBone().localAxes().calculateY().getScaledTo(drawSize)),
                     zoomScalar);
             PVector effectorZ = screenOf(pg,
-                    ewbik.processing.sceneGraph.Node3D
+                    Node3D
                             .toPVector(activePin.forBone().localAxes().calculateZ().getScaledTo(drawSize)),
                     zoomScalar);
             pg.stroke(255, 255, 255, 150);
@@ -166,7 +167,7 @@ class UI {
                           Runnable additionalDraw,
                           Skeleton3D armature,
                           String usageInstructions,
-                          IKPin activePin, ewbik.processing.sceneGraph.Node3D cubeNode3D, boolean cubeEnabled) {
+                          IKPin activePin, Node3D cubeNode3D, boolean cubeEnabled) {
         currentDrawSurface = display;
         display.beginDraw();
         setSceneAndCamera(display, zoomScalar);
@@ -234,7 +235,7 @@ public class ItemHolding extends PApplet {
     ArrayList<IKPin> pins = new ArrayList<>();
     UI ui;
     IKPin activePin;
-    ewbik.processing.sceneGraph.Node3D worldNode3D, cubeNode3D;
+    Node3D worldNode3D, cubeNode3D;
     float zoomScalar = 200f / height;
     boolean cubeMode = true;
 
@@ -259,13 +260,13 @@ public class ItemHolding extends PApplet {
             e.printStackTrace();
         }
         loadedArmature = ewbik.processing.IO.LoadArmature_singlePrecision("Humanoid_Holding_Item.arm");
-        worldNode3D = (ewbik.processing.sceneGraph.Node3D) loadedArmature.localAxes().getParentAxes();
+        worldNode3D = (Node3D) loadedArmature.localAxes().getParentAxes();
         if (worldNode3D == null) {
-            worldNode3D = new ewbik.processing.sceneGraph.Node3D();
+            worldNode3D = new Node3D();
             loadedArmature.localAxes().setParent(worldNode3D);
         }
         updatePinList();
-        cubeNode3D = new ewbik.processing.sceneGraph.Node3D();
+        cubeNode3D = new Node3D();
 
         activePin = pins.get(pins.size() - 1);
 
@@ -333,8 +334,8 @@ public class ItemHolding extends PApplet {
 
     public void mouseWheel(MouseEvent event) {
         float e = event.getCount();
-        ewbik.processing.sceneGraph.Node3D node3D = cubeMode ? cubeNode3D
-                : (ewbik.processing.sceneGraph.Node3D) activePin.getAxes();
+        Node3D node3D = cubeMode ? cubeNode3D
+                : (Node3D) activePin.getAxes();
         if (event.isShiftDown()) {
             node3D.rotateAboutZ(e / TAU, true);
         } else if (event.isControlDown()) {

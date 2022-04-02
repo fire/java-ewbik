@@ -22,6 +22,7 @@ import ewbik.math.*;
 import ewbik.processing.singlePrecision.Kusudama;
 import ik.Bone;
 import ik.IKPin;
+import processing.Node3D;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,8 +42,8 @@ public class ShadowNode3D {
     public ArrayList<Bone> bonechainList = new ArrayList<Bone>();
     public int distanceToRoot = 0;
     public int chainLength = 0;
-    public ewbik.processing.sceneGraph.Node3D debugTipNode3D;
-    public ewbik.processing.sceneGraph.Node3D debugTargetNode3D;
+    public Node3D debugTipNode3D;
+    public Node3D debugTargetNode3D;
     ShadowBone[] pinnedBones;
     boolean includeInIK = true;
     int pinDepth = 1;
@@ -207,7 +208,7 @@ public class ShadowNode3D {
                 rootStrand.bonechainRoot.parentArmature.localAxes());
     }
 
-    private void recursivelyEnsureAxesHeirarchyFor(Bone b, ewbik.processing.sceneGraph.Node3D parentTo) {
+    private void recursivelyEnsureAxesHeirarchyFor(Bone b, Node3D parentTo) {
         ewbik.ik.ShadowNode3D chain = getChainFor(b);
         if (chain != null) {
             ShadowBone sb = chain.simulatedBones.get(b);
@@ -329,7 +330,7 @@ public class ShadowNode3D {
             float totalIterations) {
 
         ShadowBone sb = simulatedBones.get(forBone);
-        ewbik.processing.sceneGraph.Node3D thisBoneNode3D = sb.simLocalNode3D;
+        Node3D thisBoneNode3D = sb.simLocalNode3D;
         thisBoneNode3D.updateGlobal();
 
         Quaternion bestOrientation = new Quaternion(thisBoneNode3D.getGlobalMBasis().rotation.rotation);
@@ -434,13 +435,13 @@ public class ShadowNode3D {
     }
 
     public void updateTargetHeadings(Vector3[] localizedTargetHeadings, float[] weights,
-            ewbik.processing.sceneGraph.Node3D thisBoneNode3D) {
+            Node3D thisBoneNode3D) {
 
         int hdx = 0;
         for (int i = 0; i < pinnedBones.length; i++) {
             ShadowBone sb = pinnedBones[i];
             IKPin pin = sb.forBone.getIKPin();
-            ewbik.processing.sceneGraph.Node3D effectorNode3D = pin.forBone.getPinnedAxes();
+            Node3D effectorNode3D = pin.forBone.getPinnedAxes();
             effectorNode3D.updateGlobal();
             Vector3 origin = thisBoneNode3D.calculatePosition();
             localizedTargetHeadings[hdx].set(effectorNode3D.calculatePosition()).sub(origin);
@@ -469,18 +470,18 @@ public class ShadowNode3D {
 
     }
 
-    public void upateTipHeadings(Vector3[] localizedTipHeadings, ewbik.processing.sceneGraph.Node3D thisBoneNode3D) {
+    public void upateTipHeadings(Vector3[] localizedTipHeadings, Node3D thisBoneNode3D) {
         int hdx = 0;
 
         for (int i = 0; i < pinnedBones.length; i++) {
             ShadowBone sb = pinnedBones[i];
             IKPin pin = sb.forBone.getIKPin();
-            ewbik.processing.sceneGraph.Node3D tipNode3D = sb.simLocalNode3D;
+            Node3D tipNode3D = sb.simLocalNode3D;
             tipNode3D.updateGlobal();
             Vector3 origin = thisBoneNode3D.calculatePosition();
             byte modeCode = pin.getModeCode();
 
-            ewbik.processing.sceneGraph.Node3D targetNode3D = pin.forBone.getPinnedAxes();
+            Node3D targetNode3D = pin.forBone.getPinnedAxes();
             targetNode3D.updateGlobal();
             float scaleBy = thisBoneNode3D.calculatePosition().dist(targetNode3D.calculatePosition());
             hdx++;
@@ -617,8 +618,8 @@ public class ShadowNode3D {
         ewbik.ik.ShadowNode3D bChain = getChildSegmentContaining(b);
         if (bChain != null) {
             ShadowBone sb = bChain.simulatedBones.get(b);
-            ewbik.processing.sceneGraph.Node3D bNode3D = sb.simLocalNode3D;
-            ewbik.processing.sceneGraph.Node3D cNode3D = sb.simConstraintNode3D;
+            Node3D bNode3D = sb.simLocalNode3D;
+            Node3D cNode3D = sb.simConstraintNode3D;
             if (forceGlobal) {
                 bNode3D.alignGlobalsTo(b.localAxes());
                 bNode3D.markDirty();
@@ -646,7 +647,7 @@ public class ShadowNode3D {
         ewbik.ik.ShadowNode3D chain = b.parentArmature.boneSegmentMap.get(b); // getChainFor(b);
         if (chain != null) {
             ShadowBone sb = chain.simulatedBones.get(b);
-            ewbik.processing.sceneGraph.Node3D simulatedLocalNode3D = sb.simLocalNode3D;
+            Node3D simulatedLocalNode3D = sb.simLocalNode3D;
             if (b.getParent() != null) {
                 b.localAxes().alignOrientationTo(simulatedLocalNode3D);
             } else {
@@ -698,8 +699,8 @@ public class ShadowNode3D {
      */
     public class ShadowBone {
         Bone forBone;
-        ewbik.processing.sceneGraph.Node3D simLocalNode3D;
-        ewbik.processing.sceneGraph.Node3D simConstraintNode3D;
+        Node3D simLocalNode3D;
+        Node3D simConstraintNode3D;
         float cosHalfDampen = 0f;
         float cosHalfReturnfullnessDampened[];
         float halfReturnfullnessDampened[];

@@ -23,6 +23,7 @@ import ewbik.asj.LoadManager;
 import ewbik.asj.SaveManager;
 import ewbik.asj.Saveable;
 import ewbik.math.*;
+import processing.Node3D;
 import processing.core.PVector;
 
 public class KusudamaTwist implements Saveable {
@@ -60,7 +61,7 @@ public class KusudamaTwist implements Saveable {
     }
 
     public KusudamaTwist(PVector location, float rad, ewbik.processing.singlePrecision.Kusudama attachedTo) {
-        Vector3 location1 = ewbik.processing.sceneGraph.Node3D.toVec3f(location);
+        Vector3 location1 = Node3D.toVec3f(location);
         setControlPoint(location1);
         ewbik.processing.singlePrecision.KusudamaTwist.this.tangentCircleCenterNext1 = location1.getOrthogonal();
         ewbik.processing.singlePrecision.KusudamaTwist.this.tangentCircleCenterNext2 = Vector3

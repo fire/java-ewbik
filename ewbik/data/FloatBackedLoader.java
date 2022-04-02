@@ -11,6 +11,7 @@ import ewbik.math.Quaternion;
 import ewbik.processing.singlePrecision.*;
 import ik.Bone;
 import ik.IKPin;
+import processing.Node3D;
 import processing.Skeleton3D;
 
 import java.io.File;
@@ -24,7 +25,7 @@ public final class FloatBackedLoader extends LoadManager {
     public File currentFilePath;
 
     public HashMap<String, JSONObject> axesJSONObjects = new HashMap<>();
-    public HashMap<String, ewbik.processing.sceneGraph.Node3D> axesLoadObjects = new HashMap<>();
+    public HashMap<String, Node3D> axesLoadObjects = new HashMap<>();
 
     public HashMap<String, JSONObject> armatureJSONObjects = new HashMap<>();
     public HashMap<String, Skeleton3D> armatureLoadObjects = new HashMap<>();
@@ -71,7 +72,7 @@ public final class FloatBackedLoader extends LoadManager {
     }
 
     public Collection<? extends Skeleton3D> importFile(File selection,
-            Class<? extends ewbik.processing.sceneGraph.Node3D> AxesClass,
+            Class<? extends Node3D> AxesClass,
             Class<? extends Bone> BoneClass,
             Class<? extends Skeleton3D> ArmatureClass,
             Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
@@ -90,7 +91,7 @@ public final class FloatBackedLoader extends LoadManager {
     }
 
     public Collection<? extends Skeleton3D> loadJSON(JSONObject loadFile,
-            Class<? extends ewbik.processing.sceneGraph.Node3D> AxesClass,
+            Class<? extends Node3D> AxesClass,
             Class<? extends Bone> BoneClass,
             Class<? extends Skeleton3D> ArmatureClass,
             Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
@@ -98,7 +99,7 @@ public final class FloatBackedLoader extends LoadManager {
             Class<? extends IKPin> IKPinClass) {
         clearCurrentLoadObjects();
 
-        AxesClass = AxesClass == null ? ewbik.processing.sceneGraph.Node3D.class : AxesClass;
+        AxesClass = AxesClass == null ? Node3D.class : AxesClass;
         BoneClass = BoneClass == null ? Bone.class : BoneClass;
         ArmatureClass = ArmatureClass == null ? Skeleton3D.class : ArmatureClass;
         KusudamaClass = KusudamaClass == null ? ewbik.processing.singlePrecision.Kusudama.class : KusudamaClass;
@@ -281,7 +282,7 @@ public final class FloatBackedLoader extends LoadManager {
     public Saveable getObjectFromClassMaps(Class keyClass, String identityHash) {
         Saveable result = null;
 
-        if (ewbik.processing.sceneGraph.Node3D.class.isAssignableFrom(keyClass))
+        if (Node3D.class.isAssignableFrom(keyClass))
             result = (Saveable) axesLoadObjects.get(identityHash);
         else if (Skeleton3D.class.isAssignableFrom(keyClass))
             result = (Saveable) armatureLoadObjects.get(identityHash);

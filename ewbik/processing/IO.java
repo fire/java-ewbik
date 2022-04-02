@@ -4,6 +4,7 @@ import ewbik.data.EWBIKLoader;
 import ewbik.data.EWBIKSaver;
 import ik.Bone;
 import ik.IKPin;
+import processing.Node3D;
 import processing.Skeleton3D;
 
 import java.util.Collection;
@@ -21,7 +22,7 @@ public final class IO {
         EWBIKLoader newLoader = new EWBIKLoader();
         @SuppressWarnings("unchecked")
         Collection<Skeleton3D> ArmatureList = (Collection<Skeleton3D>) newLoader.importSinglePrecisionArmatures(path,
-                ewbik.processing.sceneGraph.Node3D.class, Bone.class, Skeleton3D.class,
+                Node3D.class, Bone.class, Skeleton3D.class,
                 ewbik.processing.singlePrecision.Kusudama.class, ewbik.processing.singlePrecision.KusudamaTwist.class,
                 IKPin.class);
         for (Skeleton3D a : ArmatureList) {
