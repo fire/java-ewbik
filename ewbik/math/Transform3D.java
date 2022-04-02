@@ -143,7 +143,7 @@ public class Transform3D {
         yRay.setP2(yBase.copy());
         zRay.setP1(zero.copy());
         zRay.setP2(zBase.copy());
-        this.rotation = createPrioritzedRotation(x, y, z);
+        this.rotation = createPrioritizedRotation(x, y, z);
         this.refreshPrecomputed();
     }
 
@@ -182,7 +182,7 @@ public class Transform3D {
         refreshPrecomputed();
     }
 
-    private Quaternion createPrioritzedRotation(Vector3 xHeading, Vector3 yHeading, Vector3 zHeading) {
+    private Quaternion createPrioritizedRotation(Vector3 xHeading, Vector3 yHeading, Vector3 zHeading) {
 
         Vector3 tempV = zHeading.copy();
         tempV.set(0, 0, 0);
