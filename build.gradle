@@ -10,7 +10,7 @@ repositories {
 }
 
 application {
-    mainClass = 'processing.samples.ItemHolding'
+    mainClass = 'ItemHolding'
 }
 
 dependencies {
