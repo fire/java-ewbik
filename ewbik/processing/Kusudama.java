@@ -54,7 +54,7 @@ public class Kusudama implements Saveable {
      * at the previous element in the array,
      * and the cone at the next element in the array.
      */
-    protected ArrayList<ewbik.processing.singlePrecision.LimitCone> limitCones = new ArrayList<ewbik.processing.singlePrecision.LimitCone>();
+    protected ArrayList<ewbik.processing.singlePrecision.KusudamaTwist> kusudamaTwists = new ArrayList<ewbik.processing.singlePrecision.KusudamaTwist>();
     /**
      * Defined as some Angle in radians about the limitingAxes Y axis, 0 being
      * equivalent to the
@@ -117,8 +117,8 @@ public class Kusudama implements Saveable {
     /**
      * {@inheritDoc}
      **/
-    public ewbik.processing.singlePrecision.LimitCone createLimitConeForIndex(int insertAt, Vector3 newPoint,
-            float radius) {
+    public ewbik.processing.singlePrecision.KusudamaTwist createLimitConeForIndex(int insertAt, Vector3 newPoint,
+                                                                                  float radius) {
         return new LimitCone(ewbik.processing.sceneGraph.Node3D.toPVector(newPoint), radius, this);
     }
 
@@ -250,16 +250,16 @@ public class Kusudama implements Saveable {
 
     public void updateTangentRadii() {
 
-        for (int i = 0; i < limitCones.size(); i++) {
-            ewbik.processing.singlePrecision.LimitCone next = i < limitCones.size() - 1 ? limitCones.get(i + 1) : null;
-            limitCones.get(i).updateTangentHandles(next);
+        for (int i = 0; i < kusudamaTwists.size(); i++) {
+            ewbik.processing.singlePrecision.KusudamaTwist next = i < kusudamaTwists.size() - 1 ? kusudamaTwists.get(i + 1) : null;
+            kusudamaTwists.get(i).updateTangentHandles(next);
         }
         updateShaderTexture();
     }
 
     @SuppressWarnings("unchecked")
     public ArrayList<LimitCone> getLimitCones() {
-        return (ArrayList<LimitCone>) (ArrayList<? extends ewbik.processing.singlePrecision.LimitCone>) this.limitCones;
+        return (ArrayList<LimitCone>) (ArrayList<? extends ewbik.processing.singlePrecision.KusudamaTwist>) this.kusudamaTwists;
     }
 
     public void constraintUpdateNotification() {
@@ -286,7 +286,7 @@ public class Kusudama implements Saveable {
 
         ArrayList<Vector3> directions = new ArrayList<>();
         if (getLimitCones().size() == 1) {
-            directions.add((limitCones.get(0).getControlPoint()).copy());
+            directions.add((kusudamaTwists.get(0).getControlPoint()).copy());
         } else {
             for (int i = 0; i < getLimitCones().size() - 1; i++) {
                 Vector3 thisC = getLimitCones().get(i).getControlPoint().copy();
@@ -319,7 +319,7 @@ public class Kusudama implements Saveable {
                 originalLimitingNode3D.getGlobalOf(newYRay).heading());
         limitingNode3D.rotateBy(oldYtoNewY);
 
-        for (ewbik.processing.singlePrecision.LimitCone lc : getLimitCones()) {
+        for (ewbik.processing.singlePrecision.KusudamaTwist lc : getLimitCones()) {
             originalLimitingNode3D.setToGlobalOf(lc.getControlPoint(), lc.getControlPoint());
             limitingNode3D.setToLocalOf(lc.getControlPoint(), lc.getControlPoint());
             lc.getControlPoint().normalize();
@@ -611,12 +611,12 @@ public class Kusudama implements Saveable {
 
         Vector3 closestCollisionPoint = null;
         float closestCos = -2f;
-        if (limitCones.size() > 1 && this.orientationallyConstrained) {
-            for (int i = 0; i < limitCones.size() - 1; i++) {
+        if (kusudamaTwists.size() > 1 && this.orientationallyConstrained) {
+            for (int i = 0; i < kusudamaTwists.size() - 1; i++) {
                 Vector3 collisionPoint = inPoint.copy();
                 collisionPoint.set(0, 0, 0);
-                ewbik.processing.singlePrecision.LimitCone nextCone = limitCones.get(i + 1);
-                boolean inSegBounds = limitCones.get(i).inBoundsFromThisToNext(nextCone, point, collisionPoint);
+                ewbik.processing.singlePrecision.KusudamaTwist nextCone = kusudamaTwists.get(i + 1);
+                boolean inSegBounds = kusudamaTwists.get(i).inBoundsFromThisToNext(nextCone, point, collisionPoint);
                 if (inSegBounds == true) {
                     inBounds[0] = 1;
                 } else {
@@ -633,15 +633,15 @@ public class Kusudama implements Saveable {
                 return point;
             }
         } else if (orientationallyConstrained) {
-            float pointdot = point.dot(limitCones.get(0).getControlPoint());
-            float radcos = limitCones.get(0).getRadiusCosine();
+            float pointdot = point.dot(kusudamaTwists.get(0).getControlPoint());
+            float radcos = kusudamaTwists.get(0).getRadiusCosine();
             if (pointdot > radcos) {
                 inBounds[0] = 1;
                 return inPoint;
             } else {
-                Vector3 axis = limitCones.get(0).getControlPoint().crossCopy(point);
-                Quaternion toLimit = new Quaternion(axis, limitCones.get(0).getRadius());
-                Vector3 newPoint = toLimit.applyToCopy(limitCones.get(0).getControlPoint());
+                Vector3 axis = kusudamaTwists.get(0).getControlPoint().crossCopy(point);
+                Quaternion toLimit = new Quaternion(axis, kusudamaTwists.get(0).getRadius());
+                Vector3 newPoint = toLimit.applyToCopy(kusudamaTwists.get(0).getControlPoint());
                 return newPoint;
             }
         } else {
@@ -657,12 +657,12 @@ public class Kusudama implements Saveable {
         point.normalize();
         Vector3 result = (Vector3) point.copy();
 
-        if (limitCones.size() == 1) {
-            result.set(limitCones.get(0).getControlPoint());
+        if (kusudamaTwists.size() == 1) {
+            result.set(kusudamaTwists.get(0).getControlPoint());
         } else {
-            for (int i = 0; i < limitCones.size() - 1; i++) {
-                ewbik.processing.singlePrecision.LimitCone nextCone = limitCones.get(i + 1);
-                Vector3 closestPathPoint = limitCones.get(i).getClosestPathPoint(nextCone, point);
+            for (int i = 0; i < kusudamaTwists.size() - 1; i++) {
+                ewbik.processing.singlePrecision.KusudamaTwist nextCone = kusudamaTwists.get(i + 1);
+                Vector3 closestPathPoint = kusudamaTwists.get(i).getClosestPathPoint(nextCone, point);
                 float closeDot = closestPathPoint.dot(point);
                 if (closeDot > closestPointDot) {
                     result.set(closestPathPoint);
@@ -691,22 +691,22 @@ public class Kusudama implements Saveable {
      *                 LimitCone is not supposed to be between two existing
      *                 LimitCones)
      */
-    public void addLimitCone(Vector3 newPoint, float radius, ewbik.processing.singlePrecision.LimitCone previous,
-            ewbik.processing.singlePrecision.LimitCone next) {
+    public void addLimitCone(Vector3 newPoint, float radius, ewbik.processing.singlePrecision.KusudamaTwist previous,
+            ewbik.processing.singlePrecision.KusudamaTwist next) {
         int insertAt = 0;
 
-        if (next == null || limitCones.size() == 0) {
+        if (next == null || kusudamaTwists.size() == 0) {
             addLimitConeAtIndex(-1, newPoint, radius);
         } else if (previous != null) {
-            insertAt = limitCones.indexOf(previous) + 1;
+            insertAt = kusudamaTwists.indexOf(previous) + 1;
         } else {
-            insertAt = (int) MathUtils.max(0, limitCones.indexOf(next));
+            insertAt = (int) MathUtils.max(0, kusudamaTwists.indexOf(next));
         }
         addLimitConeAtIndex(insertAt, newPoint, radius);
     }
 
-    public void removeLimitCone(ewbik.processing.singlePrecision.LimitCone limitCone) {
-        this.limitCones.remove(limitCone);
+    public void removeLimitCone(ewbik.processing.singlePrecision.KusudamaTwist kusudamaTwist) {
+        this.kusudamaTwists.remove(kusudamaTwist);
         this.updateTangentRadii();
         this.updateRotationalFreedom();
     }
@@ -728,11 +728,11 @@ public class Kusudama implements Saveable {
      * @param radius   the radius of the limitCone
      */
     public void addLimitConeAtIndex(int insertAt, Vector3 newPoint, float radius) {
-        ewbik.processing.singlePrecision.LimitCone newCone = createLimitConeForIndex(insertAt, newPoint, radius);
+        ewbik.processing.singlePrecision.KusudamaTwist newCone = createLimitConeForIndex(insertAt, newPoint, radius);
         if (insertAt == -1) {
-            limitCones.add(newCone);
+            kusudamaTwists.add(newCone);
         } else {
-            limitCones.add(insertAt, newCone);
+            kusudamaTwists.add(insertAt, newCone);
         }
         this.updateTangentRadii();
         this.updateRotationalFreedom();
@@ -847,7 +847,7 @@ public class Kusudama implements Saveable {
     protected void updateRotationalFreedom() {
         float axialConstrainedHyperArea = isAxiallyConstrained() ? (range / TAU) : 1f;
         float totalLimitConeSurfaceAreaRatio = 0f;
-        for (ewbik.processing.singlePrecision.LimitCone l : limitCones) {
+        for (ewbik.processing.singlePrecision.KusudamaTwist l : kusudamaTwists) {
             totalLimitConeSurfaceAreaRatio += (l.getRadius() * 2f) / TAU;
         }
         rotationalFreedom = axialConstrainedHyperArea
@@ -901,7 +901,7 @@ public class Kusudama implements Saveable {
     @Override
     public void makeSaveable(SaveManager saveManager) {
         saveManager.addToSaveState(this);
-        for (ewbik.processing.singlePrecision.LimitCone lc : limitCones) {
+        for (ewbik.processing.singlePrecision.KusudamaTwist lc : kusudamaTwists) {
             lc.makeSaveable(saveManager);
         }
     }
@@ -912,7 +912,7 @@ public class Kusudama implements Saveable {
         saveJSON.setString("identityHash", this.getIdentityHash());
         saveJSON.setString("limitAxes", limitingAxes().getIdentityHash());
         saveJSON.setString("attachedTo", attachedTo().getIdentityHash());
-        saveJSON.setJSONArray("limitCones", saveManager.arrayListToJSONArray(limitCones));
+        saveJSON.setJSONArray("limitCones", saveManager.arrayListToJSONArray(kusudamaTwists));
         saveJSON.setFloat("minAxialAngle", minAxialAngle);
         saveJSON.setFloat("axialRange", range);
         saveJSON.setBoolean("axiallyConstrained", this.axiallyConstrained);
@@ -924,9 +924,9 @@ public class Kusudama implements Saveable {
     public void loadFromJSONObject(ewbik.asj.data.JSONObject j, LoadManager l) {
         this.attachedTo = l.getObjectFor(Bone.class, j, "attachedTo");
         this.limitingNode3D = l.getObjectFor(ewbik.processing.sceneGraph.Node3D.class, j, "limitAxes");
-        limitCones = new ArrayList<>();
-        l.arrayListFromJSONArray(j.getJSONArray("limitCones"), limitCones,
-                ewbik.processing.singlePrecision.LimitCone.class);
+        kusudamaTwists = new ArrayList<>();
+        l.arrayListFromJSONArray(j.getJSONArray("limitCones"), kusudamaTwists,
+                ewbik.processing.singlePrecision.KusudamaTwist.class);
         this.minAxialAngle = j.getFloat("minAxialAngle");
         this.range = j.getFloat("axialRange");
         this.axiallyConstrained = j.getBoolean("axiallyConstrained");
