@@ -307,7 +307,7 @@ public class Skeleton3D implements Saveable {
      */
     public void IKSolver(Bone bone, float dampening, int iterations, int stabilizingPasses) {
         performance.startPerformanceMonitor();
-        iteratedSolver(bone, dampening, iterations, stabilizingPasses);// (bone, dampening, iterations);
+        iteratedSolver(bone, dampening, iterations, stabilizingPasses);
         performance.solveFinished(iterations == -1 ? this.IKIterations : iterations);
     }
 
