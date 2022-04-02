@@ -49,7 +49,7 @@ public class Skeleton3D implements Saveable {
     protected ArrayList<Bone> bones = new ArrayList<Bone>();
     protected HashMap<String, Bone> tagBoneMap = new HashMap<String, Bone>();
     protected Bone rootBone;
-    protected String tag;
+    protected String name;
     protected int IKIterations = 15;
     protected float dampening = MathUtils.toRadians(5f);
     PerformanceStats performance = new PerformanceStats();
@@ -71,9 +71,9 @@ public class Skeleton3D implements Saveable {
         this.localNode3D = (ewbik.processing.sceneGraph.Node3D) new ewbik.processing.sceneGraph.Node3D(
                 new PVector(0, 0, 0), new PVector(1, 0, 0), new PVector(0, 1, 0), new PVector(0, 0, 1), null);
         this.tempWorkingNode3D = Skeleton3D.this.localNode3D.getGlobalCopy();
-        this.tag = name;
+        this.name = name;
         Skeleton3D.this.createRootBone(Skeleton3D.this.localNode3D.y_().heading(),
-                Skeleton3D.this.localNode3D.z_().heading(), Skeleton3D.this.tag + " : rootBone", 1f,
+                Skeleton3D.this.localNode3D.z_().heading(), Skeleton3D.this.name + " : rootBone", 1f,
                 Bone.frameType.GLOBAL);
     }
 
@@ -225,17 +225,17 @@ public class Skeleton3D implements Saveable {
     }
 
     /**
-     * @return the user specified tag String for this armature.
+     * @return the user specified name String for this armature.
      */
-    public String getTag() {
-        return this.tag;
+    public String getName() {
+        return this.name;
     }
 
     /**
-     * @param A user specified tag string for this armature.
+     * @param A user specified name string for this armature.
      */
-    public void setTag(String newTag) {
-        this.tag = newTag;
+    public void setName(String newTag) {
+        this.name = newTag;
     }
 
     /**
@@ -546,7 +546,7 @@ public class Skeleton3D implements Saveable {
         saveJSON.setString("rootBone", getRootBone().getIdentityHash());
         saveJSON.setInt("defaultIterations", getDefaultIterations());
         saveJSON.setFloat("dampening", this.getDampening());
-        saveJSON.setString("tag", this.getTag());
+        saveJSON.setString("tag", this.getName());
         return saveJSON;
     }
 
@@ -556,7 +556,7 @@ public class Skeleton3D implements Saveable {
             this.rootBone = l.getObjectFor(Bone.class, j, "rootBone");
             this.IKIterations = j.getInt("defaultIterations");
             this.dampening = j.getFloat("dampening");
-            this.tag = j.getString("tag");
+            this.name = j.getString("tag");
         } catch (Exception e) {
             e.printStackTrace();
         }
