@@ -198,7 +198,7 @@ public class Node3D implements ewbik.asj.Saveable {
     }
 
     public PVector origin() {
-        return toPVector(this.origin_());
+        return toPVector(this.calculatePosition());
     }
 
     /**
@@ -264,8 +264,8 @@ public class Node3D implements ewbik.asj.Saveable {
         rotateAboutZ(radians, true);
     }
 
-    public PVector getOrigin() {
-        return toPVector(origin_());
+    public PVector calculatePositionPVector() {
+        return toPVector(calculatePosition());
     }
 
     public PVector getLocalOf(PVector global_input) {
@@ -352,7 +352,7 @@ public class Node3D implements ewbik.asj.Saveable {
         pg.translate(size / 2f, 0, 0);
         pg.box(size, size / 10f, size / 10f);
         pg.popMatrix();
-        drawRay(pg, x_().getRayScaledTo(size));
+        drawRay(pg, calculateX().getRayScaledTo(size));
         pg.fill(255, 0, 0);
         pg.pushMatrix();
         pg.translate(0, size / 2f, 0);
@@ -373,7 +373,7 @@ public class Node3D implements ewbik.asj.Saveable {
      * @return a ray / segment representing this Axes global x basis position and
      *         direction and magnitude
      */
-    public Ray3D x_() {
+    public Ray3D calculateX() {
         this.updateGlobal();
         return this.getGlobalMBasis().getXRay();
     }
@@ -385,7 +385,7 @@ public class Node3D implements ewbik.asj.Saveable {
      * @return a ray / segment representing this Axes global y basis position and
      *         direction and magnitude
      */
-    public Ray3D y_() {
+    public Ray3D calculateY() {
         this.updateGlobal();
         return this.getGlobalMBasis().getYRay();
     }
@@ -397,7 +397,7 @@ public class Node3D implements ewbik.asj.Saveable {
      * @return a ray / segment representing this Axes global z basis position and
      *         direction and magnitude
      */
-    public Ray3D z_() {
+    public Ray3D calculateZ() {
         this.updateGlobal();
         return this.getGlobalMBasis().getZRay();
     }
@@ -407,7 +407,7 @@ public class Node3D implements ewbik.asj.Saveable {
         ax.updateGlobal();
 
         boolean composedRotationsAreEquivalent = getGlobalMBasis().rotation.equals(ax.globalMBasis.rotation);
-        boolean originsAreEquivalent = getGlobalMBasis().getOrigin().equals(ax.origin_());
+        boolean originsAreEquivalent = getGlobalMBasis().getOrigin().equals(ax.calculatePosition());
 
         return composedRotationsAreEquivalent && originsAreEquivalent;
     }
@@ -471,7 +471,7 @@ public class Node3D implements ewbik.asj.Saveable {
     public void debugCall() {
     }
 
-    public Vector3 origin_() {
+    public Vector3 calculatePosition() {
         this.updateGlobal();
         tempOrigin.set(this.getGlobalMBasis().getOrigin());
         return tempOrigin;
@@ -742,7 +742,7 @@ public class Node3D implements ewbik.asj.Saveable {
     public void translateByGlobal(Vector3 translate) {
         if (this.getParentAxes() != null) {
             this.updateGlobal();
-            this.translateTo(translate.addCopy(this.origin_()));
+            this.translateTo(translate.addCopy(this.calculatePosition()));
         } else {
             getLocalMBasis().translateBy(translate);
         }

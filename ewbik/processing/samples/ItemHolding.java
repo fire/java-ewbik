@@ -80,7 +80,7 @@ public class ItemHolding extends PApplet {
 
         if (mousePressed) {
             if (cubeMode) {
-                cubeNode3D.translateTo(new PVector(ui.mouse.x, ui.mouse.y, cubeNode3D.origin_().z));
+                cubeNode3D.translateTo(new PVector(ui.mouse.x, ui.mouse.y, cubeNode3D.calculatePosition().z));
             } else {
                 activePin.translateTo(new PVector(ui.mouse.x, ui.mouse.y, activePin.getLocation_().z));
             }

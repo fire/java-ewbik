@@ -33,7 +33,6 @@ import processing.opengl.PGraphicsOpenGL;
 import processing.opengl.PShader;
 
 import java.util.ArrayList;
-import ewbik.processing.singlePrecision.KusudamaTwist;
 
 /**
  * Note, this class is a concrete implementation of the abstract class
@@ -316,7 +315,7 @@ public class Kusudama implements Saveable {
 
         Ray3D newYRay = new Ray3D(new Vector3(0, 0, 0), newY);
 
-        Quaternion oldYtoNewY = new Quaternion(limitingNode3D.y_().heading(),
+        Quaternion oldYtoNewY = new Quaternion(limitingNode3D.calculateY().heading(),
                 originalLimitingNode3D.getGlobalOf(newYRay).heading());
         limitingNode3D.rotateBy(oldYtoNewY);
 
@@ -366,8 +365,8 @@ public class Kusudama implements Saveable {
             float angleReturnfullness) {
         if (limitingNode3D != null && painfullness > 0f) {
             if (orientationallyConstrained) {
-                Vector3 origin = toSet.origin_();
-                Vector3 inPoint = toSet.y_().p2().copy();
+                Vector3 origin = toSet.calculatePosition();
+                Vector3 inPoint = toSet.calculateY().p2().copy();
                 Vector3 pathPoint = pointOnPathSequence(inPoint, limitingNode3D);
                 inPoint.sub(origin);
                 pathPoint.sub(origin);
@@ -435,9 +434,9 @@ public class Kusudama implements Saveable {
             ewbik.processing.sceneGraph.Node3D limitingNode3D, float cosHalfAngleDampen) {
         float[] inBounds = { 1f };
         limitingNode3D.updateGlobal();
-        boneRay.p1().set(limitingNode3D.origin_());
-        boneRay.p2().set(toSet.y_().p2());
-        Vector3 bonetip = limitingNode3D.getLocalOf(toSet.y_().p2());
+        boneRay.p1().set(limitingNode3D.calculatePosition());
+        boneRay.p2().set(toSet.calculateY().p2());
+        Vector3 bonetip = limitingNode3D.getLocalOf(toSet.calculateY().p2());
         Vector3 inLimits = this.pointInLimits(bonetip, inBounds);
 
         if (inBounds[0] == -1 && inLimits != null) {
@@ -452,7 +451,7 @@ public class Kusudama implements Saveable {
     public boolean isInOrientationLimits(ewbik.processing.sceneGraph.Node3D globalNode3D,
             ewbik.processing.sceneGraph.Node3D limitingNode3D) {
         float[] inBounds = { 1f };
-        Vector3 inLimits = this.pointInLimits(limitingNode3D.getLocalOf(globalNode3D.y_().p2()), inBounds);
+        Vector3 inLimits = this.pointInLimits(limitingNode3D.getLocalOf(globalNode3D.calculateY().p2()), inBounds);
         if (inBounds[0] == -1l) {
             return false;
         } else {

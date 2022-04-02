@@ -273,7 +273,7 @@ public class IKPin implements ewbik.asj.Saveable {
      * @return the pin locationin global coordinates
      */
     public ewbik.math.Vector3 getLocation_() {
-        return node3D.origin_();
+        return node3D.calculatePosition();
     }
 
     /**

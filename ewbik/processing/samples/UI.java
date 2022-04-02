@@ -82,11 +82,11 @@ public class UI {
             ellipseAx = cubeMode ? cubeNode3D : activePin.getAxes();
             PVector pinLoc = screenOf(pg, ellipseAx.origin(), zoomScalar);
             PVector pinX = screenOf(pg,
-                    ewbik.processing.sceneGraph.Node3D.toPVector(ellipseAx.x_().getScaledTo(drawSize)), zoomScalar);
+                    ewbik.processing.sceneGraph.Node3D.toPVector(ellipseAx.calculateX().getScaledTo(drawSize)), zoomScalar);
             PVector pinY = screenOf(pg,
-                    ewbik.processing.sceneGraph.Node3D.toPVector(ellipseAx.y_().getScaledTo(drawSize)), zoomScalar);
+                    ewbik.processing.sceneGraph.Node3D.toPVector(ellipseAx.calculateY().getScaledTo(drawSize)), zoomScalar);
             PVector pinZ = screenOf(pg,
-                    ewbik.processing.sceneGraph.Node3D.toPVector(ellipseAx.z_().getScaledTo(drawSize)), zoomScalar);
+                    ewbik.processing.sceneGraph.Node3D.toPVector(ellipseAx.calculateZ().getScaledTo(drawSize)), zoomScalar);
             pg.fill(255, 255, 255, 150);
             pg.stroke(255, 0, 255);
             float totalPriorities = activePin.getXPriority() + activePin.getYPriority()
@@ -94,19 +94,19 @@ public class UI {
             pg.ellipse(pinLoc.x, pinLoc.y, zoomScalar * 50, zoomScalar * 50);
 
             PVector effectorO = screenOf(pg,
-                    ewbik.processing.sceneGraph.Node3D.toPVector(activePin.forBone().localAxes().origin_()),
+                    ewbik.processing.sceneGraph.Node3D.toPVector(activePin.forBone().localAxes().calculatePosition()),
                     zoomScalar);
             PVector effectorX = screenOf(pg,
                     ewbik.processing.sceneGraph.Node3D
-                            .toPVector(activePin.forBone().localAxes().x_().getScaledTo(drawSize)),
+                            .toPVector(activePin.forBone().localAxes().calculateX().getScaledTo(drawSize)),
                     zoomScalar);
             PVector effectorY = screenOf(pg,
                     ewbik.processing.sceneGraph.Node3D
-                            .toPVector(activePin.forBone().localAxes().y_().getScaledTo(drawSize)),
+                            .toPVector(activePin.forBone().localAxes().calculateY().getScaledTo(drawSize)),
                     zoomScalar);
             PVector effectorZ = screenOf(pg,
                     ewbik.processing.sceneGraph.Node3D
-                            .toPVector(activePin.forBone().localAxes().z_().getScaledTo(drawSize)),
+                            .toPVector(activePin.forBone().localAxes().calculateZ().getScaledTo(drawSize)),
                     zoomScalar);
             pg.stroke(255, 255, 255, 150);
 

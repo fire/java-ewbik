@@ -54,7 +54,7 @@ public class Skeleton3D implements Saveable {
     // debug code -- use to set a minimum distance an effector must move
     // in order to trigger a chain iteration
     float debugMag = 5f;
-    ewbik.math.Vector3 lastTargetPos = new ewbik.math.Vector3();
+    ewbik.math.Vector3 lastEffectorPos = new ewbik.math.Vector3();
     boolean monitorPerformance = false;
     private boolean abilityBiasing = false;
 
@@ -67,8 +67,8 @@ public class Skeleton3D implements Saveable {
                 new PVector(0, 0, 0), new PVector(1, 0, 0), new PVector(0, 1, 0), new PVector(0, 0, 1), null);
         this.tempWorkingNode3D = Skeleton3D.this.localNode3D.getGlobalCopy();
         this.name = name;
-        Skeleton3D.this.createRootBone(Skeleton3D.this.localNode3D.y_().heading(),
-                Skeleton3D.this.localNode3D.z_().heading(), Skeleton3D.this.name + " : rootBone", 1f,
+        Skeleton3D.this.createRootBone(Skeleton3D.this.localNode3D.calculateY().heading(),
+                Skeleton3D.this.localNode3D.calculateZ().heading(), Skeleton3D.this.name + " : rootBone", 1f,
                 Bone.frameType.GLOBAL);
     }
 
@@ -494,7 +494,7 @@ public class Skeleton3D implements Saveable {
      */
     public ewbik.math.Quaternion getRotationBetween(ewbik.processing.sceneGraph.Node3D a,
             ewbik.processing.sceneGraph.Node3D b) {
-        return new ewbik.math.Quaternion(a.x_().heading(), a.y_().heading(), b.x_().heading(), b.y_().heading());
+        return new ewbik.math.Quaternion(a.calculateX().heading(), a.calculateY().heading(), b.calculateX().heading(), b.calculateY().heading());
     }
 
     public int getDefaultIterations() {
