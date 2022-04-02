@@ -77,7 +77,6 @@ public class ItemHolding extends PApplet {
     }
 
     public void draw() {
-
         if (mousePressed) {
             if (cubeMode) {
                 cubeNode3D.translateTo(new PVector(ui.mouse.x, ui.mouse.y, cubeNode3D.calculatePosition().z));
@@ -86,17 +85,19 @@ public class ItemHolding extends PApplet {
             }
             loadedArmature.IKSolver(loadedArmature.getRootBone());
         } else {
-            worldNode3D.rotateAboutY(PI / 500f, true);
+            worldNode3D.rotateAboutY(0.0f, true);
         }
+
         String additionalInstructions = "Hit the 'C' key to select or deselect the cube";
-        additionalInstructions += "\n HIT THE S KEY TO SAVE." + "\n HIT THE L KEY TO LOAD THE CURRENT ARMATURE CONFIGURATION.";
+        additionalInstructions += "\n HIT THE S KEY TO SAVE."
+                + "\n HIT THE L KEY TO LOAD THE CURRENT ARMATURE CONFIGURATION.";
         // Decrease the numerator to increase the zoom.
         zoomScalar = 200f / height;
         ui.drawScene(zoomScalar, 12f, () -> drawHoldCube(), loadedArmature, additionalInstructions, activePin,
                 cubeNode3D,
                 cubeMode);
     }
-
+    
     public void drawHoldCube() {
         PGraphics currentDisplay = ui.getCurrentDrawSurface();
         if (ui.display == currentDisplay) {
