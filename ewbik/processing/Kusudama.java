@@ -403,9 +403,9 @@ public class Kusudama implements Saveable {
     public void setPainfullness(float amt) {
         painfullness = amt;
         if (attachedTo() != null && attachedTo().parentArmature != null) {
-            ewbik.ik.ShadowSkeleton3D s = attachedTo().parentArmature.boneSegmentMap.get(this.attachedTo());
+            ewbik.ik.ShadowNode3D s = attachedTo().parentArmature.boneSegmentMap.get(this.attachedTo());
             if (s != null) {
-                ewbik.ik.ShadowSkeleton3D.WorkingBone wb = s.simulatedBones.get(this.attachedTo());
+                ewbik.ik.ShadowNode3D.WorkingBone wb = s.simulatedBones.get(this.attachedTo());
                 if (wb != null) {
                     wb.updateCosDampening();
                 }

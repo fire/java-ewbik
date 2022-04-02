@@ -1092,9 +1092,9 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     public void setStiffness(float stiffness) {
         stiffnessScalar = stiffness;
         if (parentArmature != null) {
-            ewbik.ik.ShadowSkeleton3D s = parentArmature.boneSegmentMap.get(this);
+            ewbik.ik.ShadowNode3D s = parentArmature.boneSegmentMap.get(this);
             if (s != null) {
-                ewbik.ik.ShadowSkeleton3D.WorkingBone wb = s.simulatedBones.get(this);
+                ewbik.ik.ShadowNode3D.WorkingBone wb = s.simulatedBones.get(this);
                 if (wb != null) {
                     wb.updateCosDampening();
                 }
