@@ -100,7 +100,7 @@ public class FloatBackedSaver extends SaveManager {
         return saveObject;
     }
 
-    public String getSaveSring() {
+    public String getSaveString() {
         String resultString = getSaveObject().toString();
         return resultString;
     }
