@@ -339,7 +339,7 @@ public class StringList implements Iterable<String> {
         System.arraycopy(values, 0, temp, index, values.length);
 
         System.arraycopy(data, index, temp, index + values.length, count - index);
-        count = count + values.length;s
+        count = count + values.length;
         data = temp;
     }
 
