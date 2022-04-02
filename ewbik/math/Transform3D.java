@@ -183,27 +183,19 @@ public class Transform3D {
     }
 
     private Quaternion createPrioritizedRotation(Vector3 xHeading, Vector3 yHeading, Vector3 zHeading) {
+        Vector3 x_identity = xBase.copy();
+        Vector3 y_identity = yBase.copy();
+        Vector3 z_identity = zBase.copy();
+        Vector3 origin = xBase.copy();
+        origin.set(0, 0, 0);
 
-        Vector3 tempV = zHeading.copy();
-        tempV.set(0, 0, 0);
-        Quaternion toYZ = new Quaternion(yBase, zBase, yHeading, zHeading);
-        toYZ.applyTo(yBase, tempV);
-        Quaternion toY = new Quaternion(tempV, yHeading);
-
-        return toY.applyTo(toYZ);
-        /*
-         * Vector3 xidt = xBase.copy(); Vector3 yidt = yBase.copy(); Vector3 zidt =
-         * zBase.copy();
-         * Vector3 origin = xBase.copy(); origin.set(0,0,0);
-         * 
-         * Vector3[] from = {origin, xidt, yidt, zidt};
-         * Vector3[] to = {origin.copy(), xHeading, yHeading, zHeading};
-         * QCP alignHeads = new QCP(MathUtils.DOUBLE_ROUNDING_ERROR,
-         * MathUtils.DOUBLE_ROUNDING_ERROR);
-         * alignHeads.setMaxIterations(50);
-         * Quaternion rotation = alignHeads.weightedSuperpose(from, to, null, false);
-         * return rotation;
-         */
+        Vector3[] from = {origin, x_identity, y_identity, z_identity};
+        Vector3[] to = {origin.copy(), xHeading, yHeading, zHeading};
+        QCP alignHeads = new QCP(ewbik.math.MathUtils.FLOAT_ROUNDING_ERROR,
+                ewbik.math.MathUtils.FLOAT_ROUNDING_ERROR);
+        alignHeads.setMaxIterations(50);
+        Quaternion rotation = alignHeads.weightedSuperpose(from, to, null, false);
+        return rotation;
     }
 
     public Quaternion getLocalOfRotation(Quaternion inRot) {
@@ -354,7 +346,7 @@ public class Transform3D {
 
     /**
      * @return a precomputed inverse of the rotation represented by this basis
-     *         object.
+     * object.
      */
     public Quaternion getInverseRotation() {
         return this.inverseRotation;
