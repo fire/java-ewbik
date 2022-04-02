@@ -92,11 +92,11 @@ public class Transform3D {
     /**
      * Initialize this basis at the origin defined by the base of the @param x Ray.
      * <p>
-     * The basis will be backed by a rotation object which presumes right handed
+     * The basis will be backed by a rotation object which presumes right-handed
      * chirality.
      * Therefore, the rotation object will align so its local XY plane aligns with
      * this basis' XY plane
-     * Afterwards, it will check chirality, and if the basis isn't righthanded, this
+     * Afterwards, it will check chirality, and if the basis isn't right-handed, this
      * class will assume the
      * z-axis is the one that's been flipped.
      * <p>
