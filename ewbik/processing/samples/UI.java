@@ -82,11 +82,14 @@ public class UI {
             ellipseAx = cubeMode ? cubeNode3D : activePin.getAxes();
             PVector pinLoc = screenOf(pg, ellipseAx.origin(), zoomScalar);
             PVector pinX = screenOf(pg,
-                    ewbik.processing.sceneGraph.Node3D.toPVector(ellipseAx.calculateX().getScaledTo(drawSize)), zoomScalar);
+                    ewbik.processing.sceneGraph.Node3D.toPVector(ellipseAx.calculateX().getScaledTo(drawSize)),
+                    zoomScalar);
             PVector pinY = screenOf(pg,
-                    ewbik.processing.sceneGraph.Node3D.toPVector(ellipseAx.calculateY().getScaledTo(drawSize)), zoomScalar);
+                    ewbik.processing.sceneGraph.Node3D.toPVector(ellipseAx.calculateY().getScaledTo(drawSize)),
+                    zoomScalar);
             PVector pinZ = screenOf(pg,
-                    ewbik.processing.sceneGraph.Node3D.toPVector(ellipseAx.calculateZ().getScaledTo(drawSize)), zoomScalar);
+                    ewbik.processing.sceneGraph.Node3D.toPVector(ellipseAx.calculateZ().getScaledTo(drawSize)),
+                    zoomScalar);
             pg.fill(255, 255, 255, 150);
             pg.stroke(255, 0, 255);
             float totalPriorities = activePin.getXPriority() + activePin.getYPriority()

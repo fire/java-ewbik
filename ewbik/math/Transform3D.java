@@ -96,7 +96,8 @@ public class Transform3D {
      * chirality.
      * Therefore, the rotation object will align so its local XY plane aligns with
      * this basis' XY plane
-     * Afterwards, it will check chirality, and if the basis isn't right-handed, this
+     * Afterwards, it will check chirality, and if the basis isn't right-handed,
+     * this
      * class will assume the
      * z-axis is the one that's been flipped.
      * <p>
@@ -188,8 +189,8 @@ public class Transform3D {
         Vector3 z_identity = zBase.copy();
         Vector3 origin = new Vector3(0, 0, 0);
 
-        Vector3[] from = {origin, x_identity, y_identity, z_identity};
-        Vector3[] to = {origin.copy(), xHeading, yHeading, zHeading};
+        Vector3[] from = { origin, x_identity, y_identity, z_identity };
+        Vector3[] to = { origin.copy(), xHeading, yHeading, zHeading };
         QCP alignHeads = new QCP(ewbik.math.MathUtils.FLOAT_ROUNDING_ERROR,
                 ewbik.math.MathUtils.FLOAT_ROUNDING_ERROR);
         alignHeads.setMaxIterations(50);
@@ -345,7 +346,7 @@ public class Transform3D {
 
     /**
      * @return a precomputed inverse of the rotation represented by this basis
-     * object.
+     *         object.
      */
     public Quaternion getInverseRotation() {
         return this.inverseRotation;

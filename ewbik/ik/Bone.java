@@ -256,7 +256,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             this.parentArmature = this.parent.parentArmature;
             Bone.this.parentArmature.addToBoneList(this);
 
-            Bone.this.generateAxes(Bone.this.parent.getTip_(), tempNode3D.calculateX().heading(), tempNode3D.calculateY().heading(),
+            Bone.this.generateAxes(Bone.this.parent.getTip_(), tempNode3D.calculateX().heading(),
+                    tempNode3D.calculateY().heading(),
                     tempNode3D.calculateZ().heading());
             Bone.this.localNode3D.setParent(Bone.this.parent.localNode3D);
             Bone.this.previousOrientation = Bone.this.localNode3D.attachedCopy(true);
@@ -295,7 +296,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             this.parentArmature = this.parent.parentArmature;
             Bone.this.parentArmature.addToBoneList(this);
 
-            Bone.this.generateAxes(Bone.this.parent.getTip_(), tempNode3D.calculateX().heading(), tempNode3D.calculateY().heading(),
+            Bone.this.generateAxes(Bone.this.parent.getTip_(), tempNode3D.calculateX().heading(),
+                    tempNode3D.calculateY().heading(),
                     tempNode3D.calculateZ().heading());
             Bone.this.localNode3D.setParent(Bone.this.parent.localNode3D);
             Bone.this.previousOrientation = Bone.this.localNode3D.attachedCopy(true);
@@ -573,7 +575,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      *         And allows you to treat rotation in a wide variety of conventions.
      */
     public Quaternion getRotation() {
-        return (new Quaternion(this.majorRotationNode3D.calculateX().heading(), this.majorRotationNode3D.calculateY().heading(),
+        return (new Quaternion(this.majorRotationNode3D.calculateX().heading(),
+                this.majorRotationNode3D.calculateY().heading(),
                 this.localAxes().calculateX().heading(), this.localAxes().calculateY().heading()));
     }
 

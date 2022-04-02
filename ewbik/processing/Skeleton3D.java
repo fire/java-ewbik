@@ -369,7 +369,7 @@ public class Skeleton3D implements Saveable {
      */
 
     public void iteratedSolver(Bone startFrom, float dampening, int iterations,
-                               int stabilizationPasses) {
+            int stabilizationPasses) {
         ewbik.ik.ShadowNode3D armature = boneSegmentMap.get(startFrom);
 
         if (armature != null) {
@@ -400,8 +400,9 @@ public class Skeleton3D implements Saveable {
 
     }
 
-    public void groupedRecursiveBonechainSolver(ewbik.ik.ShadowNode3D startFrom, float dampening, int stabilizationPasses,
-                                                int iteration, float totalIterations) {
+    public void groupedRecursiveBonechainSolver(ewbik.ik.ShadowNode3D startFrom, float dampening,
+            int stabilizationPasses,
+            int iteration, float totalIterations) {
         recursiveBonechainSolver(startFrom, dampening, stabilizationPasses, iteration, totalIterations);
         for (ewbik.ik.ShadowNode3D a : startFrom.pinnedDescendants) {
             for (ewbik.ik.ShadowNode3D c : a.bonechainChild) {
@@ -417,7 +418,7 @@ public class Skeleton3D implements Saveable {
      * @param armature
      */
     public void recursiveBonechainSolver(ewbik.ik.ShadowNode3D armature, float dampening, int stabilizationPasses,
-                                         int iteration, float totalIterations) {
+            int iteration, float totalIterations) {
         if (armature.bonechainChild == null && !armature.isTipPinned()) {
             return;
         } else if (!armature.isTipPinned()) {
@@ -494,7 +495,8 @@ public class Skeleton3D implements Saveable {
      */
     public ewbik.math.Quaternion getRotationBetween(ewbik.processing.sceneGraph.Node3D a,
             ewbik.processing.sceneGraph.Node3D b) {
-        return new ewbik.math.Quaternion(a.calculateX().heading(), a.calculateY().heading(), b.calculateX().heading(), b.calculateY().heading());
+        return new ewbik.math.Quaternion(a.calculateX().heading(), a.calculateY().heading(), b.calculateX().heading(),
+                b.calculateY().heading());
     }
 
     public int getDefaultIterations() {

@@ -48,9 +48,11 @@ public class Kusudama implements Saveable {
     protected ewbik.processing.sceneGraph.Node3D limitingNode3D;
     protected float painfullness;
     /**
-     * An array containing all of the Kusudama's KusudamaTwists. The kusudama is built
+     * An array containing all of the Kusudama's KusudamaTwists. The kusudama is
+     * built
      * up
-     * with the expectation that any KusudamaTwist in the array is connected to the cone
+     * with the expectation that any KusudamaTwist in the array is connected to the
+     * cone
      * at the previous element in the array,
      * and the cone at the next element in the array.
      */
@@ -118,20 +120,23 @@ public class Kusudama implements Saveable {
      * {@inheritDoc}
      **/
     public ewbik.processing.singlePrecision.KusudamaTwist createKusudamaTwistForIndex(int insertAt, Vector3 newPoint,
-                                                                                  float radius) {
+            float radius) {
         return new KusudamaTwist(ewbik.processing.sceneGraph.Node3D.toPVector(newPoint), radius, this);
     }
 
     /**
-     * Adds a KusudamaTwist to the Kusudama. KusudamaTwists are reach cones which can be
+     * Adds a KusudamaTwist to the Kusudama. KusudamaTwists are reach cones which
+     * can be
      * arranged sequentially. The Kusudama will infer
      * a smooth path leading from one KusudamaTwist to the next.
      * <p>
-     * Using a single KusudamaTwist is functionally equivalent to a classic reachCone
+     * Using a single KusudamaTwist is functionally equivalent to a classic
+     * reachCone
      * constraint.
      *
      * @param insertAt the intended index for this KusudamaTwist in the sequence of
-     *                 KusudamaTwists from which the Kusudama will infer a path. @see
+     *                 KusudamaTwists from which the Kusudama will infer a
+     *                 path. @see
      *                 ewbik.ik.Kusudama.KusudamaTwists KusudamaTwists array.
      * @param newPoint where on the Kusudama to add the KusudamaTwist (in Kusudama's
      *                 local coordinate frame defined by its bone's
@@ -251,7 +256,9 @@ public class Kusudama implements Saveable {
     public void updateTangentRadii() {
 
         for (int i = 0; i < kusudamaTwists.size(); i++) {
-            ewbik.processing.singlePrecision.KusudamaTwist next = i < kusudamaTwists.size() - 1 ? kusudamaTwists.get(i + 1) : null;
+            ewbik.processing.singlePrecision.KusudamaTwist next = i < kusudamaTwists.size() - 1
+                    ? kusudamaTwists.get(i + 1)
+                    : null;
             kusudamaTwists.get(i).updateTangentHandles(next);
         }
         updateShaderTexture();
@@ -685,13 +692,15 @@ public class Kusudama implements Saveable {
      *                 local coordinate frame defined by its bone's
      *                 majorRotationAxes))
      * @param radius   the radius of the KusudamaTwist
-     * @param previous the KusudamaTwist adjacent to this one (may be null if KusudamaTwist
+     * @param previous the KusudamaTwist adjacent to this one (may be null if
+     *                 KusudamaTwist
      *                 is not supposed to be between two existing KusudamaTwists)
      * @param next     the other KusudamaTwist adjacent to this one (may be null if
      *                 KusudamaTwist is not supposed to be between two existing
      *                 KusudamaTwists)
      */
-    public void addKusudamaTwist(Vector3 newPoint, float radius, ewbik.processing.singlePrecision.KusudamaTwist previous,
+    public void addKusudamaTwist(Vector3 newPoint, float radius,
+            ewbik.processing.singlePrecision.KusudamaTwist previous,
             ewbik.processing.singlePrecision.KusudamaTwist next) {
         int insertAt = 0;
 
@@ -712,15 +721,18 @@ public class Kusudama implements Saveable {
     }
 
     /**
-     * Adds a KusudamaTwist to the Kusudama. KusudamaTwists are reach cones which can be
+     * Adds a KusudamaTwist to the Kusudama. KusudamaTwists are reach cones which
+     * can be
      * arranged sequentially. The Kusudama will infer
      * a smooth path leading from one KusudamaTwist to the next.
      * <p>
-     * Using a single KusudamaTwist is functionally equivalent to a classic reachCone
+     * Using a single KusudamaTwist is functionally equivalent to a classic
+     * reachCone
      * constraint.
      *
      * @param insertAt the intended index for this KusudamaTwist in the sequence of
-     *                 KusudamaTwists from which the Kusudama will infer a path. @see
+     *                 KusudamaTwists from which the Kusudama will infer a
+     *                 path. @see
      *                 ewbik.ik.Kusudama.KusudamaTwists KusudamaTwists array.
      * @param newPoint where on the Kusudama to add the KusudamaTwist (in Kusudama's
      *                 local coordinate frame defined by its bone's
@@ -728,7 +740,8 @@ public class Kusudama implements Saveable {
      * @param radius   the radius of the KusudamaTwist
      */
     public void addKusudamaTwistAtIndex(int insertAt, Vector3 newPoint, float radius) {
-        ewbik.processing.singlePrecision.KusudamaTwist newCone = createKusudamaTwistForIndex(insertAt, newPoint, radius);
+        ewbik.processing.singlePrecision.KusudamaTwist newCone = createKusudamaTwistForIndex(insertAt, newPoint,
+                radius);
         if (insertAt == -1) {
             kusudamaTwists.add(newCone);
         } else {

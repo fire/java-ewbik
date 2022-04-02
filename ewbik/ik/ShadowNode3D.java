@@ -144,7 +144,7 @@ public class ShadowNode3D {
     }
 
     void recursivelyCreatePenaltyArray(ewbik.ik.ShadowNode3D from, ArrayList<ArrayList<Float>> weightArray,
-                                       ArrayList<ShadowBone> pinSequence, float currentFalloff) {
+            ArrayList<ShadowBone> pinSequence, float currentFalloff) {
         if (currentFalloff == 0) {
             return;
         } else {
@@ -203,7 +203,8 @@ public class ShadowNode3D {
         while (rootStrand.bonechainParent != null) {
             rootStrand = rootStrand.bonechainParent;
         }
-        recursivelyEnsureAxesHeirarchyFor(rootStrand.bonechainRoot, rootStrand.bonechainRoot.parentArmature.localAxes());
+        recursivelyEnsureAxesHeirarchyFor(rootStrand.bonechainRoot,
+                rootStrand.bonechainRoot.parentArmature.localAxes());
     }
 
     private void recursivelyEnsureAxesHeirarchyFor(Bone b, ewbik.processing.sceneGraph.Node3D parentTo) {
