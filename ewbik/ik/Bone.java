@@ -751,7 +751,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      *                                 This is also used to set constraints. For
      *                                 example, euler constraints are computed
      *                                 against these axes
-     *                                 and the limitCones and axial twist limits of
+     *                                 and the kusudama_twists and axial twist limits of
      *                                 KusudamaExample are specified relative to
      *                                 these Axes.<br>
      *                                 <br>

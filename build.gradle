@@ -2,6 +2,7 @@ plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'  
     id 'application'
+    id 'distribution'
 }
 
 repositories {
@@ -12,6 +13,7 @@ repositories {
 application {
     mainClass = 'ItemHolding'
 }
+
 
 dependencies {
     implementation 'com.github.micycle1:processing-core-4:4.0.3'
@@ -32,8 +34,24 @@ sourceSets {
     }
 }
 
+distributions {
+    main {
+        contents {
+            from ('Humanoid_Holding_Item.arm') {                
+                rename 'Humanoid_Holding_Item.arm', 'bin/Humanoid_Holding_Item.arm'
+            }
+            from ('kusudama_vert.glsl') {                
+                rename 'kusudama_vert.glsl', 'bin/kusudama_vert.glsl'
+            }
+            from ('kusudama.glsl') {                
+                rename 'kusudama.glsl', 'bin/kusudama.glsl'
+            }
+        }
+    }
+}
+
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(11)
+        languageVersion = JavaLanguageVersion.of(13)
     }    
 }

@@ -106,15 +106,15 @@ public final class FloatBackedLoader extends LoadManager {
         KusudamaTwistClass = KusudamaTwistClass == null ? KusudamaTwist.class : KusudamaTwistClass;
         IKPinClass = IKPinClass == null ? IKPin.class : IKPinClass;
 
-        createEmptyLoadMaps(axesJSONObjects, axesLoadObjects, loadFile.getJSONArray("axes"), AxesClass);
+        createEmptyLoadMaps(axesJSONObjects, axesLoadObjects, loadFile.getJSONArray("node_3d"), AxesClass);
         createEmptyLoadMaps(boneJSONObjects, boneLoadObjects, loadFile.getJSONArray("bones"), BoneClass);
-        createEmptyLoadMaps(armatureJSONObjects, armatureLoadObjects, loadFile.getJSONArray("armatures"),
+        createEmptyLoadMaps(armatureJSONObjects, armatureLoadObjects, loadFile.getJSONArray("skeleton_3d"),
                 ArmatureClass);
         createEmptyLoadMaps(kusudamaJSONObjects, kusudamaLoadObjects, loadFile.getJSONArray("kusudamas"),
                 KusudamaClass);
-        createEmptyLoadMaps(KusudamaTwistJSONObjects, KusudamaTwistLoadObjects, loadFile.getJSONArray("limitCones"),
+        createEmptyLoadMaps(KusudamaTwistJSONObjects, KusudamaTwistLoadObjects, loadFile.getJSONArray("kusudama_twists"),
                 KusudamaTwistClass);
-        createEmptyLoadMaps(IKPinJSONObjects, IKPinLoadObjects, loadFile.getJSONArray("IKPins"), IKPinClass);
+        createEmptyLoadMaps(IKPinJSONObjects, IKPinLoadObjects, loadFile.getJSONArray("ik_pins"), IKPinClass);
 
         loadGenerally(axesJSONObjects, axesLoadObjects);
         loadGenerally(IKPinJSONObjects, IKPinLoadObjects);

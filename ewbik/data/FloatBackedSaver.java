@@ -89,12 +89,12 @@ public class FloatBackedSaver extends SaveManager {
             }
         }
 
-        saveObject.setJSONArray("axes", axesJSON);
-        saveObject.setJSONArray("armatures", armaturesJSON);
+        saveObject.setJSONArray("node_3d", axesJSON);
+        saveObject.setJSONArray("skeleton_3d", armaturesJSON);
         saveObject.setJSONArray("bones", bonesJSON);
         saveObject.setJSONArray("kusudamas", kusudamaJSON);
-        saveObject.setJSONArray("limitCones", limitConeJSON);
-        saveObject.setJSONArray("IKPins", IKPinsJSON);
+        saveObject.setJSONArray("kusudama_twists", limitConeJSON);
+        saveObject.setJSONArray("ik_pins", IKPinsJSON);
 
         notifyCurrentSaveablesOfSaveCompletion();
         return saveObject;
