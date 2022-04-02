@@ -18,7 +18,7 @@ public final class IO {
      * @param path
      * @return the Armature, or null if the file does not specify an armature
      */
-    public static Skeleton3D LoadArmature_singlePrecision(String path) {
+    public static Skeleton3D LoadArmature(String path) {
         EWBIKLoader newLoader = new EWBIKLoader();
         @SuppressWarnings("unchecked")
         Collection<Skeleton3D> ArmatureList = (Collection<Skeleton3D>) newLoader.importSinglePrecisionArmatures(path,

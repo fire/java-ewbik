@@ -259,7 +259,7 @@ public class ItemHolding extends PApplet {
             System.out.println("Can't write file.");
             e.printStackTrace();
         }
-        loadedArmature = ewbik.processing.IO.LoadArmature_singlePrecision("Humanoid_Holding_Item.arm");
+        loadedArmature = ewbik.processing.IO.LoadArmature("Humanoid_Holding_Item.arm");
         worldNode3D = (Node3D) loadedArmature.localAxes().getParentAxes();
         if (worldNode3D == null) {
             worldNode3D = new Node3D();
@@ -365,7 +365,7 @@ public class ItemHolding extends PApplet {
             ewbik.data.EWBIKSaver newSaver = new ewbik.data.EWBIKSaver();
             newSaver.saveArmature(loadedArmature, "Humanoid_Holding_Item.arm");
         } else if (key == 'l') {
-            loadedArmature = ewbik.processing.IO.LoadArmature_singlePrecision("Humanoid_Holding_Item.arm");
+            loadedArmature = ewbik.processing.IO.LoadArmature("Humanoid_Holding_Item.arm");
             loadedArmature.updateBonechains();
             loadedArmature.IKSolver(loadedArmature.getRootBone(), 0.5f, 20, 1);
 
