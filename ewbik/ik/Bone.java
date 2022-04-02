@@ -21,6 +21,7 @@ package ik;
 
 import ewbik.ik.*;
 import ewbik.ik.IKExceptions.NullParentForBoneException;
+import ewbik.ik.ShadowNode3D;
 import ewbik.math.*;
 import ewbik.processing.singlePrecision.Kusudama;
 import processing.Skeleton3D;
@@ -1097,7 +1098,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         if (parentArmature != null) {
             ewbik.ik.ShadowNode3D s = parentArmature.boneSegmentMap.get(this);
             if (s != null) {
-                ewbik.ik.ShadowNode3D.WorkingBone wb = s.simulatedBones.get(this);
+                ShadowNode3D.ShadowBone wb = s.simulatedBones.get(this);
                 if (wb != null) {
                     wb.updateCosDampening();
                 }

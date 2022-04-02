@@ -37,13 +37,13 @@ public class ShadowNode3D {
 
     public ArrayList<ewbik.ik.ShadowNode3D> childSegments = new ArrayList<ewbik.ik.ShadowNode3D>();
     public ArrayList<ewbik.ik.ShadowNode3D> pinnedDescendants = new ArrayList<ewbik.ik.ShadowNode3D>();
-    public HashMap<Bone, WorkingBone> simulatedBones = new HashMap<>();
+    public HashMap<Bone, ShadowBone> simulatedBones = new HashMap<>();
     public ArrayList<Bone> segmentBoneList = new ArrayList<Bone>();
     public int distanceToRoot = 0;
     public int chainLength = 0;
     public ewbik.processing.sceneGraph.Node3D debugTipNode3D;
     public ewbik.processing.sceneGraph.Node3D debugTargetNode3D;
-    WorkingBone[] pinnedBones;
+    ShadowBone[] pinnedBones;
     boolean includeInIK = true;
     int pinDepth = 1;
     Vector3[] localizedTargetHeadings;
@@ -119,9 +119,9 @@ public class ShadowNode3D {
 
     public void createHeadingArrays() {
         ArrayList<ArrayList<Float>> penaltyArray = new ArrayList<ArrayList<Float>>();
-        ArrayList<WorkingBone> pinSequence = new ArrayList<>();
+        ArrayList<ShadowBone> pinSequence = new ArrayList<>();
         recursivelyCreatePenaltyArray(this, penaltyArray, pinSequence, 1f);
-        pinnedBones = new WorkingBone[pinSequence.size()];
+        pinnedBones = new ShadowBone[pinSequence.size()];
         int totalHeadings = 0;
         for (ArrayList<Float> a : penaltyArray) {
             totalHeadings += a.size();
@@ -144,7 +144,7 @@ public class ShadowNode3D {
     }
 
     void recursivelyCreatePenaltyArray(ewbik.ik.ShadowNode3D from, ArrayList<ArrayList<Float>> weightArray,
-            ArrayList<WorkingBone> pinSequence, float currentFalloff) {
+                                       ArrayList<ShadowBone> pinSequence, float currentFalloff) {
         if (currentFalloff == 0) {
             return;
         } else {
@@ -209,7 +209,7 @@ public class ShadowNode3D {
     private void recursivelyEnsureAxesHeirarchyFor(Bone b, ewbik.processing.sceneGraph.Node3D parentTo) {
         ewbik.ik.ShadowNode3D chain = getChainFor(b);
         if (chain != null) {
-            WorkingBone sb = chain.simulatedBones.get(b);
+            ShadowBone sb = chain.simulatedBones.get(b);
             sb.simLocalNode3D.setParent(parentTo);
             sb.simConstraintNode3D.setParent(parentTo);
             for (Bone c : b.getChildren()) {
@@ -228,7 +228,7 @@ public class ShadowNode3D {
     }
 
     public void generateSegmentMaps() {
-        for (WorkingBone b : simulatedBones.values()) {
+        for (ShadowBone b : simulatedBones.values()) {
             b.simConstraintNode3D.emancipate();
             b.simLocalNode3D.emancipate();
         }
@@ -238,9 +238,9 @@ public class ShadowNode3D {
         Bone currentBone = segmentTip;
         Bone stopOn = segmentRoot;
         while (currentBone != null) {
-            WorkingBone sb = simulatedBones.get(currentBone);
+            ShadowBone sb = simulatedBones.get(currentBone);
             if (sb == null) {
-                simulatedBones.put(currentBone, new WorkingBone(currentBone));
+                simulatedBones.put(currentBone, new ShadowBone(currentBone));
                 segmentBoneList.add(0, currentBone);
             }
 
@@ -327,7 +327,7 @@ public class ShadowNode3D {
             int iteration,
             float totalIterations) {
 
-        WorkingBone sb = simulatedBones.get(forBone);
+        ShadowBone sb = simulatedBones.get(forBone);
         ewbik.processing.sceneGraph.Node3D thisBoneNode3D = sb.simLocalNode3D;
         thisBoneNode3D.updateGlobal();
 
@@ -398,7 +398,7 @@ public class ShadowNode3D {
     }
 
     private void updateOptimalRotationToPinnedDescendants(
-            WorkingBone sb,
+            ShadowBone sb,
             float dampening,
             boolean translate,
             Vector3[] localizedTipHeadings,
@@ -437,7 +437,7 @@ public class ShadowNode3D {
 
         int hdx = 0;
         for (int i = 0; i < pinnedBones.length; i++) {
-            WorkingBone sb = pinnedBones[i];
+            ShadowBone sb = pinnedBones[i];
             IKPin pin = sb.forBone.getIKPin();
             ewbik.processing.sceneGraph.Node3D targetNode3D = pin.forBone.getPinnedAxes();
             targetNode3D.updateGlobal();
@@ -472,7 +472,7 @@ public class ShadowNode3D {
         int hdx = 0;
 
         for (int i = 0; i < pinnedBones.length; i++) {
-            WorkingBone sb = pinnedBones[i];
+            ShadowBone sb = pinnedBones[i];
             IKPin pin = sb.forBone.getIKPin();
             ewbik.processing.sceneGraph.Node3D tipNode3D = sb.simLocalNode3D;
             tipNode3D.updateGlobal();
@@ -615,7 +615,7 @@ public class ShadowNode3D {
     public void recursivelyAlignSimAxesOutwardFrom(Bone b, boolean forceGlobal) {
         ewbik.ik.ShadowNode3D bChain = getChildSegmentContaining(b);
         if (bChain != null) {
-            WorkingBone sb = bChain.simulatedBones.get(b);
+            ShadowBone sb = bChain.simulatedBones.get(b);
             ewbik.processing.sceneGraph.Node3D bNode3D = sb.simLocalNode3D;
             ewbik.processing.sceneGraph.Node3D cNode3D = sb.simConstraintNode3D;
             if (forceGlobal) {
@@ -644,7 +644,7 @@ public class ShadowNode3D {
     public void recursivelyAlignBonesToSimAxesFrom(Bone b) {
         ewbik.ik.ShadowNode3D chain = b.parentArmature.boneSegmentMap.get(b); // getChainFor(b);
         if (chain != null) {
-            WorkingBone sb = chain.simulatedBones.get(b);
+            ShadowBone sb = chain.simulatedBones.get(b);
             ewbik.processing.sceneGraph.Node3D simulatedLocalNode3D = sb.simLocalNode3D;
             if (b.getParent() != null) {
                 b.localAxes().alignOrientationTo(simulatedLocalNode3D);
@@ -695,7 +695,7 @@ public class ShadowNode3D {
      *
      * @author Eron Gjoni
      */
-    public class WorkingBone {
+    public class ShadowBone {
         Bone forBone;
         ewbik.processing.sceneGraph.Node3D simLocalNode3D;
         ewbik.processing.sceneGraph.Node3D simConstraintNode3D;
@@ -704,7 +704,7 @@ public class ShadowNode3D {
         float halfReturnfullnessDampened[];
         boolean springy = false;
 
-        public WorkingBone(Bone toSimulate) {
+        public ShadowBone(Bone toSimulate) {
             forBone = toSimulate;
             simLocalNode3D = forBone.localAxes().getGlobalCopy();
             simConstraintNode3D = forBone.getMajorRotationAxes().getGlobalCopy();

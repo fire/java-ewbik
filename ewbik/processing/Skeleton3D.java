@@ -33,11 +33,6 @@ import processing.core.PVector;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Note, this class is a concrete implementation of the abstract class
- * Skeleton3D. Please refer to the {@link Skeleton3D
- * Skeleton3D docs.}
- */
 public class Skeleton3D implements Saveable {
 
     public ewbik.processing.sceneGraph.Node3D localNode3D;
@@ -406,7 +401,7 @@ public class Skeleton3D implements Saveable {
     }
 
     public void groupedRecursiveSegmentSolver(ewbik.ik.ShadowNode3D startFrom, float dampening, int stabilizationPasses,
-            int iteration, float totalIterations) {
+                                              int iteration, float totalIterations) {
         recursiveSegmentSolver(startFrom, dampening, stabilizationPasses, iteration, totalIterations);
         for (ewbik.ik.ShadowNode3D a : startFrom.pinnedDescendants) {
             for (ewbik.ik.ShadowNode3D c : a.childSegments) {
@@ -422,7 +417,7 @@ public class Skeleton3D implements Saveable {
      * @param armature
      */
     public void recursiveSegmentSolver(ewbik.ik.ShadowNode3D armature, float dampening, int stabilizationPasses,
-            int iteration, float totalIterations) {
+                                       int iteration, float totalIterations) {
         if (armature.childSegments == null && !armature.isTipPinned()) {
             return;
         } else if (!armature.isTipPinned()) {

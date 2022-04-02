@@ -22,6 +22,7 @@ package ewbik.processing.singlePrecision;
 import ewbik.asj.LoadManager;
 import ewbik.asj.SaveManager;
 import ewbik.asj.Saveable;
+import ewbik.ik.ShadowNode3D;
 import ewbik.math.*;
 import ik.Bone;
 import processing.core.PConstants;
@@ -409,7 +410,7 @@ public class Kusudama implements Saveable {
         if (attachedTo() != null && attachedTo().parentArmature != null) {
             ewbik.ik.ShadowNode3D s = attachedTo().parentArmature.boneSegmentMap.get(this.attachedTo());
             if (s != null) {
-                ewbik.ik.ShadowNode3D.WorkingBone wb = s.simulatedBones.get(this.attachedTo());
+                ShadowNode3D.ShadowBone wb = s.simulatedBones.get(this.attachedTo());
                 if (wb != null) {
                     wb.updateCosDampening();
                 }
