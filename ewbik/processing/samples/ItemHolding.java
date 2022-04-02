@@ -56,7 +56,7 @@ public class ItemHolding extends PApplet {
         loadedArmature.setPerformanceMonitor(true); // print performance stats
 
         // Tell the Bone class that all bones should draw their kusudamas.
-        Bone.setDrawKusudamas(true);
+        Bone.setDrawKusudamas(false);
 
         /**
          * The armature we're loading is already posed such that its hands touch
