@@ -72,7 +72,7 @@ public class EWBIKLoader {
             Class<? extends Bone> BoneClass,
             Class<? extends Skeleton3D> ArmatureClass,
             Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
-            Class<? extends ewbik.processing.singlePrecision.KusudamaTwist> LimitConeClass,
+            Class<? extends ewbik.processing.singlePrecision.LimitCone> LimitConeClass,
             Class<? extends IKPin> IKPinClass) {
         File selection = new File(filepath);
         JSONObject loadFile = StringFuncs.loadJSONObject(selection);

@@ -23,7 +23,7 @@ public final class IO {
         @SuppressWarnings("unchecked")
         Collection<Skeleton3D> ArmatureList = (Collection<Skeleton3D>) newLoader.importSinglePrecisionArmatures(path,
                 Node3D.class, Bone.class, Skeleton3D.class,
-                ewbik.processing.singlePrecision.Kusudama.class, ewbik.processing.singlePrecision.KusudamaTwist.class,
+                ewbik.processing.singlePrecision.Kusudama.class, ewbik.processing.singlePrecision.LimitCone.class,
                 IKPin.class);
         for (Skeleton3D a : ArmatureList) {
             return a;
