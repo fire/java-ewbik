@@ -2037,11 +2037,11 @@ public class Quaternion {
             if (weights != null) {
                 angle *= weights[i];
             }
-            axis.mult(angle);
+            axis.multiply(angle);
             accumulatedAxisAngle.add(axis);
         }
         float extractAngle = accumulatedAxisAngle.mag();
-        accumulatedAxisAngle.div(extractAngle);
+        accumulatedAxisAngle.divide(extractAngle);
         return new Quaternion(accumulatedAxisAngle, extractAngle);
     }
 

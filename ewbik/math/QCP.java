@@ -487,13 +487,13 @@ public class QCP {
                 wsum += weight[i];
             }
 
-            center.div(wsum);
+            center.divide(wsum);
         } else {
             for (int i = 0; i < toCenter.length; i++) {
                 center.add(toCenter[i]);
                 wsum++;
             }
-            center.div(wsum);
+            center.divide(wsum);
         }
 
         return center;

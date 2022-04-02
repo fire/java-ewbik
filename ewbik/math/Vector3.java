@@ -167,11 +167,11 @@ public class Vector3 implements CanLoad {
         return sub(v1, v2, (Vector3) null);
     }
 
-    static public Vector3 mult(Vector3 v, float n) {
-        return mult(v, n, null);
+    static public Vector3 multiply(Vector3 v, float n) {
+        return multiply(v, n, null);
     }
 
-    static public Vector3 mult(Vector3 v, float n, Vector3 target) {
+    static public Vector3 multiply(Vector3 v, float n, Vector3 target) {
         if (target == null) {
             target = (Vector3) v.copy();
         }
@@ -179,11 +179,11 @@ public class Vector3 implements CanLoad {
         return target;
     }
 
-    static public Vector3 div(Vector3 v, float n) {
-        return div(v, n, null);
+    static public Vector3 divide(Vector3 v, float n) {
+        return divide(v, n, null);
     }
 
-    static public Vector3 div(Vector3 v, float n, Vector3 target) {
+    static public Vector3 divide(Vector3 v, float n, Vector3 target) {
         if (target == null) {
             target = (Vector3) v.copy();
         }
@@ -400,7 +400,7 @@ public class Vector3 implements CanLoad {
      *
      * @return This vector for chaining
      */
-    public Vector3 mult(Vector3 other) {
+    public Vector3 multiply(Vector3 other) {
         return this.set(x * other.getX(), y * other.getY(), z * other.getZ());
     }
 
@@ -412,7 +412,7 @@ public class Vector3 implements CanLoad {
      * @param vz Z value
      * @return This vector for chaining
      */
-    public ewbik.math.Vector3 mult(float vx, float vy, float vz) {
+    public ewbik.math.Vector3 multiply(float vx, float vy, float vz) {
         return this.set(this.x * vx, this.y * vy, this.z * vz);
     }
 
@@ -428,7 +428,7 @@ public class Vector3 implements CanLoad {
      * @usage web_application
      * @brief Divide a vector by a scalar
      */
-    public ewbik.math.Vector3 div(float n) {
+    public ewbik.math.Vector3 divide(float n) {
         x /= n;
         y /= n;
         z /= n;
@@ -549,7 +549,7 @@ public class Vector3 implements CanLoad {
         final float len2 = this.mag();
         if (len2 == 0f || len2 == 1f)
             return (ewbik.math.Vector3) this;
-        return this.mult(1f / (float) len2);
+        return this.multiply(1f / (float) len2);
     }
 
     /**
@@ -632,7 +632,7 @@ public class Vector3 implements CanLoad {
     public ewbik.math.Vector3 getPlaneProjectionOf(ewbik.math.Vector3 rawNorm) {
         ewbik.math.Vector3 norm = (ewbik.math.Vector3) rawNorm.copy().normalize();
         ewbik.math.Vector3 normProj = (ewbik.math.Vector3) norm.multCopy(this.dot(norm));
-        normProj.mult(-1);
+        normProj.multiply(-1);
 
         return (ewbik.math.Vector3) normProj.addCopy(this);
     }
@@ -794,7 +794,7 @@ public class Vector3 implements CanLoad {
         final float l2 = tx * tx + ty * ty + tz * tz;
         final float dl = st * ((l2 < 0.0001f) ? 1f : 1f / (float) MathUtils.sqrt(l2));
 
-        return mult((float) MathUtils.cos(theta)).add(tx * dl, ty * dl, tz * dl).normalize();
+        return multiply((float) MathUtils.cos(theta)).add(tx * dl, ty * dl, tz * dl).normalize();
     }
 
     /**
@@ -830,7 +830,7 @@ public class Vector3 implements CanLoad {
     public ewbik.math.Vector3 limitSq(float limit2) {
         float len2 = magSq();
         if (len2 > limit2) {
-            mult((float) MathUtils.sqrt(limit2 / len2));
+            multiply((float) MathUtils.sqrt(limit2 / len2));
         }
         return (ewbik.math.Vector3) this;
     }
@@ -858,7 +858,7 @@ public class Vector3 implements CanLoad {
     public ewbik.math.Vector3 setMagSq(float len2) {
         float oldLen2 = magSq();
         return (oldLen2 == 0 || oldLen2 == len2) ? (ewbik.math.Vector3) this
-                : mult((float) MathUtils.sqrt(len2 / oldLen2));
+                : multiply((float) MathUtils.sqrt(len2 / oldLen2));
     }
 
     /**
@@ -874,10 +874,10 @@ public class Vector3 implements CanLoad {
             return (ewbik.math.Vector3) this;
         float max2 = max * max;
         if (len2 > max2)
-            return mult((float) MathUtils.sqrt(max2 / len2));
+            return multiply((float) MathUtils.sqrt(max2 / len2));
         float min2 = min * min;
         if (len2 < min2)
-            return mult((float) MathUtils.sqrt(min2 / len2));
+            return multiply((float) MathUtils.sqrt(min2 / len2));
         return (ewbik.math.Vector3) this;
     }
 
@@ -996,7 +996,7 @@ public class Vector3 implements CanLoad {
      * @param scalar The scalar
      * @return This vector for chaining
      */
-    public ewbik.math.Vector3 mult(float scalar) {
+    public ewbik.math.Vector3 multiply(float scalar) {
         this.x *= scalar;
         this.y *= scalar;
         this.z *= scalar;
@@ -1053,7 +1053,7 @@ public class Vector3 implements CanLoad {
      */
     public Vector3 multCopy(float s) {
         Vector3 cv = this.copy();
-        return cv.mult(s);
+        return cv.multiply(s);
     }
 
     /**
@@ -1102,6 +1102,6 @@ public class Vector3 implements CanLoad {
      */
     public Vector3 multCopy(Vector3 v) {
         Vector3 cv = this.copy();
-        return cv.mult(v);
+        return cv.multiply(v);
     }
 }

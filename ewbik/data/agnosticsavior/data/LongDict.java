@@ -411,7 +411,7 @@ public class LongDict {
      * @webref intdict:method
      * @brief Multiply a value
      */
-    public void mult(String key, long amount) {
+    public void multiply(String key, long amount) {
         int index = index(key);
         if (index != -1) {
             values[index] *= amount;

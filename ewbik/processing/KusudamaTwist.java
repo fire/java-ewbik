@@ -63,7 +63,7 @@ public class KusudamaTwist implements Saveable {
         Vector3 location1 = ewbik.processing.sceneGraph.Node3D.toVec3f(location);
         setControlPoint(location1);
         ewbik.processing.singlePrecision.KusudamaTwist.this.tangentCircleCenterNext1 = location1.getOrthogonal();
-        ewbik.processing.singlePrecision.KusudamaTwist.this.tangentCircleCenterNext2 = Vector3.mult(ewbik.processing.singlePrecision.KusudamaTwist.this.tangentCircleCenterNext1, -1);
+        ewbik.processing.singlePrecision.KusudamaTwist.this.tangentCircleCenterNext2 = Vector3.multiply(ewbik.processing.singlePrecision.KusudamaTwist.this.tangentCircleCenterNext1, -1);
         this.setRadius(rad);
         ewbik.processing.singlePrecision.KusudamaTwist.this.parentKusudama = attachedTo;
     }
@@ -354,13 +354,13 @@ public class KusudamaTwist implements Saveable {
 
             // the axis of this cone, scaled to minimize its distance to the tangent contact
             // points.
-            Vector3 scaledAxisA = Vector3.mult(A, MathUtils.cos(boundaryPlusTangentRadiusA));
+            Vector3 scaledAxisA = Vector3.multiply(A, MathUtils.cos(boundaryPlusTangentRadiusA));
             // a point on the plane running through the tangent contact points
             Vector3 planeDir1A = new Quaternion(arcNormal, boundaryPlusTangentRadiusA).applyToCopy(A);
             // another point on the same plane
             Vector3 planeDir2A = new Quaternion(A, MathUtils.PI / 2f).applyToCopy(planeDir1A);
 
-            Vector3 scaledAxisB = Vector3.mult(B, MathUtils.cos(boundaryPlusTangentRadiusB));
+            Vector3 scaledAxisB = Vector3.multiply(B, MathUtils.cos(boundaryPlusTangentRadiusB));
             // a point on the plane running through the tangent contact points
             Vector3 planeDir1B = new Quaternion(arcNormal, boundaryPlusTangentRadiusB).applyToCopy(B);
             // another poiint on the same plane
@@ -400,7 +400,7 @@ public class KusudamaTwist implements Saveable {
         if (tangentCircleCenterNext1 == null)
             tangentCircleCenterNext1 = controlPoint.getOrthogonal().normalize();
         if (tangentCircleCenterNext2 == null)
-            tangentCircleCenterNext2 = Vector3.mult(tangentCircleCenterNext1, -1).normalize();
+            tangentCircleCenterNext2 = Vector3.multiply(tangentCircleCenterNext1, -1).normalize();
         if (next != null)
             computeTriangles(next);
     }

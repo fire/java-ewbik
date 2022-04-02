@@ -329,7 +329,7 @@ public class Ray3D implements CanLoad {
      */
     public void div(float divisor) {
         p2.sub(p1);
-        p2.div(divisor);
+        p2.divide(divisor);
         p2.add(p1);
     }
 
@@ -340,15 +340,15 @@ public class Ray3D implements CanLoad {
      *
      * @param divisor
      */
-    public void mult(float scalar) {
+    public void multiply(float scalar) {
         p2.sub(p1);
-        p2.mult(scalar);
+        p2.multiply(scalar);
         p2.add(p1);
     }
 
     /**
      * Returns a Vector3 representing where the tip
-     * of this ray would be if mult() was called on the ray
+     * of this ray would be if multiply() was called on the ray
      * with scalar as the parameter.
      *
      * @param scalar
@@ -356,7 +356,7 @@ public class Ray3D implements CanLoad {
      */
     public Vector3 getMultipledBy(float scalar) {
         Vector3 result = this.heading();
-        result.mult(scalar);
+        result.multiply(scalar);
         result.add(p1);
         return result;
     }
@@ -371,7 +371,7 @@ public class Ray3D implements CanLoad {
      */
     public Vector3 getDivideddBy(float divisor) {
         Vector3 result = this.heading().copy();
-        result.mult(divisor);
+        result.multiply(divisor);
         result.add(p1);
         return result;
     }
@@ -387,7 +387,7 @@ public class Ray3D implements CanLoad {
     public Vector3 getScaledTo(float scale) {
         Vector3 result = this.heading().copy();
         result.normalize();
-        result.mult(scale);
+        result.multiply(scale);
         result.add(p1);
         return result;
     }
@@ -399,8 +399,8 @@ public class Ray3D implements CanLoad {
         Vector3 midPoint = p1.addCopy(p2).multCopy(0.5f);
         Vector3 p1Heading = p1.subCopy(midPoint);
         Vector3 p2Heading = p2.subCopy(midPoint);
-        Vector3 p1Add = (Vector3) p1Heading.copy().normalize().mult(amt);
-        Vector3 p2Add = (Vector3) p2Heading.copy().normalize().mult(amt);
+        Vector3 p1Add = (Vector3) p1Heading.copy().normalize().multiply(amt);
+        Vector3 p2Add = (Vector3) p2Heading.copy().normalize().multiply(amt);
 
         this.p1.set((Vector3) p1Heading.addCopy(p1Add).addCopy(midPoint));
         this.p2.set((Vector3) p2Heading.addCopy(p2Add).addCopy(midPoint));
@@ -808,7 +808,7 @@ public class Ray3D implements CanLoad {
         r = a / b;
         I.set(0, 0, 0);
         I.set(dir);
-        I.mult(r);
+        I.multiply(r);
         // float[] barycentric = new float[3];
         barycentric(ta, tb, tc, I, uvw);
 

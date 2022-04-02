@@ -388,7 +388,7 @@ public class FloatDict {
      * @webref floatdict:method
      * @brief Multiply a value
      */
-    public void mult(String key, float amount) {
+    public void multiply(String key, float amount) {
         int index = index(key);
         if (index != -1) {
             values[index] *= amount;

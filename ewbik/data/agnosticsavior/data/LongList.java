@@ -478,7 +478,7 @@ public class LongList implements Iterable<Long> {
      * @webref intlist:method
      * @brief Multiply a value
      */
-    public void mult(int index, int amount) {
+    public void multiply(int index, int amount) {
         if (index < count) {
             data[index] *= amount;
         } else {

@@ -296,7 +296,7 @@ public class Kusudama implements Saveable {
 
                 Vector3 halfAngle = halfThisToNext.applyToCopy(thisC);
                 halfAngle.normalize();
-                halfAngle.mult(thisToNext.getAngle());
+                halfAngle.multiply(thisToNext.getAngle());
                 directions.add(halfAngle);
             }
         }
@@ -306,7 +306,7 @@ public class Kusudama implements Saveable {
             newY.add(dv);
         }
 
-        newY.div(directions.size());
+        newY.divide(directions.size());
         if (newY.mag() != 0 && !Float.isNaN(newY.y)) {
             newY.normalize();
         } else {

@@ -411,7 +411,7 @@ public class IntDict {
      * @webref intdict:method
      * @brief Multiply a value
      */
-    public void mult(String key, int amount) {
+    public void multiply(String key, int amount) {
         int index = index(key);
         if (index != -1) {
             values[index] *= amount;
