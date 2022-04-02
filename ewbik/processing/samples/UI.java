@@ -170,7 +170,7 @@ public class UI {
 
         currentDrawSurface = pa.g;
         setCamera(pa.g, zoomScalar);
-        pa.background(80, 150, 190);
+        pa.background(28, 62, 96);
         pa.imageMode(PConstants.CENTER);
         pa.image(display, 0, 0, orthoWidth, orthoHeight);
         pa.resetMatrix();
