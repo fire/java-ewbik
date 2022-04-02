@@ -186,8 +186,7 @@ public class Transform3D {
         Vector3 x_identity = xBase.copy();
         Vector3 y_identity = yBase.copy();
         Vector3 z_identity = zBase.copy();
-        Vector3 origin = xBase.copy();
-        origin.set(0, 0, 0);
+        Vector3 origin = new Vector3(0, 0, 0);
 
         Vector3[] from = {origin, x_identity, y_identity, z_identity};
         Vector3[] to = {origin.copy(), xHeading, yHeading, zHeading};
