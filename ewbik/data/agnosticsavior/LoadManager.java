@@ -40,7 +40,6 @@ public abstract class LoadManager {
                 allLoadedObjects.add((Saveable) created);
             }
         } catch (InstantiationException | IllegalAccessException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

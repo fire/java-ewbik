@@ -36,8 +36,6 @@ public class FloatBackedSaver extends SaveManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        // p.println("tempDir = " + tempDir);
     }
 
     public void addToSaveState(Saveable saveObj) {
@@ -107,17 +105,12 @@ public class FloatBackedSaver extends SaveManager {
     }
 
     public void saveAs(String savePath) {
-        // File saveFile = p.saveFile("Save", currentFilePath,
-        // ".ga");//p.selectOutput("Save", "saveFileSelected");
         currentFilePath = savePath;
-        // p.saveFileSelected(new File(currentFilePath));
         save();
     }
 
     public void save() {
-
         JSONObject fileContent = getSaveObject();
-        // p.println(fileContent.toString());
         StringFuncs.saveJSONObject(fileContent, tempDir + File.separator + "structure");
         try {
             File cFile = new File(currentFilePath);
@@ -127,7 +120,5 @@ public class FloatBackedSaver extends SaveManager {
         } catch (Exception e) {
             System.out.println("failed to save");
         }
-
-        // p.saveJSONObject(fileContent, location);
     }
 }

@@ -4,8 +4,6 @@ package ewbik.asj.data;
  * These are mostly just constants potentially useful for saving and loading JSOn files.
  */
 public interface Constants {
-
-
     // platform IDs for StringFuncs.platform
     static final int OTHER = 0;
     static final int WINDOWS = 1;
