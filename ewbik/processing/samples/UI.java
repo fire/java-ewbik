@@ -58,10 +58,10 @@ public class UI {
         pg.fill(0, 0, 0, 90);
         float boxW = pg.textWidth(instructionText);
         float boxH = (pg.textAscent() + pg.textDescent()) * (instructionText.split("\n").length);
-        pg.rect((-pa.width / 2f) + 30, (-pa.height / 2f) + 15, boxW + 25, boxH + 40);
+        pg.rect((-pa.width / 2f) + 40, (-pa.height / 2f) + 15, boxW + 45, boxH + 40);
         pg.fill(255, 255, 255, 255);
         pg.emissive(255, 255, 255);
-        pg.text(instructionText, (-pa.width / 2f) + 50f, -pa.height / 2f + 40f);
+        pg.text(instructionText, (-pa.width / 2f) + 40f, -pa.height / 2f + 30f);
 
     }
 
