@@ -426,7 +426,7 @@
       "parentArmature": "1495136169-Skeleton3D",
       "boneHeight": 10,
       "tag": "c3",
-      "stiffness": 0,
+      "stiffness": 0.8,
       "constraints": "1737889623-Kusudama"
     },
     {
@@ -448,7 +448,7 @@
       "parentArmature": "1495136169-Skeleton3D",
       "boneHeight": 10,
       "tag": "c2",
-      "stiffness": 0,
+      "stiffness": 0.8,
       "constraints": "1627858255-Kusudama"
     },
     {
@@ -538,7 +538,7 @@
       "parentArmature": "1495136169-Skeleton3D",
       "boneHeight": 10,
       "tag": "c4",
-      "stiffness": 0,
+      "stiffness": 0.8,
       "constraints": "1949199359-Kusudama"
     },
     {
@@ -572,7 +572,7 @@
       "parentArmature": "1495136169-Skeleton3D",
       "boneHeight": 10,
       "tag": "c1",
-      "stiffness": 0,
+      "stiffness": 0.8,
       "constraints": "268132753-Kusudama"
     },
     {
@@ -587,7 +587,7 @@
       "parentArmature": "1495136169-Skeleton3D",
       "boneHeight": 10,
       "tag": "c5",
-      "stiffness": 0,
+      "stiffness": 0.8,
       "constraints": "49456969-Kusudama"
     },
     {
@@ -598,7 +598,7 @@
       "parentArmature": "1495136169-Skeleton3D",
       "boneHeight": 12,
       "tag": "neck 1",
-      "stiffness": 0,
+      "stiffness": 0.8,
       "constraints": "333296758-Kusudama"
     },
     {
