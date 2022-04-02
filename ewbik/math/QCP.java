@@ -83,7 +83,6 @@ public class QCP {
      * @author Eron Gjoni (adopted to EWB IK)
      */
 
-
     private float evec_prec = (float) 1E-6;
     private float eval_prec = (float) 1E-11;
     private int max_iterations = 5;
@@ -96,8 +95,8 @@ public class QCP {
     private Vector3 movedCenter = new Vector3();
 
     private float e0;
-    //private Matrix3f rotmat = new Matrix3f();
-    //private Matrix4f transformation = new Matrix4f();
+    // private Matrix3f rotmat = new Matrix3f();
+    // private Matrix4f transformation = new Matrix4f();
     private float rmsd = 0;
     private float Sxy, Sxz, Syx, Syz, Szx, Szy;
     private float SxxpSyy, Szz, mxEigenV, SyzmSzy, SxzmSzx, SxymSyx;
@@ -108,11 +107,11 @@ public class QCP {
     private boolean innerProductCalculated = false;
     private int length;
 
-
     /**
      * Constructor with option to set the precision values.
      *
-     * @param centered  true if the point arrays are centered at the origin (faster),
+     * @param centered  true if the point arrays are centered at the origin
+     *                  (faster),
      *                  false otherwise
      * @param evec_prec required eigenvector precision
      * @param eval_prec required eigenvalue precision
@@ -130,8 +129,10 @@ public class QCP {
 
     /**
      * Sets the maximum number of iterations QCP should run before giving up.
-     * In most situations QCP converges in 3 or 4 iterations, but in some situations convergence
-     * occurs slowly or not at all, and so an exit condition is used. The default value is 20.
+     * In most situations QCP converges in 3 or 4 iterations, but in some situations
+     * convergence
+     * occurs slowly or not at all, and so an exit condition is used. The default
+     * value is 20.
      * Increase it for more stability.
      *
      * @param max
@@ -173,7 +174,7 @@ public class QCP {
 
         if (translate) {
             moveToWeightedCenter(this.moved, weight, movedCenter);
-            wsum = 0f; //set wsum to 0 so we don't float up.
+            wsum = 0f; // set wsum to 0 so we don't float up.
             moveToWeightedCenter(this.target, weight, targetCenter);
             translate(movedCenter.multCopy(-1f), this.moved);
             translate(targetCenter.multCopy(-1f), this.target);
@@ -216,8 +217,8 @@ public class QCP {
     public <V extends Vector3> Quaternion weightedSuperpose(V[] moved, V[] target, float[] weight, boolean translate) {
         set(moved, target, weight, translate);
         Quaternion result = getRotation();
-        //transformation.set(rotmat);
-        return result;//transformation;
+        // transformation.set(rotmat);
+        return result;// transformation;
     }
 
     private Quaternion getRotation() {
@@ -239,8 +240,8 @@ public class QCP {
      * @param y 3f points of coordinate set for superposition
      */
     private <V extends Vector3> void calcRmsd(V[] x, V[] y) {
-        //QCP doesn't handle alignment of single values, so if we only have one point
-        //we just compute regular distance.
+        // QCP doesn't handle alignment of single values, so if we only have one point
+        // we just compute regular distance.
         if (x.length == 1) {
             rmsd = x[0].dist(y[0]);
             rmsdCalculated = true;
@@ -362,13 +363,13 @@ public class QCP {
             float c0 = Sxy2Sxz2Syx2Szx2 * Sxy2Sxz2Syx2Szx2
                     + (Sxx2Syy2Szz2Syz2Szy2 + SyzSzymSyySzz2) * (Sxx2Syy2Szz2Syz2Szy2 - SyzSzymSyySzz2)
                     + (-(SxzpSzx) * (SyzmSzy) + (SxymSyx) * (SxxmSyy - Szz))
-                    * (-(SxzmSzx) * (SyzpSzy) + (SxymSyx) * (SxxmSyy + Szz))
+                            * (-(SxzmSzx) * (SyzpSzy) + (SxymSyx) * (SxxmSyy + Szz))
                     + (-(SxzpSzx) * (SyzpSzy) - (SxypSyx) * (SxxpSyy - Szz))
-                    * (-(SxzmSzx) * (SyzmSzy) - (SxypSyx) * (SxxpSyy + Szz))
+                            * (-(SxzmSzx) * (SyzmSzy) - (SxypSyx) * (SxxpSyy + Szz))
                     + (+(SxypSyx) * (SyzpSzy) + (SxzpSzx) * (SxxmSyy + Szz))
-                    * (-(SxymSyx) * (SyzmSzy) + (SxzpSzx) * (SxxpSyy + Szz))
+                            * (-(SxymSyx) * (SyzmSzy) + (SxzpSzx) * (SxxpSyy + Szz))
                     + (+(SxypSyx) * (SyzmSzy) + (SxzmSzx) * (SxxmSyy - Szz))
-                    * (-(SxymSyx) * (SyzpSzy) + (SxzmSzx) * (SxxpSyy - Szz));
+                            * (-(SxymSyx) * (SyzpSzy) + (SxzmSzx) * (SxxpSyy - Szz));
 
             int i;
             for (i = 1; i < (max_iterations + 1); ++i) {
@@ -388,7 +389,8 @@ public class QCP {
 
     private Quaternion calcRotation() {
 
-        //QCP doesn't handle single targets, so if we only have one point and one target, we just rotate by the angular distance between them
+        // QCP doesn't handle single targets, so if we only have one point and one
+        // target, we just rotate by the angular distance between them
         if (moved.length == 1) {
             return new Quaternion(moved[0], target[0]);
         } else {
@@ -462,7 +464,7 @@ public class QCP {
                     }
                 }
             }
-            //prenormalize the result to avoid floating point errors.
+            // prenormalize the result to avoid floating point errors.
             float min = q1;
             min = q2 < min ? q2 : min;
             min = q3 < min ? q3 : min;
@@ -502,6 +504,3 @@ public class QCP {
     }
 
 }
-
-
-

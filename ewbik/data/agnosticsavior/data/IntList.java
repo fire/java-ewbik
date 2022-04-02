@@ -6,11 +6,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Random;
 
-
 // splice, slice, subset, concat, reverse
 
 // trim, join for String versions
-
 
 /**
  * Helper class for a list of ints. Lists are designed to have some of the
@@ -28,11 +26,9 @@ public class IntList implements Iterable<Integer> {
     protected int count;
     protected int[] data;
 
-
     public IntList() {
         data = new int[10];
     }
-
 
     /**
      * @nowebref
@@ -40,7 +36,6 @@ public class IntList implements Iterable<Integer> {
     public IntList(int length) {
         data = new int[length];
     }
-
 
     /**
      * @nowebref
@@ -50,7 +45,6 @@ public class IntList implements Iterable<Integer> {
         data = new int[count];
         System.arraycopy(source, 0, data, 0, count);
     }
-
 
     /**
      * Construct an IntList from an iterable pile of objects.
@@ -63,7 +57,7 @@ public class IntList implements Iterable<Integer> {
         this(10);
         for (Object o : iter) {
             if (o == null) {
-                append(0);  // missing value default
+                append(0); // missing value default
             } else if (o instanceof Number) {
                 append(((Number) o).intValue());
             } else {
@@ -73,13 +67,12 @@ public class IntList implements Iterable<Integer> {
         crop();
     }
 
-
     /**
      * Construct an IntList from a random pile of objects.
      * Un-parseable or null values will be set to zero.
      */
     public IntList(Object... items) {
-        final int missingValue = 0;  // nuts, can't be last/final/second arg
+        final int missingValue = 0; // nuts, can't be last/final/second arg
 
         count = items.length;
         data = new int[count];
@@ -97,11 +90,9 @@ public class IntList implements Iterable<Integer> {
         }
     }
 
-
     static public IntList fromRange(int stop) {
         return fromRange(0, stop);
     }
-
 
     static public IntList fromRange(int start, int stop) {
         int count = stop - start;
@@ -111,7 +102,6 @@ public class IntList implements Iterable<Integer> {
         }
         return newbie;
     }
-
 
     /**
      * Improve efficiency by removing allocated but unused entries from the
@@ -125,7 +115,6 @@ public class IntList implements Iterable<Integer> {
         }
     }
 
-
     /**
      * Get the length of the list.
      *
@@ -135,7 +124,6 @@ public class IntList implements Iterable<Integer> {
     public int size() {
         return count;
     }
-
 
     public void resize(int length) {
         if (length > data.length) {
@@ -149,7 +137,6 @@ public class IntList implements Iterable<Integer> {
         count = length;
     }
 
-
     /**
      * Remove all entries from the list.
      *
@@ -159,7 +146,6 @@ public class IntList implements Iterable<Integer> {
     public void clear() {
         count = 0;
     }
-
 
     /**
      * Get an entry at a particular index.
@@ -173,7 +159,6 @@ public class IntList implements Iterable<Integer> {
         }
         return data[index];
     }
-
 
     /**
      * Set the entry at a particular index. If the index is past the length of
@@ -194,14 +179,12 @@ public class IntList implements Iterable<Integer> {
         data[index] = what;
     }
 
-
     /**
      * Just an alias for append(), but matches pop()
      */
     public void push(int value) {
         append(value);
     }
-
 
     public int pop() {
         if (count == 0) {
@@ -211,7 +194,6 @@ public class IntList implements Iterable<Integer> {
         count--;
         return value;
     }
-
 
     /**
      * Remove an element from the specified index
@@ -224,11 +206,11 @@ public class IntList implements Iterable<Integer> {
             throw new ArrayIndexOutOfBoundsException(index);
         }
         int entry = data[index];
-//    int[] outgoing = new int[count - 1];
-//    System.arraycopy(data, 0, outgoing, 0, index);
-//    count--;
-//    System.arraycopy(data, index + 1, outgoing, 0, count - index);
-//    data = outgoing;
+        // int[] outgoing = new int[count - 1];
+        // System.arraycopy(data, 0, outgoing, 0, index);
+        // count--;
+        // System.arraycopy(data, index + 1, outgoing, 0, count - index);
+        // data = outgoing;
         // For most cases, this actually appears to be faster
         // than arraycopy() on an array copying into itself.
         for (int i = index; i < count - 1; i++) {
@@ -237,7 +219,6 @@ public class IntList implements Iterable<Integer> {
         count--;
         return entry;
     }
-
 
     // Remove the first instance of a particular value,
     // and return the index at which it was found.
@@ -249,7 +230,6 @@ public class IntList implements Iterable<Integer> {
         }
         return -1;
     }
-
 
     // Remove all instances of a particular value,
     // and return the number of values found and removed
@@ -265,7 +245,6 @@ public class IntList implements Iterable<Integer> {
         return removed;
     }
 
-
     /**
      * Add a new entry to the list.
      *
@@ -279,20 +258,17 @@ public class IntList implements Iterable<Integer> {
         data[count++] = value;
     }
 
-
     public void append(int[] values) {
         for (int v : values) {
             append(v);
         }
     }
 
-
     public void append(IntList list) {
-        for (int v : list.values()) {  // will concat the list...
+        for (int v : list.values()) { // will concat the list...
             append(v);
         }
     }
-
 
     /**
      * Add this value, but only if it's not already in the list.
@@ -303,41 +279,38 @@ public class IntList implements Iterable<Integer> {
         }
     }
 
-
-//  public void insert(int index, int value) {
-//    if (index+1 > count) {
-//      if (index+1 < data.length) {
-//    }
-//  }
-//    if (index >= data.length) {
-//      data = StringFuncs.expand(data, index+1);
-//      data[index] = value;
-//      count = index+1;
-//
-//    } else if (count == data.length) {
-//    if (index >= count) {
-//      //int[] temp = new int[count << 1];
-//      System.arraycopy(data, 0, temp, 0, index);
-//      temp[index] = value;
-//      System.arraycopy(data, index, temp, index+1, count - index);
-//      data = temp;
-//
-//    } else {
-//      // data[] has room to grow
-//      // for() loop believed to be faster than System.arraycopy over itself
-//      for (int i = count; i > index; --i) {
-//        data[i] = data[i-1];
-//      }
-//      data[index] = value;
-//      count++;
-//    }
-//  }
-
+    // public void insert(int index, int value) {
+    // if (index+1 > count) {
+    // if (index+1 < data.length) {
+    // }
+    // }
+    // if (index >= data.length) {
+    // data = StringFuncs.expand(data, index+1);
+    // data[index] = value;
+    // count = index+1;
+    //
+    // } else if (count == data.length) {
+    // if (index >= count) {
+    // //int[] temp = new int[count << 1];
+    // System.arraycopy(data, 0, temp, 0, index);
+    // temp[index] = value;
+    // System.arraycopy(data, index, temp, index+1, count - index);
+    // data = temp;
+    //
+    // } else {
+    // // data[] has room to grow
+    // // for() loop believed to be faster than System.arraycopy over itself
+    // for (int i = count; i > index; --i) {
+    // data[i] = data[i-1];
+    // }
+    // data[index] = value;
+    // count++;
+    // }
+    // }
 
     public void insert(int index, int value) {
-        insert(index, new int[]{value});
+        insert(index, new int[] { value });
     }
-
 
     // same as splice
     public void insert(int index, int[] values) {
@@ -356,79 +329,76 @@ public class IntList implements Iterable<Integer> {
         // Copy the new values into the proper place
         System.arraycopy(values, 0, temp, index, values.length);
 
-//    if (index < count) {
+        // if (index < count) {
         // The index was inside count, so it's a true splice/insert
         System.arraycopy(data, index, temp, index + values.length, count - index);
         count = count + values.length;
-//    } else {
-//      // The index was past 'count', so the new count is weirder
-//      count = index + values.length;
-//    }
+        // } else {
+        // // The index was past 'count', so the new count is weirder
+        // count = index + values.length;
+        // }
         data = temp;
     }
-
 
     public void insert(int index, IntList list) {
         insert(index, list.values());
     }
 
-
     // below are aborted attempts at more optimized versions of the code
     // that are harder to read and debug...
 
-//    if (index + values.length >= count) {
-//      // We're past the current 'count', check to see if we're still allocated
-//      // index 9, data.length = 10, values.length = 1
-//      if (index + values.length < data.length) {
-//        // There's still room for these entries, even though it's past 'count'.
-//        // First clear out the entries leading up to it, however.
-//        for (int i = count; i < index; i++) {
-//          data[i] = 0;
-//        }
-//        data[index] =
-//      }
-//      if (index >= data.length) {
-//        int length = index + values.length;
-//        int[] temp = new int[length];
-//        System.arraycopy(data, 0, temp, 0, count);
-//        System.arraycopy(values, 0, temp, index, values.length);
-//        data = temp;
-//        count = data.length;
-//      } else {
-//
-//      }
-//
-//    } else if (count == data.length) {
-//      int[] temp = new int[count << 1];
-//      System.arraycopy(data, 0, temp, 0, index);
-//      temp[index] = value;
-//      System.arraycopy(data, index, temp, index+1, count - index);
-//      data = temp;
-//
-//    } else {
-//      // data[] has room to grow
-//      // for() loop believed to be faster than System.arraycopy over itself
-//      for (int i = count; i > index; --i) {
-//        data[i] = data[i-1];
-//      }
-//      data[index] = value;
-//      count++;
-//    }
-
+    // if (index + values.length >= count) {
+    // // We're past the current 'count', check to see if we're still allocated
+    // // index 9, data.length = 10, values.length = 1
+    // if (index + values.length < data.length) {
+    // // There's still room for these entries, even though it's past 'count'.
+    // // First clear out the entries leading up to it, however.
+    // for (int i = count; i < index; i++) {
+    // data[i] = 0;
+    // }
+    // data[index] =
+    // }
+    // if (index >= data.length) {
+    // int length = index + values.length;
+    // int[] temp = new int[length];
+    // System.arraycopy(data, 0, temp, 0, count);
+    // System.arraycopy(values, 0, temp, index, values.length);
+    // data = temp;
+    // count = data.length;
+    // } else {
+    //
+    // }
+    //
+    // } else if (count == data.length) {
+    // int[] temp = new int[count << 1];
+    // System.arraycopy(data, 0, temp, 0, index);
+    // temp[index] = value;
+    // System.arraycopy(data, index, temp, index+1, count - index);
+    // data = temp;
+    //
+    // } else {
+    // // data[] has room to grow
+    // // for() loop believed to be faster than System.arraycopy over itself
+    // for (int i = count; i > index; --i) {
+    // data[i] = data[i-1];
+    // }
+    // data[index] = value;
+    // count++;
+    // }
 
     /**
      * Return the first index of a particular value.
      */
     public int index(int what) {
-    /*
-    if (indexCache != null) {
-      try {
-        return indexCache.get(what);
-      } catch (Exception e) {  // not there
-        return -1;
-      }
-    }
-    */
+        /*
+         * if (indexCache != null) {
+         * try {
+         * return indexCache.get(what);
+         * } catch (Exception e) { // not there
+         * return -1;
+         * }
+         * }
+         */
         for (int i = 0; i < count; i++) {
             if (data[i] == what) {
                 return i;
@@ -437,25 +407,24 @@ public class IntList implements Iterable<Integer> {
         return -1;
     }
 
-
     // !!! TODO this is not yet correct, because it's not being reset when
     // the rest of the entries are changed
-//  protected void cacheIndices() {
-//    indexCache = new HashMap<Integer, Integer>();
-//    for (int i = 0; i < count; i++) {
-//      indexCache.put(data[i], i);
-//    }
-//  }
+    // protected void cacheIndices() {
+    // indexCache = new HashMap<Integer, Integer>();
+    // for (int i = 0; i < count; i++) {
+    // indexCache.put(data[i], i);
+    // }
+    // }
 
     /**
      * @webref intlist:method
      * @brief Check if a number is a part of the list
      */
     public boolean hasValue(int value) {
-//    if (indexCache == null) {
-//      cacheIndices();
-//    }
-//    return index(what) != -1;
+        // if (indexCache == null) {
+        // cacheIndices();
+        // }
+        // return index(what) != -1;
         for (int i = 0; i < count; i++) {
             if (data[i] == value) {
                 return true;
@@ -475,13 +444,11 @@ public class IntList implements Iterable<Integer> {
         data[index]++;
     }
 
-
     private void boundsProblem(int index, String method) {
         final String msg = String.format("The list size is %d. " +
                 "You cannot %s() to element %d.", count, method, index);
         throw new ArrayIndexOutOfBoundsException(msg);
     }
-
 
     /**
      * @webref intlist:method
@@ -531,16 +498,13 @@ public class IntList implements Iterable<Integer> {
         }
     }
 
-
     private void checkMinMax(String functionName) {
         if (count == 0) {
-            String msg =
-                    String.format("Cannot use %s() on an empty %s.",
-                            functionName, getClass().getSimpleName());
+            String msg = String.format("Cannot use %s() on an empty %s.",
+                    functionName, getClass().getSimpleName());
             throw new RuntimeException(msg);
         }
     }
-
 
     /**
      * @webref intlist:method
@@ -550,11 +514,11 @@ public class IntList implements Iterable<Integer> {
         checkMinMax("min");
         int outgoing = data[0];
         for (int i = 1; i < count; i++) {
-            if (data[i] < outgoing) outgoing = data[i];
+            if (data[i] < outgoing)
+                outgoing = data[i];
         }
         return outgoing;
     }
-
 
     // returns the index of the minimum value.
     // if there are ties, it returns the first one found.
@@ -571,7 +535,6 @@ public class IntList implements Iterable<Integer> {
         return index;
     }
 
-
     /**
      * @webref intlist:method
      * @brief Return the largest value
@@ -580,11 +543,11 @@ public class IntList implements Iterable<Integer> {
         checkMinMax("max");
         int outgoing = data[0];
         for (int i = 1; i < count; i++) {
-            if (data[i] > outgoing) outgoing = data[i];
+            if (data[i] > outgoing)
+                outgoing = data[i];
         }
         return outgoing;
     }
-
 
     // returns the index of the maximum value.
     // if there are ties, it returns the first one found.
@@ -601,7 +564,6 @@ public class IntList implements Iterable<Integer> {
         return index;
     }
 
-
     public int sum() {
         long amount = sumLong();
         if (amount > Integer.MAX_VALUE) {
@@ -613,7 +575,6 @@ public class IntList implements Iterable<Integer> {
         return (int) amount;
     }
 
-
     public long sumLong() {
         long sum = 0;
         for (int i = 0; i < count; i++) {
@@ -621,7 +582,6 @@ public class IntList implements Iterable<Integer> {
         }
         return sum;
     }
-
 
     /**
      * Sorts the array in place.
@@ -632,7 +592,6 @@ public class IntList implements Iterable<Integer> {
     public void sort() {
         Arrays.sort(data, 0, count);
     }
-
 
     /**
      * Reverse sort, orders values from highest to lowest.
@@ -661,23 +620,21 @@ public class IntList implements Iterable<Integer> {
         }.run();
     }
 
-
     // use insert()
-//  public void splice(int index, int value) {
-//  }
+    // public void splice(int index, int value) {
+    // }
 
-
-//  public void subset(int start) {
-//    subset(start, count - start);
-//  }
-//
-//
-//  public void subset(int start, int num) {
-//    for (int i = 0; i < num; i++) {
-//      data[i] = data[i+start];
-//    }
-//    count = num;
-//  }
+    // public void subset(int start) {
+    // subset(start, count - start);
+    // }
+    //
+    //
+    // public void subset(int start, int num) {
+    // for (int i = 0; i < num; i++) {
+    // data[i] = data[i+start];
+    // }
+    // count = num;
+    // }
 
     /**
      * @webref intlist:method
@@ -692,7 +649,6 @@ public class IntList implements Iterable<Integer> {
             --ii;
         }
     }
-
 
     /**
      * Randomize the order of the list elements. Note that this does not
@@ -713,7 +669,6 @@ public class IntList implements Iterable<Integer> {
         }
     }
 
-
     /**
      * Randomize the list order using the random() function from the specified
      * sketch, allowing shuffle() to use its current randomSeed() setting.
@@ -729,13 +684,11 @@ public class IntList implements Iterable<Integer> {
         }
     }
 
-
     public IntList copy() {
         IntList outgoing = new IntList(data);
         outgoing.count = count;
         return outgoing;
     }
-
 
     /**
      * Returns the actual array being used to store the data. For advanced users,
@@ -747,10 +700,9 @@ public class IntList implements Iterable<Integer> {
         return data;
     }
 
-
     @Override
     public Iterator<Integer> iterator() {
-//  public Iterator<Integer> valueIterator() {
+        // public Iterator<Integer> valueIterator() {
         return new Iterator<Integer>() {
             int index = -1;
 
@@ -769,7 +721,6 @@ public class IntList implements Iterable<Integer> {
         };
     }
 
-
     /**
      * Create a new array with a copy of all the values.
      *
@@ -780,7 +731,6 @@ public class IntList implements Iterable<Integer> {
     public int[] array() {
         return array(null);
     }
-
 
     /**
      * Copy values into the specified array. If the specified array is null or
@@ -796,49 +746,43 @@ public class IntList implements Iterable<Integer> {
         return array;
     }
 
+    // public int[] toIntArray() {
+    // int[] outgoing = new int[count];
+    // for (int i = 0; i < count; i++) {
+    // outgoing[i] = (int) data[i];
+    // }
+    // return outgoing;
+    // }
 
-//  public int[] toIntArray() {
-//    int[] outgoing = new int[count];
-//    for (int i = 0; i < count; i++) {
-//      outgoing[i] = (int) data[i];
-//    }
-//    return outgoing;
-//  }
+    // public long[] toLongArray() {
+    // long[] outgoing = new long[count];
+    // for (int i = 0; i < count; i++) {
+    // outgoing[i] = (long) data[i];
+    // }
+    // return outgoing;
+    // }
 
+    // public float[] toFloatArray() {
+    // float[] outgoing = new float[count];
+    // System.arraycopy(data, 0, outgoing, 0, count);
+    // return outgoing;
+    // }
 
-//  public long[] toLongArray() {
-//    long[] outgoing = new long[count];
-//    for (int i = 0; i < count; i++) {
-//      outgoing[i] = (long) data[i];
-//    }
-//    return outgoing;
-//  }
+    // public double[] toDoubleArray() {
+    // double[] outgoing = new double[count];
+    // for (int i = 0; i < count; i++) {
+    // outgoing[i] = data[i];
+    // }
+    // return outgoing;
+    // }
 
-
-//  public float[] toFloatArray() {
-//    float[] outgoing = new float[count];
-//    System.arraycopy(data, 0, outgoing, 0, count);
-//    return outgoing;
-//  }
-
-
-//  public double[] toDoubleArray() {
-//    double[] outgoing = new double[count];
-//    for (int i = 0; i < count; i++) {
-//      outgoing[i] = data[i];
-//    }
-//    return outgoing;
-//  }
-
-
-//  public String[] toStringArray() {
-//    String[] outgoing = new String[count];
-//    for (int i = 0; i < count; i++) {
-//      outgoing[i] = String.valueOf(data[i]);
-//    }
-//    return outgoing;
-//  }
-
+    // public String[] toStringArray() {
+    // String[] outgoing = new String[count];
+    // for (int i = 0; i < count; i++) {
+    // outgoing[i] = String.valueOf(data[i]);
+    // }
+    // return outgoing;
+    // }
 
     /**
      * Returns a normalized version of this array. Called getPercent() for
@@ -859,31 +803,27 @@ public class IntList implements Iterable<Integer> {
         return outgoing;
     }
 
-
-//  /**
-//   * Count the number of times each entry is found in this list.
-//   * Converts each entry to a String so it can be used as a key.
-//   */
-//  public IntDict getTally() {
-//    IntDict outgoing = new IntDict();
-//    for (int i = 0; i < count; i++) {
-//      outgoing.increment(String.valueOf(data[i]));
-//    }
-//    return outgoing;
-//  }
-
+    // /**
+    // * Count the number of times each entry is found in this list.
+    // * Converts each entry to a String so it can be used as a key.
+    // */
+    // public IntDict getTally() {
+    // IntDict outgoing = new IntDict();
+    // for (int i = 0; i < count; i++) {
+    // outgoing.increment(String.valueOf(data[i]));
+    // }
+    // return outgoing;
+    // }
 
     public IntList getSubset(int start) {
         return getSubset(start, count - start);
     }
-
 
     public IntList getSubset(int start, int num) {
         int[] subset = new int[num];
         System.arraycopy(data, start, subset, 0, num);
         return new IntList(subset);
     }
-
 
     public String join(String separator) {
         if (count == 0) {
@@ -898,13 +838,11 @@ public class IntList implements Iterable<Integer> {
         return sb.toString();
     }
 
-
     public void print() {
         for (int i = 0; i < count; i++) {
             System.out.format("[%d] %d%n", i, data[i]);
         }
     }
-
 
     /**
      * Save tab-delimited entries to a file (TSV format, UTF-8 encoding)
@@ -914,7 +852,6 @@ public class IntList implements Iterable<Integer> {
         write(writer);
         writer.close();
     }
-
 
     /**
      * Write entries to a PrintWriter, one per line
@@ -926,14 +863,12 @@ public class IntList implements Iterable<Integer> {
         writer.flush();
     }
 
-
     /**
      * Return this dictionary as a String in JSON format.
      */
     public String toJSON() {
         return "[ " + join(", ") + " ]";
     }
-
 
     @Override
     public String toString() {

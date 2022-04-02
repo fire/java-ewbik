@@ -192,7 +192,7 @@ public class IKPin implements ewbik.asj.Saveable {
 
     /**
      * @return the number of bases an effector to this target will attempt to align
-     * on.
+     *         on.
      */
     public int getSubtargetCount() {
         return subTargetCount;
@@ -389,7 +389,8 @@ public class IKPin implements ewbik.asj.Saveable {
     }
 
     public void loadFromJSONObject(ewbik.asj.data.JSONObject j, ewbik.asj.LoadManager l) {
-        this.node3D = (ewbik.processing.sceneGraph.Node3D) l.getObjectFromClassMaps(ewbik.processing.sceneGraph.Node3D.class, j.getString("axes"));
+        this.node3D = (ewbik.processing.sceneGraph.Node3D) l
+                .getObjectFromClassMaps(ewbik.processing.sceneGraph.Node3D.class, j.getString("axes"));
         this.isEnabled = j.getBoolean("isEnabled");
         this.pinWeight = j.getFloat("pinWeight");
         this.forBone = (Bone) l.getObjectFromClassMaps(Bone.class, j.getString("forBone"));

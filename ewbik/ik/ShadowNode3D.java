@@ -144,7 +144,7 @@ public class ShadowNode3D {
     }
 
     void recursivelyCreatePenaltyArray(ewbik.ik.ShadowNode3D from, ArrayList<ArrayList<Float>> weightArray,
-                                       ArrayList<WorkingBone> pinSequence, float currentFalloff) {
+            ArrayList<WorkingBone> pinSequence, float currentFalloff) {
         if (currentFalloff == 0) {
             return;
         } else {
@@ -409,7 +409,8 @@ public class ShadowNode3D {
             float totalIterations) {
 
         qcpOrientationAligner.setMaxIterations(0);
-        Quaternion qcpRot = qcpOrientationAligner.weightedSuperpose(localizedTipHeadings, localizedTargetHeadings, weights,
+        Quaternion qcpRot = qcpOrientationAligner.weightedSuperpose(localizedTipHeadings, localizedTargetHeadings,
+                weights,
                 translate);
 
         Vector3 translateBy = qcpOrientationAligner.getTranslation();
@@ -431,7 +432,8 @@ public class ShadowNode3D {
 
     }
 
-    public void updateTargetHeadings(Vector3[] localizedTargetHeadings, float[] weights, ewbik.processing.sceneGraph.Node3D thisBoneNode3D) {
+    public void updateTargetHeadings(Vector3[] localizedTargetHeadings, float[] weights,
+            ewbik.processing.sceneGraph.Node3D thisBoneNode3D) {
 
         int hdx = 0;
         for (int i = 0; i < pinnedBones.length; i++) {
@@ -507,7 +509,7 @@ public class ShadowNode3D {
     /**
      * @param chainMember
      * @return returns the segment chain (pinned or unpinned, doesn't matter) to
-     * which the inputBone belongs.
+     *         which the inputBone belongs.
      */
     public ewbik.ik.ShadowNode3D getChainFor(Bone chainMember) {
         ewbik.ik.ShadowNode3D result = null;
@@ -547,7 +549,7 @@ public class ShadowNode3D {
      * chain whose base is pinned.
      *
      * @return returns the first chain encountered with a pinned base. Or, null if
-     * it reaches an unpinned armature root.
+     *         it reaches an unpinned armature root.
      */
     public ewbik.ik.ShadowNode3D getPinnedRootChainFromHere() {
 

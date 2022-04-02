@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-
 /**
  * A simple class to use a String as a lookup for an int value.
  *
@@ -30,17 +29,16 @@ public class IntDict {
      */
     private HashMap<String, Integer> indices = new HashMap<>();
 
-
     public IntDict() {
         count = 0;
         keys = new String[10];
         values = new int[10];
     }
 
-
     /**
      * Create a new lookup with a specific size. This is more efficient than not
-     * specifying a size. Use it when you know the rough size of the thing you're creating.
+     * specifying a size. Use it when you know the rough size of the thing you're
+     * creating.
      *
      * @nowebref
      */
@@ -49,7 +47,6 @@ public class IntDict {
         keys = new String[length];
         values = new int[length];
     }
-
 
     /**
      * Read a set of entries from a Reader that has each key/value pair on
@@ -88,13 +85,13 @@ public class IntDict {
         }
     }
 
-
     /**
      * Constructor to allow (more intuitive) inline initialization, e.g.:
+     * 
      * <pre>
      * new FloatDict(new Object[][] {
-     *   { "key1", 1 },
-     *   { "key2", 2 }
+     *         { "key1", 1 },
+     *         { "key2", 2 }
      * });
      * </pre>
      */
@@ -109,7 +106,6 @@ public class IntDict {
         }
     }
 
-
     /**
      * Returns the number of key/value pairs
      *
@@ -119,7 +115,6 @@ public class IntDict {
     public int size() {
         return count;
     }
-
 
     /**
      * Resize the internal data, this can only be used to shrink the list.
@@ -143,7 +138,6 @@ public class IntDict {
         resetIndices();
     }
 
-
     /**
      * Remove all entries.
      *
@@ -155,14 +149,12 @@ public class IntDict {
         indices = new HashMap<>();
     }
 
-
     private void resetIndices() {
         indices = new HashMap<>(count);
         for (int i = 0; i < count; i++) {
             indices.put(keys[i], i);
         }
     }
-
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
@@ -199,7 +191,6 @@ public class IntDict {
     public String key(int index) {
         return keys[index];
     }
-
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
@@ -338,7 +329,8 @@ public class IntDict {
 
     public int get(String key, int alternate) {
         int index = index(key);
-        if (index == -1) return alternate;
+        if (index == -1)
+            return alternate;
         return values[index];
     }
 
@@ -439,17 +431,17 @@ public class IntDict {
 
     private void checkMinMax(String functionName) {
         if (count == 0) {
-            String msg =
-                    String.format("Cannot use %s() on an empty %s.",
-                            functionName, getClass().getSimpleName());
+            String msg = String.format("Cannot use %s() on an empty %s.",
+                    functionName, getClass().getSimpleName());
             throw new RuntimeException(msg);
         }
     }
 
     // return the index of the minimum value
     public int minIndex() {
-        //checkMinMax("minIndex");
-        if (count == 0) return -1;
+        // checkMinMax("minIndex");
+        if (count == 0)
+            return -1;
 
         int index = 0;
         int value = values[0];
@@ -480,7 +472,7 @@ public class IntDict {
 
     // return the index of the max value
     public int maxIndex() {
-        //checkMinMax("maxIndex");
+        // checkMinMax("maxIndex");
         if (count == 0) {
             return -1;
         }
@@ -499,7 +491,7 @@ public class IntDict {
      * return the key corresponding to the maximum value or null if no entries
      */
     public String maxKey() {
-        //checkMinMax("maxKey");
+        // checkMinMax("maxKey");
         int index = maxIndex();
         if (index == -1) {
             return null;
@@ -587,8 +579,8 @@ public class IntDict {
         keys[b] = tkey;
         values[b] = tvalue;
 
-//    indices.put(keys[a], Integer.valueOf(a));
-//    indices.put(keys[b], Integer.valueOf(b));
+        // indices.put(keys[a], Integer.valueOf(a));
+        // indices.put(keys[b], Integer.valueOf(b));
     }
 
     /**
@@ -648,7 +640,7 @@ public class IntDict {
     }
 
     protected void sortImpl(final boolean useKeys, final boolean reverse,
-                            final boolean stable) {
+            final boolean stable) {
         Sort s = new Sort() {
             @Override
             public int size() {
@@ -663,7 +655,7 @@ public class IntDict {
                     if (diff == 0) {
                         diff = values[a] - values[b];
                     }
-                } else {  // sort values
+                } else { // sort values
                     diff = values[a] - values[b];
                     if (diff == 0 && stable) {
                         diff = keys[a].compareToIgnoreCase(keys[b]);
@@ -690,7 +682,7 @@ public class IntDict {
      * @return an IntDict with the original keys, mapped to their pct of the total
      */
     public FloatDict getPercent() {
-        double sum = sum();  // a little more accuracy
+        double sum = sum(); // a little more accuracy
         FloatDict outgoing = new FloatDict();
         for (int i = 0; i < size(); i++) {
             double percent = value(i) / sum;

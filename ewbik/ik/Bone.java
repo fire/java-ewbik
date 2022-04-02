@@ -65,12 +65,12 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      * @throws NullParentForBoneException
      */
     public Bone(Bone par, // parent bone
-                PVector tipHeading, // the orienational heading of this bone (global vs relative coords specified in
-                // coordinateType)
-                PVector rollHeading, // axial rotation heading of the bone (it's z-axis)
-                String inputTag, // some user specified name for the bone, if desired
-                float inputBoneHeight, // bone length
-                frameType coordinateType) throws NullParentForBoneException {
+            PVector tipHeading, // the orienational heading of this bone (global vs relative coords specified in
+            // coordinateType)
+            PVector rollHeading, // axial rotation heading of the bone (it's z-axis)
+            String inputTag, // some user specified name for the bone, if desired
+            float inputBoneHeight, // bone length
+            frameType coordinateType) throws NullParentForBoneException {
         Vector3 tipHeading1 = ewbik.processing.sceneGraph.Node3D.toVec3f(tipHeading);
         Vector3 rollHeading1 = ewbik.processing.sceneGraph.Node3D.toVec3f(rollHeading);
 
@@ -219,7 +219,6 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      * @param inputBoneHeight bone length
      */
 
-
     /**
      * @param par             the parent bone to which this bone is attached.
      * @param xAngle          how much the bone should be pitched relative to its
@@ -232,11 +231,11 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      * @param inputBoneHeight bone length
      */
     public Bone(Bone par, // parent bone
-                float xAngle, // how much the bone should be pitched relative to its parent bone
-                float yAngle, // how much the bone should be rolled relative to its parent bone
-                float zAngle, // how much the bone should be yawed relative to its parent bone
-                String inputTag, // some user specified name for the bone, if desired
-                float inputBoneHeight // bone length
+            float xAngle, // how much the bone should be pitched relative to its parent bone
+            float yAngle, // how much the bone should be rolled relative to its parent bone
+            float zAngle, // how much the bone should be yawed relative to its parent bone
+            String inputTag, // some user specified name for the bone, if desired
+            float inputBoneHeight // bone length
     ) {
 
         this.lastRotation = new Quaternion();
@@ -256,7 +255,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             this.parentArmature = this.parent.parentArmature;
             Bone.this.parentArmature.addToBoneList(this);
 
-            Bone.this.generateAxes(Bone.this.parent.getTip_(), tempNode3D.x_().heading(), tempNode3D.y_().heading(), tempNode3D.z_().heading());
+            Bone.this.generateAxes(Bone.this.parent.getTip_(), tempNode3D.x_().heading(), tempNode3D.y_().heading(),
+                    tempNode3D.z_().heading());
             Bone.this.localNode3D.setParent(Bone.this.parent.localNode3D);
             Bone.this.previousOrientation = Bone.this.localNode3D.attachedCopy(true);
 
@@ -274,8 +274,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     }
 
     public Bone(Bone par, // parent bone
-                String inputTag, // some user specified name for the bone, if desired
-                float inputBoneHeight // bone length
+            String inputTag, // some user specified name for the bone, if desired
+            float inputBoneHeight // bone length
     ) {
         this.lastRotation = new Quaternion();
         if (par != null) {
@@ -294,7 +294,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             this.parentArmature = this.parent.parentArmature;
             Bone.this.parentArmature.addToBoneList(this);
 
-            Bone.this.generateAxes(Bone.this.parent.getTip_(), tempNode3D.x_().heading(), tempNode3D.y_().heading(), tempNode3D.z_().heading());
+            Bone.this.generateAxes(Bone.this.parent.getTip_(), tempNode3D.x_().heading(), tempNode3D.y_().heading(),
+                    tempNode3D.z_().heading());
             Bone.this.localNode3D.setParent(Bone.this.parent.localNode3D);
             Bone.this.previousOrientation = Bone.this.localNode3D.attachedCopy(true);
 
@@ -345,8 +346,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
     /**
      * @return In the case of this out-of-the-box class, getPin() returns a IKVector
-     * indicating
-     * the spatial target of the pin.
+     *         indicating
+     *         the spatial target of the pin.
      */
     public PVector getPinLocation() {
         if (pin == null)
@@ -501,14 +502,16 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      * you are unlikely to need to use this, and at the moment
      * it presumes KusudamaExample constraints
      */
-    public void setAxesToSnapped(ewbik.processing.sceneGraph.Node3D toSet, ewbik.processing.sceneGraph.Node3D limitingNode3D, float cosHalfAngleDampen) {
+    public void setAxesToSnapped(ewbik.processing.sceneGraph.Node3D toSet,
+            ewbik.processing.sceneGraph.Node3D limitingNode3D, float cosHalfAngleDampen) {
         if (constraints != null && Kusudama.class.isAssignableFrom(constraints.getClass())) {
             ((Kusudama) constraints).setAxesToSnapped(toSet, limitingNode3D, cosHalfAngleDampen);
         }
     }
 
-    public void setAxesToReturnfulled(ewbik.processing.sceneGraph.Node3D toSet, ewbik.processing.sceneGraph.Node3D limitingNode3D, float cosHalfAngleDampen,
-                                      float angleDampen) {
+    public void setAxesToReturnfulled(ewbik.processing.sceneGraph.Node3D toSet,
+            ewbik.processing.sceneGraph.Node3D limitingNode3D, float cosHalfAngleDampen,
+            float angleDampen) {
         if (constraints != null && Kusudama.class.isAssignableFrom(constraints.getClass())) {
             ((Kusudama) constraints).setAxesToReturnfulled(toSet, limitingNode3D, cosHalfAngleDampen,
                     angleDampen);
@@ -541,11 +544,11 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
     /**
      * @return an array where each element indicated how much this bone is rotated
-     * on the X,Y,Z (in that order)
-     * axes relative to its constraint Axes.
-     * If there are no constraint Axes, the result is relative to the parent
-     * bone.
-     * If the bone has no parent, this method throws an exception.
+     *         on the X,Y,Z (in that order)
+     *         axes relative to its constraint Axes.
+     *         If there are no constraint Axes, the result is relative to the parent
+     *         bone.
+     *         If the bone has no parent, this method throws an exception.
      * @throws NullParentForBoneException
      */
     public float[] getXYZAngle() throws NullParentForBoneException {
@@ -563,10 +566,10 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
     /**
      * @return An Apache Commons Rotation object representing the rotation of this
-     * bone relative to its
-     * reference frame. The Rotation object is more versatile and robust
-     * than an array of angles.
-     * And allows you to treat rotation in a wide variety of conventions.
+     *         bone relative to its
+     *         reference frame. The Rotation object is more versatile and robust
+     *         than an array of angles.
+     *         And allows you to treat rotation in a wide variety of conventions.
      */
     public Quaternion getRotation() {
         return (new Quaternion(this.majorRotationNode3D.x_().heading(), this.majorRotationNode3D.y_().heading(),
@@ -575,8 +578,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
     /**
      * @return An Apache Commons Rotation object representing the rotation which
-     * transforms this
-     * BoneExample from its previous orientation to its current orientation.
+     *         transforms this
+     *         BoneExample from its previous orientation to its current orientation.
      */
 
     public Quaternion getRotationFromPrevious() {
@@ -585,8 +588,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
     /**
      * @return the reference frame representing this bone's previous orientation
-     * relative to
-     * its parent.
+     *         relative to
+     *         its parent.
      */
     public ewbik.processing.sceneGraph.Node3D getPreviousOrientation() {
         return previousOrientation;
@@ -1104,8 +1107,10 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
     @Override
     public void loadFromJSONObject(ewbik.asj.data.JSONObject j, ewbik.asj.LoadManager l) {
-        this.localNode3D = (ewbik.processing.sceneGraph.Node3D) l.getObjectFromClassMaps(ewbik.processing.sceneGraph.Node3D.class, j.getString("localAxes"));
-        this.majorRotationNode3D = (ewbik.processing.sceneGraph.Node3D) l.getObjectFromClassMaps(ewbik.processing.sceneGraph.Node3D.class,
+        this.localNode3D = (ewbik.processing.sceneGraph.Node3D) l
+                .getObjectFromClassMaps(ewbik.processing.sceneGraph.Node3D.class, j.getString("localAxes"));
+        this.majorRotationNode3D = (ewbik.processing.sceneGraph.Node3D) l.getObjectFromClassMaps(
+                ewbik.processing.sceneGraph.Node3D.class,
                 j.getString("majorRotationAxes"));
         this.parentArmature = (Skeleton3D) l.getObjectFromClassMaps(Skeleton3D.class,
                 j.getString("parentArmature"));
@@ -1114,7 +1119,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         if (j.hasKey("stiffness"))
             this.setStiffness(j.getFloat("stiffness"));
         if (j.hasKey("constraints"))
-            this.constraints = (ewbik.processing.singlePrecision.Kusudama) l.getObjectFromClassMaps(ewbik.processing.singlePrecision.Kusudama.class, j.getString("constraints"));
+            this.constraints = (ewbik.processing.singlePrecision.Kusudama) l.getObjectFromClassMaps(
+                    ewbik.processing.singlePrecision.Kusudama.class, j.getString("constraints"));
         if (j.hasKey("IKPin"))
             this.pin = (IKPin) l.getObjectFromClassMaps(IKPin.class, j.getString("IKPin"));
         this.tag = j.getString("tag");

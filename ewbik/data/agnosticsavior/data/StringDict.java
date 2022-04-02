@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-
 /**
  * A simple table class to use a String as a lookup for another String value.
  *
@@ -30,13 +29,11 @@ public class StringDict {
      */
     private HashMap<String, Integer> indices = new HashMap<>();
 
-
     public StringDict() {
         count = 0;
         keys = new String[10];
         values = new String[10];
     }
-
 
     /**
      * Create a new lookup pre-allocated to a specific length. This will not
@@ -50,7 +47,6 @@ public class StringDict {
         keys = new String[length];
         values = new String[length];
     }
-
 
     /**
      * Read a set of entries from a Reader that has each key/value pair on
@@ -74,7 +70,6 @@ public class StringDict {
         }
     }
 
-
     /**
      * @nowebref
      */
@@ -90,15 +85,16 @@ public class StringDict {
         }
     }
 
-
     /**
      * Constructor to allow (more intuitive) inline initialization, e.g.:
+     * 
      * <pre>
      * new StringDict(new String[][] {
-     *   { "key1", "value1" },
-     *   { "key2", "value2" }
+     *         { "key1", "value1" },
+     *         { "key2", "value2" }
      * });
      * </pre>
+     * 
      * It's no Python, but beats a static { } block with HashMap.put() statements.
      */
     public StringDict(String[][] pairs) {
@@ -111,7 +107,6 @@ public class StringDict {
             indices.put(keys[i], i);
         }
     }
-
 
     /**
      * Create a dictionary that maps between column titles and cell entries
@@ -132,7 +127,6 @@ public class StringDict {
         crop();
     }
 
-
     /**
      * @webref stringdict:method
      * @brief Returns the number of key/value pairs
@@ -140,7 +134,6 @@ public class StringDict {
     public int size() {
         return count;
     }
-
 
     /**
      * Resize the internal data, this can only be used to shrink the list.
@@ -164,7 +157,6 @@ public class StringDict {
         resetIndices();
     }
 
-
     /**
      * Remove all entries.
      *
@@ -176,14 +168,12 @@ public class StringDict {
         indices = new HashMap<>();
     }
 
-
     private void resetIndices() {
         indices = new HashMap<>(count);
         for (int i = 0; i < count; i++) {
             indices.put(keys[i], i);
         }
     }
-
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
@@ -220,7 +210,6 @@ public class StringDict {
     public String key(int index) {
         return keys[index];
     }
-
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
@@ -349,13 +338,15 @@ public class StringDict {
      */
     public String get(String key) {
         int index = index(key);
-        if (index == -1) return null;
+        if (index == -1)
+            return null;
         return values[index];
     }
 
     public String get(String key, String alternate) {
         int index = index(key);
-        if (index == -1) return alternate;
+        if (index == -1)
+            return alternate;
         return values[index];
     }
 
@@ -443,8 +434,8 @@ public class StringDict {
         keys[b] = tkey;
         values[b] = tvalue;
 
-//    indices.put(keys[a], Integer.valueOf(a));
-//    indices.put(keys[b], Integer.valueOf(b));
+        // indices.put(keys[a], Integer.valueOf(a));
+        // indices.put(keys[b], Integer.valueOf(b));
     }
 
     /**
@@ -499,7 +490,7 @@ public class StringDict {
                     if (diff == 0) {
                         diff = values[a].compareToIgnoreCase(values[b]);
                     }
-                } else {  // sort values
+                } else { // sort values
                     diff = values[a].compareToIgnoreCase(values[b]);
                     if (diff == 0) {
                         diff = keys[a].compareToIgnoreCase(keys[b]);

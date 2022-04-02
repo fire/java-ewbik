@@ -99,13 +99,13 @@ public class LimitCone implements Saveable {
      * @param next
      * @param input
      * @return null if the input point is already in bounds, or the point's
-     * rectified position
-     * if the point was out of bounds.
+     *         rectified position
+     *         if the point was out of bounds.
      */
     public <V extends Vector3> Vector3 getClosestCollision(LimitCone next, V input) {
         Vector3 result = getOnGreatTangentTriangle(next, input);
         if (result == null) {
-            boolean[] inBounds = {false};
+            boolean[] inBounds = { false };
             result = closestPointOnClosestCone(next, input, inBounds);
         }
         return result;
@@ -268,7 +268,7 @@ public class LimitCone implements Saveable {
      * @return
      */
     public <V extends Vector3> Vector3 closestPointOnClosestCone(LimitCone next, V input,
-                                                                   boolean[] inBounds) {
+            boolean[] inBounds) {
         Vector3 closestToFirst = this.closestToCone(input, inBounds);
         if (inBounds[0]) {
             return closestToFirst;
@@ -461,7 +461,8 @@ public class LimitCone implements Saveable {
     }
 
     public void loadFromJSONObject(ewbik.asj.data.JSONObject j, LoadManager l) {
-        this.parentKusudama = (ewbik.processing.singlePrecision.Kusudama) l.getObjectFromClassMaps(ewbik.processing.singlePrecision.Kusudama.class,
+        this.parentKusudama = (ewbik.processing.singlePrecision.Kusudama) l.getObjectFromClassMaps(
+                ewbik.processing.singlePrecision.Kusudama.class,
                 j.getString("parentKusudama"));
         Vector3 controlPointJ = null;
         try {

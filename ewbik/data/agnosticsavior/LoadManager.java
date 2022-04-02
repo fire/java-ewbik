@@ -21,14 +21,16 @@ public abstract class LoadManager {
     public <T extends Saveable> T getObjectFor(Class objectClass, JSONObject j, String hashKey) {
         if (j.hasKey(hashKey)) {
             return (T) getObjectFromClassMaps(objectClass, j.getString(hashKey));
-        } else return null;
+        } else
+            return null;
     }
 
     public <T extends Saveable> T getObjectFor(Class objectClass, String hash) throws Exception {
         return (T) getObjectFromClassMaps(objectClass, hash);
     }
 
-    public <T> void createEmptyLoadMaps(Map<String, JSONObject> jMap, Map<String, ? super T> oMap, JSONArray jArr, Class<T> c) {
+    public <T> void createEmptyLoadMaps(Map<String, JSONObject> jMap, Map<String, ? super T> oMap, JSONArray jArr,
+            Class<T> c) {
         try {
             for (int i = 0; i < jArr.size(); i++) {
                 JSONObject jo = jArr.getJSONObject(i);
@@ -45,7 +47,8 @@ public abstract class LoadManager {
     }
 
     /**
-     * This function should be called when initializing the loader object so that it knows
+     * This function should be called when initializing the loader object so that it
+     * knows
      * which keys in the JSON file correspond to which classes you intend to load.
      *
      * @param classMap a map of Class objects and their corresponding
@@ -69,8 +72,9 @@ public abstract class LoadManager {
             return objectMap.get(identityHash);
         } else {
             try {
-                throw new Exception("Class not found in object maps. Either define the class using the InitializeClassMaps " +
-                        "method in LoadManager, or override the getObjectFromClassMaps method to handle whatever edgecase you've encountered.");
+                throw new Exception(
+                        "Class not found in object maps. Either define the class using the InitializeClassMaps " +
+                                "method in LoadManager, or override the getObjectFromClassMaps method to handle whatever edgecase you've encountered.");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -79,7 +83,8 @@ public abstract class LoadManager {
     }
 
     /**
-     * general loader for when nothing fancy is required (I should make pretty much everything use this eventually)
+     * general loader for when nothing fancy is required (I should make pretty much
+     * everything use this eventually)
      *
      * @param jsonForm
      * @param saveableForm

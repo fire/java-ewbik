@@ -26,8 +26,10 @@ package ewbik.math;
 public final class MathUtils {
     static public final double nanoToSec = 1 / 1000000000f;
 
-    static public final float FLOAT_ROUNDING_ERROR = 0.000001f; // 32 bits, 23 of which may hold the significand for a precision of 6 digits
-    static public final double DOUBLE_ROUNDING_ERROR = 0.000000000000001d; // 64, 52 of which represent the significand for a precision of 15 digits.
+    static public final float FLOAT_ROUNDING_ERROR = 0.000001f; // 32 bits, 23 of which may hold the significand for a
+                                                                // precision of 6 digits
+    static public final double DOUBLE_ROUNDING_ERROR = 0.000000000000001d; // 64, 52 of which represent the significand
+                                                                           // for a precision of 15 digits.
     static public final float PI = (float) Math.PI;
     static public final float PI2 = PI * 2f;
     static public final float HALF_PI = (float) (Math.PI / 2d);
@@ -76,19 +78,23 @@ public final class MathUtils {
     }
 
     /**
-     * Returns atan2 in radians, faster but less accurate than Math.atan2. Average error of 0.00231 radians (0.1323 degrees),
+     * Returns atan2 in radians, faster but less accurate than Math.atan2. Average
+     * error of 0.00231 radians (0.1323 degrees),
      * largest error of 0.00488 radians (0.2796 degrees).
      */
     static public float atan2(float y, float x) {
         if (x == 0f) {
-            if (y > 0f) return HALF_PI;
-            if (y == 0f) return 0f;
+            if (y > 0f)
+                return HALF_PI;
+            if (y == 0f)
+                return 0f;
             return -HALF_PI;
         }
         final float atan, z = y / x;
         if (Math.abs(z) < 1f) {
             atan = z / (1f + 0.28f * z * z);
-            if (x < 0f) return atan + (y < 0f ? -PI : PI);
+            if (x < 0f)
+                return atan + (y < 0f ? -PI : PI);
             return atan;
         }
         atan = PI / 2 - z / (z * z + 0.28f);
@@ -100,10 +106,12 @@ public final class MathUtils {
     }
 
     /**
-     * Returns the next power of two. Returns the specified value if the value is already a power of two.
+     * Returns the next power of two. Returns the specified value if the value is
+     * already a power of two.
      */
     static public int nextPowerOfTwo(int value) {
-        if (value == 0) return 1;
+        if (value == 0)
+            return 1;
         value--;
         value |= value >> 1;
         value |= value >> 2;
@@ -118,32 +126,42 @@ public final class MathUtils {
     }
 
     static public short clamp(short value, short min, short max) {
-        if (value < min) return min;
-        if (value > max) return max;
+        if (value < min)
+            return min;
+        if (value > max)
+            return max;
         return value;
     }
 
     static public int clamp(int value, int min, int max) {
-        if (value < min) return min;
-        if (value > max) return max;
+        if (value < min)
+            return min;
+        if (value > max)
+            return max;
         return value;
     }
 
     static public long clamp(long value, long min, long max) {
-        if (value < min) return min;
-        if (value > max) return max;
+        if (value < min)
+            return min;
+        if (value > max)
+            return max;
         return value;
     }
 
     static public float clamp(float value, float min, float max) {
-        if (value < min) return min;
-        if (value > max) return max;
+        if (value < min)
+            return min;
+        if (value > max)
+            return max;
         return value;
     }
 
     static public double clamp(double value, double min, double max) {
-        if (value < min) return min;
-        if (value > max) return max;
+        if (value < min)
+            return min;
+        if (value > max)
+            return max;
         return value;
     }
 
@@ -155,7 +173,8 @@ public final class MathUtils {
     }
 
     /**
-     * Linearly interpolates between two angles in radians. Takes into account that angles wrap at two pi and always takes the
+     * Linearly interpolates between two angles in radians. Takes into account that
+     * angles wrap at two pi and always takes the
      * direction with the smallest delta angle.
      *
      * @param fromRadians start angle in radians
@@ -169,7 +188,8 @@ public final class MathUtils {
     }
 
     /**
-     * Linearly interpolates between two angles in degrees. Takes into account that angles wrap at 360 degrees and always takes
+     * Linearly interpolates between two angles in degrees. Takes into account that
+     * angles wrap at 360 degrees and always takes
      * the direction with the smallest delta angle.
      *
      * @param fromDegrees start angle in degrees
@@ -183,7 +203,8 @@ public final class MathUtils {
     }
 
     /**
-     * Returns the largest integer less than or equal to the specified double. This method will only properly floor doubles from
+     * Returns the largest integer less than or equal to the specified double. This
+     * method will only properly floor doubles from
      * -(2^14) to (double.MAX_VALUE - 2^14).
      */
     static public int floor(double value) {
@@ -191,7 +212,8 @@ public final class MathUtils {
     }
 
     /**
-     * Returns the largest integer less than or equal to the specified double. This method will only properly floor doubles that are
+     * Returns the largest integer less than or equal to the specified double. This
+     * method will only properly floor doubles that are
      * positive. Note this method simply casts the double to int.
      */
     static public int floorPositive(double value) {
@@ -199,7 +221,8 @@ public final class MathUtils {
     }
 
     /**
-     * Returns the smallest integer greater than or equal to the specified double. This method will only properly ceil doubles from
+     * Returns the smallest integer greater than or equal to the specified double.
+     * This method will only properly ceil doubles from
      * -(2^14) to (double.MAX_VALUE - 2^14).
      */
     static public int ceil(double value) {
@@ -207,7 +230,8 @@ public final class MathUtils {
     }
 
     /**
-     * Returns the smallest integer greater than or equal to the specified double. This method will only properly ceil doubles that
+     * Returns the smallest integer greater than or equal to the specified double.
+     * This method will only properly ceil doubles that
      * are positive.
      */
     static public int ceilPositive(double value) {
@@ -215,7 +239,8 @@ public final class MathUtils {
     }
 
     /**
-     * Returns the closest integer to the specified double. This method will only properly round doubles from -(2^14) to
+     * Returns the closest integer to the specified double. This method will only
+     * properly round doubles from -(2^14) to
      * (double.MAX_VALUE - 2^14).
      */
     static public int round(double value) {
@@ -223,14 +248,16 @@ public final class MathUtils {
     }
 
     /**
-     * Returns the closest integer to the specified double. This method will only properly round doubles that are positive.
+     * Returns the closest integer to the specified double. This method will only
+     * properly round doubles that are positive.
      */
     static public int roundPositive(double value) {
         return (int) (value + 0.5f);
     }
 
     /**
-     * Returns true if the value is zero (using the default tolerance as upper bound)
+     * Returns true if the value is zero (using the default tolerance as upper
+     * bound)
      */
     static public boolean isZero(double value) {
         return Math.abs(value) <= DOUBLE_ROUNDING_ERROR;
@@ -239,14 +266,16 @@ public final class MathUtils {
     /**
      * Returns true if the value is zero.
      *
-     * @param tolerance represent an upper bound below which the value is considered zero.
+     * @param tolerance represent an upper bound below which the value is considered
+     *                  zero.
      */
     static public boolean isZero(double value, double tolerance) {
         return Math.abs(value) <= tolerance;
     }
 
     /**
-     * Returns true if a is nearly equal to b. The function uses the default doubleing error tolerance.
+     * Returns true if a is nearly equal to b. The function uses the default
+     * doubleing error tolerance.
      *
      * @param a the first value.
      * @param b the second value.
@@ -260,7 +289,8 @@ public final class MathUtils {
      *
      * @param a         the first value.
      * @param b         the second value.
-     * @param tolerance represent an upper bound below which the two values are considered equal.
+     * @param tolerance represent an upper bound below which the two values are
+     *                  considered equal.
      */
     static public boolean isEqual(double a, double b, double tolerance) {
         return Math.abs(a - b) <= tolerance;

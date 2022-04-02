@@ -116,7 +116,8 @@ public class Kusudama implements Saveable {
     /**
      * {@inheritDoc}
      **/
-    public ewbik.processing.singlePrecision.LimitCone createLimitConeForIndex(int insertAt, Vector3 newPoint, float radius) {
+    public ewbik.processing.singlePrecision.LimitCone createLimitConeForIndex(int insertAt, Vector3 newPoint,
+            float radius) {
         return new LimitCone(ewbik.processing.sceneGraph.Node3D.toPVector(newPoint), radius, this);
     }
 
@@ -238,7 +239,7 @@ public class Kusudama implements Saveable {
 
     /**
      * @return the limitingAxes of this Kusudama (these are just its parentBone's
-     * majorRotationAxes)
+     *         majorRotationAxes)
      */
     @SuppressWarnings("unchecked")
     public ewbik.processing.sceneGraph.Node3D limitingAxes() {
@@ -313,7 +314,8 @@ public class Kusudama implements Saveable {
 
         Ray3D newYRay = new Ray3D(new Vector3(0, 0, 0), newY);
 
-        Quaternion oldYtoNewY = new Quaternion(limitingNode3D.y_().heading(), originalLimitingNode3D.getGlobalOf(newYRay).heading());
+        Quaternion oldYtoNewY = new Quaternion(limitingNode3D.y_().heading(),
+                originalLimitingNode3D.getGlobalOf(newYRay).heading());
         limitingNode3D.rotateBy(oldYtoNewY);
 
         for (ewbik.processing.singlePrecision.LimitCone lc : getLimitCones()) {
@@ -345,7 +347,8 @@ public class Kusudama implements Saveable {
      *
      * @param toSet
      */
-    public void setAxesToSnapped(ewbik.processing.sceneGraph.Node3D toSet, ewbik.processing.sceneGraph.Node3D limitingNode3D, float cosHalfAngleDampen) {
+    public void setAxesToSnapped(ewbik.processing.sceneGraph.Node3D toSet,
+            ewbik.processing.sceneGraph.Node3D limitingNode3D, float cosHalfAngleDampen) {
         if (limitingNode3D != null) {
             if (orientationallyConstrained) {
                 setAxesToOrientationSnap(toSet, limitingNode3D, cosHalfAngleDampen);
@@ -356,8 +359,9 @@ public class Kusudama implements Saveable {
         }
     }
 
-    public void setAxesToReturnfulled(ewbik.processing.sceneGraph.Node3D toSet, ewbik.processing.sceneGraph.Node3D limitingNode3D, float cosHalfReturnfullness,
-                                      float angleReturnfullness) {
+    public void setAxesToReturnfulled(ewbik.processing.sceneGraph.Node3D toSet,
+            ewbik.processing.sceneGraph.Node3D limitingNode3D, float cosHalfReturnfullness,
+            float angleReturnfullness) {
         if (limitingNode3D != null && painfullness > 0f) {
             if (orientationallyConstrained) {
                 Vector3 origin = toSet.origin_();
@@ -379,9 +383,9 @@ public class Kusudama implements Saveable {
 
     /**
      * @return A value between (ideally between 0 and 1) dictating
-     * how much the bone to which this kusudama belongs
-     * prefers to be away from the edges of the kusudama
-     * if it can.
+     *         how much the bone to which this kusudama belongs
+     *         prefers to be away from the edges of the kusudama
+     *         if it can.
      */
     public float getPainfullness() {
         return painfullness;
@@ -414,7 +418,7 @@ public class Kusudama implements Saveable {
     }
 
     public <V extends Vector3> boolean isInLimits_(V globalPoint) {
-        float[] inBounds = {1f};
+        float[] inBounds = { 1f };
         Vector3 inLimits = this.pointInLimits(limitingNode3D.getLocalOf(globalPoint), inBounds);
         return inBounds[0] > 0f;
     }
@@ -425,8 +429,9 @@ public class Kusudama implements Saveable {
      *
      * @param toSet
      */
-    public void setAxesToOrientationSnap(ewbik.processing.sceneGraph.Node3D toSet, ewbik.processing.sceneGraph.Node3D limitingNode3D, float cosHalfAngleDampen) {
-        float[] inBounds = {1f};
+    public void setAxesToOrientationSnap(ewbik.processing.sceneGraph.Node3D toSet,
+            ewbik.processing.sceneGraph.Node3D limitingNode3D, float cosHalfAngleDampen) {
+        float[] inBounds = { 1f };
         limitingNode3D.updateGlobal();
         boneRay.p1().set(limitingNode3D.origin_());
         boneRay.p2().set(toSet.y_().p2());
@@ -442,8 +447,9 @@ public class Kusudama implements Saveable {
         }
     }
 
-    public boolean isInOrientationLimits(ewbik.processing.sceneGraph.Node3D globalNode3D, ewbik.processing.sceneGraph.Node3D limitingNode3D) {
-        float[] inBounds = {1f};
+    public boolean isInOrientationLimits(ewbik.processing.sceneGraph.Node3D globalNode3D,
+            ewbik.processing.sceneGraph.Node3D limitingNode3D) {
+        float[] inBounds = { 1f };
         Vector3 inLimits = this.pointInLimits(limitingNode3D.getLocalOf(globalNode3D.y_().p2()), inBounds);
         if (inBounds[0] == -1l) {
             return false;
@@ -482,14 +488,16 @@ public class Kusudama implements Saveable {
      * @param toSet
      * @param limitingNode3D
      * @return radians of twist required to snap bone into twist limits (0 if bone
-     * is already in twist limits)
+     *         is already in twist limits)
      */
-    public float snapToTwistLimits(ewbik.processing.sceneGraph.Node3D toSet, ewbik.processing.sceneGraph.Node3D limitingNode3D) {
+    public float snapToTwistLimits(ewbik.processing.sceneGraph.Node3D toSet,
+            ewbik.processing.sceneGraph.Node3D limitingNode3D) {
 
         if (!axiallyConstrained)
             return 0f;
 
-        Quaternion alignRot = limitingNode3D.getGlobalMBasis().getInverseRotation().applyTo(toSet.getGlobalMBasis().rotation);
+        Quaternion alignRot = limitingNode3D.getGlobalMBasis().getInverseRotation()
+                .applyTo(toSet.getGlobalMBasis().rotation);
         Quaternion[] decomposition = alignRot.getSwingTwist(new Vector3(0, 1, 0));
         float angleDelta2 = decomposition[1].getAngle() * decomposition[1].getAxis().y * -1f;
         angleDelta2 = toTau(angleDelta2);
@@ -515,12 +523,14 @@ public class Kusudama implements Saveable {
         }
     }
 
-    public float angleToTwistCenter(ewbik.processing.sceneGraph.Node3D toSet, ewbik.processing.sceneGraph.Node3D limitingNode3D) {
+    public float angleToTwistCenter(ewbik.processing.sceneGraph.Node3D toSet,
+            ewbik.processing.sceneGraph.Node3D limitingNode3D) {
 
         if (!axiallyConstrained)
             return 0f;
 
-        Quaternion alignRot = limitingNode3D.getGlobalMBasis().getInverseRotation().applyTo(toSet.getGlobalMBasis().rotation);
+        Quaternion alignRot = limitingNode3D.getGlobalMBasis().getInverseRotation()
+                .applyTo(toSet.getGlobalMBasis().rotation);
         Quaternion[] decomposition = alignRot.getSwingTwist(new Vector3(0, 1, 0));
         float angleDelta2 = decomposition[1].getAngle() * decomposition[1].getAxis().y * -1f;
         angleDelta2 = toTau(angleDelta2);
@@ -530,16 +540,19 @@ public class Kusudama implements Saveable {
 
     }
 
-    public boolean inTwistLimits(ewbik.processing.sceneGraph.Node3D boneNode3D, ewbik.processing.sceneGraph.Node3D limitingNode3D) {
+    public boolean inTwistLimits(ewbik.processing.sceneGraph.Node3D boneNode3D,
+            ewbik.processing.sceneGraph.Node3D limitingNode3D) {
 
         limitingNode3D.updateGlobal();
-        Quaternion alignRot = limitingNode3D.getGlobalMBasis().getInverseRotation().applyTo(boneNode3D.globalMBasis.rotation);
+        Quaternion alignRot = limitingNode3D.getGlobalMBasis().getInverseRotation()
+                .applyTo(boneNode3D.globalMBasis.rotation);
         Quaternion[] decomposition = alignRot.getSwingTwist(new Vector3(0, 1, 0));
 
         float angleDelta = decomposition[1].getAngle() * decomposition[1].getAxis().y * -1;
         // uncomment the next line for reflectable axis support (removed for performance
         // reasons)
-        angleDelta *= limitingNode3D.getGlobalChirality() * (limitingNode3D.isGlobalAxisFlipped(ewbik.processing.sceneGraph.Node3D.Y) ? -1 : 1);
+        angleDelta *= limitingNode3D.getGlobalChirality()
+                * (limitingNode3D.isGlobalAxisFlipped(ewbik.processing.sceneGraph.Node3D.Y) ? -1 : 1);
 
         angleDelta = toTau(angleDelta);
         float fromMinToAngleDelta = toTau(signedAngleDifference(angleDelta, TAU - this.minAxialAngle()));
@@ -586,7 +599,7 @@ public class Kusudama implements Saveable {
      *                the point is outside of the boundary, but does not signify
      *                anything about how far from the boundary the point is.
      * @return the original point, if it's in limits, or the closest point which is
-     * in limits.
+     *         in limits.
      */
     public <V extends Vector3> Vector3 pointInLimits(V inPoint, float[] inBounds) {
 
@@ -636,7 +649,8 @@ public class Kusudama implements Saveable {
         }
     }
 
-    public <V extends Vector3> Vector3 pointOnPathSequence(V inPoint, ewbik.processing.sceneGraph.Node3D limitingNode3D) {
+    public <V extends Vector3> Vector3 pointOnPathSequence(V inPoint,
+            ewbik.processing.sceneGraph.Node3D limitingNode3D) {
         float closestPointDot = 0f;
         Vector3 point = limitingNode3D.getLocalOf(inPoint);
         point.normalize();
@@ -676,7 +690,8 @@ public class Kusudama implements Saveable {
      *                 LimitCone is not supposed to be between two existing
      *                 LimitCones)
      */
-    public void addLimitCone(Vector3 newPoint, float radius, ewbik.processing.singlePrecision.LimitCone previous, ewbik.processing.singlePrecision.LimitCone next) {
+    public void addLimitCone(Vector3 newPoint, float radius, ewbik.processing.singlePrecision.LimitCone previous,
+            ewbik.processing.singlePrecision.LimitCone next) {
         int insertAt = 0;
 
         if (next == null || limitCones.size() == 0) {
@@ -810,15 +825,15 @@ public class Kusudama implements Saveable {
 
     /**
      * @return a measure of the rotational freedom afforded by this constraint.
-     * with 0 meaning no rotational freedom (the bone is essentially
-     * stationary in relation to its parent)
-     * and 1 meaning full rotational freedom (the bone is completely
-     * unconstrained).
-     * <p>
-     * This should be computed as ratio between orientations a bone can be
-     * in and orientations
-     * a bone cannot be in as defined by its representation as a point on
-     * the surface of a hypersphere.
+     *         with 0 meaning no rotational freedom (the bone is essentially
+     *         stationary in relation to its parent)
+     *         and 1 meaning full rotational freedom (the bone is completely
+     *         unconstrained).
+     *         <p>
+     *         This should be computed as ratio between orientations a bone can be
+     *         in and orientations
+     *         a bone cannot be in as defined by its representation as a point on
+     *         the surface of a hypersphere.
      */
     public float getRotationalFreedom() {
 
@@ -909,7 +924,8 @@ public class Kusudama implements Saveable {
         this.attachedTo = l.getObjectFor(Bone.class, j, "attachedTo");
         this.limitingNode3D = l.getObjectFor(ewbik.processing.sceneGraph.Node3D.class, j, "limitAxes");
         limitCones = new ArrayList<>();
-        l.arrayListFromJSONArray(j.getJSONArray("limitCones"), limitCones, ewbik.processing.singlePrecision.LimitCone.class);
+        l.arrayListFromJSONArray(j.getJSONArray("limitCones"), limitCones,
+                ewbik.processing.singlePrecision.LimitCone.class);
         this.minAxialAngle = j.getFloat("minAxialAngle");
         this.range = j.getFloat("axialRange");
         this.axiallyConstrained = j.getBoolean("axiallyConstrained");

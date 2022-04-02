@@ -78,15 +78,15 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-         * @return a copy of this vector
-         */
+     * @return a copy of this vector
+     */
     public ewbik.math.Vector3 copy() {
         return (ewbik.math.Vector3) new ewbik.math.Vector3(this);
     }
 
     /**
-         * @return a copy of this Vector cast to a single precision analog.
-         */
+     * @return a copy of this Vector cast to a single precision analog.
+     */
     public ewbik.math.Vector3 toVec3f() {
         return new ewbik.math.Vector3((float) x, (float) y, (float) z);
     }
@@ -98,6 +98,7 @@ public class Vector3 implements CanLoad {
         vec.append(this.z);
         return vec;
     }
+
     /**
      * @return The squared euclidean length
      */
@@ -109,7 +110,7 @@ public class Vector3 implements CanLoad {
      * @return The euclidean distance between the two specified vectors
      */
     public static float dst(final float x1, final float y1, final float z1, final float x2, final float y2,
-                            final float z2) {
+            final float z2) {
         final float a = x2 - x1;
         final float b = y2 - y1;
         final float c = z2 - z1;
@@ -120,7 +121,7 @@ public class Vector3 implements CanLoad {
      * @return the squared distance between the given points
      */
     public static float dst2(final float x1, final float y1, final float z1, final float x2, final float y2,
-                             final float z2) {
+            final float z2) {
         final float a = x2 - x1;
         final float b = y2 - y1;
         final float c = z2 - z1;
@@ -279,13 +280,13 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-         * Sets this vector from the given vector
-         *
-         * @param x
-         * @param y
-         * @param z
-         * @return This vector for chaining
-         */
+     * Sets this vector from the given vector
+     *
+     * @param x
+     * @param y
+     * @param z
+     * @return This vector for chaining
+     */
     public ewbik.math.Vector3 set(float x, float y, float z) {
         this.x = x;
         this.y = y;
@@ -298,10 +299,10 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-         * Sets this vector from the given vector
-         *
-         * @param v The vector
-         */
+     * Sets this vector from the given vector
+     *
+     * @param v The vector
+     */
     public ewbik.math.Vector3 set(final float[] values) {
         return this.set(values[0], values[1], values[2]);
     }
@@ -324,11 +325,11 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-         * Adds the given vector to this vector
-         *
-         * @param v The vector
-         * @return This vector for chaining
-         */
+     * Adds the given vector to this vector
+     *
+     * @param v The vector
+     * @return This vector for chaining
+     */
     public Vector3 add(Vector3 vector) {
         return this.add(vector.getX(), vector.getY(), vector.getZ());
     }
@@ -363,11 +364,11 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-         * Subtracts the given vector from this vector.
-         *
-         * @param v The vector
-         * @return This vector for chaining
-         */
+     * Subtracts the given vector from this vector.
+     *
+     * @param v The vector
+     * @return This vector for chaining
+     */
     public Vector3 sub(Vector3 a_vec) {
         return sub(a_vec.getX(), a_vec.getY(), a_vec.getZ());
     }
@@ -395,10 +396,10 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-         * Scales this vector by another vector
-         *
-         * @return This vector for chaining
-         */
+     * Scales this vector by another vector
+     *
+     * @return This vector for chaining
+     */
     public Vector3 mult(Vector3 other) {
         return this.set(x * other.getX(), y * other.getY(), z * other.getZ());
     }
@@ -416,17 +417,17 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-         * ( begin auto-generated from SGVec_3f_div.xml )
-         * <p>
-         * Divides a vector by a scalar or divides one vector by another.
-         * <p>
-         * ( end auto-generated )
-         *
-         * @param n the number by which to divide the vector
-         * @webref Vecf:method
-         * @usage web_application
-         * @brief Divide a vector by a scalar
-         */
+     * ( begin auto-generated from SGVec_3f_div.xml )
+     * <p>
+     * Divides a vector by a scalar or divides one vector by another.
+     * <p>
+     * ( end auto-generated )
+     *
+     * @param n the number by which to divide the vector
+     * @webref Vecf:method
+     * @usage web_application
+     * @brief Divide a vector by a scalar
+     */
     public ewbik.math.Vector3 div(float n) {
         x /= n;
         y /= n;
@@ -435,11 +436,11 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-         * First scale a supplied vector, then add it to this vector.
-         *
-         * @param v      addition vector
-         * @param scalar for scaling the addition vector
-         */
+     * First scale a supplied vector, then add it to this vector.
+     *
+     * @param v      addition vector
+     * @param scalar for scaling the addition vector
+     */
     public Vector3 mulAdd(Vector3 vec, float scalar) {
         this.x += vec.getX() * scalar;
         this.y += vec.getY() * scalar;
@@ -448,11 +449,11 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-         * First scale a supplied vector, then add it to this vector.
-         *
-         * @param v      addition vector
-         * @param mulVec vector by whose values the addition vector will be scaled
-         */
+     * First scale a supplied vector, then add it to this vector.
+     *
+     * @param v      addition vector
+     * @param mulVec vector by whose values the addition vector will be scaled
+     */
     public Vector3 mulAdd(Vector3 vec, Vector3 mulVec) {
         this.x += vec.getX() * mulVec.getX();
         this.y += vec.getY() * mulVec.getY();
@@ -461,18 +462,20 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-         * @return The euclidean length
-         */
+     * @return The euclidean length
+     */
     public float mag() {
         return (float) MathUtils.sqrt(x * x + y * y + z * z);
     }
 
     /**
-         * This method is faster than {@link Vector3#mag()} because it avoids calculating a square root. It is useful for comparisons,
-         * but not for getting exact lengths, as the return value is the square of the actual length.
-         *
-         * @return The squared euclidean length
-         */
+     * This method is faster than {@link Vector3#mag()} because it avoids
+     * calculating a square root. It is useful for comparisons,
+     * but not for getting exact lengths, as the return value is the square of the
+     * actual length.
+     *
+     * @return The squared euclidean length
+     */
     public float magSq() {
         return x * x + y * y + z * z;
     }
@@ -486,9 +489,9 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-         * @param v The other vector
-         * @return the distance between this and the other vector
-         */
+     * @param v The other vector
+     * @return the distance between this and the other vector
+     */
     public float dist(final ewbik.math.Vector3 vector) {
         final float a = vector.x - x;
         final float b = vector.y - y;
@@ -507,12 +510,14 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-         * This method is faster than {@link Vector3#dist(Vector3)} because it avoids calculating a square root. It is useful for
-         * comparisons, but not for getting accurate distances, as the return value is the square of the actual distance.
-         *
-         * @param v The other vector
-         * @return the squared distance between this and the other vector
-         */
+     * This method is faster than {@link Vector3#dist(Vector3)} because it avoids
+     * calculating a square root. It is useful for
+     * comparisons, but not for getting accurate distances, as the return value is
+     * the square of the actual distance.
+     *
+     * @param v The other vector
+     * @return the squared distance between this and the other vector
+     */
     public float distSq(ewbik.math.Vector3 point) {
         final float a = point.x - x;
         final float b = point.y - y;
@@ -536,10 +541,10 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-         * Normalizes this vector. Does nothing if it is zero.
-         *
-         * @return This vector for chaining
-         */
+     * Normalizes this vector. Does nothing if it is zero.
+     *
+     * @return This vector for chaining
+     */
     public ewbik.math.Vector3 normalize() {
         final float len2 = this.mag();
         if (len2 == 0f || len2 == 1f)
@@ -548,9 +553,9 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-         * @param v The other vector
-         * @return The dot product between this and the other vector
-         */
+     * @param v The other vector
+     * @return The dot product between this and the other vector
+     */
     public float dot(Vector3 vector) {
         return x * vector.getX() + y * vector.getY() + z * vector.getZ();
     }
@@ -633,117 +638,128 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-         * @return Whether this vector is a unit length vector
-         */
+     * @return Whether this vector is a unit length vector
+     */
     public boolean isUnit() {
         return isUnit(0.000000001f);
     }
 
     /**
-         * @return Whether this vector is a unit length vector within the given margin.
-         */
+     * @return Whether this vector is a unit length vector within the given margin.
+     */
     public boolean isUnit(final float margin) {
         return MathUtils.abs(magSq() - 1f) < margin;
     }
 
     /**
-         * @return Whether this vector is a zero vector
-         */
+     * @return Whether this vector is a zero vector
+     */
     public boolean isZero() {
         return x == 0 && y == 0 && z == 0;
     }
 
     /**
-         * @return Whether the length of this vector is smaller than the given margin
-         */
+     * @return Whether the length of this vector is smaller than the given margin
+     */
     public boolean isZero(final float margin) {
         return magSq() < margin;
     }
 
     /**
-         * @return true if this vector is in line with the other vector (either in the same or the opposite direction)
-         */
+     * @return true if this vector is in line with the other vector (either in the
+     *         same or the opposite direction)
+     */
     public boolean isOnLine(ewbik.math.Vector3 other, float epsilon) {
         return magSq(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x) <= epsilon;
     }
 
     /**
-         * @return true if this vector is in line with the other vector (either in the same or the opposite direction)
-         */
+     * @return true if this vector is in line with the other vector (either in the
+     *         same or the opposite direction)
+     */
     public boolean isOnLine(ewbik.math.Vector3 other) {
         return magSq(y * other.z - z * other.y, z * other.x - x * other.z,
                 x * other.y - y * other.x) <= MathUtils.DOUBLE_ROUNDING_ERROR;
     }
 
     /**
-         * @return true if this vector is collinear with the other vector ({@link #isOnLine(Vector3, float)} &&
-         * {@link #hasSameDirection(Vector3)}).
-         */
+     * @return true if this vector is collinear with the other vector
+     *         ({@link #isOnLine(Vector3, float)} &&
+     *         {@link #hasSameDirection(Vector3)}).
+     */
     public boolean isCollinear(ewbik.math.Vector3 other, float epsilon) {
         return isOnLine(other, epsilon) && hasSameDirection(other);
     }
 
     /**
-         * @return true if this vector is collinear with the other vector ({@link #isOnLine(Vector3)} &&
-         * {@link #hasSameDirection(Vector3)}).
-         */
+     * @return true if this vector is collinear with the other vector
+     *         ({@link #isOnLine(Vector3)} &&
+     *         {@link #hasSameDirection(Vector3)}).
+     */
     public boolean isCollinear(ewbik.math.Vector3 other) {
         return isOnLine(other) && hasSameDirection(other);
     }
 
     /**
-         * @return true if this vector is opposite collinear with the other vector ({@link #isOnLine(Vector3, float)} &&
-         * {@link #hasOppositeDirection(Vector3)}).
-         */
+     * @return true if this vector is opposite collinear with the other vector
+     *         ({@link #isOnLine(Vector3, float)} &&
+     *         {@link #hasOppositeDirection(Vector3)}).
+     */
     public boolean isCollinearOpposite(ewbik.math.Vector3 other, float epsilon) {
         return isOnLine(other, epsilon) && hasOppositeDirection(other);
     }
 
     /**
-         * @return true if this vector is opposite collinear with the other vector ({@link #isOnLine(Vector3)} &&
-         * {@link #hasOppositeDirection(Vector3)}).
-         */
+     * @return true if this vector is opposite collinear with the other vector
+     *         ({@link #isOnLine(Vector3)} &&
+     *         {@link #hasOppositeDirection(Vector3)}).
+     */
     public boolean isCollinearOpposite(ewbik.math.Vector3 other) {
         return isOnLine(other) && hasOppositeDirection(other);
     }
 
     /**
-         * @return Whether this vector is perpendicular with the other vector. True if the dot product is 0.
-         */
+     * @return Whether this vector is perpendicular with the other vector. True if
+     *         the dot product is 0.
+     */
     public boolean isPerpendicular(ewbik.math.Vector3 vector) {
         return MathUtils.isZero(dot(vector));
     }
 
     /**
-         * @param epsilon a positive small number close to zero
-         * @return Whether this vector is perpendicular with the other vector. True if the dot product is 0.
-         */
+     * @param epsilon a positive small number close to zero
+     * @return Whether this vector is perpendicular with the other vector. True if
+     *         the dot product is 0.
+     */
     public boolean isPerpendicular(ewbik.math.Vector3 vector, float epsilon) {
         return MathUtils.isZero(dot(vector), epsilon);
     }
 
     /**
-         * @return Whether this vector has similar direction compared to the other vector. True if the normalized dot product is > 0.
-         */
+     * @return Whether this vector has similar direction compared to the other
+     *         vector. True if the normalized dot product is > 0.
+     */
     public boolean hasSameDirection(ewbik.math.Vector3 vector) {
         return dot(vector) > 0;
     }
 
     /**
-         * @return Whether this vector has opposite direction compared to the other vector. True if the normalized dot product is < 0.
-         */
+     * @return Whether this vector has opposite direction compared to the other
+     *         vector. True if the normalized dot product is < 0.
+     */
     public boolean hasOppositeDirection(ewbik.math.Vector3 vector) {
         return dot(vector) < 0;
     }
 
     /**
-         * Linearly interpolates between this vector and the target vector by alpha which is in the range [0,1]. The result is stored
-         * in this vector.
-         *
-         * @param target The target vector
-         * @param alpha  The interpolation coefficient
-         * @return This vector for chaining.
-         */
+     * Linearly interpolates between this vector and the target vector by alpha
+     * which is in the range [0,1]. The result is stored
+     * in this vector.
+     *
+     * @param target The target vector
+     * @param alpha  The interpolation coefficient
+     * @return This vector for chaining.
+     */
     public ewbik.math.Vector3 lerp(final ewbik.math.Vector3 target, float alpha) {
         x += alpha * (target.x - x);
         y += alpha * (target.y - y);
@@ -792,24 +808,25 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-         * Limits the length of this vector, based on the desired maximum length.
-         *
-         * @param limit desired maximum length for this vector
-         * @return this vector for chaining
-         */
+     * Limits the length of this vector, based on the desired maximum length.
+     *
+     * @param limit desired maximum length for this vector
+     * @return this vector for chaining
+     */
     public ewbik.math.Vector3 limit(float limit) {
         return limitSq(limit * limit);
     }
 
     /**
-         * Limits the length of this vector, based on the desired maximum length squared.
-         * <p/>
-         * This method is slightly faster than limit().
-         *
-         * @param limit2 squared desired maximum length for this vector
-         * @return this vector for chaining
-         * @see #magSq()
-         */
+     * Limits the length of this vector, based on the desired maximum length
+     * squared.
+     * <p/>
+     * This method is slightly faster than limit().
+     *
+     * @param limit2 squared desired maximum length for this vector
+     * @return this vector for chaining
+     * @see #magSq()
+     */
     public ewbik.math.Vector3 limitSq(float limit2) {
         float len2 = magSq();
         if (len2 > limit2) {
@@ -819,36 +836,38 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-         * Sets the length of this vector. Does nothing is this vector is zero.
-         *
-         * @param len desired length for this vector
-         * @return this vector for chaining
-         */
+     * Sets the length of this vector. Does nothing is this vector is zero.
+     *
+     * @param len desired length for this vector
+     * @return this vector for chaining
+     */
     public ewbik.math.Vector3 setMag(float len) {
         return setMagSq(len * len);
     }
 
     /**
-         * Sets the length of this vector, based on the square of the desired length. Does nothing is this vector is zero.
-         * <p/>
-         * This method is slightly faster than setLength().
-         *
-         * @param len2 desired square of the length for this vector
-         * @return this vector for chaining
-         * @see #magSq()
-         */
+     * Sets the length of this vector, based on the square of the desired length.
+     * Does nothing is this vector is zero.
+     * <p/>
+     * This method is slightly faster than setLength().
+     *
+     * @param len2 desired square of the length for this vector
+     * @return this vector for chaining
+     * @see #magSq()
+     */
     public ewbik.math.Vector3 setMagSq(float len2) {
         float oldLen2 = magSq();
-        return (oldLen2 == 0 || oldLen2 == len2) ? (ewbik.math.Vector3) this : mult((float) MathUtils.sqrt(len2 / oldLen2));
+        return (oldLen2 == 0 || oldLen2 == len2) ? (ewbik.math.Vector3) this
+                : mult((float) MathUtils.sqrt(len2 / oldLen2));
     }
 
     /**
-         * Clamps this vector's length to given min and max values
-         *
-         * @param min Min length
-         * @param max Max length
-         * @return This vector for chaining
-         */
+     * Clamps this vector's length to given min and max values
+     *
+     * @param min Min length
+     * @param max Max length
+     * @return This vector for chaining
+     */
     public ewbik.math.Vector3 clamp(float min, float max) {
         final float len2 = magSq();
         if (len2 == 0f)
@@ -863,12 +882,13 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-         * Compares this vector with the other vector, using the supplied epsilon for fuzzy equality testing.
-         *
-         * @param other
-         * @param epsilon
-         * @return whether the vectors have fuzzy equality.
-         */
+     * Compares this vector with the other vector, using the supplied epsilon for
+     * fuzzy equality testing.
+     *
+     * @param other
+     * @param epsilon
+     * @return whether the vectors have fuzzy equality.
+     */
     public boolean epsilonEquals(Vector3 other, float epsilon) {
         if (other == null)
             return false;
@@ -898,10 +918,10 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-         * Sets the components of this vector to 0
-         *
-         * @return This vector for chaining
-         */
+     * Sets the components of this vector to 0
+     *
+     * @return This vector for chaining
+     */
     public ewbik.math.Vector3 setZero() {
         this.x = 0;
         this.y = 0;
@@ -910,33 +930,33 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-         * @return the X component of this vector.
-         */
+     * @return the X component of this vector.
+     */
     public float getX() {
         return this.x;
     }
 
     /**
-         * @return the Y component of this vector.
-         */
+     * @return the Y component of this vector.
+     */
     public float getY() {
         return this.y;
     }
 
     /**
-         * sets this vector's x component to the input value
-         *
-         * @param x
-         */
+     * sets this vector's x component to the input value
+     *
+     * @param x
+     */
     public void setX_(float x) {
         this.x = x;
     }
 
     /**
-         * sets this vector's y component to the input value
-         *
-         * @param y
-         */
+     * sets this vector's y component to the input value
+     *
+     * @param y
+     */
     public void setY_(float y) {
         this.y = y;
 
@@ -971,11 +991,11 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-         * Scales this vector by a scalar
-         *
-         * @param scalar The scalar
-         * @return This vector for chaining
-         */
+     * Scales this vector by a scalar
+     *
+     * @param scalar The scalar
+     * @return This vector for chaining
+     */
     public ewbik.math.Vector3 mult(float scalar) {
         this.x *= scalar;
         this.y *= scalar;
@@ -998,8 +1018,8 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-         * @return the Y component of this vector.
-         */
+     * @return the Y component of this vector.
+     */
     public float getZ() {
         return this.z;
     }
@@ -1025,7 +1045,8 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-     * makes a copy of this vector and scales it by the given value, then returns that copy.
+     * makes a copy of this vector and scales it by the given value, then returns
+     * that copy.
      *
      * @param v The vector
      * @return the resulting vector
@@ -1036,7 +1057,8 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-     * make a copy of this vector and add the given vector to it, then return that copy.
+     * make a copy of this vector and add the given vector to it, then return that
+     * copy.
      *
      * @param v The vector
      * @return The resulting vector
@@ -1047,7 +1069,8 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-     * makes a copy of this vector and sets it to the cross product between it and the input vector,
+     * makes a copy of this vector and sets it to the cross product between it and
+     * the input vector,
      * then returns the copy
      *
      * @param vector The other vector
@@ -1059,7 +1082,8 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-     * make a copy of this vector and subtract the given vector from it, then return that copy.
+     * make a copy of this vector and subtract the given vector from it, then return
+     * that copy.
      *
      * @param v The vector
      * @return the resulting vector
@@ -1070,7 +1094,8 @@ public class Vector3 implements CanLoad {
     }
 
     /**
-     * makes a copy of this vector and multiplies it componentWise by the given vector, then returns that copy.
+     * makes a copy of this vector and multiplies it componentWise by the given
+     * vector, then returns that copy.
      *
      * @param v The vector
      * @return the resulting vector

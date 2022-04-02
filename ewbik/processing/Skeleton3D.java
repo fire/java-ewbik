@@ -72,7 +72,8 @@ public class Skeleton3D implements Saveable {
                 new PVector(0, 0, 0), new PVector(1, 0, 0), new PVector(0, 1, 0), new PVector(0, 0, 1), null);
         this.tempWorkingNode3D = Skeleton3D.this.localNode3D.getGlobalCopy();
         this.tag = name;
-        Skeleton3D.this.createRootBone(Skeleton3D.this.localNode3D.y_().heading(), Skeleton3D.this.localNode3D.z_().heading(), Skeleton3D.this.tag + " : rootBone", 1f,
+        Skeleton3D.this.createRootBone(Skeleton3D.this.localNode3D.y_().heading(),
+                Skeleton3D.this.localNode3D.z_().heading(), Skeleton3D.this.tag + " : rootBone", 1f,
                 Bone.frameType.GLOBAL);
     }
 
@@ -140,7 +141,7 @@ public class Skeleton3D implements Saveable {
     }
 
     private <V extends ewbik.math.Vector3> Bone createRootBone(V tipHeading, V rollHeading, String inputTag,
-                                                               float boneHeight, Bone.frameType coordinateType) {
+            float boneHeight, Bone.frameType coordinateType) {
         initializeRootBone(this, tipHeading, rollHeading, inputTag, boneHeight, coordinateType);
         this.shadowNode3D = new ewbik.ik.ShadowNode3D(rootBone);
         fauxParent = rootBone.localAxes().getGlobalCopy();
@@ -373,7 +374,7 @@ public class Skeleton3D implements Saveable {
      */
 
     public void iteratedImprovedSolver(Bone startFrom, float dampening, int iterations,
-                                       int stabilizationPasses) {
+            int stabilizationPasses) {
         ewbik.ik.ShadowNode3D armature = boneSegmentMap.get(startFrom);
 
         if (armature != null) {
@@ -405,7 +406,7 @@ public class Skeleton3D implements Saveable {
     }
 
     public void groupedRecursiveSegmentSolver(ewbik.ik.ShadowNode3D startFrom, float dampening, int stabilizationPasses,
-                                              int iteration, float totalIterations) {
+            int iteration, float totalIterations) {
         recursiveSegmentSolver(startFrom, dampening, stabilizationPasses, iteration, totalIterations);
         for (ewbik.ik.ShadowNode3D a : startFrom.pinnedDescendants) {
             for (ewbik.ik.ShadowNode3D c : a.childSegments) {
@@ -421,7 +422,7 @@ public class Skeleton3D implements Saveable {
      * @param armature
      */
     public void recursiveSegmentSolver(ewbik.ik.ShadowNode3D armature, float dampening, int stabilizationPasses,
-                                       int iteration, float totalIterations) {
+            int iteration, float totalIterations) {
         if (armature.childSegments == null && !armature.isTipPinned()) {
             return;
         } else if (!armature.isTipPinned()) {
@@ -496,7 +497,8 @@ public class Skeleton3D implements Saveable {
      * @param b
      * @return
      */
-    public ewbik.math.Quaternion getRotationBetween(ewbik.processing.sceneGraph.Node3D a, ewbik.processing.sceneGraph.Node3D b) {
+    public ewbik.math.Quaternion getRotationBetween(ewbik.processing.sceneGraph.Node3D a,
+            ewbik.processing.sceneGraph.Node3D b) {
         return new ewbik.math.Quaternion(a.x_().heading(), a.y_().heading(), b.x_().heading(), b.y_().heading());
     }
 

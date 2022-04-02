@@ -1,6 +1,5 @@
 package math;
 
-
 public final class Precision {
 
     public static final double SAFE_MIN_DOUBLE;
@@ -13,7 +12,6 @@ public final class Precision {
     static {
         EPSILON_DOUBLE = Double.longBitsToDouble((EXPONENT_OFFSET_DOUBLE - 53l) << 52);
         SAFE_MIN_DOUBLE = Double.longBitsToDouble((EXPONENT_OFFSET_DOUBLE - 1022l) << 52);
-
 
         EPSILON_FLOAT = Double.longBitsToDouble((EXPONENT_OFFSET_FLOAT - 24l) << 23);
         SAFE_MIN_FLOAT = Double.longBitsToDouble((EXPONENT_OFFSET_FLOAT - 126) << 23);
@@ -34,16 +32,23 @@ public final class Precision {
      * (or fewer) floating point numbers between them, i.e. two adjacent floating
      * point numbers are considered equal.
      * Adapted from <a
-     * href="http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm">
+     * href=
+     * "http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm">
      * Bruce Dawson</a>
      *
      * @param x       first value
      * @param y       second value
      * @param maxUlps {@code (maxUlps - 1)} is the number of floating point
      *                values between {@code x} and {@code y}.
-     * @return <ul><li>0 if  {@link #equals(double, double, int) equals(x, y, maxUlps)}</li>
-     * <li>&lt; 0 if !{@link #equals(double, double, int) equals(x, y, maxUlps)} &amp;&amp; x &lt; y</li>
-     * <li>> 0 if !{@link #equals(double, double, int) equals(x, y, maxUlps)} &amp;&amp; x > y</li></ul>
+     * @return
+     *         <ul>
+     *         <li>0 if {@link #equals(double, double, int) equals(x, y,
+     *         maxUlps)}</li>
+     *         <li>&lt; 0 if !{@link #equals(double, double, int) equals(x, y,
+     *         maxUlps)} &amp;&amp; x &lt; y</li>
+     *         <li>> 0 if !{@link #equals(double, double, int) equals(x, y,
+     *         maxUlps)} &amp;&amp; x > y</li>
+     *         </ul>
      */
     public static int compareTo(final double x, final double y, final int maxUlps) {
         if (equals(x, y, maxUlps)) {
@@ -102,7 +107,8 @@ public final class Precision {
      * @param maxUlps {@code (maxUlps - 1)} is the number of floating point
      *                values between {@code x} and {@code y}.
      * @return {@code true} if both arguments are NaN or if there are less than
-     * {@code maxUlps} floating point values between {@code x} and {@code y}.
+     *         {@code maxUlps} floating point values between {@code x} and
+     *         {@code y}.
      * @since 2.2
      */
     public static boolean equalsIncludingNaN(float x, float y, int maxUlps) {
@@ -143,7 +149,7 @@ public final class Precision {
      * @param y   Second value.
      * @param eps Amount of allowed absolute error.
      * @return {@code true} if the values are two adjacent floating point
-     * numbers or they are within range of each other.
+     *         numbers or they are within range of each other.
      */
     public static boolean equals(double x, double y, double eps) {
         return equals(x, y, 1) || Math.abs(y - x) <= eps;
@@ -295,7 +301,9 @@ public final class Precision {
         public static String LCM_OVERFLOW_64_BITS = "overflow: lcm = {0}, {1}) is 2^63";
         public static String LIST_OF_CHROMOSOMES_BIGGER_THAN_POPULATION_SIZE = "list of chromosomes bigger than maxPopulationSize";
         public static String LOESS_EXPECTS_AT_LEAST_ONE_POINT = "Loess expects at least 1 point";
-        public static String LOWER_BOUND_NOT_BELOW_UPPER_BOUND = "lower bound ({0}) must be strictly less than upper bound  = {1})"; /* keep */
+        public static String LOWER_BOUND_NOT_BELOW_UPPER_BOUND = "lower bound ({0}) must be strictly less than upper bound  = {1})"; /*
+                                                                                                                                      * keep
+                                                                                                                                      */
         public static String LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT = "lower endpoint ({0}) must be less than or equal to upper endpoint  = {1})";
         public static String MAP_MODIFIED_WHILE_ITERATING = "map has been modified while iterating";
         public static String EVALUATIONS = "evaluations"; /* keep */
@@ -374,16 +382,24 @@ public final class Precision {
         public static String NOT_POWER_OF_TWO_CONSIDER_PADDING = "{0} is not a power of 2, consider padding for fix";
         public static String NOT_POWER_OF_TWO_PLUS_ONE = "{0} is not a power of 2 plus one";
         public static String NOT_STRICTLY_DECREASING_NUMBER_OF_POINTS = "points {0} and {1} are not strictly decreasing  = {2} <= {3})";
-        public static String NOT_STRICTLY_DECREASING_SEQUENCE = "points {3} and {2} are not strictly decreasing  = {1} <= {0})"; /* keep */
+        public static String NOT_STRICTLY_DECREASING_SEQUENCE = "points {3} and {2} are not strictly decreasing  = {1} <= {0})"; /*
+                                                                                                                                  * keep
+                                                                                                                                  */
         public static String NOT_STRICTLY_INCREASING_KNOT_VALUES = "knot values must be strictly increasing";
         public static String NOT_STRICTLY_INCREASING_NUMBER_OF_POINTS = "points {0} and {1} are not strictly increasing  = {2} >= {3})";
-        public static String NOT_STRICTLY_INCREASING_SEQUENCE = "points {3} and {2} are not strictly increasing  = {1} >= {0})"; /* keep */
+        public static String NOT_STRICTLY_INCREASING_SEQUENCE = "points {3} and {2} are not strictly increasing  = {1} >= {0})"; /*
+                                                                                                                                  * keep
+                                                                                                                                  */
         public static String NOT_SUBTRACTION_COMPATIBLE_MATRICES = "{0}x{1} and {2}x{3} matrices are not subtraction compatible";
         public static String NOT_SUPPORTED_IN_DIMENSION_N = "method not supported in dimension {0}";
         public static String NOT_SYMMETRIC_MATRIX = "not symmetric matrix";
-        public static String NON_SYMMETRIC_MATRIX = "non symmetric matrix: the difference between entries at ({0},{1}) and  = {1},{0}) is larger than {2}"; /* keep */
+        public static String NON_SYMMETRIC_MATRIX = "non symmetric matrix: the difference between entries at ({0},{1}) and  = {1},{0}) is larger than {2}"; /*
+                                                                                                                                                             * keep
+                                                                                                                                                             */
         public static String NO_BIN_SELECTED = "no bin selected";
-        public static String NO_CONVERGENCE_WITH_ANY_START_POINT = "none of the {0} start points lead to convergence"; /* keep */
+        public static String NO_CONVERGENCE_WITH_ANY_START_POINT = "none of the {0} start points lead to convergence"; /*
+                                                                                                                        * keep
+                                                                                                                        */
         public static String NO_DATA = "no data"; /* keep */
         public static String NO_DEGREES_OF_FREEDOM = "no degrees of freedom  = {0} measurements, {1} parameters)";
         public static String NO_DENSITY_FOR_THIS_DISTRIBUTION = "This distribution does not have a density function implemented";
@@ -409,8 +425,12 @@ public final class Precision {
         public static String WHOLE_FORMAT = "whole format"; /* keep */
         public static String NUMBER_TOO_LARGE = "{0} is larger than the maximum  = {1})"; /* keep */
         public static String NUMBER_TOO_SMALL = "{0} is smaller than the minimum  = {1})"; /* keep */
-        public static String NUMBER_TOO_LARGE_BOUND_EXCLUDED = "{0} is larger than, or equal to, the maximum  = {1})"; /* keep */
-        public static String NUMBER_TOO_SMALL_BOUND_EXCLUDED = "{0} is smaller than, or equal to, the minimum  = {1})"; /* keep */
+        public static String NUMBER_TOO_LARGE_BOUND_EXCLUDED = "{0} is larger than, or equal to, the maximum  = {1})"; /*
+                                                                                                                        * keep
+                                                                                                                        */
+        public static String NUMBER_TOO_SMALL_BOUND_EXCLUDED = "{0} is smaller than, or equal to, the minimum  = {1})"; /*
+                                                                                                                         * keep
+                                                                                                                         */
         public static String NUMBER_OF_SUCCESS_LARGER_THAN_POPULATION_SIZE = "number of successes ({0}) must be less than or equal to population size  = {1})";
         public static String NUMERATOR_OVERFLOW_AFTER_MULTIPLY = "overflow, numerator too large after multiply: {0}";
         public static String N_POINTS_GAUSS_LEGENDRE_INTEGRATOR_NOT_SUPPORTED = "{0} points Legendre-Gauss integrator not supported, number of points must be in the {1}-{2} range";
@@ -434,7 +454,9 @@ public final class Precision {
         public static String OVERFLOW_IN_SUBTRACTION = "overflow in subtraction: {0} - {1}";
         public static String PERCENTILE_IMPLEMENTATION_CANNOT_ACCESS_METHOD = "cannot access {0} method in percentile implementation {1}";
         public static String PERCENTILE_IMPLEMENTATION_UNSUPPORTED_METHOD = "percentile implementation {0} does not support {1}";
-        public static String PERMUTATION_EXCEEDS_N = "permutation size ({0}) exceeds permuation domain  = {1})"; /* keep */
+        public static String PERMUTATION_EXCEEDS_N = "permutation size ({0}) exceeds permuation domain  = {1})"; /*
+                                                                                                                  * keep
+                                                                                                                  */
         public static String POLYNOMIAL = "polynomial"; /* keep */
         public static String POLYNOMIAL_INTERPOLANTS_MISMATCH_SEGMENTS = "number of polynomial interpolants must match the number of segments  = {0} != {1} - 1)";
         public static String POPULATION_LIMIT_NOT_POSITIVE = "population limit has to be positive";
@@ -446,7 +468,9 @@ public final class Precision {
         public static String ROW_INDEX_OUT_OF_RANGE = "row index {0} out of allowed range [{1}, {2}]";
         public static String ROW_INDEX = "row index  = {0})"; /* keep */
         public static String SAME_SIGN_AT_ENDPOINTS = "function values at endpoints do not have different signs, endpoints: [{0}, {1}], values: [{2}, {3}]";
-        public static String SAMPLE_SIZE_EXCEEDS_COLLECTION_SIZE = "sample size ({0}) exceeds collection size  = {1})"; /* keep */
+        public static String SAMPLE_SIZE_EXCEEDS_COLLECTION_SIZE = "sample size ({0}) exceeds collection size  = {1})"; /*
+                                                                                                                         * keep
+                                                                                                                         */
         public static String SAMPLE_SIZE_LARGER_THAN_POPULATION_SIZE = "sample size ({0}) must be less than or equal to population size  = {1})";
         public static String SIMPLEX_NEED_ONE_POINT = "simplex must contain at least one point";
         public static String SIMPLE_MESSAGE = "{0}";
@@ -474,7 +498,9 @@ public final class Precision {
         public static String UNKNOWN_MODE = "unknown mode {0}, known modes: {1} ({2}; {3} ({4}; {5} ({6}; {7} ({8}; {9} ({10}) and {11}  = {12})";
         public static String UNKNOWN_PARAMETER = "unknown parameter {0}";
         public static String UNMATCHED_ODE_IN_EXPANDED_SET = "ode does not match the main ode set in the extended set";
-        public static String CANNOT_PARSE_AS_TYPE = "string \"{0}\" unparseable  = from position {1}) as an object of type {2}"; /* keep */
+        public static String CANNOT_PARSE_AS_TYPE = "string \"{0}\" unparseable  = from position {1}) as an object of type {2}"; /*
+                                                                                                                                  * keep
+                                                                                                                                  */
         public static String CANNOT_PARSE = "string \"{0}\" unparseable  = from position {1})"; /* keep */
         public static String UNPARSEABLE_3D_VECTOR = "unparseable 3D vector: \"{0}\"";
         public static String UNPARSEABLE_COMPLEX_NUMBER = "unparseable complex number: \"{0}\"";
@@ -502,7 +528,6 @@ public final class Precision {
 
         // CHECKSTYLE: resume JavadocVariable
         // CHECKSTYLE: resume MultipleVariableDeclarations
-
 
         /**
          * Source English format.
@@ -541,6 +566,5 @@ public final class Precision {
         }
 
     }
-
 
 }

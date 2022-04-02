@@ -9,7 +9,6 @@ public abstract class Sort implements Runnable {
     public Sort() {
     }
 
-
     public void run() {
         int c = size();
         if (c > 1) {
@@ -17,16 +16,16 @@ public abstract class Sort implements Runnable {
         }
     }
 
-
     protected void sort(int i, int j) {
         int pivotIndex = (i + j) / 2;
         swap(pivotIndex, j);
         int k = partition(i - 1, j);
         swap(k, j);
-        if ((k - i) > 1) sort(i, k - 1);
-        if ((j - k) > 1) sort(k + 1, j);
+        if ((k - i) > 1)
+            sort(i, k - 1);
+        if ((j - k) > 1)
+            sort(k + 1, j);
     }
-
 
     protected int partition(int left, int right) {
         int pivot = right;
@@ -40,7 +39,6 @@ public abstract class Sort implements Runnable {
         swap(left, right);
         return left;
     }
-
 
     abstract public int size();
 

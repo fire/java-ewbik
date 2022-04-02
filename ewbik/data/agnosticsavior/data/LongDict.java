@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-
 /**
  * A simple class to use a String as a lookup for an int value.
  *
@@ -30,17 +29,16 @@ public class LongDict {
      */
     private HashMap<String, Integer> indices = new HashMap<>();
 
-
     public LongDict() {
         count = 0;
         keys = new String[10];
         values = new long[10];
     }
 
-
     /**
      * Create a new lookup with a specific size. This is more efficient than not
-     * specifying a size. Use it when you know the rough size of the thing you're creating.
+     * specifying a size. Use it when you know the rough size of the thing you're
+     * creating.
      *
      * @nowebref
      */
@@ -49,7 +47,6 @@ public class LongDict {
         keys = new String[length];
         values = new long[length];
     }
-
 
     /**
      * Read a set of entries from a Reader that has each key/value pair on
@@ -88,13 +85,13 @@ public class LongDict {
         }
     }
 
-
     /**
      * Constructor to allow (more intuitive) inline initialization, e.g.:
+     * 
      * <pre>
      * new FloatDict(new Object[][] {
-     *   { "key1", 1 },
-     *   { "key2", 2 }
+     *         { "key1", 1 },
+     *         { "key2", 2 }
      * });
      * </pre>
      */
@@ -109,7 +106,6 @@ public class LongDict {
         }
     }
 
-
     /**
      * Returns the number of key/value pairs
      *
@@ -119,7 +115,6 @@ public class LongDict {
     public int size() {
         return count;
     }
-
 
     /**
      * Resize the internal data, this can only be used to shrink the list.
@@ -143,7 +138,6 @@ public class LongDict {
         resetIndices();
     }
 
-
     /**
      * Remove all entries.
      *
@@ -155,14 +149,12 @@ public class LongDict {
         indices = new HashMap<>();
     }
 
-
     private void resetIndices() {
         indices = new HashMap<>(count);
         for (int i = 0; i < count; i++) {
             indices.put(keys[i], i);
         }
     }
-
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
@@ -199,7 +191,6 @@ public class LongDict {
     public String key(int index) {
         return keys[index];
     }
-
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
@@ -338,7 +329,8 @@ public class LongDict {
 
     public long get(String key, long alternate) {
         int index = index(key);
-        if (index == -1) return alternate;
+        if (index == -1)
+            return alternate;
         return values[index];
     }
 
@@ -439,17 +431,17 @@ public class LongDict {
 
     private void checkMinMax(String functionName) {
         if (count == 0) {
-            String msg =
-                    String.format("Cannot use %s() on an empty %s.",
-                            functionName, getClass().getSimpleName());
+            String msg = String.format("Cannot use %s() on an empty %s.",
+                    functionName, getClass().getSimpleName());
             throw new RuntimeException(msg);
         }
     }
 
     // return the index of the minimum value
     public int minIndex() {
-        //checkMinMax("minIndex");
-        if (count == 0) return -1;
+        // checkMinMax("minIndex");
+        if (count == 0)
+            return -1;
 
         int index = 0;
         long value = values[0];
@@ -480,7 +472,7 @@ public class LongDict {
 
     // return the index of the max value
     public int maxIndex() {
-        //checkMinMax("maxIndex");
+        // checkMinMax("maxIndex");
         if (count == 0) {
             return -1;
         }
@@ -499,7 +491,7 @@ public class LongDict {
      * return the key corresponding to the maximum value or null if no entries
      */
     public String maxKey() {
-        //checkMinMax("maxKey");
+        // checkMinMax("maxKey");
         int index = maxIndex();
         if (index == -1) {
             return null;
@@ -576,8 +568,8 @@ public class LongDict {
         keys[b] = tkey;
         values[b] = tvalue;
 
-//    indices.put(keys[a], Integer.valueOf(a));
-//    indices.put(keys[b], Integer.valueOf(b));
+        // indices.put(keys[a], Integer.valueOf(a));
+        // indices.put(keys[b], Integer.valueOf(b));
     }
 
     /**
@@ -637,7 +629,7 @@ public class LongDict {
     }
 
     protected void sortImpl(final boolean useKeys, final boolean reverse,
-                            final boolean stable) {
+            final boolean stable) {
         Sort s = new Sort() {
             @Override
             public int size() {
@@ -652,7 +644,7 @@ public class LongDict {
                     if (diff == 0) {
                         diff = values[a] - values[b];
                     }
-                } else {  // sort values
+                } else { // sort values
                     diff = values[a] - values[b];
                     if (diff == 0 && stable) {
                         diff = keys[a].compareToIgnoreCase(keys[b]);
@@ -685,7 +677,7 @@ public class LongDict {
      * @return an IntDict with the original keys, mapped to their pct of the total
      */
     public FloatDict getPercent() {
-        double sum = sum();  // a little more accuracy
+        double sum = sum(); // a little more accuracy
         FloatDict outgoing = new FloatDict();
         for (int i = 0; i < size(); i++) {
             double percent = value(i) / sum;

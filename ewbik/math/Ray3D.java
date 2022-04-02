@@ -17,7 +17,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
  */
 
-
 package ewbik.math;
 
 import data.agnosticsavior.CanLoad;
@@ -63,7 +62,8 @@ public class Ray3D implements CanLoad {
      * @param b1 the first vertex of a triangle on the second plane
      * @param b2 the second vertex of a triangle on the second plane
      * @param b3 the third vertex od a triangle on the second plane
-     * @return a sgRay along the line of intersection of these two planes, or null if inputs are coplanar
+     * @return a sgRay along the line of intersection of these two planes, or null
+     *         if inputs are coplanar
      */
     public static <V extends Vector3> ewbik.math.Ray3D planePlaneIntersect(V a1, V a2, V a3, V b1, V b2, V b3) {
         ewbik.math.Ray3D a1a2 = new ewbik.math.Ray3D(a1, a2);
@@ -74,7 +74,7 @@ public class Ray3D implements CanLoad {
         Vector3 interceptsa1a3 = a1a3.intersectsPlane(b1, b2, b3);
         Vector3 interceptsa2a3 = a2a3.intersectsPlane(b1, b2, b3);
 
-        Vector3[] notNullCandidates = {interceptsa1a2, interceptsa1a3, interceptsa2a3};
+        Vector3[] notNullCandidates = { interceptsa1a2, interceptsa1a3, interceptsa2a3 };
         Vector3 notNull1 = null;
         Vector3 notNull2 = null;
 
@@ -109,7 +109,8 @@ public class Ray3D implements CanLoad {
     }
 
     /**
-     * returns the distance between the input point and the point on this ray (treated as a lineSegment) to which the input is closest.
+     * returns the distance between the input point and the point on this ray
+     * (treated as a lineSegment) to which the input is closest.
      *
      * @param point
      * @return
@@ -131,7 +132,8 @@ public class Ray3D implements CanLoad {
     }
 
     /**
-     * returns the distance between this ray treated as a line and the input ray treated as a line.
+     * returns the distance between this ray treated as a line and the input ray
+     * treated as a line.
      *
      * @param r
      * @return
@@ -142,7 +144,8 @@ public class Ray3D implements CanLoad {
     }
 
     /**
-     * returns the distance between this ray as a line segment, and the input ray treated as a line segment
+     * returns the distance between this ray as a line segment, and the input ray
+     * treated as a line segment
      */
     public float distToStrict(ewbik.math.Ray3D r) {
         Vector3 closestOnThis = this.closestPointToSegment3D(r);
@@ -162,10 +165,9 @@ public class Ray3D implements CanLoad {
         Vector3 heading = this.heading();
         heading.mag();
         workingVector.mag();
-        //workingVector.normalize();
+        // workingVector.normalize();
         heading.normalize();
         float scale = workingVector.dot(heading);
-
 
         return (V) this.getScaledTo(scale);
     }
@@ -186,7 +188,8 @@ public class Ray3D implements CanLoad {
 
     public Vector3 heading() {
         if (this.p2 == null) {
-            if (p1 == null) p1 = new Vector3();
+            if (p1 == null)
+                p1 = new Vector3();
             p2 = p1.copy();
             p2.set(0f, 0f, 0f);
             return p2;
@@ -210,13 +213,15 @@ public class Ray3D implements CanLoad {
     }
 
     public void heading(float[] newHead) {
-        if (p2 == null) p2 = p1.copy();
+        if (p2 == null)
+            p2 = p1.copy();
         p2.set(newHead);
         p2.set(p1);
     }
 
     public <V extends Vector3> void heading(V newHead) {
-        if (p2 == null) p2 = p1.copy();
+        if (p2 == null)
+            p2 = p1.copy();
         p2.set(p1);
         p2.add(newHead);
     }
@@ -290,12 +295,15 @@ public class Ray3D implements CanLoad {
      * Due to floating point errors, the intended properties of this function might
      * not be entirely consistent with its output under summation.
      * <p>
-     * To help spare programmer cognitive cycles debugging in such circumstances, the intended properties
+     * To help spare programmer cognitive cycles debugging in such circumstances,
+     * the intended properties
      * are listed for reference here (despite their being easily inferred).
      * <p>
-     * 1. calling scaledProjection(someVector) should return the same value as calling
+     * 1. calling scaledProjection(someVector) should return the same value as
+     * calling
      * scaledProjection(closestPointTo(someVector).
-     * 2. calling getMultipliedBy(scaledProjection(someVector)) should return the same
+     * 2. calling getMultipliedBy(scaledProjection(someVector)) should return the
+     * same
      * vector as calling closestPointTo(someVector)
      *
      * @param input a vector to project onto this ray
@@ -422,39 +430,43 @@ public class Ray3D implements CanLoad {
      * if dot product is already positive, does nothing.
      */
     public void pointWith(ewbik.math.Ray3D r) {
-        if (this.heading().dot(r.heading()) < 0) this.reverse();
+        if (this.heading().dot(r.heading()) < 0)
+            this.reverse();
     }
 
     public void pointWith(Vector3 heading) {
-        if (this.heading().dot(heading) < 0) this.reverse();
+        if (this.heading().dot(heading) < 0)
+            this.reverse();
     }
 
     public ewbik.math.Ray3D getRayScaledBy(float scalar) {
         return new ewbik.math.Ray3D(p1, this.getMultipledBy(scalar));
     }
 
-	/*public Vector3 intercepts2D(sgRay r) {
-		Vector3 result = new Vector3();
-
-		float a1 = p2.y - p1.y;
-		float b1 = p1.x - p2.x;
-		float c1 = a1*p1.x + b1*p1.y;
-
-		float a2 = r.p2.y - r.p1.y;
-		float b2 = r.p1.x - r.p2.y;
-		float c2 = a2* + b2* r.p1.y;
-
-		float det = a1*b2 - a2*b1;
-		if(det == 0){
-			// Lines are parallel
-			return null;
-		}
-		else {
-			result.x = (b2*c1 - b1*c2)/det;
-			result.y = (a1*c2 - a2*c1)/det;
-		}   
-		return result;
-	}*/
+    /*
+     * public Vector3 intercepts2D(sgRay r) {
+     * Vector3 result = new Vector3();
+     * 
+     * float a1 = p2.y - p1.y;
+     * float b1 = p1.x - p2.x;
+     * float c1 = a1*p1.x + b1*p1.y;
+     * 
+     * float a2 = r.p2.y - r.p1.y;
+     * float b2 = r.p1.x - r.p2.y;
+     * float c2 = a2* + b2* r.p1.y;
+     * 
+     * float det = a1*b2 - a2*b1;
+     * if(det == 0){
+     * // Lines are parallel
+     * return null;
+     * }
+     * else {
+     * result.x = (b2*c1 - b1*c2)/det;
+     * result.y = (a1*c2 - a2*c1)/det;
+     * }
+     * return result;
+     * }
+     */
 
     /**
      * sets the values of the given vector to where the
@@ -470,17 +482,20 @@ public class Ray3D implements CanLoad {
         return vec;
     }
 
-	/*public Vector3 closestPointToSegment3DStrict(sgRay r) {
-
-	}*/
+    /*
+     * public Vector3 closestPointToSegment3DStrict(sgRay r) {
+     * 
+     * }
+     */
 
     public void contractTo(float percent) {
-        //contracts both ends of a ray toward its center such that the total length of the ray
-        //is the percent % of its current length;
+        // contracts both ends of a ray toward its center such that the total length of
+        // the ray
+        // is the percent % of its current length;
         float halfPercent = 1 - ((1 - percent) / 2f);
 
-        p1 = p1.lerp(p2, halfPercent);//)new Vector3(p1Tempx, p1Tempy, p1Tempz);
-        p2 = p2.lerp(p1, halfPercent);//new Vector3(p2Tempx, p2Tempy, p2Tempz);
+        p1 = p1.lerp(p2, halfPercent);// )new Vector3(p1Tempx, p1Tempy, p1Tempz);
+        p2 = p2.lerp(p1, halfPercent);// new Vector3(p2Tempx, p2Tempy, p2Tempz);
     }
 
     public void translateTo(Vector3 newLocation) {
@@ -529,12 +544,12 @@ public class Ray3D implements CanLoad {
         float t;
         t = (s2_x * (p0_y - p2_y) - s2_y * (p0_x - p2_x)) / (-s2_x * s1_y + s1_x * s2_y);
 
-        //if (s >= 0 && s <= 1 && t >= 0 && t <= 1) {
+        // if (s >= 0 && s <= 1 && t >= 0 && t <= 1) {
         // Collision detected
         return result.set(p0_x + (t * s1_x), p0_y + (t * s1_y), 0f);
         // }
 
-        //return null; // No collision
+        // return null; // No collision
     }
 
     /**
@@ -566,21 +581,21 @@ public class Ray3D implements CanLoad {
         Vector3 v = workingVector.sub(r.p1);
         workingVector.set(this.p1);
         Vector3 w = workingVector.sub(r.p1);
-        float a = u.dot(u);         // always >= 0
+        float a = u.dot(u); // always >= 0
         float b = u.dot(v);
-        float c = v.dot(v);         // always >= 0
+        float c = v.dot(v); // always >= 0
         float d = u.dot(w);
         float e = v.dot(w);
-        float D = a * c - b * b;        // always >= 0
-        float sc; //tc
+        float D = a * c - b * b; // always >= 0
+        float sc; // tc
 
         // compute the line parameters of the two closest points
-        if (D < Float.MIN_VALUE) {          // the lines are almost parallel
+        if (D < Float.MIN_VALUE) { // the lines are almost parallel
             sc = 0.0f;
-            //tc = (b>c ? d/b : e/c);    // use the largest denominator
+            // tc = (b>c ? d/b : e/c); // use the largest denominator
         } else {
             sc = (b * e - c * d) / D;
-            //tc = (a*e - b*d) / D;
+            // tc = (a*e - b*d) / D;
         }
 
         result = this.getRayScaledBy(sc).p2;
@@ -596,26 +611,29 @@ public class Ray3D implements CanLoad {
         Vector3 v = workingVector.sub(r.p1);
         workingVector.set(this.p1);
         Vector3 w = workingVector.sub(r.p1);
-        float a = u.dot(u);         // always >= 0
+        float a = u.dot(u); // always >= 0
         float b = u.dot(v);
-        float c = v.dot(v);         // always >= 0
+        float c = v.dot(v); // always >= 0
         float d = u.dot(w);
         float e = v.dot(w);
-        float D = a * c - b * b;        // always >= 0
-        float sc; //tc
+        float D = a * c - b * b; // always >= 0
+        float sc; // tc
 
         // compute the line parameters of the two closest points
-        if (D < Float.MIN_VALUE) {          // the lines are almost parallel
+        if (D < Float.MIN_VALUE) { // the lines are almost parallel
             sc = 0.0f;
-            //tc = (b>c ? d/b : e/c);    // use the largest denominator
+            // tc = (b>c ? d/b : e/c); // use the largest denominator
         } else {
             sc = (b * e - c * d) / D;
-            //tc = (a*e - b*d) / D;
+            // tc = (a*e - b*d) / D;
         }
 
-        if (sc < 0) result = this.p1;
-        else if (sc > 1) result = this.p2;
-        else result = this.getRayScaledBy(sc).p2;
+        if (sc < 0)
+            result = this.p1;
+        else if (sc > 1)
+            result = this.p2;
+        else
+            result = this.getRayScaledBy(sc).p2;
 
         return result;
     }
@@ -637,31 +655,34 @@ public class Ray3D implements CanLoad {
         Vector3 v = workingVector.sub(r.p1);
         workingVector.set(this.p1);
         Vector3 w = workingVector.sub(r.p1);
-        float a = u.dot(u);         // always >= 0
+        float a = u.dot(u); // always >= 0
         float b = u.dot(v);
-        float c = v.dot(v);         // always >= 0
+        float c = v.dot(v); // always >= 0
         float d = u.dot(w);
         float e = v.dot(w);
-        float D = a * c - b * b;        // always >= 0
-        float sc; //tc
+        float D = a * c - b * b; // always >= 0
+        float sc; // tc
 
         // compute the line parameters of the two closest points
-        if (D < Float.MIN_VALUE) {          // the lines are almost parallel
+        if (D < Float.MIN_VALUE) { // the lines are almost parallel
             sc = 0.0f;
-            //tc = (b>c ? d/b : e/c);    // use the largest denominator
+            // tc = (b>c ? d/b : e/c); // use the largest denominator
         } else {
             sc = (b * e - c * d) / D;
-            //tc = (a*e - b*d) / D;
+            // tc = (a*e - b*d) / D;
         }
 
-        if (sc < 0) result = null;
-        else if (sc > 1) result = null;
-        else result = this.getRayScaledBy(sc).p2;
+        if (sc < 0)
+            result = null;
+        else if (sc > 1)
+            result = null;
+        else
+            result = this.getRayScaledBy(sc).p2;
 
         return result;
     }
 
-    //returns a ray perpendicular to this ray on the XY plane;
+    // returns a ray perpendicular to this ray on the XY plane;
     public ewbik.math.Ray3D getPerpendicular2D() {
         Vector3 heading = this.heading();
         workingVector.set(heading.x - 1f, heading.x, 0f);
@@ -669,11 +690,11 @@ public class Ray3D implements CanLoad {
     }
 
     public Vector3 intercepts2DStrict(ewbik.math.Ray3D r) {
-        //will also return null if the intersection does not occur on the
-        //line segment specified by the ray.
+        // will also return null if the intersection does not occur on the
+        // line segment specified by the ray.
         Vector3 result = p1.copy();
 
-        //boolean over = false;
+        // boolean over = false;
         float a1 = p2.y - p1.y;
         float b1 = p1.x - p2.x;
         float c1 = a1 * p1.x + b1 * p1.y;
@@ -693,7 +714,8 @@ public class Ray3D implements CanLoad {
         }
 
         float position = result.dot(this.heading());
-        if (position > 1 || position < 0) return null;
+        if (position > 1 || position < 0)
+            return null;
 
         return result;
     }
@@ -702,7 +724,8 @@ public class Ray3D implements CanLoad {
      * @param ta the first vertex of a triangle on the plane
      * @param tb the second vertex of a triangle on the plane
      * @param tc the third vertex of a triangle on the plane
-     * @return the point where this ray intersects the plane specified by the triangle ta,tb,tc.
+     * @return the point where this ray intersects the plane specified by the
+     *         triangle ta,tb,tc.
      */
     public <V extends Vector3> Vector3 intersectsPlane(V ta, V tb, V tc) {
         float[] uvw = new float[3];
@@ -739,7 +762,8 @@ public class Ray3D implements CanLoad {
     }
 
     /**
-     * Similar to intersectsPlane, but returns false if intersection does not occur on the triangle strictly defined by ta, tb, and tc
+     * Similar to intersectsPlane, but returns false if intersection does not occur
+     * on the triangle strictly defined by ta, tb, and tc
      *
      * @param ta     the first vertex of a triangle on the plane
      * @param tb     the second vertex of a triangle on the plane
@@ -771,7 +795,7 @@ public class Ray3D implements CanLoad {
             dir.set(this.heading());
             w0.set(0, 0, 0);
         }
-        //Vector3 w = new Vector3();
+        // Vector3 w = new Vector3();
         float r, a, b;
         u.sub(ta);
         v.sub(ta);
@@ -785,7 +809,7 @@ public class Ray3D implements CanLoad {
         I.set(0, 0, 0);
         I.set(dir);
         I.mult(r);
-        //float[] barycentric = new float[3];
+        // float[] barycentric = new float[3];
         barycentric(ta, tb, tc, I, uvw);
 
         return (V) I.copy();
@@ -793,11 +817,19 @@ public class Ray3D implements CanLoad {
 
     ;
 
-    /* Find where this ray intersects a sphere
+    /*
+     * Find where this ray intersects a sphere
+     * 
      * @param Vector3 the center of the sphere to test against.
+     * 
      * @param radius radius of the sphere
-     * @param S1 reference to variable in which the first intersection will be placed
-     * @param S2 reference to variable in which the second intersection will be placed
+     * 
+     * @param S1 reference to variable in which the first intersection will be
+     * placed
+     * 
+     * @param S2 reference to variable in which the second intersection will be
+     * placed
+     * 
      * @return number of intersections found;
      */
     public <V extends Vector3> int intersectsSphere(V sphereCenter, float radius, V S1, V S2) {
@@ -809,34 +841,43 @@ public class Ray3D implements CanLoad {
         return result;
     }
 
-    /* Find where this ray intersects a sphere
+    /*
+     * Find where this ray intersects a sphere
+     * 
      * @param radius radius of the sphere
-     * @param S1 reference to variable in which the first intersection will be placed
-     * @param S2 reference to variable in which the second intersection will be placed
+     * 
+     * @param S1 reference to variable in which the first intersection will be
+     * placed
+     * 
+     * @param S2 reference to variable in which the second intersection will be
+     * placed
+     * 
      * @return number of intersections found;
      */
     public <V extends Vector3> int intersectsSphere(V rp1, V rp2, float radius, V S1, V S2) {
         V direction = (V) rp2.subCopy(rp1);
-        V e = (V) direction.copy();   // e=ray.dir
-        e.normalize();                            // e=g/|g|
+        V e = (V) direction.copy(); // e=ray.dir
+        e.normalize(); // e=g/|g|
         V h = (V) p1.copy();
         h.set(0f, 0f, 0f);
-        h = (V) h.sub(rp1);  // h=r.o-c.M
-        float lf = e.dot(h);                      // lf=e.h
+        h = (V) h.sub(rp1); // h=r.o-c.M
+        float lf = e.dot(h); // lf=e.h
         float radpow = radius * radius;
         float hdh = h.magSq();
         float lfpow = lf * lf;
-        float s = radpow - hdh + lfpow;   // s=r^2-h^2+lf^2
-        if (s < 0.0f) return 0;                    // no intersection points ?
-        s = MathUtils.sqrt(s);                              // s=sqrt(r^2-h^2+lf^2)
+        float s = radpow - hdh + lfpow; // s=r^2-h^2+lf^2
+        if (s < 0.0f)
+            return 0; // no intersection points ?
+        s = MathUtils.sqrt(s); // s=sqrt(r^2-h^2+lf^2)
 
         int result = 0;
-        if (lf < s) {                               // S1 behind A ?
-            if (lf + s >= 0) {                         // S2 before A ?}
-                s = -s;                               // swap S1 <-> S2}
-                result = 1;                           // one intersection point
+        if (lf < s) { // S1 behind A ?
+            if (lf + s >= 0) { // S2 before A ?}
+                s = -s; // swap S1 <-> S2}
+                result = 1; // one intersection point
             }
-        } else result = 2;                          // 2 intersection points
+        } else
+            result = 2; // 2 intersection points
 
         S1.set(e.multCopy((float) lf - s));
         S1.add(rp1); // S1=A+e*(lf-s)
@@ -847,8 +888,8 @@ public class Ray3D implements CanLoad {
 
     public <V extends Vector3> void barycentric(V a, V b, V c, V p, float[] uvw) {
         if (m == null) {
-            //m=a.copy();
-            //m.set(0f,0f,0f);
+            // m=a.copy();
+            // m.set(0f,0f,0f);
             bc = b.copy();
             ca = c.copy();
             at = a.copy();
@@ -909,11 +950,9 @@ public class Ray3D implements CanLoad {
         this.p2 = in.copy();
     }
 
-
     public float lerp(float a, float b, float t) {
         return (1 - t) * a + t * b;
     }
-
 
     public Vector3 p2() {
         return p2;
@@ -938,8 +977,10 @@ public class Ray3D implements CanLoad {
 
     @Override
     public CanLoad populateSelfFromJSON(JSONObject j) {
-        if (this.p1 != null) this.p2 = this.p1.copy();
-        if (this.p2 != null) this.p1 = this.p2.copy();
+        if (this.p1 != null)
+            this.p2 = this.p1.copy();
+        if (this.p2 != null)
+            this.p1 = this.p2.copy();
 
         if (this.p1 == null)
             this.p1 = new Vector3(j.getJSONObject("p1"));
@@ -963,7 +1004,4 @@ public class Ray3D implements CanLoad {
         return result;
     }
 
-
 }
-
-

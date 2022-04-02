@@ -15,15 +15,16 @@ public class Transform3D {
      * a vector representing the translation of this basis relative to its parent.
      */
     public Vector3 translate;
-    protected Vector3 xBase = new Vector3(1,0,0);
-    protected Vector3 yBase = new Vector3(0,1,0);
-    protected Vector3 zBase = new Vector3(0,0,1);
-    protected Ray3D xRay = new Ray3D(new Vector3(0,0,0), new Vector3(1,0,0));
-    protected Ray3D yRay = new Ray3D(new Vector3(0,0,0), new Vector3(0,1,0));
-    protected Ray3D zRay = new Ray3D(new Vector3(0,0,0), new Vector3(0,0,1));
+    protected Vector3 xBase = new Vector3(1, 0, 0);
+    protected Vector3 yBase = new Vector3(0, 1, 0);
+    protected Vector3 zBase = new Vector3(0, 0, 1);
+    protected Ray3D xRay = new Ray3D(new Vector3(0, 0, 0), new Vector3(1, 0, 0));
+    protected Ray3D yRay = new Ray3D(new Vector3(0, 0, 0), new Vector3(0, 1, 0));
+    protected Ray3D zRay = new Ray3D(new Vector3(0, 0, 0), new Vector3(0, 0, 1));
 
     /**
-     * Initialize this basis at the origin. The basis will be righthanded by default.
+     * Initialize this basis at the origin. The basis will be righthanded by
+     * default.
      *
      * @param origin
      */
@@ -60,17 +61,20 @@ public class Transform3D {
 
     }
 
-
     /**
      * Initialize this basis at the origin.
-     * The basis will be backed by a rotation object which presumes right handed chirality.
-     * Therefore, the rotation object will align so its local XY plane aligns with this basis' XY plane
-     * Afterwards, it will check chirality, and if the basis isn't righthanded, this class will assume the
+     * The basis will be backed by a rotation object which presumes right handed
+     * chirality.
+     * Therefore, the rotation object will align so its local XY plane aligns with
+     * this basis' XY plane
+     * Afterwards, it will check chirality, and if the basis isn't righthanded, this
+     * class will assume the
      * z-axis is the one that's been flipped.
      * <p>
      * If you want to manually specify which axis has been flipped
      * (so that the rotation object aligns with respect to the plane formed
-     * by the other two basis vectors) then use the constructor dedicated for that purpose
+     * by the other two basis vectors) then use the constructor dedicated for that
+     * purpose
      *
      * @param origin
      * @param x      basis vector direction
@@ -88,14 +92,18 @@ public class Transform3D {
     /**
      * Initialize this basis at the origin defined by the base of the @param x Ray.
      * <p>
-     * The basis will be backed by a rotation object which presumes right handed chirality.
-     * Therefore, the rotation object will align so its local XY plane aligns with this basis' XY plane
-     * Afterwards, it will check chirality, and if the basis isn't righthanded, this class will assume the
+     * The basis will be backed by a rotation object which presumes right handed
+     * chirality.
+     * Therefore, the rotation object will align so its local XY plane aligns with
+     * this basis' XY plane
+     * Afterwards, it will check chirality, and if the basis isn't righthanded, this
+     * class will assume the
      * z-axis is the one that's been flipped.
      * <p>
      * If you want to manually specify which axis has been flipped
      * (so that the rotation object aligns with respect to the plane formed
-     * by the other two basis vectors) then use the constructor dedicated for that purpose
+     * by the other two basis vectors) then use the constructor dedicated for that
+     * purpose
      *
      * @param x basis Ray
      * @param y basis Ray
@@ -115,7 +123,6 @@ public class Transform3D {
         set(xDirNew, yDirNew, zDirNew);
 
     }
-
 
     public ewbik.math.Transform3D copy() {
         return new ewbik.math.Transform3D(this);
@@ -184,15 +191,19 @@ public class Transform3D {
         Quaternion toY = new Quaternion(tempV, yHeading);
 
         return toY.applyTo(toYZ);
-		/*Vector3 xidt = xBase.copy(); Vector3 yidt = yBase.copy();  Vector3 zidt = zBase.copy();
-		Vector3 origin = xBase.copy(); origin.set(0,0,0);
-
-		Vector3[] from = {origin, xidt, yidt, zidt};
-		Vector3[] to = {origin.copy(), xHeading, yHeading, zHeading};
-		QCP alignHeads = new QCP(MathUtils.DOUBLE_ROUNDING_ERROR, MathUtils.DOUBLE_ROUNDING_ERROR);
-		alignHeads.setMaxIterations(50);
-		Quaternion rotation = alignHeads.weightedSuperpose(from, to, null, false);
-		return rotation;*/
+        /*
+         * Vector3 xidt = xBase.copy(); Vector3 yidt = yBase.copy(); Vector3 zidt =
+         * zBase.copy();
+         * Vector3 origin = xBase.copy(); origin.set(0,0,0);
+         * 
+         * Vector3[] from = {origin, xidt, yidt, zidt};
+         * Vector3[] to = {origin.copy(), xHeading, yHeading, zHeading};
+         * QCP alignHeads = new QCP(MathUtils.DOUBLE_ROUNDING_ERROR,
+         * MathUtils.DOUBLE_ROUNDING_ERROR);
+         * alignHeads.setMaxIterations(50);
+         * Quaternion rotation = alignHeads.weightedSuperpose(from, to, null, false);
+         * return rotation;
+         */
     }
 
     public Quaternion getLocalOfRotation(Quaternion inRot) {
@@ -237,7 +248,8 @@ public class Transform3D {
     /**
      * the default Transform3D implementation is orthonormal,
      * so by default this function will just set @param vec to (1,0,0),
-     * but extending (affine) classes can override this to represent the direction and magnitude of the x axis prior to rotation.
+     * but extending (affine) classes can override this to represent the direction
+     * and magnitude of the x axis prior to rotation.
      */
     public <V extends Vector3> void setToShearXBase(V vec) {
         vec.set(xBase);
@@ -246,7 +258,8 @@ public class Transform3D {
     /**
      * the default Transform3D implementation is orthonormal,
      * so by default this function will just set @param vec to (0,1,0),
-     * but extending (affine) classes can override this to represent the direction and magnitude of the y axis prior to rotation.
+     * but extending (affine) classes can override this to represent the direction
+     * and magnitude of the y axis prior to rotation.
      */
     public <V extends Vector3> void setToShearYBase(V vec) {
         vec.set(yBase);
@@ -255,7 +268,8 @@ public class Transform3D {
     /**
      * the default Transform3D implementation is orthonormal,
      * so by default this function will just set @param vec to (0,0,1),
-     * but extending (affine) classes can override this to represent the direction and magnitude of the z axis prior to rotation.
+     * but extending (affine) classes can override this to represent the direction
+     * and magnitude of the z axis prior to rotation.
      */
     public <V extends Vector3> void setToShearZBase(V vec) {
         vec.set(zBase);
@@ -327,7 +341,8 @@ public class Transform3D {
 
     /**
      * true if the input axis should be multiplied by negative one after rotation.
-     * By default, this always returns false. But can be overriden for more advanced implementations
+     * By default, this always returns false. But can be overriden for more advanced
+     * implementations
      * allowing for reflection transformations.
      *
      * @param axis
@@ -338,7 +353,8 @@ public class Transform3D {
     }
 
     /**
-     * @return a precomputed inverse of the rotation represented by this basis object.
+     * @return a precomputed inverse of the rotation represented by this basis
+     *         object.
      */
     public Quaternion getInverseRotation() {
         return this.inverseRotation;
@@ -371,7 +387,7 @@ public class Transform3D {
         float xMag = xh.mag();
         float yMag = yh.mag();
         float zMag = zh.mag();
-        //this.chirality = this.composedMatrix. ? RIGHT : LEFT;
+        // this.chirality = this.composedMatrix. ? RIGHT : LEFT;
         String chirality = this.chirality == LEFT ? "LEFT" : "RIGHT";
         String result = "-----------\n"
                 + chirality + " handed \n"

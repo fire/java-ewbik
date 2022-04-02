@@ -67,12 +67,12 @@ public class EWBIKLoader {
      */
 
     public Collection<? extends Skeleton3D> importSinglePrecisionArmatures(String filepath,
-                                                                           Class<? extends ewbik.processing.sceneGraph.Node3D> AxesClass,
-                                                                           Class<? extends Bone> BoneClass,
-                                                                           Class<? extends Skeleton3D> ArmatureClass,
-                                                                           Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
-                                                                           Class<? extends ewbik.processing.singlePrecision.LimitCone> LimitConeClass,
-                                                                           Class<? extends IKPin> IKPinClass) {
+            Class<? extends ewbik.processing.sceneGraph.Node3D> AxesClass,
+            Class<? extends Bone> BoneClass,
+            Class<? extends Skeleton3D> ArmatureClass,
+            Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
+            Class<? extends ewbik.processing.singlePrecision.LimitCone> LimitConeClass,
+            Class<? extends IKPin> IKPinClass) {
         File selection = new File(filepath);
         JSONObject loadFile = StringFuncs.loadJSONObject(selection);
         clearCurrentLoadObjects();
@@ -107,7 +107,7 @@ public class EWBIKLoader {
      * @param result
      */
     public <T extends Object, V extends Object> HashMap<T, V> hashMapFromJSON(JSONObject json, HashMap<T, V> result,
-                                                                              TypeIdentifier ti) {
+            TypeIdentifier ti) {
         return floatBackedLoader.hashMapFromJSON(json, result, ti);
     }
 

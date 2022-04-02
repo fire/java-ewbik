@@ -54,34 +54,42 @@ class MRotation {
 
     /**
      * Build a rotation from the quaternion coordinates.
-     * <p>A rotation can be built from a <em>normalized</em> quaternion,
+     * <p>
+     * A rotation can be built from a <em>normalized</em> quaternion,
      * i.e. a quaternion for which q<sub>0</sub><sup>2</sup> +
      * q<sub>1</sub><sup>2</sup> + q<sub>2</sub><sup>2</sup> +
      * q<sub>3</sub><sup>2</sup> = 1. If the quaternion is not normalized,
-     * the constructor can normalize it in a preprocessing step.</p>
-     * <p>Note that some conventions put the scalar part of the quaternion
+     * the constructor can normalize it in a preprocessing step.
+     * </p>
+     * <p>
+     * Note that some conventions put the scalar part of the quaternion
      * as the 4<sup>th</sup> component and the vector part as the first three
      * components. This is <em>not</em> our convention. We put the scalar part
-     * as the first component.</p>
+     * as the first component.
+     * </p>
      *
      * @param q0                 scalar part of the quaternion
-     * @param q1                 first coordinate of the vectorial part of the quaternion
-     * @param q2                 second coordinate of the vectorial part of the quaternion
-     * @param q3                 third coordinate of the vectorial part of the quaternion
+     * @param q1                 first coordinate of the vectorial part of the
+     *                           quaternion
+     * @param q2                 second coordinate of the vectorial part of the
+     *                           quaternion
+     * @param q3                 third coordinate of the vectorial part of the
+     *                           quaternion
      * @param needsNormalization if true, the coordinates are considered
-     *                           not to be normalized, a normalization preprocessing step is performed
+     *                           not to be normalized, a normalization preprocessing
+     *                           step is performed
      *                           before using them
      */
     public MRotation(float q0, float q1, float q2, float q3,
-                     boolean needsNormalization) {
+            boolean needsNormalization) {
 
         this.q0 = q0;
         this.q1 = q1;
         this.q2 = q2;
         this.q3 = q3;
 
-        if (needsNormalization) setToNormalized();
-
+        if (needsNormalization)
+            setToNormalized();
 
     }
 
@@ -99,25 +107,30 @@ class MRotation {
         this(q0, q1, q2, q3, false);
     }
 
-
     /**
      * Build a rotation from an axis and an angle.
-     * <p>We use the convention that angles are oriented according to
+     * <p>
+     * We use the convention that angles are oriented according to
      * the effect of the rotation on vectors around the axis. That means
      * that if (i, j, k) is a direct frame and if we first provide +k as
      * the axis and &pi;/2 as the angle to this constructor, and then
      * {@link #applyTo(T) apply} the instance to +i, we will get
-     * +j.</p>
-     * <p>Another way to represent our convention is to say that a rotation
+     * +j.
+     * </p>
+     * <p>
+     * Another way to represent our convention is to say that a rotation
      * of angle &theta; about the unit vector (x, y, z) is the same as the
      * rotation build from quaternion components { cos(-&theta;/2),
      * x * sin(-&theta;/2), y * sin(-&theta;/2), z * sin(-&theta;/2) }.
-     * Note the minus sign on the angle!</p>
-     * <p>On the one hand this convention is consistent with a vectorial
+     * Note the minus sign on the angle!
+     * </p>
+     * <p>
+     * On the one hand this convention is consistent with a vectorial
      * perspective (moving vectors in fixed frames), on the other hand it
      * is different from conventions with a frame perspective (fixed vectors
      * viewed from different frames) like the ones used for example in spacecraft
-     * attitude community or in the graphics community.</p>
+     * attitude community or in the graphics community.
+     * </p>
      *
      * @param axis  axis around which to rotate
      * @param angle rotation angle.
@@ -156,18 +169,21 @@ class MRotation {
      * <p>
      * And for a 4x4 matrix the indices are:
      * <br/>
-     * 0,  4,  8,  12 <br/>
-     * 1,  5,  9,  13 <br/>
-     * 2,  6, 10, 14 <br/>
-     * 3,  7, 11, 15 <br/>
+     * 0, 4, 8, 12 <br/>
+     * 1, 5, 9, 13 <br/>
+     * 2, 6, 10, 14 <br/>
+     * 3, 7, 11, 15 <br/>
      *
      *
-     * <p>Rotation matrices are orthogonal matrices, i.e. unit matrices
+     * <p>
+     * Rotation matrices are orthogonal matrices, i.e. unit matrices
      * (which are matrices for which m.m<sup>T</sup> = I) with real
      * coefficients. The module of the determinant of unit matrices is
      * 1, among the orthogonal 3X3 matrices, only the ones having a
-     * positive determinant (+1) are rotation matrices.</p>
-     * <p>When a rotation is defined by a matrix with truncated values
+     * positive determinant (+1) are rotation matrices.
+     * </p>
+     * <p>
+     * When a rotation is defined by a matrix with truncated values
      * (typically when it is extracted from a technical sheet where only
      * four to five significant digits are available), the matrix is not
      * orthogonal anymore. This constructor handles this case
@@ -175,7 +191,8 @@ class MRotation {
      * correction to the copy in order to perfect its orthogonality. If
      * the Frobenius norm of the correction needed is above the given
      * threshold, then the matrix is considered to be too far from a
-     * true rotation matrix and an exception is thrown.<p>
+     * true rotation matrix and an exception is thrown.
+     * <p>
      *
      * @param m         rotation matrix
      * @param is4x4     set to true if passing in a 4x4 matrix.
@@ -184,8 +201,10 @@ class MRotation {
      *                  difference between two steps of the Frobenius norm of the
      *                  correction is below this threshold)
      * @throws NotARotationMatrixException if the matrix is not a 3X3
-     *                                     matrix, or if it cannot be transformed into an orthogonal matrix
-     *                                     with the given threshold, or if the determinant of the resulting
+     *                                     matrix, or if it cannot be transformed
+     *                                     into an orthogonal matrix
+     *                                     with the given threshold, or if the
+     *                                     determinant of the resulting
      *                                     orthogonal matrix is negative
      */
     public MRotation(float[] m, float threshold)
@@ -236,12 +255,15 @@ class MRotation {
 
     /**
      * Build a rotation from a 3X3 matrix.
-     * <p>Rotation matrices are orthogonal matrices, i.e. unit matrices
+     * <p>
+     * Rotation matrices are orthogonal matrices, i.e. unit matrices
      * (which are matrices for which m.m<sup>T</sup> = I) with real
      * coefficients. The module of the determinant of unit matrices is
      * 1, among the orthogonal 3X3 matrices, only the ones having a
-     * positive determinant (+1) are rotation matrices.</p>
-     * <p>When a rotation is defined by a matrix with truncated values
+     * positive determinant (+1) are rotation matrices.
+     * </p>
+     * <p>
+     * When a rotation is defined by a matrix with truncated values
      * (typically when it is extracted from a technical sheet where only
      * four to five significant digits are available), the matrix is not
      * orthogonal anymore. This constructor handles this case
@@ -249,7 +271,8 @@ class MRotation {
      * correction to the copy in order to perfect its orthogonality. If
      * the Frobenius norm of the correction needed is above the given
      * threshold, then the matrix is considered to be too far from a
-     * true rotation matrix and an exception is thrown.<p>
+     * true rotation matrix and an exception is thrown.
+     * <p>
      *
      * @param m         rotation matrix
      * @param threshold convergence threshold for the iterative
@@ -257,8 +280,10 @@ class MRotation {
      *                  difference between two steps of the Frobenius norm of the
      *                  correction is below this threshold)
      * @throws NotARotationMatrixException if the matrix is not a 3X3
-     *                                     matrix, or if it cannot be transformed into an orthogonal matrix
-     *                                     with the given threshold, or if the determinant of the resulting
+     *                                     matrix, or if it cannot be transformed
+     *                                     into an orthogonal matrix
+     *                                     with the given threshold, or if the
+     *                                     determinant of the resulting
      *                                     orthogonal matrix is negative
      */
     public MRotation(float[][] m, float threshold)
@@ -292,28 +317,34 @@ class MRotation {
         q1 = quat[1];
         q2 = quat[2];
         q3 = quat[3];
-        if (Float.isNaN(q0) || Float.isNaN(q1) || Float.isNaN(q2) || Float.isNaN(q3) || !(Float.isFinite(q0) && Float.isFinite(q1) && Float.isFinite(q2) && Float.isFinite(q3))) {
+        if (Float.isNaN(q0) || Float.isNaN(q1) || Float.isNaN(q2) || Float.isNaN(q3)
+                || !(Float.isFinite(q0) && Float.isFinite(q1) && Float.isFinite(q2) && Float.isFinite(q3))) {
             System.out.println("errror");
         }
     }
 
     /**
      * Build the rotation that transforms a pair of vector into another pair.
-     * <p>Except for possible scale factors, if the instance were applied to
+     * <p>
+     * Except for possible scale factors, if the instance were applied to
      * the pair (u<sub>1</sub>, u<sub>2</sub>) it will produce the pair
-     * (v<sub>1</sub>, v<sub>2</sub>).</p>
-     * <p>If the angular separation between u<sub>1</sub> and u<sub>2</sub> is
+     * (v<sub>1</sub>, v<sub>2</sub>).
+     * </p>
+     * <p>
+     * If the angular separation between u<sub>1</sub> and u<sub>2</sub> is
      * not the same as the angular separation between v<sub>1</sub> and
      * v<sub>2</sub>, then a corrected v'<sub>2</sub> will be used rather than
      * v<sub>2</sub>, the corrected vector will be in the (v<sub>1</sub>,
-     * v<sub>2</sub>) plane.</p>
+     * v<sub>2</sub>) plane.
+     * </p>
      *
      * @param u1 first vector of the origin pair
      * @param u2 second vector of the origin pair
      * @param v1 desired image of u1 by the rotation
      * @param v2 desired image of u2 by the rotation
      * @throws MathArithmeticException if the norm of one of the vectors is zero,
-     *                                 or if one of the pair is degenerated (i.e. the vectors of the pair are colinear)
+     *                                 or if one of the pair is degenerated (i.e.
+     *                                 the vectors of the pair are colinear)
      */
     public <V extends Vector3> MRotation(V u1, V u2, V v1, V v2) {
 
@@ -436,58 +467,64 @@ class MRotation {
         c = k.dot(k);
         q0 = vRef.dot(k) / (c + c);
 
-		/*// build orthonormalized base from u1, u2
-		// this fails when vectors are null or colinear, which is forbidden to define a rotation
-		final Vector3 u3 = u1.crossCopy(u2).normalize();
-		u2 = u3.crossCopy(u1).normalize();
-		u1 = u1.normalize();
+        /*
+         * // build orthonormalized base from u1, u2
+         * // this fails when vectors are null or colinear, which is forbidden to define
+         * a rotation
+         * final Vector3 u3 = u1.crossCopy(u2).normalize();
+         * u2 = u3.crossCopy(u1).normalize();
+         * u1 = u1.normalize();
+         * 
+         * // build an orthonormalized base from v1, v2
+         * // this fails when vectors are null or colinear, which is forbidden to define
+         * a rotation
+         * final Vector3 v3 = v1.crossCopy(v2).normalize();
+         * v2 = v3.crossCopy(v1).normalize();
+         * v1 = v1.normalize();
+         * 
+         * // buid a matrix transforming the first base into the second one
+         * final float[][] m = new float[][] {
+         * {
+         * MathArrays.linearCombination(u1.x, v1.x, u2.x, v2.x, u3.x, v3.x),
+         * MathArrays.linearCombination(u1.y, v1.x, u2.y, v2.x, u3.y, v3.x),
+         * MathArrays.linearCombination(u1.z, v1.x, u2.z, v2.x, u3.z, v3.x)
+         * },
+         * {
+         * MathArrays.linearCombination(u1.x, v1.y, u2.x, v2.y, u3.x, v3.y),
+         * MathArrays.linearCombination(u1.y, v1.y, u2.y, v2.y, u3.y, v3.y),
+         * MathArrays.linearCombination(u1.z, v1.y, u2.z, v2.y, u3.z, v3.y)
+         * },
+         * {
+         * MathArrays.linearCombination(u1.x, v1.z, u2.x, v2.z, u3.x, v3.z),
+         * MathArrays.linearCombination(u1.y, v1.z, u2.y, v2.z, u3.y, v3.z),
+         * MathArrays.linearCombination(u1.z, v1.z, u2.z, v2.z, u3.z, v3.z)
+         * }
+         * };
+         * 
+         * float[] quat = mat2quat(m);
+         * q0 = quat[0];
+         * q1 = quat[1];
+         * q2 = quat[2];
+         * q3 = quat[3];
+         */
 
-		// build an orthonormalized base from v1, v2
-		// this fails when vectors are null or colinear, which is forbidden to define a rotation
-		final Vector3 v3 = v1.crossCopy(v2).normalize();
-		v2 = v3.crossCopy(v1).normalize();
-		v1 = v1.normalize();
-
-		// buid a matrix transforming the first base into the second one
-		final float[][] m = new float[][] {
-			{
-				MathArrays.linearCombination(u1.x, v1.x, u2.x, v2.x, u3.x, v3.x),
-				MathArrays.linearCombination(u1.y, v1.x, u2.y, v2.x, u3.y, v3.x),
-				MathArrays.linearCombination(u1.z, v1.x, u2.z, v2.x, u3.z, v3.x)
-			},
-			{
-				MathArrays.linearCombination(u1.x, v1.y, u2.x, v2.y, u3.x, v3.y),
-				MathArrays.linearCombination(u1.y, v1.y, u2.y, v2.y, u3.y, v3.y),
-				MathArrays.linearCombination(u1.z, v1.y, u2.z, v2.y, u3.z, v3.y)
-			},
-			{
-				MathArrays.linearCombination(u1.x, v1.z, u2.x, v2.z, u3.x, v3.z),
-				MathArrays.linearCombination(u1.y, v1.z, u2.y, v2.z, u3.y, v3.z),
-				MathArrays.linearCombination(u1.z, v1.z, u2.z, v2.z, u3.z, v3.z)
-			}
-		};
-
-		float[] quat = mat2quat(m);
-		q0 = quat[0];
-		q1 = quat[1];
-		q2 = quat[2];
-		q3 = quat[3];*/
-
-        if (Float.isNaN(q0) || Float.isNaN(q1) || Float.isNaN(q2) || Float.isNaN(q3) || !(Float.isFinite(q0) && Float.isFinite(q1) && Float.isFinite(q2) && Float.isFinite(q3))) {
+        if (Float.isNaN(q0) || Float.isNaN(q1) || Float.isNaN(q2) || Float.isNaN(q3)
+                || !(Float.isFinite(q0) && Float.isFinite(q1) && Float.isFinite(q2) && Float.isFinite(q3))) {
             System.out.println("errror");
         }
 
     }
 
-
     /**
      * Build one of the rotations that transform one vector into another one.
-     * <p>Except for a possible scale factor, if the instance were
+     * <p>
+     * Except for a possible scale factor, if the instance were
      * applied to the vector u it will produce the vector v. There is an
      * infinite number of such rotations, this constructor choose the
      * one with the smallest associated angle (i.e. the one whose axis
      * is orthogonal to the (u, v) plane). If u and v are colinear, an
-     * arbitrary rotation axis is chosen.</p>
+     * arbitrary rotation axis is chosen.
+     * </p>
      *
      * @param u origin vector
      * @param v desired image of u by the rotation
@@ -497,7 +534,8 @@ class MRotation {
 
         float normProduct = u.mag() * v.mag();
         if (normProduct == 0) {
-            //throw new MathArithmeticException(LocalizedFormats.ZERO_NORM_FOR_ROTATION_DEFINING_VECTOR);
+            // throw new
+            // MathArithmeticException(LocalizedFormats.ZERO_NORM_FOR_ROTATION_DEFINING_VECTOR);
             this.q0 = 1f;
             this.q1 = 0f;
             this.q2 = 0f;
@@ -526,24 +564,29 @@ class MRotation {
             q3 = coeff * q.z;
         }
 
-        if (Float.isNaN(q0) || Float.isNaN(q1) || Float.isNaN(q2) || Float.isNaN(q3) || !(Float.isFinite(q0) && Float.isFinite(q1) && Float.isFinite(q2) && Float.isFinite(q3))) {
+        if (Float.isNaN(q0) || Float.isNaN(q1) || Float.isNaN(q2) || Float.isNaN(q3)
+                || !(Float.isFinite(q0) && Float.isFinite(q1) && Float.isFinite(q2) && Float.isFinite(q3))) {
             System.out.println("errror");
         }
     }
 
     /**
      * Build a rotation from three Cartesian or Euler elementary rotations.
-     * <p>Cartesian rotations are three successive rotations around the
+     * <p>
+     * Cartesian rotations are three successive rotations around the
      * canonical axes X, Y and Z, each axis being used once. There are
      * 6 such sets of rotations (XYZ, XZY, YXZ, YZX, ZXY and ZYX). Euler
      * rotations are three successive rotations around the canonical
      * axes X, Y and Z, the first and last rotations being around the
      * same axis. There are 6 such sets of rotations (XYX, XZX, YXY,
-     * YZY, ZXZ and ZYZ), the most popular one being ZXZ.</p>
-     * <p>Beware that many people routinely use the term Euler angles even
+     * YZY, ZXZ and ZYZ), the most popular one being ZXZ.
+     * </p>
+     * <p>
+     * Beware that many people routinely use the term Euler angles even
      * for what really are Cartesian angles (this confusion is especially
      * widespread in the aerospace business where Roll, Pitch and Yaw angles
-     * are often wrongly tagged as Euler angles).</p>
+     * are often wrongly tagged as Euler angles).
+     * </p>
      *
      * @param order  order of rotations to use
      * @param alpha1 angle of the first elementary rotation
@@ -551,7 +594,7 @@ class MRotation {
      * @param alpha3 angle of the third elementary rotation
      */
     public MRotation(RotationOrder order,
-                     float alpha1, float alpha2, float alpha3) {
+            float alpha1, float alpha2, float alpha3) {
         MRotation r1 = new MRotation(order.getA1(), alpha1);
         MRotation r2 = new MRotation(order.getA2(), alpha2);
         MRotation r3 = new MRotation(order.getA3(), alpha3);
@@ -561,7 +604,8 @@ class MRotation {
         q2 = composed.q2;
         q3 = composed.q3;
 
-        if (Float.isNaN(q0) || Float.isNaN(q1) || Float.isNaN(q2) || Float.isNaN(q3) || !(Float.isFinite(q0) && Float.isFinite(q1) && Float.isFinite(q2) && Float.isFinite(q3))) {
+        if (Float.isNaN(q0) || Float.isNaN(q1) || Float.isNaN(q2) || Float.isNaN(q3)
+                || !(Float.isFinite(q0) && Float.isFinite(q1) && Float.isFinite(q2) && Float.isFinite(q3))) {
             System.out.println("errror");
         }
     }
@@ -659,7 +703,7 @@ class MRotation {
      * @return the dot product of {@code q1} and {@code q2}.
      */
     public static float dotProduct(final MRotation q1,
-                                   final MRotation q2) {
+            final MRotation q2) {
         return q1.getQ0() * q2.getQ0() +
                 q1.getQ1() * q2.getQ1() +
                 q1.getQ2() * q2.getQ2() +
@@ -668,25 +712,33 @@ class MRotation {
 
     /**
      * Compute the <i>distance</i> between two rotations.
-     * <p>The <i>distance</i> is intended here as a way to check if two
+     * <p>
+     * The <i>distance</i> is intended here as a way to check if two
      * rotations are almost similar (i.e. they transform vectors the same way)
      * or very different. It is mathematically defined as the angle of
      * the rotation r that prepended to one of the rotations gives the other
-     * one:</p>
+     * one:
+     * </p>
+     * 
      * <pre>
      *        r<sub>1</sub>(r) = r<sub>2</sub>
      * </pre>
-     * <p>This distance is an angle between 0 and &pi;. Its value is the smallest
+     * <p>
+     * This distance is an angle between 0 and &pi;. Its value is the smallest
      * possible upper bound of the angle in radians between r<sub>1</sub>(v)
      * and r<sub>2</sub>(v) for all possible vectors v. This upper bound is
      * reached for some v. The distance is equal to 0 if and only if the two
-     * rotations are identical.</p>
-     * <p>Comparing two rotations should always be done using this value rather
+     * rotations are identical.
+     * </p>
+     * <p>
+     * Comparing two rotations should always be done using this value rather
      * than for example comparing the components of the quaternions. It is much
      * more stable, and has a geometric meaning. Also comparing quaternions
-     * components is error prone since for example quaternions (0.36, 0.48, -0.48, -0.64)
+     * components is error prone since for example quaternions (0.36, 0.48, -0.48,
+     * -0.64)
      * and (-0.36, -0.48, 0.48, 0.64) represent exactly the same rotation despite
-     * their components are different (they are exact opposites).</p>
+     * their components are different (they are exact opposites).
+     * </p>
      *
      * @param r1 first rotation
      * @param r2 second rotation
@@ -706,7 +758,7 @@ class MRotation {
         float squaredSine = q1 * q1 + q2 * q2 + q3 * q3;
         if (squaredSine != 0) {
             float inverseCoeff = MathUtils.sqrt(((1 - (cosHalfAngle * cosHalfAngle)) / squaredSine));
-            //inverseCoeff = cosHalfAngle < 0 ? -inverseCoeff : inverseCoeff;
+            // inverseCoeff = cosHalfAngle < 0 ? -inverseCoeff : inverseCoeff;
             q0 = q0 < 0 ? -cosHalfAngle : cosHalfAngle;
             q1 = inverseCoeff * q1;
             q2 = inverseCoeff * q2;
@@ -747,7 +799,7 @@ class MRotation {
      * instance is not changed.
      *
      * @return a new rotation whose effect is the reverse of the effect
-     * of the instance
+     *         of the instance
      */
     public MRotation revert() {
         return new MRotation(-q0, q1, q2, q3, false);
@@ -844,7 +896,8 @@ class MRotation {
         q2 = coeff * newAxis.y;
         q3 = coeff * newAxis.z;
 
-        if (Float.isNaN(q0) || Float.isNaN(q1) || Float.isNaN(q2) || Float.isNaN(q3) || !(Float.isFinite(q0) && Float.isFinite(q1) && Float.isFinite(q2) && Float.isFinite(q3))) {
+        if (Float.isNaN(q0) || Float.isNaN(q1) || Float.isNaN(q2) || Float.isNaN(q3)
+                || !(Float.isFinite(q0) && Float.isFinite(q1) && Float.isFinite(q2) && Float.isFinite(q3))) {
             System.out.println("errror");
         }
     }
@@ -924,21 +977,24 @@ class MRotation {
 
     /**
      * Get the Cartesian or Euler angles corresponding to the instance.
-     * <p>The equations show that each rotation can be defined by two
+     * <p>
+     * The equations show that each rotation can be defined by two
      * different values of the Cartesian or Euler angles set. For example
      * if Cartesian angles are used, the rotation defined by the angles
      * a<sub>1</sub>, a<sub>2</sub> and a<sub>3</sub> is the same as
      * the rotation defined by the angles &pi; + a<sub>1</sub>, &pi;
      * - a<sub>2</sub> and &pi; + a<sub>3</sub>. This method implements
-     * the following arbitrary choices:</p>
+     * the following arbitrary choices:
+     * </p>
      * <ul>
-     *   <li>for Cartesian angles, the chosen set is the one for which the
-     *   second angle is between -&pi;/2 and &pi;/2 (i.e its cosine is
-     *   positive),</li>
-     *   <li>for Euler angles, the chosen set is the one for which the
-     *   second angle is between 0 and &pi; (i.e its sine is positive).</li>
+     * <li>for Cartesian angles, the chosen set is the one for which the
+     * second angle is between -&pi;/2 and &pi;/2 (i.e its cosine is
+     * positive),</li>
+     * <li>for Euler angles, the chosen set is the one for which the
+     * second angle is between 0 and &pi; (i.e its sine is positive).</li>
      * </ul>
-     * <p>Cartesian and Euler angle have a very disappointing drawback: all
+     * <p>
+     * Cartesian and Euler angle have a very disappointing drawback: all
      * of them have singularities. This means that if the instance is
      * too close to the singularities corresponding to the given
      * rotation order, it will be impossible to retrieve the angles. For
@@ -949,19 +1005,21 @@ class MRotation {
      * angles, singularities occur when the second angle is close to
      * -&pi;/2 or +&pi;/2, for Euler angle singularities occur when the
      * second angle is close to 0 or &pi;, this implies that the identity
-     * rotation is always singular for Euler angles!</p>
+     * rotation is always singular for Euler angles!
+     * </p>
      *
      * @param order rotation order to use
      * @return an array of three angles, in the order specified by the set
      * @throws CardanEulerSingularityException if the rotation is
-     *                                         singular with respect to the angles set specified
+     *                                         singular with respect to the angles
+     *                                         set specified
      */
     public float[] getAngles(RotationOrder order) {
 
         if (order == RotationOrder.XYZ) {
 
             // r (T .plusK) coordinates are :
-            //  sin (theta), -cos (theta) sin (phi), cos (theta) cos (phi)
+            // sin (theta), -cos (theta) sin (phi), cos (theta) cos (phi)
             // (-r) (T .plusI) coordinates are :
             // cos (psi) cos (theta), -sin (psi) cos (theta), sin (theta)
             // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
@@ -975,7 +1033,7 @@ class MRotation {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(-(v1.y), v1.z),
                     MathUtils.asin(v2.z),
                     MathUtils.atan2(-(v2.y), v2.x)
@@ -997,7 +1055,7 @@ class MRotation {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(v1.z, v1.y),
                     -MathUtils.asin(v2.y),
                     MathUtils.atan2(v2.z, v2.x)
@@ -1006,7 +1064,7 @@ class MRotation {
         } else if (order == RotationOrder.YXZ) {
 
             // r (T .plusK) coordinates are :
-            //  cos (phi) sin (theta), -sin (phi), cos (phi) cos (theta)
+            // cos (phi) sin (theta), -sin (phi), cos (phi) cos (theta)
             // (-r) (T .plusJ) coordinates are :
             // sin (psi) cos (phi), cos (psi) cos (phi), -sin (phi)
             // and we can choose to have phi in the interval [-PI/2 ; +PI/2]
@@ -1019,7 +1077,7 @@ class MRotation {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(v1.x, v1.z),
                     -MathUtils.asin(v2.z),
                     MathUtils.atan2(v2.x, v2.y)
@@ -1041,7 +1099,7 @@ class MRotation {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(-(v1.z), v1.x),
                     MathUtils.asin(v2.x),
                     MathUtils.atan2(-(v2.z), v2.y)
@@ -1063,7 +1121,7 @@ class MRotation {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(-(v1.x), v1.y),
                     MathUtils.asin(v2.y),
                     MathUtils.atan2(-(v2.x), v2.z)
@@ -1072,7 +1130,7 @@ class MRotation {
         } else if (order == RotationOrder.ZYX) {
 
             // r (T .plusI) coordinates are :
-            //  cos (theta) cos (psi), cos (theta) sin (psi), -sin (theta)
+            // cos (theta) cos (psi), cos (theta) sin (psi), -sin (theta)
             // (-r) (T .plusK) coordinates are :
             // -sin (theta), sin (phi) cos (theta), cos (phi) cos (theta)
             // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
@@ -1085,7 +1143,7 @@ class MRotation {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(v1.y, v1.x),
                     -MathUtils.asin(v2.x),
                     MathUtils.atan2(v2.y, v2.z)
@@ -1094,7 +1152,7 @@ class MRotation {
         } else if (order == RotationOrder.XYX) {
 
             // r (T .plusI) coordinates are :
-            //  cos (theta), sin (phi1) sin (theta), -cos (phi1) sin (theta)
+            // cos (theta), sin (phi1) sin (theta), -cos (phi1) sin (theta)
             // (-r) (T .plusI) coordinates are :
             // cos (theta), sin (theta) sin (phi2), sin (theta) cos (phi2)
             // and we can choose to have theta in the interval [0 ; PI]
@@ -1107,7 +1165,7 @@ class MRotation {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(v1.y, -v1.z),
                     MathUtils.acos(v2.x),
                     MathUtils.atan2(v2.y, v2.z)
@@ -1116,7 +1174,7 @@ class MRotation {
         } else if (order == RotationOrder.XZX) {
 
             // r (T .plusI) coordinates are :
-            //  cos (psi), cos (phi1) sin (psi), sin (phi1) sin (psi)
+            // cos (psi), cos (phi1) sin (psi), sin (phi1) sin (psi)
             // (-r) (T .plusI) coordinates are :
             // cos (psi), -sin (psi) cos (phi2), sin (psi) sin (phi2)
             // and we can choose to have psi in the interval [0 ; PI]
@@ -1129,7 +1187,7 @@ class MRotation {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(v1.z, v1.y),
                     MathUtils.acos(v2.x),
                     MathUtils.atan2(v2.z, -v2.y)
@@ -1138,7 +1196,7 @@ class MRotation {
         } else if (order == RotationOrder.YXY) {
 
             // r (T .plusJ) coordinates are :
-            //  sin (theta1) sin (phi), cos (phi), cos (theta1) sin (phi)
+            // sin (theta1) sin (phi), cos (phi), cos (theta1) sin (phi)
             // (-r) (T .plusJ) coordinates are :
             // sin (phi) sin (theta2), cos (phi), -sin (phi) cos (theta2)
             // and we can choose to have phi in the interval [0 ; PI]
@@ -1151,7 +1209,7 @@ class MRotation {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(v1.x, v1.z),
                     MathUtils.acos(v2.y),
                     MathUtils.atan2(v2.x, -v2.z)
@@ -1160,7 +1218,7 @@ class MRotation {
         } else if (order == RotationOrder.YZY) {
 
             // r (T .plusJ) coordinates are :
-            //  -cos (theta1) sin (psi), cos (psi), sin (theta1) sin (psi)
+            // -cos (theta1) sin (psi), cos (psi), sin (theta1) sin (psi)
             // (-r) (T .plusJ) coordinates are :
             // sin (psi) cos (theta2), cos (psi), sin (psi) sin (theta2)
             // and we can choose to have psi in the interval [0 ; PI]
@@ -1173,7 +1231,7 @@ class MRotation {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(v1.z, -v1.x),
                     MathUtils.acos(v2.y),
                     MathUtils.atan2(v2.z, v2.x)
@@ -1182,7 +1240,7 @@ class MRotation {
         } else if (order == RotationOrder.ZXZ) {
 
             // r (T .plusK) coordinates are :
-            //  sin (psi1) sin (phi), -cos (psi1) sin (phi), cos (phi)
+            // sin (psi1) sin (phi), -cos (psi1) sin (phi), cos (phi)
             // (-r) (T .plusK) coordinates are :
             // sin (phi) sin (psi2), sin (phi) cos (psi2), cos (phi)
             // and we can choose to have phi in the interval [0 ; PI]
@@ -1195,7 +1253,7 @@ class MRotation {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(v1.x, -v1.y),
                     MathUtils.acos(v2.z),
                     MathUtils.atan2(v2.x, v2.y)
@@ -1204,7 +1262,7 @@ class MRotation {
         } else { // last possibility is ZYZ
 
             // r (T .plusK) coordinates are :
-            //  cos (psi1) sin (theta), sin (psi1) sin (theta), cos (theta)
+            // cos (psi1) sin (theta), sin (psi1) sin (theta), cos (theta)
             // (-r) (T .plusK) coordinates are :
             // -sin (theta) cos (psi2), sin (theta) sin (psi2), cos (theta)
             // and we can choose to have theta in the interval [0 ; PI]
@@ -1217,7 +1275,7 @@ class MRotation {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(v1.y, v1.x),
                     MathUtils.acos(v2.z),
                     MathUtils.atan2(v2.y, -v2.x)
@@ -1228,7 +1286,8 @@ class MRotation {
     }
 
     /**
-     * Get an array representing the 3X3 matrix corresponding to this rotation instance
+     * Get an array representing the 3X3 matrix corresponding to this rotation
+     * instance
      * Indices are in column major order. In other words
      * <br/>
      * 0, 3, 6 <br/>
@@ -1285,13 +1344,14 @@ class MRotation {
     }
 
     /**
-     * Get an array representing the 4X4 matrix corresponding to this rotation instance.
+     * Get an array representing the 4X4 matrix corresponding to this rotation
+     * instance.
      * Indices are in column major order. In other words
      * <br/>
-     * 0,  4,  8,  12 <br/>
-     * 1,  5,  9,  13 <br/>
-     * 2,  6, 10, 14 <br/>
-     * 3,  7, 11, 15 <br/>
+     * 0, 4, 8, 12 <br/>
+     * 1, 5, 9, 13 <br/>
+     * 2, 6, 10, 14 <br/>
+     * 3, 7, 11, 15 <br/>
      */
     public float[] toMatrix4Val() {
         float[] result = new float[16];
@@ -1299,16 +1359,18 @@ class MRotation {
     }
 
     /**
-     * Get an array representing the 4X4 matrix corresponding to this rotation instance.
+     * Get an array representing the 4X4 matrix corresponding to this rotation
+     * instance.
      * Indices are in column major order. In other words
      * <br/>
-     * 0,  4,  8,  12 <br/>
-     * 1,  5,  9,  13 <br/>
-     * 2,  6, 10, 14 <br/>
-     * 3,  7, 11, 15 <br/>
+     * 0, 4, 8, 12 <br/>
+     * 1, 5, 9, 13 <br/>
+     * 2, 6, 10, 14 <br/>
+     * 3, 7, 11, 15 <br/>
      *
      * @param storeIn the array to storevalues in.
-     * @param zeroOut if true, will zero out any elements in the matrix not corresponding to this rotation.
+     * @param zeroOut if true, will zero out any elements in the matrix not
+     *                corresponding to this rotation.
      */
     public float[] toMatrix4Val(float[] storeIn, boolean zeroOut) {
         float q0q0 = q0 * q0;
@@ -1330,7 +1392,6 @@ class MRotation {
         storeIn[4] = 2.0f * (q1q2 + q0q3);
         storeIn[5] = 2.0f * (q0q0 + q2q2) - 1.0f;
         storeIn[6] = 2.0f * (q2q3 - q0q1);
-
 
         storeIn[8] = 2.0f * (q1q3 - q0q2);
         storeIn[9] = 2.0f * (q2q3 + q0q1);
@@ -1499,7 +1560,7 @@ class MRotation {
      *
      * @param r rotation to apply the rotation to
      * @return a new rotation which is the composition of r by the inverse
-     * of the instance
+     *         of the instance
      */
     public MRotation applyInverseTo(MRotation r) {
         return new MRotation(-r.q0 * q0 - (r.q1 * q1 + r.q2 * q2 + r.q3 * q3),
@@ -1510,7 +1571,8 @@ class MRotation {
     }
 
     /**
-     * Apply the instance to another rotation. Store the result in the specified rotation
+     * Apply the instance to another rotation. Store the result in the specified
+     * rotation
      * Applying the instance to a rotation is computing the composition
      * in an order compliant with the following rule : let u be any
      * vector and v its image by r (i.e. r.applyTo(u) = v), let w be the image
@@ -1530,7 +1592,8 @@ class MRotation {
     }
 
     /**
-     * Apply the inverse of the instance to another rotation. Store the result in the specified rotation
+     * Apply the inverse of the instance to another rotation. Store the result in
+     * the specified rotation
      * Applying the inverse of the instance to a rotation is computing
      * the composition in an order compliant with the following rule :
      * let u be any vector and v its image by r (i.e. r.applyTo(u) = v),
@@ -1541,7 +1604,7 @@ class MRotation {
      * @param r      rotation to apply the rotation to
      * @param output the rotation to store the result in
      * @return a new rotation which is the composition of r by the inverse
-     * of the instance
+     *         of the instance
      */
     public void applyInverseTo(MRotation r, MRotation output) {
         output.set(-r.q0 * q0 - (r.q1 * q1 + r.q2 * q2 + r.q3 * q3),
@@ -1559,14 +1622,15 @@ class MRotation {
     }
 
     public void set(float q0, float q1, float q2, float q3,
-                    boolean needsNormalization) {
+            boolean needsNormalization) {
 
         this.q0 = q0;
         this.q1 = q1;
         this.q2 = q2;
         this.q3 = q3;
 
-        if (needsNormalization) setToNormalized();
+        if (needsNormalization)
+            setToNormalized();
     }
 
     public void setToNormalized() {
@@ -1678,7 +1742,8 @@ class MRotation {
      *                  correction is below this threshold)
      * @return an orthogonal matrix close to m
      * @throws NotARotationMatrixException if the matrix cannot be
-     *                                     orthogonalized with the given threshold after 10 iterations
+     *                                     orthogonalized with the given threshold
+     *                                     after 10 iterations
      */
     private float[][] orthogonalizeMatrix(float[][] m, float threshold) {
         float[] m0 = m[0];
@@ -1773,7 +1838,6 @@ class MRotation {
         return distance(this, m) < MathUtils.DOUBLE_ROUNDING_ERROR;
     }
 
-
     public String toString() {
         String result = "axis: " + getAxis().toVec3f().toString();
         result += "\n angle : " + (float) MathUtils.toDegrees(getAngle()) + " degrees ";
@@ -1802,10 +1866,9 @@ public class Quaternion {
     }
 
     public Quaternion(RotationOrder order,
-                      float alpha1, float alpha2, float alpha3) {
+            float alpha1, float alpha2, float alpha3) {
         rotation = new MRotation(order, alpha1, alpha2, alpha3);
     }
-
 
     public <V extends Vector3> Quaternion(V v1, V v2, V u1, V u2) {
         rotation = new MRotation(v1, v2, u1, u2);
@@ -1951,7 +2014,7 @@ public class Quaternion {
      *                every element in this array is treated as a weight on the
      *                corresponding element of the rots array.
      * @return the weighted average Rotation. If the total weights are 0, then
-     * returns null.
+     *         returns null.
      */
     public static Quaternion instantaneousAvg(Quaternion[] rots, float[] weights) {
         Vector3 accumulatedAxisAngle = new Vector3();
@@ -1983,7 +2046,8 @@ public class Quaternion {
     }
 
     public Quaternion copy() {
-        return new Quaternion(new MRotation(rotation.getQ0(), rotation.getQ1(), rotation.getQ2(), rotation.getQ3(), false));
+        return new Quaternion(
+                new MRotation(rotation.getQ0(), rotation.getQ1(), rotation.getQ2(), rotation.getQ3(), false));
     }
 
     /**
@@ -2079,12 +2143,12 @@ public class Quaternion {
      *
      * @param r
      * @return public Quaternion getLocalOfRotation(Quaternion r) {
-     * Rotation composedRot = this.rotation.composeInverse(r.rotation,
-     * RotationConvention.VECTOR_OPERATOR);
-     * <p>
-     * <p>
-     * return new Quaternion(composedRot);
-     * }
+     *         Rotation composedRot = this.rotation.composeInverse(r.rotation,
+     *         RotationConvention.VECTOR_OPERATOR);
+     *         <p>
+     *         <p>
+     *         return new Quaternion(composedRot);
+     *         }
      */
 
     private Quaternion getNormalized(MRotation r) {
@@ -2201,13 +2265,15 @@ public class Quaternion {
      *              swing and twist rotation
      * @param axisZ the Z component of the normalized axis for which to get the
      *              swing and twist rotation
-     * @return an Array of Quaternion objects. With the first element representing the
-     * swing, and the second representing the twist
+     * @return an Array of Quaternion objects. With the first element representing
+     *         the
+     *         swing, and the second representing the twist
      * @see <a href=
-     * "http://www.euclideanspace.com/maths/geometry/rotations/for/decomposition">calculation</a>
+     *      "http://www.euclideanspace.com/maths/geometry/rotations/for/decomposition">calculation</a>
      */
     public Quaternion[] getSwingTwist(Vector3 axis) {
-        Quaternion twistRot = new Quaternion(new MRotation(rotation.getQ0(), rotation.getQ1(), rotation.getQ2(), rotation.getQ3()));
+        Quaternion twistRot = new Quaternion(
+                new MRotation(rotation.getQ0(), rotation.getQ1(), rotation.getQ2(), rotation.getQ3()));
         final float d = Vector3.dot(twistRot.rotation.getQ1(), twistRot.rotation.getQ2(), twistRot.rotation.getQ3(),
                 axis.x, axis.y, axis.z);
         twistRot.rotation.set(rotation.getQ0(), axis.x * d, axis.y * d, axis.z * d, true);
@@ -2240,7 +2306,6 @@ public class Quaternion {
     public <T extends Vector3> T applyTo(T u) {
         return rotation.applyTo(u);
     }
-
 
     public void clampToAngle(float angle) {
         rotation.clampToAngle(angle);

@@ -1,7 +1,8 @@
 package data.agnosticsavior;
 
 /**
- * This interface defines objects which can self populate from JSONObjects but don't
+ * This interface defines objects which can self populate from JSONObjects but
+ * don't
  * need to register themselves with the savestate tracker.
  *
  * @author Eron Gjoni

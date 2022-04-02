@@ -10,7 +10,6 @@ public interface Saveable {
 
     public void notifyOfSaveCompletion(SaveManager saveManager);
 
-
     public void loadFromJSONObject(JSONObject j, LoadManager l);
 
     /**

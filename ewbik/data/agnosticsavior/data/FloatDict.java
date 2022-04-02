@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-
 /**
  * A simple table class to use a String as a lookup for an float value.
  *
@@ -30,17 +29,16 @@ public class FloatDict {
      */
     private HashMap<String, Integer> indices = new HashMap<>();
 
-
     public FloatDict() {
         count = 0;
         keys = new String[10];
         values = new float[10];
     }
 
-
     /**
      * Create a new lookup with a specific size. This is more efficient than not
-     * specifying a size. Use it when you know the rough size of the thing you're creating.
+     * specifying a size. Use it when you know the rough size of the thing you're
+     * creating.
      *
      * @nowebref
      */
@@ -49,7 +47,6 @@ public class FloatDict {
         keys = new String[length];
         values = new float[length];
     }
-
 
     /**
      * Read a set of entries from a Reader that has each key/value pair on
@@ -73,7 +70,6 @@ public class FloatDict {
         }
     }
 
-
     /**
      * @nowebref
      */
@@ -89,13 +85,13 @@ public class FloatDict {
         }
     }
 
-
     /**
      * Constructor to allow (more intuitive) inline initialization, e.g.:
+     * 
      * <pre>
      * new FloatDict(new Object[][] {
-     *   { "key1", 1 },
-     *   { "key2", 2 }
+     *         { "key1", 1 },
+     *         { "key2", 2 }
      * });
      * </pre>
      */
@@ -110,7 +106,6 @@ public class FloatDict {
         }
     }
 
-
     /**
      * @webref floatdict:method
      * @brief Returns the number of key/value pairs
@@ -119,13 +114,13 @@ public class FloatDict {
         return count;
     }
 
-
     /**
      * Resize the internal data, this can only be used to shrink the list.
      * Helpful for situations like sorting and then grabbing the top 50 entries.
      */
     public void resize(int length) {
-        if (length == count) return;
+        if (length == count)
+            return;
 
         if (length > count) {
             throw new IllegalArgumentException("resize() can only be used to shrink the dictionary");
@@ -144,7 +139,6 @@ public class FloatDict {
         resetIndices();
     }
 
-
     /**
      * Remove all entries.
      *
@@ -156,14 +150,12 @@ public class FloatDict {
         indices = new HashMap<>();
     }
 
-
     private void resetIndices() {
         indices = new HashMap<>(count);
         for (int i = 0; i < count; i++) {
             indices.put(keys[i], i);
         }
     }
-
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
@@ -200,7 +192,6 @@ public class FloatDict {
     public String key(int index) {
         return keys[index];
     }
-
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
@@ -417,9 +408,8 @@ public class FloatDict {
 
     private void checkMinMax(String functionName) {
         if (count == 0) {
-            String msg =
-                    String.format("Cannot use %s() on an empty %s.",
-                            functionName, getClass().getSimpleName());
+            String msg = String.format("Cannot use %s() on an empty %s.",
+                    functionName, getClass().getSimpleName());
             throw new RuntimeException(msg);
         }
     }
@@ -429,8 +419,9 @@ public class FloatDict {
      * @brief Return the smallest value
      */
     public int minIndex() {
-        //checkMinMax("minIndex");
-        if (count == 0) return -1;
+        // checkMinMax("minIndex");
+        if (count == 0)
+            return -1;
 
         // Will still return NaN if there are 1 or more entries, and they're all NaN
         float m = Float.NaN;
@@ -481,7 +472,7 @@ public class FloatDict {
      */
     // The index of the entry that has the max value. Reference above is incorrect.
     public int maxIndex() {
-        //checkMinMax("maxIndex");
+        // checkMinMax("maxIndex");
         if (count == 0) {
             return -1;
         }
@@ -512,7 +503,7 @@ public class FloatDict {
      * The key for a max value; null if empty or everything is NaN (no max).
      */
     public String maxKey() {
-        //checkMinMax("maxKey");
+        // checkMinMax("maxKey");
         int index = maxIndex();
         if (index == -1) {
             return null;
@@ -524,7 +515,7 @@ public class FloatDict {
      * The max value. (Or NaN if no entries or they're all NaN.)
      */
     public float maxValue() {
-        //checkMinMax("maxValue");
+        // checkMinMax("maxValue");
         int index = maxIndex();
         if (index == -1) {
             return Float.NaN;
@@ -606,8 +597,8 @@ public class FloatDict {
         keys[b] = tkey;
         values[b] = tvalue;
 
-//    indices.put(keys[a], Integer.valueOf(a));
-//    indices.put(keys[b], Integer.valueOf(b));
+        // indices.put(keys[a], Integer.valueOf(a));
+        // indices.put(keys[b], Integer.valueOf(b));
     }
 
     /**
@@ -662,22 +653,22 @@ public class FloatDict {
     }
 
     protected void sortImpl(final boolean useKeys, final boolean reverse,
-                            final boolean stable) {
+            final boolean stable) {
         Sort s = new Sort() {
             @Override
             public int size() {
                 if (useKeys) {
-                    return count;  // don't worry about NaN values
+                    return count; // don't worry about NaN values
 
-                } else if (count == 0) {  // skip the NaN check, it'll AIOOBE
+                } else if (count == 0) { // skip the NaN check, it'll AIOOBE
                     return 0;
 
-                } else {  // first move NaN values to the end of the list
+                } else { // first move NaN values to the end of the list
                     int right = count - 1;
                     while (values[right] != values[right]) {
                         right--;
                         if (right == -1) {
-                            return 0;  // all values are NaN
+                            return 0; // all values are NaN
                         }
                     }
                     for (int i = right; i >= 0; --i) {
@@ -698,7 +689,7 @@ public class FloatDict {
                     if (diff == 0) {
                         diff = values[a] - values[b];
                     }
-                } else {  // sort values
+                } else { // sort values
                     diff = values[a] - values[b];
                     if (diff == 0 && stable) {
                         diff = keys[a].compareToIgnoreCase(keys[b]);

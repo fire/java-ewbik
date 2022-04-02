@@ -5,7 +5,6 @@ import ewbik.asj.data.*;
 
 import java.util.*;
 
-
 public abstract class SaveManager {
 
     protected HashMap<Class, JSONArray> classes = new HashMap<>();
@@ -142,10 +141,10 @@ public abstract class SaveManager {
         return result;
     }
 
-
     public class ClassNotSaveableException extends Exception {
         public ClassNotSaveableException(Class c) {
-            super(c.toString() + " does not implement the Saveable interface and therefore cannot be registered with Saveable.");
+            super(c.toString()
+                    + " does not implement the Saveable interface and therefore cannot be registered with Saveable.");
         }
     }
 }

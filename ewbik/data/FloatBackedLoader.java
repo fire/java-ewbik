@@ -70,13 +70,13 @@ public final class FloatBackedLoader extends LoadManager {
     }
 
     public Collection<? extends Skeleton3D> importFile(File selection,
-                                                       Class<? extends ewbik.processing.sceneGraph.Node3D> AxesClass,
-                                                       Class<? extends Bone> BoneClass,
-                                                       Class<? extends Skeleton3D> ArmatureClass,
-                                                       Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
-                                                       Class<? extends LimitCone> LimitConeClass,
-                                                       Class<? extends IKPin> IKPinClass,
-                                                       EWBIKLoader loader) {
+            Class<? extends ewbik.processing.sceneGraph.Node3D> AxesClass,
+            Class<? extends Bone> BoneClass,
+            Class<? extends Skeleton3D> ArmatureClass,
+            Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
+            Class<? extends LimitCone> LimitConeClass,
+            Class<? extends IKPin> IKPinClass,
+            EWBIKLoader loader) {
         JSONObject loadFile = StringFuncs.loadJSONObject(selection);
         clearCurrentLoadObjects();
         return loadJSON(loadFile,
@@ -89,12 +89,12 @@ public final class FloatBackedLoader extends LoadManager {
     }
 
     public Collection<? extends Skeleton3D> loadJSON(JSONObject loadFile,
-                                                     Class<? extends ewbik.processing.sceneGraph.Node3D> AxesClass,
-                                                     Class<? extends Bone> BoneClass,
-                                                     Class<? extends Skeleton3D> ArmatureClass,
-                                                     Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
-                                                     Class<? extends LimitCone> LimitConeClass,
-                                                     Class<? extends IKPin> IKPinClass) {
+            Class<? extends ewbik.processing.sceneGraph.Node3D> AxesClass,
+            Class<? extends Bone> BoneClass,
+            Class<? extends Skeleton3D> ArmatureClass,
+            Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
+            Class<? extends LimitCone> LimitConeClass,
+            Class<? extends IKPin> IKPinClass) {
         clearCurrentLoadObjects();
 
         AxesClass = AxesClass == null ? ewbik.processing.sceneGraph.Node3D.class : AxesClass;
@@ -176,7 +176,7 @@ public final class FloatBackedLoader extends LoadManager {
      * @param result
      */
     public <T extends Object, V extends Object> HashMap<T, V> hashMapFromJSON(JSONObject json, HashMap<T, V> result,
-                                                                              TypeIdentifier ti) {
+            TypeIdentifier ti) {
         Class keyClass = null;
         if (ti.key.getClass() == Class.class) {
             keyClass = (Class) ti.key;

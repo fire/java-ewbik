@@ -41,9 +41,7 @@ import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-
 public class StringFuncs implements Constants {
-
 
     static protected LinkedHashMap<String, Pattern> matchPatterns;
     static File desktopFolder;
@@ -68,22 +66,21 @@ public class StringFuncs implements Constants {
         JSONObject outgoing = new JSONObject(reader);
         try {
             reader.close();
-        } catch (IOException e) {  // not sure what would cause this
+        } catch (IOException e) { // not sure what would cause this
             e.printStackTrace();
         }
         return outgoing;
     }
 
-
-    //  /**
-    //   * @webref input:files
-    //   * @see Table
-    //   * @see StringFuncs#loadTable(String)
-    //   * @see StringFuncs#saveTable(Table, String)
-    //   */
-    //  public Table xcreateTable() {
-//	    return new Table();
-    //  }
+    // /**
+    // * @webref input:files
+    // * @see Table
+    // * @see StringFuncs#loadTable(String)
+    // * @see StringFuncs#saveTable(Table, String)
+    // */
+    // public Table xcreateTable() {
+    // return new Table();
+    // }
 
     /**
      * @param json     the JSONObject to save
@@ -112,7 +109,7 @@ public class StringFuncs implements Constants {
         JSONArray outgoing = new JSONArray(reader);
         try {
             reader.close();
-        } catch (IOException e) {  // not sure what would cause this
+        } catch (IOException e) { // not sure what would cause this
             e.printStackTrace();
         }
         return outgoing;
@@ -137,11 +134,10 @@ public class StringFuncs implements Constants {
 
     /**
      * @nowebref I want to read lines from a stream. If I have to type the
-     * following lines any more I'm gonna send Sun my medical bills.
+     *           following lines any more I'm gonna send Sun my medical bills.
      */
     static public BufferedReader createReader(InputStream input) {
-        InputStreamReader isr =
-                new InputStreamReader(input, StandardCharsets.UTF_8);
+        InputStreamReader isr = new InputStreamReader(input, StandardCharsets.UTF_8);
 
         BufferedReader reader = new BufferedReader(isr);
         // consume the Unicode BOM (byte order marker) if present
@@ -160,14 +156,14 @@ public class StringFuncs implements Constants {
 
     /**
      * @nowebref I want to print lines to a file. I have RSI from typing these
-     * eight lines of code so many times.
+     *           eight lines of code so many times.
      */
     static public PrintWriter createWriter(File file) {
         if (file == null) {
             throw new RuntimeException("File passed to createWriter() was null");
         }
         try {
-            createPath(file);  // make sure in-between folders exist
+            createPath(file); // make sure in-between folders exist
             OutputStream output = new FileOutputStream(file);
             if (file.getName().toLowerCase().endsWith(".gz")) {
                 output = new GZIPOutputStream(output);
@@ -180,19 +176,17 @@ public class StringFuncs implements Constants {
         }
     }
 
-
     //////////////////////////////////////////////////////////////
 
     // FILE INPUT
 
     /**
      * @nowebref I want to print lines to a file. Why am I always explaining myself?
-     * It's the JavaSoft API engineers who need to explain themselves.
+     *           It's the JavaSoft API engineers who need to explain themselves.
      */
     static public PrintWriter createWriter(OutputStream output) {
         BufferedOutputStream bos = new BufferedOutputStream(output, 8192);
-        OutputStreamWriter osw =
-                new OutputStreamWriter(bos, StandardCharsets.UTF_8);
+        OutputStreamWriter osw = new OutputStreamWriter(bos, StandardCharsets.UTF_8);
         return new PrintWriter(osw);
     }
 
@@ -211,17 +205,19 @@ public class StringFuncs implements Constants {
      * see the examples in the main description text for StringFuncs.
      */
     public static String sketchPath(String where) {
-        //if (sketchPath() == null) {
+        // if (sketchPath() == null) {
         return where;
-        //}
+        // }
         // isAbsolute() could throw an access exception, but so will writing
         // to the local disk using the sketch path, so this is safe here.
         // for 0120, added a try/catch anyways.
-        /** try {
-         if (new File(where).isAbsolute()) return where;
-         } catch (Exception e) { }
-
-         return sketchPath() + File.separator + where;*/
+        /**
+         * try {
+         * if (new File(where).isAbsolute()) return where;
+         * } catch (Exception e) { }
+         * 
+         * return sketchPath() + File.separator + where;
+         */
     }
 
     /**
@@ -352,8 +348,7 @@ public class StringFuncs implements Constants {
      */
     static public String[] loadStrings(InputStream input) {
         try {
-            BufferedReader reader =
-                    new BufferedReader(new InputStreamReader(input, "UTF-8"));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(input, "UTF-8"));
             return loadStrings(reader);
         } catch (IOException e) {
             e.printStackTrace();
@@ -387,7 +382,7 @@ public class StringFuncs implements Constants {
 
         } catch (IOException e) {
             e.printStackTrace();
-            //throw new RuntimeException("Error inside loadStrings()");
+            // throw new RuntimeException("Error inside loadStrings()");
         }
         return null;
     }
@@ -397,7 +392,7 @@ public class StringFuncs implements Constants {
      */
     static public OutputStream createOutput(File file) {
         try {
-            createPath(file);  // make sure the path exists
+            createPath(file); // make sure the path exists
             OutputStream output = new FileOutputStream(file);
             if (file.getName().toLowerCase().endsWith(".gz")) {
                 return new BufferedOutputStream(new GZIPOutputStream(output));
@@ -451,7 +446,7 @@ public class StringFuncs implements Constants {
      * @nowebref
      */
     static public void saveStream(OutputStream target,
-                                  InputStream source) throws IOException {
+            InputStream source) throws IOException {
         BufferedInputStream bis = new BufferedInputStream(source, 16384);
         BufferedOutputStream bos = new BufferedOutputStream(target);
 
@@ -463,7 +458,6 @@ public class StringFuncs implements Constants {
 
         bos.flush();
     }
-
 
     //////////////////////////////////////////////////////////////
 
@@ -572,27 +566,28 @@ public class StringFuncs implements Constants {
         try {
             folder = System.getProperty("user.dir");
 
-            URL jarURL =
-                    StringFuncs.class.getProtectionDomain().getCodeSource().getLocation();
+            URL jarURL = StringFuncs.class.getProtectionDomain().getCodeSource().getLocation();
             // Decode URL
             String jarPath = jarURL.toURI().getSchemeSpecificPart();
 
             // Workaround for bug in Java for OS X from Oracle (7u51)
             // https://github.com/processing/processing/issues/2181
-	     /* if (platform == MACOSX) {
-	        if (jarPath.contains("Contents/Java/")) {
-	          String appPath = jarPath.substring(0, jarPath.indexOf(".app") + 4);
-	          File containingFolder = new File(appPath).getParentFile();
-	          folder = containingFolder.getAbsolutePath();
-	        }
-	      } else {
-	        // Working directory may not be set properly, try some options
-	        // https://github.com/processing/processing/issues/2195
-	        if (jarPath.contains("/lib/")) {
-	          // Windows or Linux, back up a directory to get the executable
-	          folder = new File(jarPath, "../..").getCanonicalPath();
-	        }
-	      }*/
+            /*
+             * if (platform == MACOSX) {
+             * if (jarPath.contains("Contents/Java/")) {
+             * String appPath = jarPath.substring(0, jarPath.indexOf(".app") + 4);
+             * File containingFolder = new File(appPath).getParentFile();
+             * folder = containingFolder.getAbsolutePath();
+             * }
+             * } else {
+             * // Working directory may not be set properly, try some options
+             * // https://github.com/processing/processing/issues/2195
+             * if (jarPath.contains("/lib/")) {
+             * // Windows or Linux, back up a directory to get the executable
+             * folder = new File(jarPath, "../..").getCanonicalPath();
+             * }
+             * }
+             */
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -613,7 +608,8 @@ public class StringFuncs implements Constants {
      * use <TT>saveXxxx("data/blah.dat")</TT>.
      */
     public static String savePath(String where) {
-        if (where == null) return null;
+        if (where == null)
+            return null;
         String filename = sketchPath(where);
         createPath(filename);
         return filename;
@@ -640,7 +636,8 @@ public class StringFuncs implements Constants {
             String parent = file.getParent();
             if (parent != null) {
                 File unit = new File(parent);
-                if (!unit.exists()) unit.mkdirs();
+                if (!unit.exists())
+                    unit.mkdirs();
             }
         } catch (SecurityException se) {
             System.err.println("You don't have permissions to create " +
@@ -654,7 +651,7 @@ public class StringFuncs implements Constants {
         String lower = filename.toLowerCase();
         int dot = filename.lastIndexOf('.');
         if (dot == -1) {
-            return "";  // no extension found
+            return ""; // no extension found
         }
         extension = lower.substring(dot + 1);
 
@@ -668,13 +665,12 @@ public class StringFuncs implements Constants {
         return extension;
     }
 
-
     //
 
     static public String urlEncode(String str) {
         try {
             return URLEncoder.encode(str, "UTF-8");
-        } catch (UnsupportedEncodingException e) {  // oh c'mon
+        } catch (UnsupportedEncodingException e) { // oh c'mon
             return null;
         }
     }
@@ -687,7 +683,7 @@ public class StringFuncs implements Constants {
     static public String urlDecode(String str) {
         try {
             return URLDecoder.decode(str, "UTF-8");
-        } catch (UnsupportedEncodingException e) {  // safe per the JDK source
+        } catch (UnsupportedEncodingException e) { // safe per the JDK source
             return null;
         }
     }
@@ -712,7 +708,6 @@ public class StringFuncs implements Constants {
     static public byte[] sort(byte list[]) {
         return sort(list, list.length);
     }
-
 
     //////////////////////////////////////////////////////////////
 
@@ -759,17 +754,15 @@ public class StringFuncs implements Constants {
         return outgoing;
     }
 
-
     /**
      * On Windows and Linux, this is simply the data folder. On Mac OS X, this is
      * the path to the data folder buried inside Contents/Java
      */
-    //  public File inputFile(String where) {
-    //  }
+    // public File inputFile(String where) {
+    // }
 
-
-    //  public String inputPath(String where) {
-    //  }
+    // public String inputPath(String where) {
+    // }
     static public String[] sort(String list[]) {
         return sort(list, list.length);
     }
@@ -784,43 +777,42 @@ public class StringFuncs implements Constants {
     static public String[] split(String value, char delim) {
         // do this so that the exception occurs inside the user's
         // program, rather than appearing to be a bug inside split()
-        if (value == null) return null;
-        //return split(what, String.valueOf(delim));  // huh
+        if (value == null)
+            return null;
+        // return split(what, String.valueOf(delim)); // huh
 
         char chars[] = value.toCharArray();
-        int splitCount = 0; //1;
+        int splitCount = 0; // 1;
         for (int i = 0; i < chars.length; i++) {
-            if (chars[i] == delim) splitCount++;
+            if (chars[i] == delim)
+                splitCount++;
         }
         // make sure that there is something in the input string
-        //if (chars.length > 0) {
+        // if (chars.length > 0) {
         // if the last char is a delimeter, get rid of it..
-        //if (chars[chars.length-1] == delim) splitCount--;
+        // if (chars[chars.length-1] == delim) splitCount--;
         // on second thought, i don't agree with this, will disable
-        //}
+        // }
         if (splitCount == 0) {
             String splits[] = new String[1];
             splits[0] = value;
             return splits;
         }
-        //int pieceCount = splitCount + 1;
+        // int pieceCount = splitCount + 1;
         String splits[] = new String[splitCount + 1];
         int splitIndex = 0;
         int startIndex = 0;
         for (int i = 0; i < chars.length; i++) {
             if (chars[i] == delim) {
-                splits[splitIndex++] =
-                        new String(chars, startIndex, i - startIndex);
+                splits[splitIndex++] = new String(chars, startIndex, i - startIndex);
                 startIndex = i + 1;
             }
         }
-        //if (startIndex != chars.length) {
-        splits[splitIndex] =
-                new String(chars, startIndex, chars.length - startIndex);
-        //}
+        // if (startIndex != chars.length) {
+        splits[splitIndex] = new String(chars, startIndex, chars.length - startIndex);
+        // }
         return splits;
     }
-
 
     //////////////////////////////////////////////////////////////
 
@@ -859,7 +851,6 @@ public class StringFuncs implements Constants {
         }
         return p;
     }
-
 
     //////////////////////////////////////////////////////////////
 
@@ -974,10 +965,14 @@ public class StringFuncs implements Constants {
     }
 
     /**
-     * <p>Convert an integer to a boolean. Because of how Java handles upgrading
+     * <p>
+     * Convert an integer to a boolean. Because of how Java handles upgrading
      * numbers, this will also cover byte and char (as they will upgrade to
-     * an int without any sort of explicit cast).</p>
-     * <p>The preprocessor will convert boolean(what) to parseBoolean(what).</p>
+     * an int without any sort of explicit cast).
+     * </p>
+     * <p>
+     * The preprocessor will convert boolean(what) to parseBoolean(what).
+     * </p>
      *
      * @return false if 0, true if any other number
      */
@@ -1072,21 +1067,19 @@ public class StringFuncs implements Constants {
         return (char) what;
     }
 
-
     //////////////////////////////////////////////////////////////
 
     // CASTING FUNCTIONS, INSERTED BY PREPROC
-
 
     /**
      * Convert a char to a boolean. 'T', 't', and '1' will become the
      * boolean value true, while 'F', 'f', or '0' will become false.
      */
-		  /*
-		  static final public boolean parseBoolean(char what) {
-		    return ((what == 't') || (what == 'T') || (what == '1'));
-		  }
-		  */
+    /*
+     * static final public boolean parseBoolean(char what) {
+     * return ((what == 't') || (what == 'T') || (what == '1'));
+     * }
+     */
     static final public char[] parseChar(byte what[]) {
         char outgoing[] = new char[what.length];
         for (int i = 0; i < what.length; i++) {
@@ -1095,12 +1088,12 @@ public class StringFuncs implements Constants {
         return outgoing;
     }
 
-		  /*
-		  // removed because this makes no useful sense
-		  static final public boolean parseBoolean(float what) {
-		    return (what != 0);
-		  }
-		  */
+    /*
+     * // removed because this makes no useful sense
+     * static final public boolean parseBoolean(float what) {
+     * return (what != 0);
+     * }
+     */
 
     static final public char[] parseChar(int what[]) {
         char outgoing[] = new char[what.length];
@@ -1112,17 +1105,17 @@ public class StringFuncs implements Constants {
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-		  /*
-		  // removed, no need to introduce strange syntax from other languages
-		  static final public boolean[] parseBoolean(char what[]) {
-		    boolean outgoing[] = new boolean[what.length];
-		    for (int i = 0; i < what.length; i++) {
-		      outgoing[i] =
-		        ((what[i] == 't') || (what[i] == 'T') || (what[i] == '1'));
-		    }
-		    return outgoing;
-		  }
-		  */
+    /*
+     * // removed, no need to introduce strange syntax from other languages
+     * static final public boolean[] parseBoolean(char what[]) {
+     * boolean outgoing[] = new boolean[what.length];
+     * for (int i = 0; i < what.length; i++) {
+     * outgoing[i] =
+     * ((what[i] == 't') || (what[i] == 'T') || (what[i] == '1'));
+     * }
+     * return outgoing;
+     * }
+     */
 
     /**
      * Convert a byte array to a boolean array. Each element will be
@@ -1131,29 +1124,29 @@ public class StringFuncs implements Constants {
      *
      * @return array of boolean elements
      */
-		  /*
-		  static final public boolean[] parseBoolean(byte what[]) {
-		    boolean outgoing[] = new boolean[what.length];
-		    for (int i = 0; i < what.length; i++) {
-		      outgoing[i] = (what[i] != 0);
-		    }
-		    return outgoing;
-		  }
-		  */
+    /*
+     * static final public boolean[] parseBoolean(byte what[]) {
+     * boolean outgoing[] = new boolean[what.length];
+     * for (int i = 0; i < what.length; i++) {
+     * outgoing[i] = (what[i] != 0);
+     * }
+     * return outgoing;
+     * }
+     */
     static final public int parseInt(boolean what) {
         return what ? 1 : 0;
     }
 
-		  /*
-		  // removed, not necessary... if necessary, convert to int array first
-		  static final public boolean[] parseBoolean(float what[]) {
-		    boolean outgoing[] = new boolean[what.length];
-		    for (int i = 0; i < what.length; i++) {
-		      outgoing[i] = (what[i] != 0);
-		    }
-		    return outgoing;
-		  }
-		  */
+    /*
+     * // removed, not necessary... if necessary, convert to int array first
+     * static final public boolean[] parseBoolean(float what[]) {
+     * boolean outgoing[] = new boolean[what.length];
+     * for (int i = 0; i < what.length; i++) {
+     * outgoing[i] = (what[i] != 0);
+     * }
+     * return outgoing;
+     * }
+     */
 
     /**
      * Note that parseInt() will un-sign a signed byte value.
@@ -1204,12 +1197,12 @@ public class StringFuncs implements Constants {
         return otherwise;
     }
 
-		  /*
-		  // nixed, no precedent
-		  static final public byte[] parseByte(String what) {  // note: array[]
-		    return what.getBytes();
-		  }
-		  */
+    /*
+     * // nixed, no precedent
+     * static final public byte[] parseByte(String what) { // note: array[]
+     * return what.getBytes();
+     * }
+     */
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
@@ -1221,7 +1214,7 @@ public class StringFuncs implements Constants {
         return list;
     }
 
-    static final public int[] parseInt(byte what[]) {  // note this unsigns
+    static final public int[] parseInt(byte what[]) { // note this unsigns
         int list[] = new int[what.length];
         for (int i = 0; i < what.length; i++) {
             list[i] = (what[i] & 0xff);
@@ -1245,23 +1238,23 @@ public class StringFuncs implements Constants {
         return inties;
     }
 
-		  /*
-		  static final public byte[][] parseByte(String what[]) {  // note: array[][]
-		    byte outgoing[][] = new byte[what.length][];
-		    for (int i = 0; i < what.length; i++) {
-		      outgoing[i] = what[i].getBytes();
-		    }
-		    return outgoing;
-		  }
-		  */
+    /*
+     * static final public byte[][] parseByte(String what[]) { // note: array[][]
+     * byte outgoing[][] = new byte[what.length][];
+     * for (int i = 0; i < what.length; i++) {
+     * outgoing[i] = what[i].getBytes();
+     * }
+     * return outgoing;
+     * }
+     */
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-		  /*
-		  static final public char parseChar(boolean what) {  // 0/1 or T/F ?
-		    return what ? 't' : 'f';
-		  }
-		  */
+    /*
+     * static final public char parseChar(boolean what) { // 0/1 or T/F ?
+     * return what ? 't' : 'f';
+     * }
+     */
 
     /**
      * Make an array of int elements from an array of String objects.
@@ -1298,33 +1291,33 @@ public class StringFuncs implements Constants {
         return output;
     }
 
-		  /*
-		  static final public char parseChar(float what) {  // nonsensical
-		    return (char) what;
-		  }
-
-		  static final public char[] parseChar(String what) {  // note: array[]
-		    return what.toCharArray();
-		  }
-		  */
+    /*
+     * static final public char parseChar(float what) { // nonsensical
+     * return (char) what;
+     * }
+     * 
+     * static final public char[] parseChar(String what) { // note: array[]
+     * return what.toCharArray();
+     * }
+     */
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-		  /*
-		  static final public char[] parseChar(boolean what[]) {  // 0/1 or T/F ?
-		    char outgoing[] = new char[what.length];
-		    for (int i = 0; i < what.length; i++) {
-		      outgoing[i] = what[i] ? 't' : 'f';
-		    }
-		    return outgoing;
-		  }
-		  */
+    /*
+     * static final public char[] parseChar(boolean what[]) { // 0/1 or T/F ?
+     * char outgoing[] = new char[what.length];
+     * for (int i = 0; i < what.length; i++) {
+     * outgoing[i] = what[i] ? 't' : 'f';
+     * }
+     * return outgoing;
+     * }
+     */
 
     /**
      * Convert an int to a float value. Also handles bytes because of
      * Java's rules for upgrading values.
      */
-    static final public float parseFloat(int what) {  // also handles byte
+    static final public float parseFloat(int what) { // also handles byte
         return what;
     }
 
@@ -1332,23 +1325,23 @@ public class StringFuncs implements Constants {
         return parseFloat(what, Float.NaN);
     }
 
-		  /*
-		  static final public char[] parseChar(float what[]) {  // nonsensical
-		    char outgoing[] = new char[what.length];
-		    for (int i = 0; i < what.length; i++) {
-		      outgoing[i] = (char) what[i];
-		    }
-		    return outgoing;
-		  }
-
-		  static final public char[][] parseChar(String what[]) {  // note: array[][]
-		    char outgoing[][] = new char[what.length][];
-		    for (int i = 0; i < what.length; i++) {
-		      outgoing[i] = what[i].toCharArray();
-		    }
-		    return outgoing;
-		  }
-		  */
+    /*
+     * static final public char[] parseChar(float what[]) { // nonsensical
+     * char outgoing[] = new char[what.length];
+     * for (int i = 0; i < what.length; i++) {
+     * outgoing[i] = (char) what[i];
+     * }
+     * return outgoing;
+     * }
+     * 
+     * static final public char[][] parseChar(String what[]) { // note: array[][]
+     * char outgoing[][] = new char[what.length][];
+     * for (int i = 0; i < what.length; i++) {
+     * outgoing[i] = what[i].toCharArray();
+     * }
+     * return outgoing;
+     * }
+     */
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
@@ -1417,61 +1410,66 @@ public class StringFuncs implements Constants {
 
     static final public String[] str(boolean x[]) {
         String s[] = new String[x.length];
-        for (int i = 0; i < x.length; i++) s[i] = String.valueOf(x[i]);
+        for (int i = 0; i < x.length; i++)
+            s[i] = String.valueOf(x[i]);
         return s;
     }
 
     static final public String[] str(byte x[]) {
         String s[] = new String[x.length];
-        for (int i = 0; i < x.length; i++) s[i] = String.valueOf(x[i]);
+        for (int i = 0; i < x.length; i++)
+            s[i] = String.valueOf(x[i]);
         return s;
     }
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-		  /*
-		  static final public float parseFloat(boolean what) {
-		    return what ? 1 : 0;
-		  }
-		  */
+    /*
+     * static final public float parseFloat(boolean what) {
+     * return what ? 1 : 0;
+     * }
+     */
 
     static final public String[] str(char x[]) {
         String s[] = new String[x.length];
-        for (int i = 0; i < x.length; i++) s[i] = String.valueOf(x[i]);
+        for (int i = 0; i < x.length; i++)
+            s[i] = String.valueOf(x[i]);
         return s;
     }
 
     static final public String[] str(int x[]) {
         String s[] = new String[x.length];
-        for (int i = 0; i < x.length; i++) s[i] = String.valueOf(x[i]);
+        for (int i = 0; i < x.length; i++)
+            s[i] = String.valueOf(x[i]);
         return s;
     }
 
     static final public String[] str(float x[]) {
         String s[] = new String[x.length];
-        for (int i = 0; i < x.length; i++) s[i] = String.valueOf(x[i]);
+        for (int i = 0; i < x.length; i++)
+            s[i] = String.valueOf(x[i]);
         return s;
     }
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
-		  /*
-		  static final public float[] parseFloat(boolean what[]) {
-		    float floaties[] = new float[what.length];
-		    for (int i = 0; i < what.length; i++) {
-		      floaties[i] = what[i] ? 1 : 0;
-		    }
-		    return floaties;
-		  }
-
-		  static final public float[] parseFloat(char what[]) {
-		    float floaties[] = new float[what.length];
-		    for (int i = 0; i < what.length; i++) {
-		      floaties[i] = (char) what[i];
-		    }
-		    return floaties;
-		  }
-		  */
+    /*
+     * static final public float[] parseFloat(boolean what[]) {
+     * float floaties[] = new float[what.length];
+     * for (int i = 0; i < what.length; i++) {
+     * floaties[i] = what[i] ? 1 : 0;
+     * }
+     * return floaties;
+     * }
+     * 
+     * static final public float[] parseFloat(char what[]) {
+     * float floaties[] = new float[what.length];
+     * for (int i = 0; i < what.length; i++) {
+     * floaties[i] = (char) what[i];
+     * }
+     * return floaties;
+     * }
+     */
 
     static public String nf(float num) {
         int inum = (int) num;
@@ -1495,7 +1493,9 @@ public class StringFuncs implements Constants {
      * Utility function for formatting numbers into strings. There are two
      * versions, one for formatting floats and one for formatting ints. The
      * values for the <b>digits</b>, <b>left</b>, and <b>right</b> parameters
-     * should always be positive integers.<br /><br />As shown in the above
+     * should always be positive integers.<br />
+     * <br />
+     * As shown in the above
      * example, <b>nf()</b> is used to add zeros to the left and/or right of a
      * number. This is typically for aligning a list of numbers. To
      * <em>remove</em> digits from a floating-point number, use the
@@ -1510,7 +1510,8 @@ public class StringFuncs implements Constants {
      * @see StringFuncs#nfs(float, int, int)
      * @see StringFuncs#nfp(float, int, int)
      * @see StringFuncs#nfc(float, int)
-     * @see <a href="https://processing.org/reference/intconvert_.html">int(float)</a>
+     * @see <a href=
+     *      "https://processing.org/reference/intconvert_.html">int(float)</a>
      */
 
     static public String[] nf(int nums[], int digits) {
@@ -1548,7 +1549,8 @@ public class StringFuncs implements Constants {
      * appropriate commas to mark units of 1000. There are two versions, one
      * for formatting ints and one for formatting an array of ints. The value
      * for the <b>digits</b> parameter should always be a positive integer.
-     * <br/><br/>
+     * <br/>
+     * <br/>
      * For a non-US locale, this will insert periods instead of commas, or
      * whatever is apprioriate for that region.
      * <p>
@@ -1679,7 +1681,8 @@ public class StringFuncs implements Constants {
         float_nf.setGroupingUsed(false);
         float_nf_commas = false;
 
-        if (left != 0) float_nf.setMinimumIntegerDigits(left);
+        if (left != 0)
+            float_nf.setMinimumIntegerDigits(left);
         if (right != 0) {
             float_nf.setMinimumFractionDigits(right);
             float_nf.setMaximumFractionDigits(right);
@@ -1720,7 +1723,6 @@ public class StringFuncs implements Constants {
         float_nf_right = right;
         return float_nf.format(num);
     }
-
 
     //////////////////////////////////////////////////////////////
 
@@ -1765,7 +1767,8 @@ public class StringFuncs implements Constants {
      * equivalent hexadecimal notation. For example color(0, 102, 153) will
      * convert to the String "FF006699". This function can help make your geeky
      * debugging sessions much happier.
-     * <br/> <br/>
+     * <br/>
+     * <br/>
      * Note that the maximum number of digits is 8, because an int value can
      * only represent up to 32 bits. Specifying more than eight digits will
      * simply shorten the string to eight anyway.
@@ -1828,7 +1831,6 @@ public class StringFuncs implements Constants {
         return (int) (Long.parseLong(value, 16));
     }
 
-
     /**
      * number format signed (or space)
      * Formats a number but leaves a blank space in the front
@@ -1877,7 +1879,8 @@ public class StringFuncs implements Constants {
      * equivalent binary notation. For example color(0, 102, 153, 255) will
      * convert to the String "11111111000000000110011010011001". This function
      * can help make your geeky debugging sessions much happier.
-     * <br/> <br/>
+     * <br/>
+     * <br/>
      * Note that the maximum number of digits is 32, because an int value can
      * only represent up to 32 bits. Specifying more than 32 digits will simply
      * shorten the string to 32 anyway.
@@ -1908,7 +1911,6 @@ public class StringFuncs implements Constants {
         return stuff;
     }
 
-
     //////////////////////////////////////////////////////////////
 
     // FLOAT NUMBER FORMATTING
@@ -1932,8 +1934,8 @@ public class StringFuncs implements Constants {
     }
 
     static public void arrayCopy(Object src, int srcPosition,
-                                 Object dst, int dstPosition,
-                                 int length) {
+            Object dst, int dstPosition,
+            int length) {
         System.arraycopy(src, srcPosition, dst, dstPosition, length);
     }
 
@@ -1959,8 +1961,8 @@ public class StringFuncs implements Constants {
      */
     @Deprecated
     static public void arraycopy(Object src, int srcPosition,
-                                 Object dst, int dstPosition,
-                                 int length) {
+            Object dst, int dstPosition,
+            int length) {
         System.arraycopy(src, srcPosition, dst, dstPosition, length);
     }
 
@@ -1994,7 +1996,8 @@ public class StringFuncs implements Constants {
      * from the <b>offset</b> to the end of the array. When specifying the
      * <b>offset</b> remember the first array element is 0. This function does
      * not change the source array.
-     * <br/> <br/>
+     * <br/>
+     * <br/>
      * When using an array of objects, the data returned from the function must
      * be cast to the object array's data type. For example: <em>SomeClass[]
      * items = (SomeClass[]) subset(originalArray, 0, 4)</em>.
@@ -2022,7 +2025,6 @@ public class StringFuncs implements Constants {
         System.arraycopy(list, start, output, 0, count);
         return output;
     }
-
 
     //////////////////////////////////////////////////////////////
 
@@ -2113,7 +2115,8 @@ public class StringFuncs implements Constants {
      * Concatenates two arrays. For example, concatenating the array { 1, 2, 3
      * } and the array { 4, 5, 6 } yields { 1, 2, 3, 4, 5, 6 }. Both parameters
      * must be arrays of the same datatype.
-     * <br/> <br/>
+     * <br/>
+     * <br/>
      * When using an array of objects, the data returned from the function must
      * be cast to the object array's data type. For example: <em>SomeClass[]
      * items = (SomeClass[]) concat(array1, array2)</em>.
@@ -2315,7 +2318,8 @@ public class StringFuncs implements Constants {
     static public String join(String[] list, String separator) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < list.length; i++) {
-            if (i != 0) sb.append(separator);
+            if (i != 0)
+                sb.append(separator);
             sb.append(list[i]);
         }
         return sb.toString();
@@ -2331,7 +2335,8 @@ public class StringFuncs implements Constants {
      * The splitTokens() function splits a String at one or many character
      * "tokens." The <b>tokens</b> parameter specifies the character or
      * characters to be used as a boundary.
-     * <br/> <br/>
+     * <br/>
+     * <br/>
      * If no <b>tokens</b> character is specified, any whitespace character is
      * used to split. Whitespace characters include tab (\\t), line feed (\\n),
      * carriage return (\\r), form feed (\\f), and space. To convert a String
@@ -2433,7 +2438,6 @@ public class StringFuncs implements Constants {
         return temp;
     }
 
-
     //////////////////////////////////////////////////////////////
 
     // STRINGS
@@ -2471,7 +2475,8 @@ public class StringFuncs implements Constants {
      * Expands an array by one element and adds data to the new position. The
      * datatype of the <b>element</b> parameter must be the same as the
      * datatype of the array.
-     * <br/> <br/>
+     * <br/>
+     * <br/>
      * When using an array of objects, the data returned from the function must
      * be cast to the object array's data type. For example: <em>SomeClass[]
      * items = (SomeClass[]) append(originalArray, element)</em>.
@@ -2525,7 +2530,8 @@ public class StringFuncs implements Constants {
      * ( begin auto-generated from shorten.xml )
      * <p>
      * Decreases an array by one element and returns the shortened array.
-     * <br/> <br/>
+     * <br/>
+     * <br/>
      * When using an array of objects, the data returned from the function must
      * be cast to the object array's data type. For example: <em>SomeClass[]
      * items = (SomeClass[]) shorten(originalArray)</em>.
@@ -2573,7 +2579,8 @@ public class StringFuncs implements Constants {
      * parameters must be of the same datatype. The <b>array</b> parameter
      * defines the array which will be modified and the second parameter
      * defines the data which will be inserted.
-     * <br/> <br/>
+     * <br/>
+     * <br/>
      * When using an array of objects, the data returned from the function must
      * be cast to the object array's data type. For example: <em>SomeClass[]
      * items = (SomeClass[]) splice(array1, array2, index)</em>.
@@ -2588,7 +2595,7 @@ public class StringFuncs implements Constants {
      * @see StringFuncs#subset(boolean[], int, int)
      */
     static final public boolean[] splice(boolean list[],
-                                         boolean value, int index) {
+            boolean value, int index) {
         boolean outgoing[] = new boolean[list.length + 1];
         System.arraycopy(list, 0, outgoing, 0, index);
         outgoing[index] = value;
@@ -2598,7 +2605,7 @@ public class StringFuncs implements Constants {
     }
 
     static final public boolean[] splice(boolean list[],
-                                         boolean value[], int index) {
+            boolean value[], int index) {
         boolean outgoing[] = new boolean[list.length + value.length];
         System.arraycopy(list, 0, outgoing, 0, index);
         System.arraycopy(value, 0, outgoing, index, value.length);
@@ -2608,7 +2615,7 @@ public class StringFuncs implements Constants {
     }
 
     static final public byte[] splice(byte list[],
-                                      byte value, int index) {
+            byte value, int index) {
         byte outgoing[] = new byte[list.length + 1];
         System.arraycopy(list, 0, outgoing, 0, index);
         outgoing[index] = value;
@@ -2618,7 +2625,7 @@ public class StringFuncs implements Constants {
     }
 
     static final public byte[] splice(byte list[],
-                                      byte value[], int index) {
+            byte value[], int index) {
         byte outgoing[] = new byte[list.length + value.length];
         System.arraycopy(list, 0, outgoing, 0, index);
         System.arraycopy(value, 0, outgoing, index, value.length);
@@ -2628,7 +2635,7 @@ public class StringFuncs implements Constants {
     }
 
     static final public char[] splice(char list[],
-                                      char value, int index) {
+            char value, int index) {
         char outgoing[] = new char[list.length + 1];
         System.arraycopy(list, 0, outgoing, 0, index);
         outgoing[index] = value;
@@ -2638,7 +2645,7 @@ public class StringFuncs implements Constants {
     }
 
     static final public char[] splice(char list[],
-                                      char value[], int index) {
+            char value[], int index) {
         char outgoing[] = new char[list.length + value.length];
         System.arraycopy(list, 0, outgoing, 0, index);
         System.arraycopy(value, 0, outgoing, index, value.length);
@@ -2648,7 +2655,7 @@ public class StringFuncs implements Constants {
     }
 
     static final public int[] splice(int list[],
-                                     int value, int index) {
+            int value, int index) {
         int outgoing[] = new int[list.length + 1];
         System.arraycopy(list, 0, outgoing, 0, index);
         outgoing[index] = value;
@@ -2661,7 +2668,7 @@ public class StringFuncs implements Constants {
     // (expand() is also functionally equivalent)
 
     static final public int[] splice(int list[],
-                                     int value[], int index) {
+            int value[], int index) {
         int outgoing[] = new int[list.length + value.length];
         System.arraycopy(list, 0, outgoing, 0, index);
         System.arraycopy(value, 0, outgoing, index, value.length);
@@ -2671,7 +2678,7 @@ public class StringFuncs implements Constants {
     }
 
     static final public float[] splice(float list[],
-                                       float value, int index) {
+            float value, int index) {
         float outgoing[] = new float[list.length + 1];
         System.arraycopy(list, 0, outgoing, 0, index);
         outgoing[index] = value;
@@ -2681,7 +2688,7 @@ public class StringFuncs implements Constants {
     }
 
     static final public float[] splice(float list[],
-                                       float value[], int index) {
+            float value[], int index) {
         float outgoing[] = new float[list.length + value.length];
         System.arraycopy(list, 0, outgoing, 0, index);
         System.arraycopy(value, 0, outgoing, index, value.length);
@@ -2691,7 +2698,7 @@ public class StringFuncs implements Constants {
     }
 
     static final public String[] splice(String list[],
-                                        String value, int index) {
+            String value, int index) {
         String outgoing[] = new String[list.length + 1];
         System.arraycopy(list, 0, outgoing, 0, index);
         outgoing[index] = value;
@@ -2701,7 +2708,7 @@ public class StringFuncs implements Constants {
     }
 
     static final public String[] splice(String list[],
-                                        String value[], int index) {
+            String value[], int index) {
         String outgoing[] = new String[list.length + value.length];
         System.arraycopy(list, 0, outgoing, 0, index);
         System.arraycopy(value, 0, outgoing, index, value.length);
@@ -2757,7 +2764,7 @@ public class StringFuncs implements Constants {
         JSONObject outgoing = new JSONObject(reader);
         try {
             reader.close();
-        } catch (IOException e) {  // not sure what would cause this
+        } catch (IOException e) { // not sure what would cause this
             e.printStackTrace();
         }
         return outgoing;
@@ -2788,7 +2795,7 @@ public class StringFuncs implements Constants {
         JSONArray outgoing = new JSONArray(reader);
         try {
             reader.close();
-        } catch (IOException e) {  // not sure what would cause this
+        } catch (IOException e) { // not sure what would cause this
             e.printStackTrace();
         }
         return outgoing;
@@ -2821,7 +2828,8 @@ public class StringFuncs implements Constants {
      * Creates a <b>BufferedReader</b> object that can be used to read files
      * line-by-line as individual <b>String</b> objects. This is the complement
      * to the <b>createWriter()</b> function.
-     * <br/> <br/>
+     * <br/>
+     * <br/>
      * Starting with Processing release 0134, all files loaded and saved by the
      * Processing API use UTF-8 encoding. In previous releases, the default
      * encoding for your platform was used, which causes problems when files
@@ -2854,7 +2862,8 @@ public class StringFuncs implements Constants {
      * to write to it. For the file to be made correctly, it should be flushed
      * and must be closed with its <b>flush()</b> and <b>close()</b> methods
      * (see above example).
-     * <br/> <br/>
+     * <br/>
+     * <br/>
      * Starting with Processing release 0134, all files loaded and saved by the
      * Processing API use UTF-8 encoding. In previous releases, the default
      * encoding for your platform was used, which causes problems when files
@@ -2952,7 +2961,7 @@ public class StringFuncs implements Constants {
                     return new BufferedInputStream(new GZIPInputStream(input));
 
                 } catch (IOException e) {
-                    //printStackTrace(e);
+                    // printStackTrace(e);
                 }
             } else {
                 return new BufferedInputStream(input);
@@ -2965,17 +2974,17 @@ public class StringFuncs implements Constants {
      * Call openStream() without automatic gzip decompression.
      */
     public InputStream createInputRaw(String filename) {
-        if (filename == null) return null;
-
+        if (filename == null)
+            return null;
 
         if (filename.length() == 0) {
             // an error will be called by the parent function
-            //System.err.println("The filename passed to openStream() was empty.");
+            // System.err.println("The filename passed to openStream() was empty.");
             return null;
         }
 
         // First check whether this looks like a URL
-        if (filename.contains(":")) {  // at least smells like URL
+        if (filename.contains(":")) { // at least smells like URL
             try {
                 URL url = new URL(filename);
                 URLConnection conn = url.openConnection();
@@ -3004,10 +3013,10 @@ public class StringFuncs implements Constants {
 
             } catch (IOException e) {
                 // changed for 0117, shouldn't be throwing exception
-                //printStackTrace(e);
-                //System.err.println("Error downloading from URL " + filename);
+                // printStackTrace(e);
+                // System.err.println("Error downloading from URL " + filename);
                 return null;
-                //throw new RuntimeException("Error downloading from URL " + filename);
+                // throw new RuntimeException("Error downloading from URL " + filename);
             }
         }
 
@@ -3037,8 +3046,8 @@ public class StringFuncs implements Constants {
                     String filenameShort = new File(filename).getName();
                     // if the actual filename is the same, but capitalized
                     // differently, warn the user.
-                    //if (filenameActual.equalsIgnoreCase(filenameShort) &&
-                    //!filenameActual.equals(filenameShort)) {
+                    // if (filenameActual.equalsIgnoreCase(filenameShort) &&
+                    // !filenameActual.equals(filenameShort)) {
                     if (!filenameActual.equals(filenameShort)) {
                         throw new RuntimeException("This file is named " +
                                 filenameActual + " not " +
@@ -3051,7 +3060,8 @@ public class StringFuncs implements Constants {
 
             // if this file is ok, may as well just load it
             stream = new FileInputStream(file);
-            if (stream != null) return stream;
+            if (stream != null)
+                return stream;
 
             // have to break these out because a general Exception might
             // catch the RuntimeException being thrown above
@@ -3093,30 +3103,33 @@ public class StringFuncs implements Constants {
         try {
             // attempt to load from a local file, used when running as
             // an application, or as a signed applet
-            try {  // first try to catch any security exceptions
+            try { // first try to catch any security exceptions
                 try {
                     stream = new FileInputStream(dataPath(filename));
-                    if (stream != null) return stream;
+                    if (stream != null)
+                        return stream;
                 } catch (IOException e2) {
                 }
 
                 try {
                     stream = new FileInputStream(sketchPath(filename));
-                    if (stream != null) return stream;
+                    if (stream != null)
+                        return stream;
                 } catch (Exception e) {
-                }  // ignored
+                } // ignored
 
                 try {
                     stream = new FileInputStream(filename);
-                    if (stream != null) return stream;
+                    if (stream != null)
+                        return stream;
                 } catch (IOException e1) {
                 }
 
             } catch (SecurityException se) {
-            }  // online, whups
+            } // online, whups
 
         } catch (Exception e) {
-            //printStackTrace(e);
+            // printStackTrace(e);
         }
 
         return null;
@@ -3151,7 +3164,7 @@ public class StringFuncs implements Constants {
         if (!lower.endsWith(".gz")) {
             // If this looks like a URL, try to load it that way. Use the fact that
             // URL connections may have a content length header to size the array.
-            if (filename.contains(":")) {  // at least smells like URL
+            if (filename.contains(":")) { // at least smells like URL
                 InputStream input = null;
                 try {
                     URL url = new URL(filename);
@@ -3199,7 +3212,7 @@ public class StringFuncs implements Constants {
                     // http://dev.processing.org/bugs/show_bug.cgi?id=403
 
                 } catch (IOException e) {
-                    //printStackTrace(e);
+                    // printStackTrace(e);
                     return null;
 
                 } finally {
@@ -3220,7 +3233,7 @@ public class StringFuncs implements Constants {
             try {
                 is.close();
             } catch (IOException e) {
-                //printStackTrace(e);  // shouldn't happen
+                // printStackTrace(e); // shouldn't happen
             }
             return outgoing;
         }
@@ -3250,7 +3263,8 @@ public class StringFuncs implements Constants {
      * message does not halt the program, however the null value may cause a
      * NullPointerException if your code does not check whether the value
      * returned is null.
-     * <br/> <br/>
+     * <br/>
+     * <br/>
      * Starting with Processing release 0134, all files loaded and saved by the
      * Processing API use UTF-8 encoding. In previous releases, the default
      * encoding for your platform was used, which causes problems when files
@@ -3283,7 +3297,7 @@ public class StringFuncs implements Constants {
             try {
                 is.close();
             } catch (IOException e) {
-                //printStackTrace(e);
+                // printStackTrace(e);
             }
             return strArr;
         }
@@ -3301,16 +3315,19 @@ public class StringFuncs implements Constants {
      * Similar to <b>createInput()</b>, this creates a Java <b>OutputStream</b>
      * for a given filename or path. The file will be created in the sketch
      * folder, or in the same folder as an exported application.
-     * <br /><br />
+     * <br />
+     * <br />
      * If the path does not exist, intermediate folders will be created. If an
      * exception occurs, it will be printed to the console, and <b>null</b>
      * will be returned.
-     * <br /><br />
+     * <br />
+     * <br />
      * This function is a convenience over the Java approach that requires you
      * to 1) create a FileOutputStream object, 2) determine the exact file
      * location, and 3) handle exceptions. Exceptions are handled internally by
      * the function, which is more appropriate for "sketch" projects.
-     * <br /><br />
+     * <br />
+     * <br />
      * If the output filename ends with <b>.gz</b>, the output will be
      * automatically GZIP compressed as it is written.
      * <p>
@@ -3456,7 +3473,8 @@ public class StringFuncs implements Constants {
         // isAbsolute() could throw an access exception, but so will writing
         // to the local disk using the sketch path, so this is safe here.
         File why = new File(where);
-        if (why.isAbsolute()) return why;
+        if (why.isAbsolute())
+            return why;
 
         URL jarURL = getClass().getProtectionDomain().getCodeSource().getLocation();
         // Decode URL
@@ -3473,10 +3491,9 @@ public class StringFuncs implements Constants {
             return new File(dataFolder, where);
         }
         // Windows, Linux, or when not using a Mac OS X .app file
-        File workingDirItem =
-                new File(File.separator + "data" + File.separator + where);
+        File workingDirItem = new File(File.separator + "data" + File.separator + where);
         return workingDirItem;
-	    // In some cases, the current working directory won't be set properly.
+        // In some cases, the current working directory won't be set properly.
     }
 
     /**

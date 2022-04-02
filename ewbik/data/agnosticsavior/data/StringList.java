@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Random;
 
-
 /**
  * Helper class for a list of Strings. Lists are designed to have some of the
  * features of ArrayLists, but to maintain the simplicity and efficiency of
@@ -22,7 +21,6 @@ import java.util.Random;
 public class StringList implements Iterable<String> {
     int count;
     String[] data;
-
 
     public StringList() {
         this(10);
@@ -44,7 +42,6 @@ public class StringList implements Iterable<String> {
         System.arraycopy(list, 0, data, 0, count);
     }
 
-
     /**
      * Construct a StringList from a random pile of objects. Null values will
      * stay null, but all the others will be converted to String values.
@@ -55,13 +52,12 @@ public class StringList implements Iterable<String> {
         int index = 0;
         for (Object o : items) {
             // Keep null values null (because join() will make non-null anyway)
-            if (o != null) {  // leave null values null
+            if (o != null) { // leave null values null
                 data[index] = o.toString();
             }
             index++;
         }
     }
-
 
     /**
      * Create from something iterable, for instance:
@@ -76,7 +72,6 @@ public class StringList implements Iterable<String> {
         }
     }
 
-
     /**
      * Improve efficiency by removing allocated but unused entries from the
      * internal array used to store the data. Set to private, though it could
@@ -89,7 +84,6 @@ public class StringList implements Iterable<String> {
         }
     }
 
-
     /**
      * Get the length of the list.
      *
@@ -99,7 +93,6 @@ public class StringList implements Iterable<String> {
     public int size() {
         return count;
     }
-
 
     public void resize(int length) {
         if (length > data.length) {
@@ -113,7 +106,6 @@ public class StringList implements Iterable<String> {
         count = length;
     }
 
-
     /**
      * Remove all entries from the list.
      *
@@ -123,7 +115,6 @@ public class StringList implements Iterable<String> {
     public void clear() {
         count = 0;
     }
-
 
     /**
      * Get an entry at a particular index.
@@ -137,7 +128,6 @@ public class StringList implements Iterable<String> {
         }
         return data[index];
     }
-
 
     /**
      * Set the entry at a particular index. If the index is past the length of
@@ -158,7 +148,6 @@ public class StringList implements Iterable<String> {
         data[index] = what;
     }
 
-
     /**
      * Just an alias for append(), but matches pop()
      */
@@ -166,16 +155,14 @@ public class StringList implements Iterable<String> {
         append(value);
     }
 
-
     public String pop() {
         if (count == 0) {
             throw new RuntimeException("Can't call pop() on an empty list");
         }
         String value = get(count - 1);
-        data[--count] = null;  // avoid leak
+        data[--count] = null; // avoid leak
         return value;
     }
-
 
     /**
      * Remove an element from the specified index.
@@ -214,7 +201,6 @@ public class StringList implements Iterable<String> {
         return -1;
     }
 
-
     // Remove all instances of a particular value and return the count removed.
     public int removeValues(String value) {
         int ii = 0;
@@ -236,7 +222,6 @@ public class StringList implements Iterable<String> {
         return removed;
     }
 
-
     // replace the first value that matches, return the index that was replaced
     public int replaceValue(String value, String newValue) {
         if (value == null) {
@@ -256,7 +241,6 @@ public class StringList implements Iterable<String> {
         }
         return -1;
     }
-
 
     // replace all values that match, return the count of those replaced
     public int replaceValues(String value, String newValue) {
@@ -279,7 +263,6 @@ public class StringList implements Iterable<String> {
         return changed;
     }
 
-
     /**
      * Add a new entry to the list.
      *
@@ -293,20 +276,17 @@ public class StringList implements Iterable<String> {
         data[count++] = value;
     }
 
-
     public void append(String[] values) {
         for (String v : values) {
             append(v);
         }
     }
 
-
     public void append(StringList list) {
-        for (String v : list.values()) {  // will concat the list...
+        for (String v : list.values()) { // will concat the list...
             append(v);
         }
     }
-
 
     /**
      * Add this value, but only if it's not already in the list.
@@ -318,7 +298,7 @@ public class StringList implements Iterable<String> {
     }
 
     public void insert(int index, String value) {
-        insert(index, new String[]{value});
+        insert(index, new String[] { value });
     }
 
     // same as splice
@@ -342,7 +322,6 @@ public class StringList implements Iterable<String> {
         count = count + values.length;
         data = temp;
     }
-
 
     public void insert(int index, StringList list) {
         insert(index, list.values());
@@ -389,7 +368,6 @@ public class StringList implements Iterable<String> {
         return false;
     }
 
-
     /**
      * Sorts the array in place.
      *
@@ -400,7 +378,6 @@ public class StringList implements Iterable<String> {
         sortImpl(false);
     }
 
-
     /**
      * Reverse sort, orders values from highest to lowest.
      *
@@ -410,7 +387,6 @@ public class StringList implements Iterable<String> {
     public void sortReverse() {
         sortImpl(true);
     }
-
 
     private void sortImpl(final boolean reverse) {
         new Sort() {
@@ -448,7 +424,6 @@ public class StringList implements Iterable<String> {
         }
     }
 
-
     /**
      * Randomize the order of the list elements. Note that this does not
      * obey the randomSeed() function in StringFuncs.
@@ -468,7 +443,6 @@ public class StringList implements Iterable<String> {
         }
     }
 
-
     /**
      * Randomize the list order using the random() function from the specified
      * sketch, allowing shuffle() to use its current randomSeed() setting.
@@ -484,7 +458,6 @@ public class StringList implements Iterable<String> {
         }
     }
 
-
     /**
      * Make the entire list lower case.
      *
@@ -498,7 +471,6 @@ public class StringList implements Iterable<String> {
             }
         }
     }
-
 
     /**
      * Make the entire list upper case.
@@ -514,13 +486,11 @@ public class StringList implements Iterable<String> {
         }
     }
 
-
     public StringList copy() {
         StringList outgoing = new StringList(data);
         outgoing.count = count;
         return outgoing;
     }
-
 
     /**
      * Returns the actual array being used to store the data. Suitable for
@@ -531,7 +501,6 @@ public class StringList implements Iterable<String> {
         crop();
         return data;
     }
-
 
     @Override
     public Iterator<String> iterator() {
@@ -553,7 +522,6 @@ public class StringList implements Iterable<String> {
         };
     }
 
-
     /**
      * Create a new array with a copy of all the values.
      *
@@ -564,7 +532,6 @@ public class StringList implements Iterable<String> {
     public String[] array() {
         return array(null);
     }
-
 
     /**
      * Copy values into the specified array. If the specified array is null or
@@ -580,11 +547,9 @@ public class StringList implements Iterable<String> {
         return array;
     }
 
-
     public StringList getSubset(int start) {
         return getSubset(start, count - start);
     }
-
 
     public StringList getSubset(int start, int num) {
         String[] subset = new String[num];
@@ -592,14 +557,12 @@ public class StringList implements Iterable<String> {
         return new StringList(subset);
     }
 
-
     /**
      * Get a list of all unique entries.
      */
     public String[] getUnique() {
         return getTally().keyArray();
     }
-
 
     /**
      * Count the number of times each String entry is found in this list.
@@ -612,7 +575,6 @@ public class StringList implements Iterable<String> {
         return outgoing;
     }
 
-
     /**
      * Create a dictionary associating each entry in this list to its index.
      */
@@ -623,7 +585,6 @@ public class StringList implements Iterable<String> {
         }
         return outgoing;
     }
-
 
     public String join(String separator) {
         if (count == 0) {
@@ -638,13 +599,11 @@ public class StringList implements Iterable<String> {
         return sb.toString();
     }
 
-
     public void print() {
         for (int i = 0; i < count; i++) {
             System.out.format("[%d] %s%n", i, data[i]);
         }
     }
-
 
     /**
      * Save tab-delimited entries to a file (TSV format, UTF-8 encoding)
@@ -654,7 +613,6 @@ public class StringList implements Iterable<String> {
         write(writer);
         writer.close();
     }
-
 
     /**
      * Write entries to a PrintWriter, one per line
@@ -666,7 +624,6 @@ public class StringList implements Iterable<String> {
         writer.flush();
     }
 
-
     /**
      * Return this dictionary as a String in JSON format.
      */
@@ -677,7 +634,6 @@ public class StringList implements Iterable<String> {
         }
         return "[ " + temp.join(", ") + " ]";
     }
-
 
     @Override
     public String toString() {
