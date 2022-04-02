@@ -196,7 +196,7 @@
             "orientationallyConstrained": true
           }
         ],
-        "kusudama_twists": [
+        "limit_cones": [
           {
             "identityHash": "149131410-KusudamaTwist",
             "parentKusudama": "857642946-Kusudama",

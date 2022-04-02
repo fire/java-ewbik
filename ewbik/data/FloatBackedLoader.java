@@ -112,7 +112,7 @@ public final class FloatBackedLoader extends LoadManager {
                 ArmatureClass);
         createEmptyLoadMaps(kusudamaJSONObjects, kusudamaLoadObjects, loadFile.getJSONArray("kusudamas"),
                 KusudamaClass);
-        createEmptyLoadMaps(KusudamaTwistJSONObjects, KusudamaTwistLoadObjects, loadFile.getJSONArray("kusudama_twists"),
+        createEmptyLoadMaps(KusudamaTwistJSONObjects, KusudamaTwistLoadObjects, loadFile.getJSONArray("limit_cones"),
                 KusudamaTwistClass);
         createEmptyLoadMaps(IKPinJSONObjects, IKPinLoadObjects, loadFile.getJSONArray("ik_pins"), IKPinClass);
 
