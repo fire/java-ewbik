@@ -136,13 +136,13 @@ public class UI {
             float xPriority, float yPriority, float zPriority, float totalpriorities) {
 
         pg.line(pinLoc.x, pinLoc.y, pinLoc.z, effectorO.x, effectorO.y, effectorO.z);
-        pg.stroke(0, 255, 0, 150);
+        pg.stroke(2, 58, 0, 150);
         pg.strokeWeight(2f * xPriority / totalpriorities);
         pg.line(pinX.x, pinX.y, pinX.z, effectorX.x, effectorX.y, effectorX.z);
-        pg.stroke(255, 0, 0, 150);
+        pg.stroke(140, 0, 1, 150);
         pg.strokeWeight(2f * yPriority / totalpriorities);
         pg.line(pinY.x, pinY.y, pinY.z, effectorY.x, effectorY.y, effectorY.z);
-        pg.stroke(0, 0, 255, 150);
+        pg.stroke(0, 26, 130, 150);
         pg.strokeWeight(2f * zPriority / totalpriorities);
         pg.line(pinZ.x, pinZ.y, pinZ.z, effectorZ.x, effectorZ.y, effectorZ.z);
 
