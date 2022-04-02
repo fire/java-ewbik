@@ -901,7 +901,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             parent.addToEffectored(this);
         }
         if (updateSegments)
-            parentArmature.updateArmatureSegments();
+            parentArmature.updateBonechains();
     }
 
     public void notifyAncestorsOfPin() {
@@ -912,7 +912,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         if (this.parent != null) {
             parent.removeFromEffectored(this);
         }
-        parentArmature.updateArmatureSegments();
+        parentArmature.updateBonechains();
     }
 
     public void addToEffectored(Bone Bone) {
@@ -952,7 +952,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     }
 
     public void updateSegmentedArmature() {
-        this.parentArmature.updateArmatureSegments();
+        this.parentArmature.updateBonechains();
     }
 
     public String getTag() {
@@ -960,7 +960,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     }
 
     public void setTag(String newTag) {
-        parentArmature.updateBoneTag(this, this.tag, newTag);
+        parentArmature.setBoneName(this, this.tag, newTag);
         this.tag = newTag;
     }
 
@@ -1052,7 +1052,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         if (this.freeChildren.indexOf(bone) == -1) {
             freeChildren.add(bone);
         }
-        parentArmature.updateArmatureSegments();
+        parentArmature.updateBonechains();
     }
 
     public void addEffectoredChild(Bone bone) {

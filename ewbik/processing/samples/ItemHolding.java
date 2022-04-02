@@ -71,8 +71,8 @@ public class ItemHolding extends PApplet {
          * should be computed relative to the axes of the cube we're drawing,
          * Thereby, any time we transform the parent cube's axes, the pins will follow.
          */
-        loadedArmature.getBoneTagged("left hand").getIKPin().getAxes().setParent(cubeNode3D);
-        loadedArmature.getBoneTagged("right hand").getIKPin().getAxes().setParent(cubeNode3D);
+        loadedArmature.getBoneName("left hand").getIKPin().getAxes().setParent(cubeNode3D);
+        loadedArmature.getBoneName("right hand").getIKPin().getAxes().setParent(cubeNode3D);
 
     }
 
@@ -148,7 +148,7 @@ public class ItemHolding extends PApplet {
             newSaver.saveArmature(loadedArmature, "Humanoid_Holding_Item.arm");
         } else if (key == 'l') {
             loadedArmature = ewbik.processing.IO.LoadArmature_singlePrecision("Humanoid_Holding_Item.arm");
-            loadedArmature.updateArmatureSegments();
+            loadedArmature.updateBonechains();
             loadedArmature.IKSolver(loadedArmature.getRootBone(), 0.5f, 20, 1);
 
             Bone.setDrawKusudamas(true);

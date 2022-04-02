@@ -17,6 +17,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import ewbik.processing.singlePrecision.KusudamaTwist;
 
 public final class FloatBackedLoader extends LoadManager {
 
@@ -34,8 +35,8 @@ public final class FloatBackedLoader extends LoadManager {
     public HashMap<String, ewbik.processing.singlePrecision.Kusudama> kusudamaLoadObjects = new HashMap<>();
     public HashMap<String, JSONObject> kusudamaJSONObjects = new HashMap<>();
 
-    public HashMap<String, LimitCone> limitConeLoadObjects = new HashMap<>();
-    public HashMap<String, JSONObject> limitConeJSONObjects = new HashMap<>();
+    public HashMap<String, KusudamaTwist> KusudamaTwistLoadObjects = new HashMap<>();
+    public HashMap<String, JSONObject> KusudamaTwistJSONObjects = new HashMap<>();
 
     public HashMap<String, IKPin> IKPinLoadObjects = new HashMap<>();
     public HashMap<String, JSONObject> IKPinJSONObjects = new HashMap<>();
@@ -74,7 +75,7 @@ public final class FloatBackedLoader extends LoadManager {
             Class<? extends Bone> BoneClass,
             Class<? extends Skeleton3D> ArmatureClass,
             Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
-            Class<? extends LimitCone> LimitConeClass,
+            Class<? extends KusudamaTwist> KusudamaTwistClass,
             Class<? extends IKPin> IKPinClass,
             EWBIKLoader loader) {
         JSONObject loadFile = StringFuncs.loadJSONObject(selection);
@@ -84,7 +85,7 @@ public final class FloatBackedLoader extends LoadManager {
                 BoneClass,
                 ArmatureClass,
                 KusudamaClass,
-                LimitConeClass,
+                KusudamaTwistClass,
                 IKPinClass);
     }
 
@@ -93,7 +94,7 @@ public final class FloatBackedLoader extends LoadManager {
             Class<? extends Bone> BoneClass,
             Class<? extends Skeleton3D> ArmatureClass,
             Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
-            Class<? extends LimitCone> LimitConeClass,
+            Class<? extends KusudamaTwist> KusudamaTwistClass,
             Class<? extends IKPin> IKPinClass) {
         clearCurrentLoadObjects();
 
@@ -101,7 +102,7 @@ public final class FloatBackedLoader extends LoadManager {
         BoneClass = BoneClass == null ? Bone.class : BoneClass;
         ArmatureClass = ArmatureClass == null ? Skeleton3D.class : ArmatureClass;
         KusudamaClass = KusudamaClass == null ? ewbik.processing.singlePrecision.Kusudama.class : KusudamaClass;
-        LimitConeClass = LimitConeClass == null ? LimitCone.class : LimitConeClass;
+        KusudamaTwistClass = KusudamaTwistClass == null ? KusudamaTwist.class : KusudamaTwistClass;
         IKPinClass = IKPinClass == null ? IKPin.class : IKPinClass;
 
         createEmptyLoadMaps(axesJSONObjects, axesLoadObjects, loadFile.getJSONArray("axes"), AxesClass);
@@ -110,13 +111,13 @@ public final class FloatBackedLoader extends LoadManager {
                 ArmatureClass);
         createEmptyLoadMaps(kusudamaJSONObjects, kusudamaLoadObjects, loadFile.getJSONArray("kusudamas"),
                 KusudamaClass);
-        createEmptyLoadMaps(limitConeJSONObjects, limitConeLoadObjects, loadFile.getJSONArray("limitCones"),
-                LimitConeClass);
+        createEmptyLoadMaps(KusudamaTwistJSONObjects, KusudamaTwistLoadObjects, loadFile.getJSONArray("limitCones"),
+                KusudamaTwistClass);
         createEmptyLoadMaps(IKPinJSONObjects, IKPinLoadObjects, loadFile.getJSONArray("IKPins"), IKPinClass);
 
         loadGenerally(axesJSONObjects, axesLoadObjects);
         loadGenerally(IKPinJSONObjects, IKPinLoadObjects);
-        loadGenerally(limitConeJSONObjects, limitConeLoadObjects);
+        loadGenerally(KusudamaTwistJSONObjects, KusudamaTwistLoadObjects);
         loadGenerally(kusudamaJSONObjects, kusudamaLoadObjects);
         loadGenerally(boneJSONObjects, boneLoadObjects);
         loadGenerally(armatureJSONObjects, armatureLoadObjects);
@@ -151,8 +152,8 @@ public final class FloatBackedLoader extends LoadManager {
 
         kusudamaLoadObjects.clear();
         kusudamaJSONObjects.clear();
-        limitConeLoadObjects.clear();
-        limitConeJSONObjects.clear();
+        KusudamaTwistLoadObjects.clear();
+        KusudamaTwistJSONObjects.clear();
 
         allLoadedObjects.clear();
 
@@ -288,8 +289,8 @@ public final class FloatBackedLoader extends LoadManager {
             result = (Saveable) boneLoadObjects.get(identityHash);
         else if (ewbik.processing.singlePrecision.Kusudama.class.isAssignableFrom(keyClass))
             result = (Saveable) kusudamaLoadObjects.get(identityHash);
-        else if (LimitCone.class.isAssignableFrom(keyClass))
-            result = (Saveable) limitConeLoadObjects.get(identityHash);
+        else if (KusudamaTwist.class.isAssignableFrom(keyClass))
+            result = (Saveable) KusudamaTwistLoadObjects.get(identityHash);
         else if (IKPin.class.isAssignableFrom(keyClass))
             result = (Saveable) IKPinLoadObjects.get(identityHash);
 

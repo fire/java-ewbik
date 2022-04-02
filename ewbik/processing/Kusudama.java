@@ -33,6 +33,7 @@ import processing.opengl.PGraphicsOpenGL;
 import processing.opengl.PShader;
 
 import java.util.ArrayList;
+import ewbik.processing.singlePrecision.KusudamaTwist;
 
 /**
  * Note, this class is a concrete implementation of the abstract class
@@ -48,9 +49,9 @@ public class Kusudama implements Saveable {
     protected ewbik.processing.sceneGraph.Node3D limitingNode3D;
     protected float painfullness;
     /**
-     * An array containing all of the Kusudama's limitCones. The kusudama is built
+     * An array containing all of the Kusudama's KusudamaTwists. The kusudama is built
      * up
-     * with the expectation that any limitCone in the array is connected to the cone
+     * with the expectation that any KusudamaTwist in the array is connected to the cone
      * at the previous element in the array,
      * and the cone at the next element in the array.
      */
@@ -117,29 +118,29 @@ public class Kusudama implements Saveable {
     /**
      * {@inheritDoc}
      **/
-    public ewbik.processing.singlePrecision.KusudamaTwist createLimitConeForIndex(int insertAt, Vector3 newPoint,
+    public ewbik.processing.singlePrecision.KusudamaTwist createKusudamaTwistForIndex(int insertAt, Vector3 newPoint,
                                                                                   float radius) {
-        return new LimitCone(ewbik.processing.sceneGraph.Node3D.toPVector(newPoint), radius, this);
+        return new KusudamaTwist(ewbik.processing.sceneGraph.Node3D.toPVector(newPoint), radius, this);
     }
 
     /**
-     * Adds a LimitCone to the Kusudama. LimitCones are reach cones which can be
+     * Adds a KusudamaTwist to the Kusudama. KusudamaTwists are reach cones which can be
      * arranged sequentially. The Kusudama will infer
-     * a smooth path leading from one LimitCone to the next.
+     * a smooth path leading from one KusudamaTwist to the next.
      * <p>
-     * Using a single LimitCone is functionally equivalent to a classic reachCone
+     * Using a single KusudamaTwist is functionally equivalent to a classic reachCone
      * constraint.
      *
-     * @param insertAt the intended index for this LimitCone in the sequence of
-     *                 LimitCones from which the Kusudama will infer a path. @see
-     *                 ewbik.ik.Kusudama.limitCones limitCones array.
-     * @param newPoint where on the Kusudama to add the LimitCone (in Kusudama's
+     * @param insertAt the intended index for this KusudamaTwist in the sequence of
+     *                 KusudamaTwists from which the Kusudama will infer a path. @see
+     *                 ewbik.ik.Kusudama.KusudamaTwists KusudamaTwists array.
+     * @param newPoint where on the Kusudama to add the KusudamaTwist (in Kusudama's
      *                 local coordinate frame defined by its bone's
      *                 majorRotationAxes))
-     * @param radius   the radius of the limitCone
+     * @param radius   the radius of the KusudamaTwist
      */
-    public void addLimitConeAtIndex(int insertAt, PVector newPoint, float radius) {
-        addLimitConeAtIndex(insertAt, ewbik.processing.sceneGraph.Node3D.toVec3f(newPoint), radius);
+    public void addKusudamaTwistAtIndex(int insertAt, PVector newPoint, float radius) {
+        addKusudamaTwistAtIndex(insertAt, ewbik.processing.sceneGraph.Node3D.toVec3f(newPoint), radius);
     }
 
     public boolean isInLimits(PVector inPoint) {
@@ -202,14 +203,14 @@ public class Kusudama implements Saveable {
 
     protected void updateShaderTexture() {
 
-        if (coneSequence == null || coneSequence.length != getLimitCones().size() * 12
-                || coneCount != getLimitCones().size()) {
-            coneSequence = new float[getLimitCones().size() * 12];
-            coneCount = getLimitCones().size();
+        if (coneSequence == null || coneSequence.length != getKusudamaTwists().size() * 12
+                || coneCount != getKusudamaTwists().size()) {
+            coneSequence = new float[getKusudamaTwists().size() * 12];
+            coneCount = getKusudamaTwists().size();
         }
 
         int idx = 0;
-        for (LimitCone lc : getLimitCones()) {
+        for (KusudamaTwist lc : getKusudamaTwists()) {
             PVector controlPoint = ewbik.processing.sceneGraph.Node3D.toPVector(lc.getControlPoint());
             PVector leftTangent = ewbik.processing.sceneGraph.Node3D.toPVector(lc.tangentCircleCenterNext1);
             PVector rightTangent = ewbik.processing.sceneGraph.Node3D.toPVector(lc.tangentCircleCenterNext2);
@@ -258,8 +259,8 @@ public class Kusudama implements Saveable {
     }
 
     @SuppressWarnings("unchecked")
-    public ArrayList<LimitCone> getLimitCones() {
-        return (ArrayList<LimitCone>) (ArrayList<? extends ewbik.processing.singlePrecision.KusudamaTwist>) this.kusudamaTwists;
+    public ArrayList<KusudamaTwist> getKusudamaTwists() {
+        return (ArrayList<KusudamaTwist>) (ArrayList<? extends ewbik.processing.singlePrecision.KusudamaTwist>) this.kusudamaTwists;
     }
 
     public void constraintUpdateNotification() {
@@ -285,12 +286,12 @@ public class Kusudama implements Saveable {
         ewbik.processing.sceneGraph.Node3D originalLimitingNode3D = limitingNode3D.getGlobalCopy();
 
         ArrayList<Vector3> directions = new ArrayList<>();
-        if (getLimitCones().size() == 1) {
+        if (getKusudamaTwists().size() == 1) {
             directions.add((kusudamaTwists.get(0).getControlPoint()).copy());
         } else {
-            for (int i = 0; i < getLimitCones().size() - 1; i++) {
-                Vector3 thisC = getLimitCones().get(i).getControlPoint().copy();
-                Vector3 nextC = getLimitCones().get(i + 1).getControlPoint().copy();
+            for (int i = 0; i < getKusudamaTwists().size() - 1; i++) {
+                Vector3 thisC = getKusudamaTwists().get(i).getControlPoint().copy();
+                Vector3 nextC = getKusudamaTwists().get(i + 1).getControlPoint().copy();
                 Quaternion thisToNext = new Quaternion(thisC, nextC);
                 Quaternion halfThisToNext = new Quaternion(thisToNext.getAxis(), thisToNext.getAngle() / 2f);
 
@@ -319,7 +320,7 @@ public class Kusudama implements Saveable {
                 originalLimitingNode3D.getGlobalOf(newYRay).heading());
         limitingNode3D.rotateBy(oldYtoNewY);
 
-        for (ewbik.processing.singlePrecision.KusudamaTwist lc : getLimitCones()) {
+        for (ewbik.processing.singlePrecision.KusudamaTwist lc : getKusudamaTwists()) {
             originalLimitingNode3D.setToGlobalOf(lc.getControlPoint(), lc.getControlPoint());
             limitingNode3D.setToLocalOf(lc.getControlPoint(), lc.getControlPoint());
             lc.getControlPoint().normalize();
@@ -679,56 +680,56 @@ public class Kusudama implements Saveable {
     }
 
     /**
-     * Add a LimitCone to the Kusudama.
+     * Add a KusudamaTwist to the Kusudama.
      *
-     * @param newPoint where on the Kusudama to add the LimitCone (in Kusudama's
+     * @param newPoint where on the Kusudama to add the KusudamaTwist (in Kusudama's
      *                 local coordinate frame defined by its bone's
      *                 majorRotationAxes))
-     * @param radius   the radius of the limitCone
-     * @param previous the LimitCone adjacent to this one (may be null if LimitCone
-     *                 is not supposed to be between two existing LimitCones)
-     * @param next     the other LimitCone adjacent to this one (may be null if
-     *                 LimitCone is not supposed to be between two existing
-     *                 LimitCones)
+     * @param radius   the radius of the KusudamaTwist
+     * @param previous the KusudamaTwist adjacent to this one (may be null if KusudamaTwist
+     *                 is not supposed to be between two existing KusudamaTwists)
+     * @param next     the other KusudamaTwist adjacent to this one (may be null if
+     *                 KusudamaTwist is not supposed to be between two existing
+     *                 KusudamaTwists)
      */
-    public void addLimitCone(Vector3 newPoint, float radius, ewbik.processing.singlePrecision.KusudamaTwist previous,
+    public void addKusudamaTwist(Vector3 newPoint, float radius, ewbik.processing.singlePrecision.KusudamaTwist previous,
             ewbik.processing.singlePrecision.KusudamaTwist next) {
         int insertAt = 0;
 
         if (next == null || kusudamaTwists.size() == 0) {
-            addLimitConeAtIndex(-1, newPoint, radius);
+            addKusudamaTwistAtIndex(-1, newPoint, radius);
         } else if (previous != null) {
             insertAt = kusudamaTwists.indexOf(previous) + 1;
         } else {
             insertAt = (int) MathUtils.max(0, kusudamaTwists.indexOf(next));
         }
-        addLimitConeAtIndex(insertAt, newPoint, radius);
+        addKusudamaTwistAtIndex(insertAt, newPoint, radius);
     }
 
-    public void removeLimitCone(ewbik.processing.singlePrecision.KusudamaTwist kusudamaTwist) {
+    public void removeKusudamaTwist(ewbik.processing.singlePrecision.KusudamaTwist kusudamaTwist) {
         this.kusudamaTwists.remove(kusudamaTwist);
         this.updateTangentRadii();
         this.updateRotationalFreedom();
     }
 
     /**
-     * Adds a LimitCone to the Kusudama. LimitCones are reach cones which can be
+     * Adds a KusudamaTwist to the Kusudama. KusudamaTwists are reach cones which can be
      * arranged sequentially. The Kusudama will infer
-     * a smooth path leading from one LimitCone to the next.
+     * a smooth path leading from one KusudamaTwist to the next.
      * <p>
-     * Using a single LimitCone is functionally equivalent to a classic reachCone
+     * Using a single KusudamaTwist is functionally equivalent to a classic reachCone
      * constraint.
      *
-     * @param insertAt the intended index for this LimitCone in the sequence of
-     *                 LimitCones from which the Kusudama will infer a path. @see
-     *                 ewbik.ik.Kusudama.limitCones limitCones array.
-     * @param newPoint where on the Kusudama to add the LimitCone (in Kusudama's
+     * @param insertAt the intended index for this KusudamaTwist in the sequence of
+     *                 KusudamaTwists from which the Kusudama will infer a path. @see
+     *                 ewbik.ik.Kusudama.KusudamaTwists KusudamaTwists array.
+     * @param newPoint where on the Kusudama to add the KusudamaTwist (in Kusudama's
      *                 local coordinate frame defined by its bone's
      *                 majorRotationAxes))
-     * @param radius   the radius of the limitCone
+     * @param radius   the radius of the KusudamaTwist
      */
-    public void addLimitConeAtIndex(int insertAt, Vector3 newPoint, float radius) {
-        ewbik.processing.singlePrecision.KusudamaTwist newCone = createLimitConeForIndex(insertAt, newPoint, radius);
+    public void addKusudamaTwistAtIndex(int insertAt, Vector3 newPoint, float radius) {
+        ewbik.processing.singlePrecision.KusudamaTwist newCone = createKusudamaTwistForIndex(insertAt, newPoint, radius);
         if (insertAt == -1) {
             kusudamaTwists.add(newCone);
         } else {
@@ -846,12 +847,12 @@ public class Kusudama implements Saveable {
 
     protected void updateRotationalFreedom() {
         float axialConstrainedHyperArea = isAxiallyConstrained() ? (range / TAU) : 1f;
-        float totalLimitConeSurfaceAreaRatio = 0f;
+        float totalKusudamaTwistSurfaceAreaRatio = 0f;
         for (ewbik.processing.singlePrecision.KusudamaTwist l : kusudamaTwists) {
-            totalLimitConeSurfaceAreaRatio += (l.getRadius() * 2f) / TAU;
+            totalKusudamaTwistSurfaceAreaRatio += (l.getRadius() * 2f) / TAU;
         }
         rotationalFreedom = axialConstrainedHyperArea
-                * (isOrientationallyConstrained() ? MathUtils.min(totalLimitConeSurfaceAreaRatio, 1f) : 1f);
+                * (isOrientationallyConstrained() ? MathUtils.min(totalKusudamaTwistSurfaceAreaRatio, 1f) : 1f);
     }
 
     /**
