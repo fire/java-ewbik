@@ -32,13 +32,13 @@ import java.util.HashMap;
  * @author Eron Gjoni
  */
 public class ShadowNode3D {
-    public Bone segmentRoot;
-    public Bone segmentTip;
+    public Bone bonechainRoot;
+    public Bone bonechainTip;
 
-    public ArrayList<ewbik.ik.ShadowNode3D> childSegments = new ArrayList<ewbik.ik.ShadowNode3D>();
+    public ArrayList<ewbik.ik.ShadowNode3D> bonechainChild = new ArrayList<ewbik.ik.ShadowNode3D>();
     public ArrayList<ewbik.ik.ShadowNode3D> pinnedDescendants = new ArrayList<ewbik.ik.ShadowNode3D>();
     public HashMap<Bone, ShadowBone> simulatedBones = new HashMap<>();
-    public ArrayList<Bone> segmentBoneList = new ArrayList<Bone>();
+    public ArrayList<Bone> bonechainList = new ArrayList<Bone>();
     public int distanceToRoot = 0;
     public int chainLength = 0;
     public ewbik.processing.sceneGraph.Node3D debugTipNode3D;
@@ -49,23 +49,23 @@ public class ShadowNode3D {
     Vector3[] localizedTargetHeadings;
     Vector3[] localizedTipHeadings;
     float[] weights;
-    private ewbik.ik.ShadowNode3D parentSegment = null;
+    private ewbik.ik.ShadowNode3D bonechainParent = null;
     private boolean basePinned = false;
     private boolean tipPinned = false;
     private boolean processed = false;
     private boolean simAligned = false;
 
     public ShadowNode3D(Bone rootBone) {
-        segmentRoot = armatureRootBone(rootBone);
-        generateArmatureSegments();
+        bonechainRoot = armatureRootBone(rootBone);
+        generateArmatureBonechains();
         ensureAxesHeirarchy();
     }
 
     public ShadowNode3D(ewbik.ik.ShadowNode3D inputParentSegment, Bone inputSegmentRoot) {
-        this.segmentRoot = inputSegmentRoot;
-        this.setParentSegment(inputParentSegment);
-        this.distanceToRoot = this.getParentSegment().distanceToRoot + 1;
-        generateArmatureSegments();
+        this.bonechainRoot = inputSegmentRoot;
+        this.setBonechainParent(inputParentSegment);
+        this.distanceToRoot = this.getBonechainParent().distanceToRoot + 1;
+        generateArmatureBonechains();
     }
 
     /**
@@ -75,41 +75,41 @@ public class ShadowNode3D {
      */
     public static void recursivelyCreateHeadingArraysFor(ewbik.ik.ShadowNode3D s) {
         s.createHeadingArrays();
-        for (ewbik.ik.ShadowNode3D c : s.childSegments) {
+        for (ewbik.ik.ShadowNode3D c : s.bonechainChild) {
             recursivelyCreateHeadingArraysFor(c);
         }
     }
 
-    private void generateArmatureSegments() {
-        childSegments.clear();
+    private void generateArmatureBonechains() {
+        bonechainChild.clear();
         setTipPinned(false);
-        if (segmentRoot.getParent() != null && segmentRoot.getParent().isPinned())
+        if (bonechainRoot.getParent() != null && bonechainRoot.getParent().isPinned())
             this.setBasePinned(true);
         else
             this.setBasePinned(false);
 
-        Bone tempSegmentTip = this.segmentRoot;
+        Bone temporaryBonechainTip = this.bonechainRoot;
         this.chainLength = -1;
         while (true) {
             this.chainLength++;
-            ArrayList<Bone> childrenWithPinnedDescendants = tempSegmentTip
+            ArrayList<Bone> childrenWithPinnedDescendants = temporaryBonechainTip
                     .returnChildrenWithPinnedDescendants();
 
-            if (childrenWithPinnedDescendants.size() > 1 || (tempSegmentTip.isPinned())) {
-                if (tempSegmentTip.isPinned()) {
+            if (childrenWithPinnedDescendants.size() > 1 || (temporaryBonechainTip.isPinned())) {
+                if (temporaryBonechainTip.isPinned()) {
                     setTipPinned(true);
                 }
-                this.segmentTip = tempSegmentTip;
+                this.bonechainTip = temporaryBonechainTip;
 
                 for (Bone childBone : childrenWithPinnedDescendants) {
-                    this.childSegments.add(new ewbik.ik.ShadowNode3D(this, childBone));
+                    this.bonechainChild.add(new ewbik.ik.ShadowNode3D(this, childBone));
                 }
 
                 break;
             } else if (childrenWithPinnedDescendants.size() == 1) {
-                tempSegmentTip = childrenWithPinnedDescendants.get(0);
+                temporaryBonechainTip = childrenWithPinnedDescendants.get(0);
             } else {
-                this.segmentTip = tempSegmentTip;
+                this.bonechainTip = temporaryBonechainTip;
                 break;
             }
         }
@@ -148,7 +148,7 @@ public class ShadowNode3D {
         if (currentFalloff == 0) {
             return;
         } else {
-            IKPin pin = from.segmentTip.getIKPin();
+            IKPin pin = from.bonechainTip.getIKPin();
             if (pin != null) {
                 ArrayList<Float> innerWeightArray = new ArrayList<Float>();
                 weightArray.add(innerWeightArray);
@@ -186,7 +186,7 @@ public class ShadowNode3D {
                         .get(pin.forBone()));
             }
             float thisFalloff = pin == null ? 1f : pin.getDepthFalloff();
-            for (ewbik.ik.ShadowNode3D s : from.childSegments) {
+            for (ewbik.ik.ShadowNode3D s : from.bonechainChild) {
                 recursivelyCreatePenaltyArray(s, weightArray, pinSequence, currentFalloff * thisFalloff);
             }
 
@@ -200,10 +200,10 @@ public class ShadowNode3D {
      */
     private void ensureAxesHeirarchy() {
         ewbik.ik.ShadowNode3D rootStrand = this;
-        while (rootStrand.parentSegment != null) {
-            rootStrand = rootStrand.parentSegment;
+        while (rootStrand.bonechainParent != null) {
+            rootStrand = rootStrand.bonechainParent;
         }
-        recursivelyEnsureAxesHeirarchyFor(rootStrand.segmentRoot, rootStrand.segmentRoot.parentArmature.localAxes());
+        recursivelyEnsureAxesHeirarchyFor(rootStrand.bonechainRoot, rootStrand.bonechainRoot.parentArmature.localAxes());
     }
 
     private void recursivelyEnsureAxesHeirarchyFor(Bone b, ewbik.processing.sceneGraph.Node3D parentTo) {
@@ -219,10 +219,10 @@ public class ShadowNode3D {
     }
 
     public void updateSegmentedArmature() {
-        if (this.getParentSegment() != null) {
-            this.getParentSegment().updateSegmentedArmature();
+        if (this.getBonechainParent() != null) {
+            this.getBonechainParent().updateSegmentedArmature();
         } else {
-            generateArmatureSegments();
+            generateArmatureBonechains();
             ensureAxesHeirarchy();
         }
     }
@@ -233,15 +233,15 @@ public class ShadowNode3D {
             b.simLocalNode3D.emancipate();
         }
         simulatedBones.clear();
-        segmentBoneList.clear();
+        bonechainList.clear();
 
-        Bone currentBone = segmentTip;
-        Bone stopOn = segmentRoot;
+        Bone currentBone = bonechainTip;
+        Bone stopOn = bonechainRoot;
         while (currentBone != null) {
             ShadowBone sb = simulatedBones.get(currentBone);
             if (sb == null) {
                 simulatedBones.put(currentBone, new ShadowBone(currentBone));
-                segmentBoneList.add(0, currentBone);
+                bonechainList.add(0, currentBone);
             }
 
             if (currentBone == stopOn)
@@ -279,7 +279,7 @@ public class ShadowNode3D {
         if (this.isTipPinned()) {
             innerPinnedChains.add(this);
         } else {
-            for (ewbik.ik.ShadowNode3D childSegment : childSegments) {
+            for (ewbik.ik.ShadowNode3D childSegment : bonechainChild) {
                 innerPinnedChains.addAll(childSegment.returnSegmentPinnedNodes());
             }
         }
@@ -513,20 +513,20 @@ public class ShadowNode3D {
      */
     public ewbik.ik.ShadowNode3D getChainFor(Bone chainMember) {
         ewbik.ik.ShadowNode3D result = null;
-        if (this.segmentBoneList.contains(chainMember))
+        if (this.bonechainList.contains(chainMember))
             return this;
-        if (this.parentSegment != null)
-            result = this.parentSegment.getAncestorSegmentContaining(chainMember);
+        if (this.bonechainParent != null)
+            result = this.bonechainParent.getAncestorSegmentContaining(chainMember);
         if (result == null)
             result = getChildSegmentContaining(chainMember);
         return result;
     }
 
     public ewbik.ik.ShadowNode3D getChildSegmentContaining(Bone b) {
-        if (segmentBoneList.contains(b)) {
+        if (bonechainList.contains(b)) {
             return this;
         } else {
-            for (ewbik.ik.ShadowNode3D s : childSegments) {
+            for (ewbik.ik.ShadowNode3D s : bonechainChild) {
                 ewbik.ik.ShadowNode3D childContaining = s.getChildSegmentContaining(b);
                 if (childContaining != null)
                     return childContaining;
@@ -536,10 +536,10 @@ public class ShadowNode3D {
     }
 
     public ewbik.ik.ShadowNode3D getAncestorSegmentContaining(Bone b) {
-        if (segmentBoneList.contains(b))
+        if (bonechainList.contains(b))
             return this;
-        else if (this.parentSegment != null)
-            return this.parentSegment.getAncestorSegmentContaining(b);
+        else if (this.bonechainParent != null)
+            return this.bonechainParent.getAncestorSegmentContaining(b);
         else
             return null;
     }
@@ -558,7 +558,7 @@ public class ShadowNode3D {
             if (currentChain.isBasePinned())
                 return currentChain;
             else
-                currentChain = currentChain.getParentSegment();
+                currentChain = currentChain.getBonechainParent();
         }
 
         return null;
@@ -589,12 +589,12 @@ public class ShadowNode3D {
         this.basePinned = basePinned;
     }
 
-    public ewbik.ik.ShadowNode3D getParentSegment() {
-        return parentSegment;
+    public ewbik.ik.ShadowNode3D getBonechainParent() {
+        return bonechainParent;
     }
 
-    public void setParentSegment(ewbik.ik.ShadowNode3D parentSegment) {
-        this.parentSegment = parentSegment;
+    public void setBonechainParent(ewbik.ik.ShadowNode3D bonechainParent) {
+        this.bonechainParent = bonechainParent;
     }
 
     /**
@@ -605,10 +605,10 @@ public class ShadowNode3D {
      */
 
     public void alignSimulationAxesToBones() {
-        if (!this.isBasePinned() && this.getParentSegment() != null) {
-            this.getParentSegment().alignSimulationAxesToBones();
+        if (!this.isBasePinned() && this.getBonechainParent() != null) {
+            this.getBonechainParent().alignSimulationAxesToBones();
         } else {
-            recursivelyAlignSimAxesOutwardFrom(segmentRoot, true);
+            recursivelyAlignSimAxesOutwardFrom(bonechainRoot, true);
         }
     }
 
@@ -675,7 +675,7 @@ public class ShadowNode3D {
         } else {
             if (this.tipPinned)
                 return;
-            for (ewbik.ik.ShadowNode3D c : childSegments) {
+            for (ewbik.ik.ShadowNode3D c : bonechainChild) {
                 c.getRootMostUnprocessedChains(segments);
             }
         }
@@ -684,7 +684,7 @@ public class ShadowNode3D {
     public void setProcessed(boolean b) {
         this.processed = b;
         if (processed == false) {
-            for (ewbik.ik.ShadowNode3D c : childSegments) {
+            for (ewbik.ik.ShadowNode3D c : bonechainChild) {
                 c.setProcessed(false);
             }
         }
