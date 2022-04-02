@@ -167,26 +167,15 @@ public class Node3D implements ewbik.asj.Saveable {
         this.updateGlobal();
     }
 
-    /**
-     * conversion functions. Replace these with functions that convert to and from your
-     * framework's native vector and ray representations.
-     */
-    //////////////////////////////////////////////////////////////////////////////////////////////
     public static PVector toPVector(Vector3 sv) {
         return new PVector(sv.x, sv.y, sv.z);
     }
-
-    //////////////////// END OF CONVERSION FUNCTIONS
 
     public static void toDVector(Vector3 sv, PVector storeIn) {
         storeIn.x = sv.x;
         storeIn.y = sv.y;
         storeIn.z = sv.z;
     }
-
-
-    ///WRAPPER FUNCTIONS. Basically just find + replace these with the appropriate class names and conversion functions above if you need them
-    //and you should be good to go.
 
     public static Vector3 toVec3f(PVector ev) {
         return new Vector3(ev.x, ev.y, ev.z);
@@ -275,8 +264,6 @@ public class Node3D implements ewbik.asj.Saveable {
     public void rotateAboutZ(float radians) {
         rotateAboutZ(radians, true);
     }
-
-    //////////////////////// End of wrapper functions
 
     public PVector getOrigin() {
         return toPVector(origin_());
@@ -1150,26 +1137,19 @@ public class Node3D implements ewbik.asj.Saveable {
 
     @Override
     public void notifyOfSaveIntent(ewbik.asj.SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void notifyOfSaveCompletion(ewbik.asj.SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public boolean isLoading() {
-
         return false;
     }
 
     @Override
     public void setLoading(boolean loading) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override

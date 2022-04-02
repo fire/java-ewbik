@@ -277,11 +277,7 @@ public class QCP {
         Szz = 0;
 
         if (weight != null) {
-            // wsum = 0;
             for (int i = 0; i < coords1.length; i++) {
-
-                // wsum += weight[i];
-
                 x1 = weight[i] * coords1[i].x;
                 y1 = weight[i] * coords1[i].y;
                 z1 = weight[i] * coords1[i].z;
@@ -323,7 +319,6 @@ public class QCP {
                 Szy += coords1[i].z * coords2[i].y;
                 Szz += coords1[i].z * coords2[i].z;
             }
-            // wsum = coords1.length;
         }
 
         e0 = (g1 + g2) * 0.5f;

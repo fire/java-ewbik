@@ -54,9 +54,6 @@ public class StringList implements Iterable<String> {
         data = new String[count];
         int index = 0;
         for (Object o : items) {
-//      // Not gonna go with null values staying that way because perhaps
-//      // the most common case here is to immediately call join() or similar.
-//      data[index++] = String.valueOf(o);
             // Keep null values null (because join() will make non-null anyway)
             if (o != null) {  // leave null values null
                 data[index] = o.toString();
@@ -191,18 +188,12 @@ public class StringList implements Iterable<String> {
             throw new ArrayIndexOutOfBoundsException(index);
         }
         String entry = data[index];
-//    int[] outgoing = new int[count - 1];
-//    System.arraycopy(data, 0, outgoing, 0, index);
-//    count--;
-//    System.arraycopy(data, index + 1, outgoing, 0, count - index);
-//    data = outgoing;
         for (int i = index; i < count - 1; i++) {
             data[i] = data[i + 1];
         }
         count--;
         return entry;
     }
-
 
     // Remove the first instance of a particular value and return its index.
     public int removeValue(String value) {
@@ -326,41 +317,9 @@ public class StringList implements Iterable<String> {
         }
     }
 
-
-//  public void insert(int index, int value) {
-//    if (index+1 > count) {
-//      if (index+1 < data.length) {
-//    }
-//  }
-//    if (index >= data.length) {
-//      data = StringFuncs.expand(data, index+1);
-//      data[index] = value;
-//      count = index+1;
-//
-//    } else if (count == data.length) {
-//    if (index >= count) {
-//      //int[] temp = new int[count << 1];
-//      System.arraycopy(data, 0, temp, 0, index);
-//      temp[index] = value;
-//      System.arraycopy(data, index, temp, index+1, count - index);
-//      data = temp;
-//
-//    } else {
-//      // data[] has room to grow
-//      // for() loop believed to be faster than System.arraycopy over itself
-//      for (int i = count; i > index; --i) {
-//        data[i] = data[i-1];
-//      }
-//      data[index] = value;
-//      count++;
-//    }
-//  }
-
-
     public void insert(int index, String value) {
         insert(index, new String[]{value});
     }
-
 
     // same as splice
     public void insert(int index, String[] values) {
@@ -379,14 +338,8 @@ public class StringList implements Iterable<String> {
         // Copy the new values into the proper place
         System.arraycopy(values, 0, temp, index, values.length);
 
-//    if (index < count) {
-        // The index was inside count, so it's a true splice/insert
         System.arraycopy(data, index, temp, index + values.length, count - index);
-        count = count + values.length;
-//    } else {
-//      // The index was past 'count', so the new count is weirder
-//      count = index + values.length;
-//    }
+        count = count + values.length;s
         data = temp;
     }
 
@@ -394,50 +347,6 @@ public class StringList implements Iterable<String> {
     public void insert(int index, StringList list) {
         insert(index, list.values());
     }
-
-
-    // below are aborted attempts at more optimized versions of the code
-    // that are harder to read and debug...
-
-//    if (index + values.length >= count) {
-//      // We're past the current 'count', check to see if we're still allocated
-//      // index 9, data.length = 10, values.length = 1
-//      if (index + values.length < data.length) {
-//        // There's still room for these entries, even though it's past 'count'.
-//        // First clear out the entries leading up to it, however.
-//        for (int i = count; i < index; i++) {
-//          data[i] = 0;
-//        }
-//        data[index] =
-//      }
-//      if (index >= data.length) {
-//        int length = index + values.length;
-//        int[] temp = new int[length];
-//        System.arraycopy(data, 0, temp, 0, count);
-//        System.arraycopy(values, 0, temp, index, values.length);
-//        data = temp;
-//        count = data.length;
-//      } else {
-//
-//      }
-//
-//    } else if (count == data.length) {
-//      int[] temp = new int[count << 1];
-//      System.arraycopy(data, 0, temp, 0, index);
-//      temp[index] = value;
-//      System.arraycopy(data, index, temp, index+1, count - index);
-//      data = temp;
-//
-//    } else {
-//      // data[] has room to grow
-//      // for() loop believed to be faster than System.arraycopy over itself
-//      for (int i = count; i > index; --i) {
-//        data[i] = data[i-1];
-//      }
-//      data[index] = value;
-//      count++;
-//    }
-
 
     /**
      * Return the first index of a particular value.
@@ -458,16 +367,6 @@ public class StringList implements Iterable<String> {
         }
         return -1;
     }
-
-
-    // !!! TODO this is not yet correct, because it's not being reset when
-    // the rest of the entries are changed
-//  protected void cacheIndices() {
-//    indexCache = new HashMap<Integer, Integer>();
-//    for (int i = 0; i < count; i++) {
-//      indexCache.put(data[i], i);
-//    }
-//  }
 
     /**
      * @webref stringlist:method
@@ -534,24 +433,6 @@ public class StringList implements Iterable<String> {
             }
         }.run();
     }
-
-
-    // use insert()
-//  public void splice(int index, int value) {
-//  }
-
-
-//  public void subset(int start) {
-//    subset(start, count - start);
-//  }
-//
-//
-//  public void subset(int start, int num) {
-//    for (int i = 0; i < num; i++) {
-//      data[i] = data[i+start];
-//    }
-//    count = num;
-//  }
 
     /**
      * @webref stringlist:method
@@ -654,11 +535,6 @@ public class StringList implements Iterable<String> {
 
     @Override
     public Iterator<String> iterator() {
-//    return valueIterator();
-//  }
-//
-//
-//  public Iterator<String> valueIterator() {
         return new Iterator<String>() {
             int index = -1;
 

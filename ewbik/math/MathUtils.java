@@ -26,7 +26,6 @@ package ewbik.math;
 public final class MathUtils {
     static public final double nanoToSec = 1 / 1000000000f;
 
-    // ---
     static public final float FLOAT_ROUNDING_ERROR = 0.000001f; // 32 bits, 23 of which may hold the significand for a precision of 6 digits
     static public final double DOUBLE_ROUNDING_ERROR = 0.000000000000001d; // 64, 52 of which represent the significand for a precision of 15 digits.
     static public final float PI = (float) Math.PI;
@@ -55,8 +54,6 @@ public final class MathUtils {
     static private final double CEIL = 0.9999999;
     static private final double BIG_ENOUGH_ROUND = BIG_ENOUGH_INT + 0.5f;
 
-    // ---
-
     /**
      * Returns the sine in radians from a lookup table.
      */
@@ -64,16 +61,12 @@ public final class MathUtils {
         return (float) Math.sin((double) radians);
     }
 
-    // ---
-
     /**
      * Returns the cosine in radians from a lookup table.
      */
     static public float cos(float radians) {
         return (float) Math.cos(radians);
     }
-
-    // ---
 
     /**
      * Returns the cosine in radians from a lookup table.
@@ -101,8 +94,6 @@ public final class MathUtils {
         atan = PI / 2 - z / (z * z + 0.28f);
         return y < 0f ? atan - PI : atan;
     }
-
-    // ---
 
     public static float lerp(float a, float b, float t) {
         return (1 - t) * a + t * b;
@@ -138,8 +129,6 @@ public final class MathUtils {
         return value;
     }
 
-    // ---
-
     static public long clamp(long value, long min, long max) {
         if (value < min) return min;
         if (value > max) return max;
@@ -157,8 +146,6 @@ public final class MathUtils {
         if (value > max) return max;
         return value;
     }
-
-    // ---
 
     /**
      * Linearly interpolates between fromValue to toValue on progress position.

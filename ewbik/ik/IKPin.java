@@ -22,7 +22,6 @@ public class IKPin implements ewbik.asj.Saveable {
     int subTargetCount = 4;
     float depthFalloff = 0f;
 
-    // default constructor required for file loading to work
     public IKPin() {
     }
 
@@ -413,25 +412,18 @@ public class IKPin implements ewbik.asj.Saveable {
 
     @Override
     public void notifyOfSaveIntent(ewbik.asj.SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void notifyOfSaveCompletion(ewbik.asj.SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public boolean isLoading() {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public void setLoading(boolean loading) {
-        // TODO Auto-generated method stub
-
     }
 }

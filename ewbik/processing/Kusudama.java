@@ -83,7 +83,6 @@ public class Kusudama implements Saveable {
     float unitArea = 4 * MathUtils.PI;
     float rotationalFreedom = 1f;
 
-    // default constructor required for file loading to work
     public Kusudama() {
     }
 
@@ -174,7 +173,7 @@ public class Kusudama implements Saveable {
         float r = p.red(System.identityHashCode(this));
         float g = p.green(System.identityHashCode(this));
         float b = p.blue(System.identityHashCode(this));
-        p.fill(p.color(r, g, b));// p.color(255, 0, 255, 100));
+        p.fill(p.color(r, g, b));
         p.textureMode(PConstants.NORMAL);
         p.shader(currentShader);
         p.fill(p.color(200, 0, 200, 255));
@@ -416,8 +415,6 @@ public class Kusudama implements Saveable {
 
     public <V extends Vector3> boolean isInLimits_(V globalPoint) {
         float[] inBounds = {1f};
-        // boneRay.p1.set(toSet.origin());
-        // boneRay.p2.set(toSet.y().getScaledTo(attachedTo.boneHeight));
         Vector3 inLimits = this.pointInLimits(limitingNode3D.getLocalOf(globalPoint), inBounds);
         return inBounds[0] > 0f;
     }
@@ -447,8 +444,6 @@ public class Kusudama implements Saveable {
 
     public boolean isInOrientationLimits(ewbik.processing.sceneGraph.Node3D globalNode3D, ewbik.processing.sceneGraph.Node3D limitingNode3D) {
         float[] inBounds = {1f};
-        // boneRay.p1().set(globalAxes.origin_());
-        // boneRay.p2().set(globalAxes.y_().getScaledTo(attachedTo.boneHeight));
         Vector3 inLimits = this.pointInLimits(limitingNode3D.getLocalOf(globalNode3D.y_().p2()), inBounds);
         if (inBounds[0] == -1l) {
             return false;
@@ -518,7 +513,6 @@ public class Kusudama implements Saveable {
         } else {
             return 0;
         }
-        // return 0;
     }
 
     public float angleToTwistCenter(ewbik.processing.sceneGraph.Node3D toSet, ewbik.processing.sceneGraph.Node3D limitingNode3D) {
@@ -546,7 +540,6 @@ public class Kusudama implements Saveable {
         // uncomment the next line for reflectable axis support (removed for performance
         // reasons)
         angleDelta *= limitingNode3D.getGlobalChirality() * (limitingNode3D.isGlobalAxisFlipped(ewbik.processing.sceneGraph.Node3D.Y) ? -1 : 1);
-        ;
 
         angleDelta = toTau(angleDelta);
         float fromMinToAngleDelta = toTau(signedAngleDifference(angleDelta, TAU - this.minAxialAngle()));
@@ -599,7 +592,6 @@ public class Kusudama implements Saveable {
 
         Vector3 point = inPoint.copy();
         point.normalize();
-        // point.mult(attachedTo.boneHeight);
 
         inBounds[0] = -1;
 
@@ -634,7 +626,6 @@ public class Kusudama implements Saveable {
                 return inPoint;
             } else {
                 Vector3 axis = limitCones.get(0).getControlPoint().crossCopy(point);
-                // Quaternion toLimit = new Quaternion(limitCones.get(0).getControlPoint(), point);
                 Quaternion toLimit = new Quaternion(axis, limitCones.get(0).getRadius());
                 Vector3 newPoint = toLimit.applyToCopy(limitCones.get(0).getControlPoint());
                 return newPoint;
@@ -768,7 +759,6 @@ public class Kusudama implements Saveable {
      * @return
      */
     public float absoluteMaxAxialAngle() {
-        // return mod((minAxialAngle + range),(MathUtils.PI*2f));
         return signedAngleDifference(range + minAxialAngle, MathUtils.PI * 2f);
     }
 
@@ -840,14 +830,12 @@ public class Kusudama implements Saveable {
 
     protected void updateRotationalFreedom() {
         float axialConstrainedHyperArea = isAxiallyConstrained() ? (range / TAU) : 1f;
-        // quick and dirty solution (should revisit);
         float totalLimitConeSurfaceAreaRatio = 0f;
         for (ewbik.processing.singlePrecision.LimitCone l : limitCones) {
             totalLimitConeSurfaceAreaRatio += (l.getRadius() * 2f) / TAU;
         }
         rotationalFreedom = axialConstrainedHyperArea
                 * (isOrientationallyConstrained() ? MathUtils.min(totalLimitConeSurfaceAreaRatio, 1f) : 1f);
-        // System.out.println("rotational freedom: " + rotationalFreedom);
     }
 
     /**
@@ -931,14 +919,10 @@ public class Kusudama implements Saveable {
 
     @Override
     public void notifyOfSaveIntent(SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void notifyOfSaveCompletion(SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -949,13 +933,10 @@ public class Kusudama implements Saveable {
 
     @Override
     public boolean isLoading() {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public void setLoading(boolean loading) {
-        // TODO Auto-generated method stub
-
     }
 }

@@ -50,7 +50,6 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     protected boolean orientationLock = false;
     protected float stiffnessScalar = 0f;
 
-    // default constructor required for file loader to work.
     public Bone() {
         this.lastRotation = new Quaternion();
     }
@@ -118,7 +117,6 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             Bone.this.parentArmature.addToBoneList(this);
 
             Bone.this.generateAxes(Bone.this.parent.getTip_(), tempX, tempTip, tempRoll);
-            // this.localAxes.orthoNormalize(true);
             Bone.this.localNode3D.setParent(Bone.this.parent.localNode3D);
 
             Bone.this.previousOrientation = Bone.this.localNode3D.attachedCopy(true);
@@ -130,7 +128,6 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             this.parent.addFreeChild(this);
             this.parent.addChild(this);
             this.updateAncestorCount();
-            // this.updateSegmentedArmature();
         } else {
             throw ewbik.ik.IKExceptions.NullParentForBoneException();
         }
@@ -260,7 +257,6 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             Bone.this.parentArmature.addToBoneList(this);
 
             Bone.this.generateAxes(Bone.this.parent.getTip_(), tempNode3D.x_().heading(), tempNode3D.y_().heading(), tempNode3D.z_().heading());
-            // this.localAxes.orthoNormalize(true);
             Bone.this.localNode3D.setParent(Bone.this.parent.localNode3D);
             Bone.this.previousOrientation = Bone.this.localNode3D.attachedCopy(true);
 
@@ -299,7 +295,6 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             Bone.this.parentArmature.addToBoneList(this);
 
             Bone.this.generateAxes(Bone.this.parent.getTip_(), tempNode3D.x_().heading(), tempNode3D.y_().heading(), tempNode3D.z_().heading());
-            // this.localAxes.orthoNormalize(true);
             Bone.this.localNode3D.setParent(Bone.this.parent.localNode3D);
             Bone.this.previousOrientation = Bone.this.localNode3D.attachedCopy(true);
 
@@ -375,7 +370,6 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
         pg.beginShape(PConstants.TRIANGLE_FAN);
         pg.fill(pg.color(0, 255 - boneCol, boneCol));
-        // pg.stroke(lineColor);
         float circumference = (float) (boneHeight / 8f);
         pg.noStroke();
         pg.vertex(0, (float) boneHeight, 0);
@@ -653,7 +647,6 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      *                       when rotating the bone
      */
     public void rotAboutFrameX(float amt, boolean obeyConstraints) {
-        // localAxes().alignLocalsTo(previousOrientation);
         previousOrientation.alignLocalsTo(localNode3D);
 
         Quaternion xRot = new Quaternion(majorRotationNode3D.x_().heading(), amt);
@@ -814,14 +807,10 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         for (Bone child : getChildren()) {
             if (child.pin != null && !child.pin.isEnabled()) {
                 addFreeChild(child);
-                // System.out.println("childAdd");
             }
         }
-        // System.out.println("notifying ancestors");
         notifyAncestorsOfPin(false);
-        // System.out.println("updating segment armature");
         this.updateSegmentedArmature();
-        // System.out.println("segment armature updated");
     }
 
     /**
@@ -847,7 +836,6 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             }
         }
         notifyAncestorsOfPin();
-        // this.updateSegmentedArmature();
     }
 
     /**
@@ -1054,7 +1042,6 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         if (this.getChildren().indexOf(bone) == -1) {
             ((ArrayList<Bone>) getChildren()).add(bone);
         }
-        // parentArmature.updateArmatureSegments();
     }
 
     public void addFreeChild(Bone bone) {
@@ -1171,14 +1158,10 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
     @Override
     public void notifyOfSaveIntent(ewbik.asj.SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void notifyOfSaveCompletion(ewbik.asj.SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -1192,13 +1175,11 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
     @Override
     public boolean isLoading() {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public void setLoading(boolean loading) {
-        // TODO Auto-generated method stub
 
     }
 

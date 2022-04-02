@@ -82,7 +82,6 @@ public class ShadowSkeleton3D {
 
     private void generateArmatureSegments() {
         childSegments.clear();
-        // pinnedDescendants.clear();
         setTipPinned(false);
         if (segmentRoot.getParent() != null && segmentRoot.getParent().isPinned())
             this.setBasePinned(true);
@@ -97,9 +96,9 @@ public class ShadowSkeleton3D {
                     .returnChildrenWithPinnedDescendants();
 
             if (childrenWithPinnedDescendants.size() > 1 || (tempSegmentTip.isPinned())) {
-                if (tempSegmentTip.isPinned())
+                if (tempSegmentTip.isPinned()) {
                     setTipPinned(true);
-                // else tipPinned = false;
+                }
                 this.segmentTip = tempSegmentTip;
 
                 for (Bone childBone : childrenWithPinnedDescendants) {
@@ -258,7 +257,6 @@ public class ShadowSkeleton3D {
         if (pinnedBone.isPinned()) {
             result.add(pinnedBone);
             Bone currBone = pinnedBone.getParent();
-            // note to self -- try removing the currbone.parent != null condition
             while (currBone != null && currBone.getParent() != null) {
                 result.add(currBone);
                 if (currBone.getParent().isPinned()) {
@@ -299,8 +297,7 @@ public class ShadowSkeleton3D {
             manualRMSD += magsq;
             wsum += weights[i];
         }
-        manualRMSD /= wsum;// (float) locTargets.length;
-        // manualRMSD = MathUtils.sqrt(manualRMSD);
+        manualRMSD /= wsum;
         return manualRMSD;
     }
 
@@ -364,7 +361,6 @@ public class ShadowSkeleton3D {
                     totalIterations);
 
             if (stabilizationPasses > 0) {
-                // newDampening = dampening == -1 ? sb.forBone.parentArmature.dampening
                 upateTipHeadings(localizedTipHeadings, thisBoneNode3D);
                 newRMSD = getManualMSD(localizedTipHeadings, localizedTargetHeadings, weights);
 
@@ -514,7 +510,6 @@ public class ShadowSkeleton3D {
      * which the inputBone belongs.
      */
     public ewbik.ik.ShadowSkeleton3D getChainFor(Bone chainMember) {
-        // Bone candidate = this.segmentTip;
         ewbik.ik.ShadowSkeleton3D result = null;
         if (this.segmentBoneList.contains(chainMember))
             return this;

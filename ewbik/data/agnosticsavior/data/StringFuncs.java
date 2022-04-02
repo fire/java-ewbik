@@ -3475,10 +3475,8 @@ public class StringFuncs implements Constants {
         // Windows, Linux, or when not using a Mac OS X .app file
         File workingDirItem =
                 new File(File.separator + "data" + File.separator + where);
-//	    if (workingDirItem.exists()) {
         return workingDirItem;
-//	    }
-//	    // In some cases, the current working directory won't be set properly.
+	    // In some cases, the current working directory won't be set properly.
     }
 
     /**

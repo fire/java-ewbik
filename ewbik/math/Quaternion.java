@@ -1808,19 +1808,11 @@ public class Quaternion {
 
 
     public <V extends Vector3> Quaternion(V v1, V v2, V u1, V u2) {
-        // try {
         rotation = new MRotation(v1, v2, u1, u2);
-        // } catch(Exception e) {
-        // rotation = new MRotation(v1, 0f);
-        // }
     }
 
     public <V extends Vector3> Quaternion(V axis, float angle) {
-        // try {
         rotation = new MRotation(axis, angle);
-        // } catch(Exception e) {
-        // rotation = new MRotation(RotationOrder.X, 0f);
-        // }
     }
 
     public Quaternion(float w, float x, float y, float z, boolean needsNormalization) {
@@ -1828,11 +1820,7 @@ public class Quaternion {
     }
 
     public <V extends Vector3> Quaternion(V begin, V end) {
-        // try{
         rotation = new MRotation(begin, end);
-        // } catch(Exception e) {
-        // rotation = new MRotation(RotationOrder.X, 0f);
-        // }
     }
 
     /*
@@ -1870,23 +1858,10 @@ public class Quaternion {
 
         float dot = value1.dotProduct(value2);
         float x2, y2, z2, w2;
-        /*
-         * if (dot < 0.0f)
-         * {
-         * dot = 0.0f - dot;
-         * x2 = 0.0f - value2.getQ1();
-         * y2 = 0.0f - value2.getQ2();
-         * z2 = 0.0f - value2.getQ3();
-         * w2 = 0.0f - value2.getQ0();
-         * }
-         * else
-         * {
-         */
         x2 = value2.getQ1();
         y2 = value2.getQ2();
         z2 = value2.getQ3();
         w2 = value2.getQ0();
-        // }
 
         float t1, t2;
 

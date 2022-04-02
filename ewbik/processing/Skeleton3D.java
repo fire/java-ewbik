@@ -63,7 +63,6 @@ public class Skeleton3D implements Saveable {
     boolean monitorPerformance = false;
     private boolean abilityBiasing = false;
 
-    // default constructor required for file loading to work
     public Skeleton3D() {
     }
 
@@ -545,7 +544,6 @@ public class Skeleton3D implements Saveable {
         saveJSON.setString("rootBone", getRootBone().getIdentityHash());
         saveJSON.setInt("defaultIterations", getDefaultIterations());
         saveJSON.setFloat("dampening", this.getDampening());
-        // saveJSON.setBoolean("inverseWeighted", this.isInverseWeighted());
         saveJSON.setString("tag", this.getTag());
         return saveJSON;
     }
@@ -569,8 +567,6 @@ public class Skeleton3D implements Saveable {
 
     @Override
     public void notifyOfSaveCompletion(SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override

@@ -76,8 +76,7 @@ public class LimitCone implements Saveable {
      * @return
      */
     public boolean inBoundsFromThisToNext(LimitCone next, Vector3 input, Vector3 collisionPoint) {
-        boolean isInBounds = false;// determineIfInBounds(next, input);
-        // if(!isInBounds) {
+        boolean isInBounds = false;
         Vector3 closestCollision = getClosestCollision(next, input);
         if (closestCollision == null) {
             /**
@@ -93,13 +92,6 @@ public class LimitCone implements Saveable {
             collisionPoint.y = closestCollision.y;
             collisionPoint.z = closestCollision.z;
         }
-        /*
-         * } else {
-         * collisionPoint.x = input.x;
-         * collisionPoint.y = input.y;
-         * collisionPoint.z = input.z;
-         * }
-         */
         return isInBounds;
     }
 
@@ -309,13 +301,10 @@ public class LimitCone implements Saveable {
         float radiusCosine = this.getRadiusCosine();
         if (controlPointDotProduct > radiusCosine) {
             inBounds[0] = true;
-            return null;// input.copy();
+            return null;
         } else {
             Vector3 axis = this.getControlPoint().crossCopy(input);
-            // axis.normalize();
-            // Quaternion pointDiff = new Quaternion(this.getControlPoint(), input);
             Quaternion rotTo = new Quaternion(axis, this.getRadius());
-            // Quaternion rot2To = new Quaternion(pointDiff.getAxis(), this.getRadius());
             Vector3 result = rotTo.applyToCopy(this.getControlPoint());
             inBounds[0] = false;
             return result;
@@ -368,7 +357,7 @@ public class LimitCone implements Saveable {
             Vector3 scaledAxisA = Vector3.mult(A, MathUtils.cos(boundaryPlusTangentRadiusA));
             // a point on the plane running through the tangent contact points
             Vector3 planeDir1A = new Quaternion(arcNormal, boundaryPlusTangentRadiusA).applyToCopy(A);
-            // another poiint on the same plane
+            // another point on the same plane
             Vector3 planeDir2A = new Quaternion(A, MathUtils.PI / 2f).applyToCopy(planeDir1A);
 
             Vector3 scaledAxisB = Vector3.mult(B, MathUtils.cos(boundaryPlusTangentRadiusB));
@@ -489,25 +478,19 @@ public class LimitCone implements Saveable {
 
     @Override
     public void notifyOfSaveIntent(SaveManager saveManager) {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void notifyOfSaveCompletion(SaveManager saveManager) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public boolean isLoading() {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public void setLoading(boolean loading) {
-        // TODO Auto-generated method stub
-
     }
 }

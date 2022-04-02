@@ -89,7 +89,7 @@ public class ItemHolding extends PApplet {
         }
         String additionalInstructions = "Hit the 'C' key to select or deselect the cube";
         additionalInstructions += "\n HIT THE S KEY TO SAVE AND HIT THE L KEY TO LOAD THE CURRENT ARMATURE CONFIGURATION.";
-        // decrease the numerator to increase the zoom.
+        // Decrease the numerator to increase the zoom.
         zoomScalar = 200f / height;
         ui.drawScene(zoomScalar, 12f, () -> drawHoldCube(), loadedArmature, additionalInstructions, activePin, cubeNode3D,
                 cubeMode);

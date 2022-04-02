@@ -842,9 +842,6 @@ public class Ray3D implements CanLoad {
         S1.add(rp1); // S1=A+e*(lf-s)
         S2.set(e.multCopy((float) lf + s));
         S2.add(rp1); // S2=A+e*(lf+s)
-
-        // only for testing
-
         return result;
     }
 

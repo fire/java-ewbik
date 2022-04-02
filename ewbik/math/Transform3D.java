@@ -15,12 +15,12 @@ public class Transform3D {
      * a vector representing the translation of this basis relative to its parent.
      */
     public Vector3 translate;
-    protected Vector3 xBase; //= new Vector3(1,0,0);
-    protected Vector3 yBase; //= new Vector3(0,1,0);
-    protected Vector3 zBase;// = new Vector3(0,0,1);
-    protected Ray3D xRay;// = new Ray3D(new Vector3(0,0,0), new Vector3(1,0,0));
-    protected Ray3D yRay;// = new Ray3D(new Vector3(0,0,0), new Vector3(0,1,0));
-    protected Ray3D zRay;// = new Ray3D(new Vector3(0,0,0), new Vector3(0,0,1));
+    protected Vector3 xBase = new Vector3(1,0,0);
+    protected Vector3 yBase = new Vector3(0,1,0);
+    protected Vector3 zBase = new Vector3(0,0,1);
+    protected Ray3D xRay = new Ray3D(new Vector3(0,0,0), new Vector3(1,0,0));
+    protected Ray3D yRay = new Ray3D(new Vector3(0,0,0), new Vector3(0,1,0));
+    protected Ray3D zRay = new Ray3D(new Vector3(0,0,0), new Vector3(0,0,1));
 
     /**
      * Initialize this basis at the origin. The basis will be righthanded by default.
