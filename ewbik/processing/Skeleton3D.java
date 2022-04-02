@@ -225,14 +225,14 @@ public class Skeleton3D implements Saveable {
     }
 
     /**
-     * @return the user specified name String for this armature.
+     * @return the user specified name string for this armature.
      */
     public String getName() {
         return this.name;
     }
 
     /**
-     * @param A user specified name string for this armature.
+     * @param name A user specified name string for this armature.
      */
     public void setName(String newTag) {
         this.name = newTag;
