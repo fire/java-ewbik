@@ -8,7 +8,7 @@ public class Transform3D {
     public static final int X = 0;
     public static final int Y = 1;
     public static final int Z = 2;
-    // Chirality is always right.
+    // The chirality is always right.
     public Quaternion rotation = new Quaternion();
     public Quaternion inverseRotation = new Quaternion();
     /**
