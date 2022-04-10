@@ -17,16 +17,11 @@ jobs:
     - name: Build with Gradle
       uses: gradle/gradle-build-action@4137be6a8bf7d7133955359dbd952c0ca73b1021
       with:
-        arguments: build installDist
+        arguments: distZip
     - name: Copy licenses
       run: |
         cp LICENSE build/install/
       shell: bash
-    - uses: papeloto/action-zip@v1
-      with:
-        files: build/install/
-        recursive: false
-        dest: ewbik-windows.zip
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
@@ -34,4 +29,4 @@ jobs:
         prerelease: true
         title: EWBIK windows
         files: |
-          ewbik-windows.zip
+          java-ewbik-*.zip
