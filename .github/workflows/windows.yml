@@ -25,4 +25,4 @@ jobs:
         prerelease: true
         title: EWBIK windows
         files: |
-          java-ewbik-*.zip
+          build/distributions/java-ewbik-*.zip

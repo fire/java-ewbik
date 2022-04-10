@@ -25,4 +25,4 @@ jobs:
         prerelease: true
         title: EWBIK Linux
         files: |
-          java-ewbik-*.zip
+          build/distributions/java-ewbik-*.zip
