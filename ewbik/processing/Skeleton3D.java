@@ -63,7 +63,7 @@ public class Skeleton3D implements Saveable {
 
     public Skeleton3D(String name) {
 
-        this.localNode3D = (Node3D) new Node3D(
+        this.localNode3D = new Node3D(
                 new PVector(0, 0, 0), new PVector(1, 0, 0), new PVector(0, 1, 0), new PVector(0, 0, 1), null);
         this.tempWorkingNode3D = Skeleton3D.this.localNode3D.getGlobalCopy();
         this.name = name;
@@ -103,7 +103,7 @@ public class Skeleton3D implements Saveable {
      * @return the rootBone of this armature.
      */
     public Bone getRootBone() {
-        return (Bone) rootBone;
+        return rootBone;
     }
 
     /**
@@ -111,14 +111,14 @@ public class Skeleton3D implements Saveable {
      * @return the bone object corresponding to this name
      */
     public Bone getBoneName(String name) {
-        return (Bone) boneNameMap.get(name);
+        return boneNameMap.get(name);
     }
 
     /**
      * @return a reference to the Axes serving as this Armature's coordinate system.
      */
     public Node3D localAxes() {
-        return (Node3D) this.localNode3D;
+        return this.localNode3D;
     }
 
     /**

@@ -81,14 +81,14 @@ public class Vector3 implements CanLoad {
      * @return a copy of this vector
      */
     public ewbik.math.Vector3 copy() {
-        return (ewbik.math.Vector3) new ewbik.math.Vector3(this);
+        return new Vector3(this);
     }
 
     /**
      * @return a copy of this Vector cast to a single precision analog.
      */
     public ewbik.math.Vector3 toVec3f() {
-        return new ewbik.math.Vector3((float) x, (float) y, (float) z);
+        return new ewbik.math.Vector3(x, y, z);
     }
 
     public JSONArray toJSONArray() {
@@ -145,7 +145,7 @@ public class Vector3 implements CanLoad {
 
     public static Vector3 add(Vector3 v1, Vector3 v2, Vector3 target) {
         if (target == null) {
-            target = (Vector3) v1.copy();
+            target = v1.copy();
             v1.set(
                     v1.x + v2.x,
                     v1.y + v2.y,
@@ -164,7 +164,7 @@ public class Vector3 implements CanLoad {
      * @param target Vector3 in which to store the result
      */
     static public Vector3 sub(Vector3 v1, Vector3 v2) {
-        return sub(v1, v2, (Vector3) null);
+        return sub(v1, v2, null);
     }
 
     static public Vector3 multiply(Vector3 v, float n) {
@@ -173,7 +173,7 @@ public class Vector3 implements CanLoad {
 
     static public Vector3 multiply(Vector3 v, float n, Vector3 target) {
         if (target == null) {
-            target = (Vector3) v.copy();
+            target = v.copy();
         }
         target.set(v.x * n, v.y * n, v.z * n);
         return target;
@@ -185,7 +185,7 @@ public class Vector3 implements CanLoad {
 
     static public Vector3 divide(Vector3 v, float n, Vector3 target) {
         if (target == null) {
-            target = (Vector3) v.copy();
+            target = v.copy();
         }
         target.set(v.x / n, v.y / n, v.z / n);
 
@@ -200,7 +200,7 @@ public class Vector3 implements CanLoad {
      */
     static public Vector3 sub(Vector3 v1, Vector3 v2, Vector3 target) {
         if (target == null) {
-            target = (Vector3) v1.copy();
+            target = v1.copy();
         }
         target.set(v1.x - v2.x,
                 v1.y - v2.y,
@@ -220,7 +220,7 @@ public class Vector3 implements CanLoad {
         float crossZ = v1.x * v2.y - v2.x * v1.y;
 
         if (target == null) {
-            target = (Vector3) v1.copy();
+            target = v1.copy();
         }
         target.set(crossX, crossY, crossZ);
 
@@ -234,7 +234,7 @@ public class Vector3 implements CanLoad {
      * @param v2 the vector to lerp to
      */
     public static Vector3 lerp(Vector3 v1, Vector3 v2, float amt) {
-        Vector3 v = (Vector3) v1.copy();
+        Vector3 v = v1.copy();
         v.lerp(v2, amt);
         return v;
     }
@@ -291,7 +291,7 @@ public class Vector3 implements CanLoad {
         this.x = x;
         this.y = y;
         this.z = z;
-        return (ewbik.math.Vector3) this;
+        return this;
     }
 
     public ewbik.math.Vector3 set(final ewbik.math.Vector3 vector) {
@@ -350,7 +350,7 @@ public class Vector3 implements CanLoad {
         this.x += x;
         this.y += y;
         this.z += z;
-        return (ewbik.math.Vector3) this;
+        return this;
     }
 
     /**
@@ -432,7 +432,7 @@ public class Vector3 implements CanLoad {
         x /= n;
         y /= n;
         z /= n;
-        return (ewbik.math.Vector3) this;
+        return this;
     }
 
     /**
@@ -445,7 +445,7 @@ public class Vector3 implements CanLoad {
         this.x += vec.getX() * scalar;
         this.y += vec.getY() * scalar;
         this.z += vec.getZ() * scalar;
-        return (ewbik.math.Vector3) this;
+        return this;
     }
 
     /**
@@ -458,7 +458,7 @@ public class Vector3 implements CanLoad {
         this.x += vec.getX() * mulVec.getX();
         this.y += vec.getY() * mulVec.getY();
         this.z += vec.getZ() * mulVec.getZ();
-        return (ewbik.math.Vector3) this;
+        return this;
     }
 
     /**
@@ -548,8 +548,8 @@ public class Vector3 implements CanLoad {
     public ewbik.math.Vector3 normalize() {
         final float len2 = this.mag();
         if (len2 == 0f || len2 == 1f)
-            return (ewbik.math.Vector3) this;
-        return this.multiply(1f / (float) len2);
+            return this;
+        return this.multiply(1f / len2);
     }
 
     /**
@@ -619,7 +619,7 @@ public class Vector3 implements CanLoad {
      * @return
      */
     public ewbik.math.Vector3 getPlaneProjectionOf(ewbik.math.Vector3 p1, ewbik.math.Vector3 p2) {
-        return this.getPlaneProjectionOf((ewbik.math.Vector3) p1.crossCopy(p2));
+        return this.getPlaneProjectionOf(p1.crossCopy(p2));
     }
 
     /**
@@ -630,11 +630,11 @@ public class Vector3 implements CanLoad {
      * @return
      */
     public ewbik.math.Vector3 getPlaneProjectionOf(ewbik.math.Vector3 rawNorm) {
-        ewbik.math.Vector3 norm = (ewbik.math.Vector3) rawNorm.copy().normalize();
-        ewbik.math.Vector3 normProj = (ewbik.math.Vector3) norm.multCopy(this.dot(norm));
+        ewbik.math.Vector3 norm = rawNorm.copy().normalize();
+        ewbik.math.Vector3 normProj = norm.multCopy(this.dot(norm));
         normProj.multiply(-1);
 
-        return (ewbik.math.Vector3) normProj.addCopy(this);
+        return normProj.addCopy(this);
     }
 
     /**
@@ -764,7 +764,7 @@ public class Vector3 implements CanLoad {
         x += alpha * (target.x - x);
         y += alpha * (target.y - y);
         z += alpha * (target.z - z);
-        return (ewbik.math.Vector3) this;
+        return this;
     }
 
     /**
@@ -804,7 +804,7 @@ public class Vector3 implements CanLoad {
      */
     @Override
     public String toString() {
-        return "(" + (float) x + "," + (float) y + "," + (float) z + ")";
+        return "(" + x + "," + y + "," + z + ")";
     }
 
     /**
@@ -832,7 +832,7 @@ public class Vector3 implements CanLoad {
         if (len2 > limit2) {
             multiply((float) MathUtils.sqrt(limit2 / len2));
         }
-        return (ewbik.math.Vector3) this;
+        return this;
     }
 
     /**
@@ -857,7 +857,7 @@ public class Vector3 implements CanLoad {
      */
     public ewbik.math.Vector3 setMagSq(float len2) {
         float oldLen2 = magSq();
-        return (oldLen2 == 0 || oldLen2 == len2) ? (ewbik.math.Vector3) this
+        return (oldLen2 == 0 || oldLen2 == len2) ? this
                 : multiply((float) MathUtils.sqrt(len2 / oldLen2));
     }
 
@@ -871,14 +871,14 @@ public class Vector3 implements CanLoad {
     public ewbik.math.Vector3 clamp(float min, float max) {
         final float len2 = magSq();
         if (len2 == 0f)
-            return (ewbik.math.Vector3) this;
+            return this;
         float max2 = max * max;
         if (len2 > max2)
             return multiply((float) MathUtils.sqrt(max2 / len2));
         float min2 = min * min;
         if (len2 < min2)
             return multiply((float) MathUtils.sqrt(min2 / len2));
-        return (ewbik.math.Vector3) this;
+        return this;
     }
 
     /**
@@ -896,9 +896,7 @@ public class Vector3 implements CanLoad {
             return false;
         if (MathUtils.abs(other.getY() - y) > epsilon)
             return false;
-        if (MathUtils.abs(other.getZ() - z) > epsilon)
-            return false;
-        return true;
+        return !(MathUtils.abs(other.getZ() - z) > epsilon);
     }
 
     /**
@@ -912,9 +910,7 @@ public class Vector3 implements CanLoad {
             return false;
         if (MathUtils.abs(y - this.y) > epsilon)
             return false;
-        if (MathUtils.abs(z - this.z) > epsilon)
-            return false;
-        return true;
+        return !(MathUtils.abs(z - this.z) > epsilon);
     }
 
     /**
@@ -926,7 +922,7 @@ public class Vector3 implements CanLoad {
         this.x = 0;
         this.y = 0;
         this.z = 0;
-        return (ewbik.math.Vector3) this;
+        return this;
     }
 
     /**
@@ -1000,7 +996,7 @@ public class Vector3 implements CanLoad {
         this.x *= scalar;
         this.y *= scalar;
         this.z *= scalar;
-        return (ewbik.math.Vector3) this;
+        return this;
     }
 
     /**

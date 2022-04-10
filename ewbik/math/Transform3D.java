@@ -371,7 +371,7 @@ public class Transform3D {
                 + chirality + " handed \n"
                 + "origin: " + this.translate.toVec3f() + "\n"
                 + "rot Axis: " + this.rotation.getAxis().toVec3f() + ", "
-                + "Angle: " + (float) MathUtils.toDegrees(this.rotation.getAngle()) + "\n"
+                + "Angle: " + MathUtils.toDegrees(this.rotation.getAngle()) + "\n"
                 + "xHead: " + xh + ", mag: " + xMag + "\n"
                 + "yHead: " + yh + ", mag: " + yMag + "\n"
                 + "zHead: " + zh + ", mag: " + zMag + "\n";

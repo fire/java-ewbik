@@ -12,8 +12,8 @@ public interface CanLoad {
      * @param j
      * @return should return an instance of itself for chaining
      */
-    public CanLoad populateSelfFromJSON(ewbik.asj.data.JSONObject j);
+    CanLoad populateSelfFromJSON(ewbik.asj.data.JSONObject j);
 
-    public ewbik.asj.data.JSONObject toJSONObject();
+    ewbik.asj.data.JSONObject toJSONObject();
 
 }

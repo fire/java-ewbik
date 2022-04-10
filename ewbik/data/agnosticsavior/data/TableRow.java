@@ -20,12 +20,12 @@ public interface TableRow {
      * @see TableRow#getInt(int)
      * @see TableRow#getFloat(int)
      */
-    public String getString(int column);
+    String getString(int column);
 
     /**
      * @param columnName title of the column to reference
      */
-    public String getString(String columnName);
+    String getString(String columnName);
 
     /**
      * @param column ID number of the column to reference
@@ -34,12 +34,12 @@ public interface TableRow {
      * @see TableRow#getFloat(int)
      * @see TableRow#getString(int)
      */
-    public int getInt(int column);
+    int getInt(int column);
 
     /**
      * @param columnName title of the column to reference
      */
-    public int getInt(String columnName);
+    int getInt(String columnName);
 
     /**
      * @param column ID number of the column to reference
@@ -48,12 +48,12 @@ public interface TableRow {
      * @see TableRow#getString(int)
      */
 
-    public long getLong(int column);
+    long getLong(int column);
 
     /**
      * @param columnName title of the column to reference
      */
-    public long getLong(String columnName);
+    long getLong(String columnName);
 
     /**
      * @param column ID number of the column to reference
@@ -62,12 +62,12 @@ public interface TableRow {
      * @see TableRow#getInt(int)
      * @see TableRow#getString(int)
      */
-    public float getFloat(int column);
+    float getFloat(int column);
 
     /**
      * @param columnName title of the column to reference
      */
-    public float getFloat(String columnName);
+    float getFloat(String columnName);
 
     /**
      * @param column ID number of the column to reference
@@ -75,12 +75,12 @@ public interface TableRow {
      * @see TableRow#getInt(int)
      * @see TableRow#getString(int)
      */
-    public double getDouble(int column);
+    double getDouble(int column);
 
     /**
      * @param columnName title of the column to reference
      */
-    public double getDouble(String columnName);
+    double getDouble(String columnName);
 
     /**
      * @param column ID number of the target column
@@ -90,12 +90,12 @@ public interface TableRow {
      * @see TableRow#setInt(int, int)
      * @see TableRow#setFloat(int, float)
      */
-    public void setString(int column, String value);
+    void setString(int column, String value);
 
     /**
      * @param columnName title of the target column
      */
-    public void setString(String columnName, String value);
+    void setString(String columnName, String value);
 
     /**
      * @param column ID number of the target column
@@ -105,12 +105,12 @@ public interface TableRow {
      * @see TableRow#setFloat(int, float)
      * @see TableRow#setString(int, String)
      */
-    public void setInt(int column, int value);
+    void setInt(int column, int value);
 
     /**
      * @param columnName title of the target column
      */
-    public void setInt(String columnName, int value);
+    void setInt(String columnName, int value);
 
     /**
      * @param column ID number of the target column
@@ -119,12 +119,12 @@ public interface TableRow {
      * @see TableRow#setFloat(int, float)
      * @see TableRow#setString(int, String)
      */
-    public void setLong(int column, long value);
+    void setLong(int column, long value);
 
     /**
      * @param columnName title of the target column
      */
-    public void setLong(String columnName, long value);
+    void setLong(String columnName, long value);
 
     /**
      * @param column ID number of the target column
@@ -134,12 +134,12 @@ public interface TableRow {
      * @see TableRow#setInt(int, int)
      * @see TableRow#setString(int, String)
      */
-    public void setFloat(int column, float value);
+    void setFloat(int column, float value);
 
     /**
      * @param columnName title of the target column
      */
-    public void setFloat(String columnName, float value);
+    void setFloat(String columnName, float value);
 
     /**
      * @param column ID number of the target column
@@ -148,37 +148,37 @@ public interface TableRow {
      * @see TableRow#setFloat(int, float)
      * @see TableRow#setString(int, String)
      */
-    public void setDouble(int column, double value);
+    void setDouble(int column, double value);
 
     /**
      * @param columnName title of the target column
      */
-    public void setDouble(String columnName, double value);
+    void setDouble(String columnName, double value);
 
     /**
      * @return count of all columns
      * @webref tablerow:method
      * @brief Get the column count.
      */
-    public int getColumnCount();
+    int getColumnCount();
 
     /**
      * @param columnName title of the target column
      * @return type of the column
      * @brief Get the column type.
      */
-    public int getColumnType(String columnName);
+    int getColumnType(String columnName);
 
     /**
      * @param column ID number of the target column
      */
-    public int getColumnType(int column);
+    int getColumnType(int column);
 
     /**
      * @return list of all column types
      * @brief Get the all column types
      */
-    public int[] getColumnTypes();
+    int[] getColumnTypes();
 
     /**
      * @param column ID number of the target column
@@ -186,15 +186,15 @@ public interface TableRow {
      * @webref tablerow:method
      * @brief Get the column title.
      */
-    public String getColumnTitle(int column);
+    String getColumnTitle(int column);
 
     /**
      * @return list of all column titles
      * @brief Get the all column titles
      */
-    public String[] getColumnTitles();
+    String[] getColumnTitles();
 
-    public void write(PrintWriter writer);
+    void write(PrintWriter writer);
 
-    public void print();
+    void print();
 }

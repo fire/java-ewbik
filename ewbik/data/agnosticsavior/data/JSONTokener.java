@@ -41,7 +41,7 @@ class JSONTokener {
     private long index;
     private long line;
     private char previous;
-    private Reader reader;
+    private final Reader reader;
     private boolean usePrevious;
 
     /**

@@ -23,7 +23,7 @@ public class EWBIKSaver extends SaveManager {
 
     public void saveArmature(Skeleton3D toSave, String path) {
         clearSaveState();
-        ((Skeleton3D) toSave).notifyOfSaveIntent(this);
+        toSave.notifyOfSaveIntent(this);
         saveAs(path);
         notifyCurrentSaveablesOfSaveCompletion();
     }

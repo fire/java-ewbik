@@ -159,7 +159,7 @@ public class Kusudama implements Saveable {
 
         PMatrix localMat = limitingAxes().getLocalPMatrix();
         p.applyMatrix(localMat);
-        float circumference = (float) (attachedTo().getBoneHeight() / 2.5f);
+        float circumference = attachedTo().getBoneHeight() / 2.5f;
         ewbik.math.Vector3 min = new ewbik.math.Vector3(0f, 0f, circumference);
         ewbik.math.Vector3 current = new ewbik.math.Vector3(0f, 0f, circumference);
         Quaternion minRot = new Quaternion(new ewbik.math.Vector3(0, 1, 0), minAxialAngle());
@@ -175,7 +175,7 @@ public class Kusudama implements Saveable {
         for (float i = 0; i <= pieces + (3 * granularity); i++) {
             ewbik.math.Quaternion interp = new ewbik.math.Quaternion(i * granularity, minRot, minRot);
             current = interp.applyTo(min);
-            p.vertex((float) current.x, (float) current.y, (float) (current.z));
+            p.vertex(current.x, current.y, current.z);
         }
         p.endShape();
         float r = p.red(System.identityHashCode(this));
@@ -190,7 +190,7 @@ public class Kusudama implements Saveable {
         currentShader.set("coneSequence", coneSequence, 4);
         currentShader.set("coneCount", coneCount);
         p.sphereDetail(30);
-        p.sphere((float) attachedTo().getBoneHeight() / 3.5f);
+        p.sphere(attachedTo().getBoneHeight() / 3.5f);
         p.resetShader();
         Quaternion alignRot = limitingNode3D.getGlobalMBasis().getInverseRotation()
                 .applyTo(attachedTo().localAxes().getGlobalMBasis().rotation);
@@ -202,7 +202,7 @@ public class Kusudama implements Saveable {
         yaw = zRot.applyToCopy(yaw);
         p.stroke(25, 25, 195);
         p.strokeWeight(4);
-        p.line(0f, 0f, 0f, (float) yaw.x, (float) yaw.y, (float) yaw.z);
+        p.line(0f, 0f, 0f, yaw.x, yaw.y, yaw.z);
 
     }
 
@@ -250,7 +250,7 @@ public class Kusudama implements Saveable {
      */
     @SuppressWarnings("unchecked")
     public Node3D limitingAxes() {
-        return (Node3D) (Node3D) limitingNode3D;
+        return limitingNode3D;
     }
 
     public void updateTangentRadii() {
@@ -458,11 +458,7 @@ public class Kusudama implements Saveable {
                                          Node3D limitingNode3D) {
         float[] inBounds = { 1f };
         Vector3 inLimits = this.pointInLimits(limitingNode3D.getLocalOf(globalNode3D.calculateY().p2()), inBounds);
-        if (inBounds[0] == -1l) {
-            return false;
-        } else {
-            return true;
-        }
+        return inBounds[0] != -1l;
     }
 
     /**

@@ -455,7 +455,7 @@ class MRotation {
 
         // compute the vectorial part
         c = (float) MathUtils.sqrt(c);
-        float inv = (float) 1.0f / (c + c);
+        float inv = 1.0f / (c + c);
         q1 = inv * k.x;
         q2 = inv * k.y;
         q3 = inv * k.z;
@@ -1840,16 +1840,16 @@ class MRotation {
 
     public String toString() {
         String result = "axis: " + getAxis().toVec3f().toString();
-        result += "\n angle : " + (float) MathUtils.toDegrees(getAngle()) + " degrees ";
-        result += "\n angle : " + (float) getAngle() + " radians ";
+        result += "\n angle : " + MathUtils.toDegrees(getAngle()) + " degrees ";
+        result += "\n angle : " + getAngle() + " radians ";
         return result;
     }
 }
 
 public class Quaternion {
     public MRotation rotation = MRotation.IDENTITY;
-    private float[] workingInput = new float[3];
-    private float[] workingOutput = new float[3];
+    private final float[] workingInput = new float[3];
+    private final float[] workingOutput = new float[3];
 
     public Quaternion() {
         this.rotation = new MRotation(
@@ -1858,8 +1858,6 @@ public class Quaternion {
                 MRotation.IDENTITY.getQ2(),
                 MRotation.IDENTITY.getQ3(), false);
     }
-
-    ;
 
     public Quaternion(MRotation r) {
         this.rotation = new MRotation(r.getQ0(), r.getQ1(), r.getQ2(), r.getQ3());
@@ -2224,7 +2222,7 @@ public class Quaternion {
     }
 
     public float getAngle() {
-        return (float) rotation.getAngle();
+        return rotation.getAngle();
     }
 
     public Vector3 getAxis() {

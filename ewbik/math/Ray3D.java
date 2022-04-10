@@ -773,10 +773,7 @@ public class Ray3D implements CanLoad {
     public <V extends Vector3> boolean intersectsTriangle(V ta, V tb, V tc, V result) {
         float[] uvw = new float[3];
         result.set(intersectsPlane(ta, tb, tc, uvw));
-        if (Float.isNaN(uvw[0]) || Float.isNaN(uvw[1]) || Float.isNaN(uvw[2]) || uvw[0] < 0 || uvw[1] < 0 || uvw[2] < 0)
-            return false;
-        else
-            return true;
+        return !Float.isNaN(uvw[0]) && !Float.isNaN(uvw[1]) && !Float.isNaN(uvw[2]) && !(uvw[0] < 0) && !(uvw[1] < 0) && !(uvw[2] < 0);
     }
 
     private <V extends Vector3> V planeIntersectTest(V ta, V tb, V tc, float[] uvw) {
@@ -814,8 +811,6 @@ public class Ray3D implements CanLoad {
 
         return (V) I.copy();
     }
-
-    ;
 
     /*
      * Find where this ray intersects a sphere
@@ -879,9 +874,9 @@ public class Ray3D implements CanLoad {
         } else
             result = 2; // 2 intersection points
 
-        S1.set(e.multCopy((float) lf - s));
+        S1.set(e.multCopy(lf - s));
         S1.add(rp1); // S1=A+e*(lf-s)
-        S2.set(e.multCopy((float) lf + s));
+        S2.set(e.multCopy(lf + s));
         S2.add(rp1); // S2=A+e*(lf+s)
         return result;
     }
@@ -934,9 +929,9 @@ public class Ray3D implements CanLoad {
     @Override
     public String toString() {
         String result = "sgRay " + System.identityHashCode(this) + "\n"
-                + "(" + (float) this.p1.x + " ->  " + (float) this.p2.x + ") \n "
-                + "(" + (float) this.p1.y + " ->  " + (float) this.p2.y + ") \n "
-                + "(" + (float) this.p1.z + " ->  " + (float) this.p2.z + ") \n ";
+                + "(" + this.p1.x + " ->  " + this.p2.x + ") \n "
+                + "(" + this.p1.y + " ->  " + this.p2.y + ") \n "
+                + "(" + this.p1.z + " ->  " + this.p2.z + ") \n ";
         return result;
     }
 

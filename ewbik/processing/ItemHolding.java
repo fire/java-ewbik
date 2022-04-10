@@ -245,7 +245,7 @@ public class ItemHolding extends PApplet {
     public void setup() {
         ui = new UI(this);
         loadedArmature = ewbik.processing.IO.LoadArmature("Humanoid_Holding_Item.json");
-        worldNode3D = (Node3D) loadedArmature.localAxes().getParentAxes();
+        worldNode3D = loadedArmature.localAxes().getParentAxes();
         if (worldNode3D == null) {
             worldNode3D = new Node3D();
             loadedArmature.localAxes().setParent(worldNode3D);
@@ -320,7 +320,7 @@ public class ItemHolding extends PApplet {
     public void mouseWheel(MouseEvent event) {
         float e = event.getCount();
         Node3D node3D = cubeMode ? cubeNode3D
-                : (Node3D) activePin.getAxes();
+                : activePin.getAxes();
         if (event.isShiftDown()) {
             node3D.rotateAboutZ(e / TAU, true);
         } else if (event.isControlDown()) {
@@ -367,7 +367,7 @@ public class ItemHolding extends PApplet {
         @SuppressWarnings("unchecked")
         ArrayList<Bone> pinnedChildren = (ArrayList<Bone>) descendedFrom.getMostImmediatelyPinnedDescendants();
         for (Bone b : pinnedChildren) {
-            IKPin pin = (IKPin) b.getIKPin();
+            IKPin pin = b.getIKPin();
             pins.add(pin);
         }
         for (Bone b : pinnedChildren) {

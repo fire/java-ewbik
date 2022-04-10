@@ -47,9 +47,9 @@ public abstract class SaveManager {
                     else if (kc == Long.class)
                         ks = ((Long) k).toString();
                     else if (kc == Float.class)
-                        ks = ((Float) k).toString();
+                        ks = k.toString();
                     else if (kc == Double.class)
-                        ks = ((Double) k).toString();
+                        ks = k.toString();
                     else if (kc == Boolean.class)
                         ks = ((Boolean) k).toString();
                     else if (Saveable.class.isAssignableFrom(kc))

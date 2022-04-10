@@ -28,13 +28,13 @@ public class IKPin implements ewbik.asj.Saveable {
 
     public IKPin(Node3D inNode3D, boolean enabled, Bone bone) {
         this.isEnabled = enabled;
-        this.node3D = (Node3D) inNode3D;
+        this.node3D = inNode3D;
         this.forBone = bone;
         setTargetPriorities(IKPin.this.xPriority, IKPin.this.yPriority, IKPin.this.zPriority);
     }
 
     public IKPin(Node3D inNode3D, Bone bone) {
-        this.node3D = (Node3D) inNode3D;
+        this.node3D = inNode3D;
         this.forBone = bone;
         this.isEnabled = false;
         setTargetPriorities(IKPin.this.xPriority, IKPin.this.yPriority, IKPin.this.zPriority);
@@ -74,12 +74,12 @@ public class IKPin implements ewbik.asj.Saveable {
     }
 
     public Node3D getAxes() {
-        return (Node3D) node3D;
+        return node3D;
     }
 
     public Bone forBone() {
 
-        return (Bone) this.forBone;
+        return this.forBone;
     }
 
     public boolean isEnabled() {
@@ -166,9 +166,9 @@ public class IKPin implements ewbik.asj.Saveable {
      *                  basis corresponds to a limb's twist)
      */
     public void setTargetPriorities(float xPriority, float yPriority, float zPriority) {
-        boolean xDir = xPriority > 0 ? true : false;
-        boolean yDir = yPriority > 0 ? true : false;
-        boolean zDir = zPriority > 0 ? true : false;
+        boolean xDir = xPriority > 0;
+        boolean yDir = yPriority > 0;
+        boolean zDir = zPriority > 0;
         modeCode = 0;
         if (xDir)
             modeCode += XDir;

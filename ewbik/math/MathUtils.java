@@ -60,7 +60,7 @@ public final class MathUtils {
      * Returns the sine in radians from a lookup table.
      */
     static public float sin(float radians) {
-        return (float) Math.sin((double) radians);
+        return (float) Math.sin(radians);
     }
 
     /**
@@ -300,7 +300,7 @@ public final class MathUtils {
      * @return the logarithm of value with base a
      */
     static public double log(double a, double value) {
-        return (double) (Math.log(value) / Math.log(a));
+        return Math.log(value) / Math.log(a);
     }
 
     /**
@@ -315,7 +315,7 @@ public final class MathUtils {
     }
 
     public static float abs(float f) {
-        return (float) Math.abs(f);
+        return Math.abs(f);
     }
 
     public static float sqrt(float f) {

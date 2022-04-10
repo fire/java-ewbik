@@ -45,7 +45,7 @@ public final class FloatBackedLoader extends LoadManager {
 
     private String tempLoadDirectory;
 
-    private boolean Load = false;
+    private final boolean Load = false;
 
     public FloatBackedLoader() {
 
@@ -282,17 +282,17 @@ public final class FloatBackedLoader extends LoadManager {
         Saveable result = null;
 
         if (Node3D.class.isAssignableFrom(keyClass))
-            result = (Saveable) axesLoadObjects.get(identityHash);
+            result = axesLoadObjects.get(identityHash);
         else if (Skeleton3D.class.isAssignableFrom(keyClass))
-            result = (Saveable) armatureLoadObjects.get(identityHash);
+            result = armatureLoadObjects.get(identityHash);
         else if (Bone.class.isAssignableFrom(keyClass))
-            result = (Saveable) boneLoadObjects.get(identityHash);
+            result = boneLoadObjects.get(identityHash);
         else if (ewbik.processing.singlePrecision.Kusudama.class.isAssignableFrom(keyClass))
-            result = (Saveable) kusudamaLoadObjects.get(identityHash);
+            result = kusudamaLoadObjects.get(identityHash);
         else if (ewbik.processing.singlePrecision.LimitCone.class.isAssignableFrom(keyClass))
-            result = (Saveable) LimitConeLoadObjects.get(identityHash);
+            result = LimitConeLoadObjects.get(identityHash);
         else if (IKPin.class.isAssignableFrom(keyClass))
-            result = (Saveable) IKPinLoadObjects.get(identityHash);
+            result = IKPinLoadObjects.get(identityHash);
 
         return result;
     }

@@ -4,13 +4,13 @@ import ewbik.asj.data.JSONObject;
 
 public interface Saveable {
 
-    public JSONObject getSaveJSON(SaveManager saveManager);
+    JSONObject getSaveJSON(SaveManager saveManager);
 
-    public void notifyOfSaveIntent(SaveManager saveManager);
+    void notifyOfSaveIntent(SaveManager saveManager);
 
-    public void notifyOfSaveCompletion(SaveManager saveManager);
+    void notifyOfSaveCompletion(SaveManager saveManager);
 
-    public void loadFromJSONObject(JSONObject j, LoadManager l);
+    void loadFromJSONObject(JSONObject j, LoadManager l);
 
     /**
      * called on all loaded objects once the full load sequence has been completed
@@ -18,11 +18,11 @@ public interface Saveable {
     default void notifyOfLoadCompletion() {
     }
 
-    public boolean isLoading();
+    boolean isLoading();
 
-    public void setLoading(boolean loading);
+    void setLoading(boolean loading);
 
-    public void makeSaveable(SaveManager saveManager);
+    void makeSaveable(SaveManager saveManager);
 
     default String getIdentityHash() {
         String result = "";

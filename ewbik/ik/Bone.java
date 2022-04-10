@@ -84,8 +84,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
                 this.tag = inputTag;
             this.boneHeight = inputBoneHeight;
 
-            Ray3D tipHeadingRay = new Ray3D(((Bone) par).getTip_(), tipHeading1);
-            Ray3D rollHeadingRay = new Ray3D(((Bone) par).getTip_(), rollHeading1);
+            Ray3D tipHeadingRay = new Ray3D(par.getTip_(), tipHeading1);
+            Ray3D rollHeadingRay = new Ray3D(par.getTip_(), rollHeading1);
             Vector3 tempTip = tipHeading1.copy();
             tempTip.set(0, 0, 0);
             Vector3 tempRoll = rollHeading1.copy();
@@ -97,8 +97,8 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
                 tempTip = tipHeadingRay.heading();
                 tempRoll = rollHeadingRay.heading();
             } else if (coordinateType == Bone.frameType.RELATIVE) {
-                tempTip = ((Bone) par).localAxes().getGlobalOf(tipHeadingRay.heading());
-                tempRoll = ((Bone) par).localAxes().getGlobalOf(rollHeadingRay.heading());
+                tempTip = par.localAxes().getGlobalOf(tipHeadingRay.heading());
+                tempRoll = par.localAxes().getGlobalOf(rollHeadingRay.heading());
             } else {
                 System.out.println("WOAH WOAH WOAH");
             }
@@ -328,7 +328,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
     protected IKPin createAndReturnPinOnAxes(Node3D on) {
         return new IKPin(
-                (Node3D) on,
+                on,
                 true,
                 this);
     }
@@ -350,7 +350,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         if (pin == null)
             return null;
         else {
-            ewbik.math.Vector3 loc = (ewbik.math.Vector3) pin.getLocation_();
+            ewbik.math.Vector3 loc = pin.getLocation_();
             return new PVector(loc.x, loc.y, loc.z);
         }
     }
@@ -359,7 +359,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
         if (this.constraints != null && drawKusudamas) {
             pg.pushMatrix();
-            ((ewbik.processing.singlePrecision.Kusudama) constraints).drawMe(pg, boneCol, pinSize);
+            constraints.drawMe(pg, boneCol, pinSize);
             pg.popMatrix();
         }
 
@@ -368,9 +368,9 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
         pg.beginShape(PConstants.TRIANGLE_FAN);
         pg.fill(pg.color(0, 255 - boneCol, boneCol));
-        float circumference = (float) (boneHeight / 8f);
+        float circumference = boneHeight / 8f;
         pg.noStroke();
-        pg.vertex(0, (float) boneHeight, 0);
+        pg.vertex(0, boneHeight, 0);
         pg.vertex(circumference, circumference, 0);
         pg.vertex(0, circumference, circumference);
         pg.vertex(-circumference, circumference, 0);
@@ -395,7 +395,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
         pg.strokeWeight(4f);
         if (this.isPinned()) {
-            ((Node3D) this.getIKPin().getAxes()).drawMe(pg, pinSize);
+            this.getIKPin().getAxes().drawMe(pg, pinSize);
         }
 
         if (this.isPinned()) {
@@ -405,14 +405,14 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     }
 
     public IKPin getIKPin() {
-        return (IKPin) this.pin;
+        return this.pin;
     }
 
     /**
      * Get the Axes associated with this bone.
      */
     public Node3D localAxes() {
-        return (Node3D) this.localNode3D;
+        return this.localNode3D;
     }
 
     /**
@@ -424,12 +424,12 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      */
     @SuppressWarnings("unchecked")
     public Node3D getMajorRotationAxes() {
-        return (Node3D) this.majorRotationNode3D;
+        return this.majorRotationNode3D;
     }
 
     @SuppressWarnings("unchecked")
     public ArrayList<Bone> getChildren() {
-        return (ArrayList<Bone>) (ArrayList<? extends Bone>) children;
+        return children;
     }
 
     public void setChildren(ArrayList<? extends Bone> children) {
@@ -502,7 +502,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     public void setAxesToSnapped(Node3D toSet,
                                  Node3D limitingNode3D, float cosHalfAngleDampen) {
         if (constraints != null && Kusudama.class.isAssignableFrom(constraints.getClass())) {
-            ((Kusudama) constraints).setAxesToSnapped(toSet, limitingNode3D, cosHalfAngleDampen);
+            constraints.setAxesToSnapped(toSet, limitingNode3D, cosHalfAngleDampen);
         }
     }
 
@@ -510,7 +510,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
                                       Node3D limitingNode3D, float cosHalfAngleDampen,
                                       float angleDampen) {
         if (constraints != null && Kusudama.class.isAssignableFrom(constraints.getClass())) {
-            ((Kusudama) constraints).setAxesToReturnfulled(toSet, limitingNode3D, cosHalfAngleDampen,
+            constraints.setAxesToReturnfulled(toSet, limitingNode3D, cosHalfAngleDampen,
                     angleDampen);
         }
     }
@@ -843,11 +843,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      * @return true if the bone has a pin enabled, false otherwise.
      */
     public boolean isPinned() {
-        if (pin == null || !pin.isEnabled()) {
-            return false;
-        } else {
-            return true;
-        }
+        return pin != null && pin.isEnabled();
 
     }
 
@@ -1041,7 +1037,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
     public void addChild(Bone bone) {
         if (this.getChildren().indexOf(bone) == -1) {
-            ((ArrayList<Bone>) getChildren()).add(bone);
+            getChildren().add(bone);
         }
     }
 
@@ -1130,7 +1126,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         thisBone.setString("identityHash", this.getIdentityHash());
         thisBone.setString("localAxes", this.localNode3D.getIdentityHash());
         thisBone.setString("majorRotationAxes", majorRotationNode3D.getIdentityHash());
-        thisBone.setString("parentArmature", ((ewbik.asj.Saveable) parentArmature).getIdentityHash());
+        thisBone.setString("parentArmature", parentArmature.getIdentityHash());
         ewbik.asj.data.JSONArray children = saveManager.arrayListToJSONArray(getChildren());
         thisBone.setJSONArray("children", children);
         if (constraints != null) {

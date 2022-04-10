@@ -91,8 +91,8 @@ public class QCP {
     private float[] weight;
     private float wsum;
 
-    private Vector3 targetCenter = new Vector3();
-    private Vector3 movedCenter = new Vector3();
+    private final Vector3 targetCenter = new Vector3();
+    private final Vector3 movedCenter = new Vector3();
 
     private float e0;
     private float rmsd = 0;

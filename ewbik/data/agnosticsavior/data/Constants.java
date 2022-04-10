@@ -6,53 +6,53 @@ package ewbik.asj.data;
  */
 public interface Constants {
     // platform IDs for StringFuncs.platform
-    static final int OTHER = 0;
-    static final int WINDOWS = 1;
-    static final int MACOSX = 2;
-    static final int LINUX = 3;
+    int OTHER = 0;
+    int WINDOWS = 1;
+    int MACOSX = 2;
+    int LINUX = 3;
 
-    static final String[] platformNames = {
+    String[] platformNames = {
             "other", "windows", "macosx", "linux"
     };
-    static final String WHITESPACE = " \t\n\r\f\u00A0";
+    String WHITESPACE = " \t\n\r\f\u00A0";
 
-    static final int GROUP = 0;
-    static final int POINT = 2; // primitive
-    static final int POINTS = 3; // vertices
-    static final int LINE = 4; // primitive
-    static final int TRIANGLE = 8; // primitive
-    static final int TRIANGLES = 9; // vertices
-    static final int TRIANGLE_STRIP = 10; // vertices
-    static final int TRIANGLE_FAN = 11; // vertices
-    static final int QUAD = 16; // primitive
-    static final int QUADS = 17; // vertices
-    static final int QUAD_STRIP = 18; // vertices
-    static final int POLYGON = 20; // in the end, probably cannot
-    static final int PATH = 21; // separate these two
-    static final int RECT = 30; // primitive
-    static final int ELLIPSE = 31; // primitive
-    static final int ARC = 32; // primitive
-    static final int SPHERE = 40; // primitive
-    static final int BOX = 41; // primitive
+    int GROUP = 0;
+    int POINT = 2; // primitive
+    int POINTS = 3; // vertices
+    int LINE = 4; // primitive
+    int TRIANGLE = 8; // primitive
+    int TRIANGLES = 9; // vertices
+    int TRIANGLE_STRIP = 10; // vertices
+    int TRIANGLE_FAN = 11; // vertices
+    int QUAD = 16; // primitive
+    int QUADS = 17; // vertices
+    int QUAD_STRIP = 18; // vertices
+    int POLYGON = 20; // in the end, probably cannot
+    int PATH = 21; // separate these two
+    int RECT = 30; // primitive
+    int ELLIPSE = 31; // primitive
+    int ARC = 32; // primitive
+    int SPHERE = 40; // primitive
+    int BOX = 41; // primitive
 
-    static final int OPEN = 1;
-    static final int CLOSE = 2;
+    int OPEN = 1;
+    int CLOSE = 2;
 
-    static final int CORNER = 0;
-    static final int CORNERS = 1;
-    static final int RADIUS = 2;
-    static final int CENTER = 3;
-    static final int DIAMETER = 3;
-    static final int CHORD = 2;
-    static final int PIE = 3;
-    static final int BASELINE = 0;
-    static final int TOP = 101;
-    static final int BOTTOM = 102;
-    static final int NORMAL = 1;
+    int CORNER = 0;
+    int CORNERS = 1;
+    int RADIUS = 2;
+    int CENTER = 3;
+    int DIAMETER = 3;
+    int CHORD = 2;
+    int PIE = 3;
+    int BASELINE = 0;
+    int TOP = 101;
+    int BOTTOM = 102;
+    int NORMAL = 1;
 
-    public static final int CLAMP = 0;
-    public static final int REPEAT = 1;
+    int CLAMP = 0;
+    int REPEAT = 1;
 
-    static final int MODEL = 4;
+    int MODEL = 4;
 
 }

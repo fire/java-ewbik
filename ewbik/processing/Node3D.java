@@ -121,7 +121,7 @@ public class Node3D implements ewbik.asj.Saveable {
         Vector3 inX = new Vector3(1, 0, 0);
         Vector3 inY = new Vector3(0, 1, 0);
         Vector3 inZ = new Vector3(0, 0, 1);
-        if ((Node3D) null == null)
+        if (null == null)
             this.areGlobal = true;
         createTempVars(origin);
 
@@ -135,8 +135,8 @@ public class Node3D implements ewbik.asj.Saveable {
         Vector3 i = o.copy();
         i.set(1, 1, 1);
 
-        if ((Node3D) null != null) {
-            this.setParent((Node3D) null);
+        if (null != null) {
+            this.setParent(null);
         } else {
             this.areGlobal = true;
         }
@@ -572,10 +572,7 @@ public class Node3D implements ewbik.asj.Saveable {
     }
 
     public boolean needsUpdate() {
-        if (this.dirty)
-            return true;
-        else
-            return false;
+        return this.dirty;
     }
 
     /**
@@ -861,8 +858,8 @@ public class Node3D implements ewbik.asj.Saveable {
     public void registerDependent(Node3D newDependent) {
         // Make sure we don't hit a dependency loop
         if (Node3D.class.isAssignableFrom(newDependent.getClass())) {
-            if (((Node3D) newDependent).isAncestorOf(this)) {
-                this.transferToParent(((Node3D) newDependent).getParentAxes());
+            if (newDependent.isAncestorOf(this)) {
+                this.transferToParent(newDependent.getParentAxes());
             }
         }
         if (dependentsRegistry.indexOf(newDependent) == -1) {
@@ -957,7 +954,7 @@ public class Node3D implements ewbik.asj.Saveable {
 
         String parentHash = "-1";
         if (getParentAxes() != null)
-            parentHash = ((ewbik.asj.Saveable) getParentAxes()).getIdentityHash();
+            parentHash = getParentAxes().getIdentityHash();
         thisAxes.setString("parent", parentHash);
         thisAxes.setString("identityHash", this.getIdentityHash());
         return thisAxes;
@@ -1053,7 +1050,7 @@ public class Node3D implements ewbik.asj.Saveable {
                 // First we check if the dependent extends Axes
                 // so we know whether or not to pass the dontWarn list
                 if (this.getClass().isAssignableFrom(dependant.getClass())) {
-                    ((Node3D) dependant).axisSlipWarning(this.getGlobalCopy(),
+                    dependant.axisSlipWarning(this.getGlobalCopy(),
                             newAxisGlobal, this, dontWarn);
                 } else {
                     dependant.axisSlipWarning(this.getGlobalCopy(), newAxisGlobal, this);
@@ -1173,10 +1170,7 @@ public class Node3D implements ewbik.asj.Saveable {
         public boolean equals(Object o) {
             if (o == this)
                 return true;
-            if (o == this.get())
-                return true;
-            else
-                return false;
+            return o == this.get();
         }
     }
 }
