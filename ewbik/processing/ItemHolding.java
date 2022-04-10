@@ -19,9 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.cedarsoftware.util.io.JsonReader;
-import com.cedarsoftware.util.io.JsonWriter;
-
 import ewbik.processing.singlePrecision.Kusudama;
 import processing.core.PConstants;
 
