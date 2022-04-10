@@ -245,31 +245,9 @@ public class ItemHolding extends PApplet {
         size(1200, 900, P3D);
     }
 
-    public void loadArmature() {
-        loadedArmature = ewbik.processing.IO.LoadArmature("Humanoid_Holding_Item.arm");
-    }
-
-    public void loadArmatureJson() {
-        try (BufferedReader br = new BufferedReader(new FileReader("Humanoid_Holding_Item.json"))) {
-            StringBuilder sb = new StringBuilder();
-            String line = br.readLine();
-
-            while (line != null) {
-                sb.append(line);
-                sb.append(System.lineSeparator());
-                line = br.readLine();
-            }
-            String json = sb.toString();
-            Map args = new HashMap();
-            loadedArmature= (Skeleton3D) JsonReader.jsonToJava(json, args);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void setup() {
         ui = new UI(this);
-        loadArmature();
+        loadedArmature = ewbik.processing.IO.LoadArmature("Humanoid_Holding_Item.arm");
         worldNode3D = (Node3D) loadedArmature.localAxes().getParentAxes();
         if (worldNode3D == null) {
             worldNode3D = new Node3D();
@@ -372,26 +350,10 @@ public class ItemHolding extends PApplet {
             cubeMode = !cubeMode;
         } else if (key == 's') {
             println("Saving");
-            Map args = new HashMap();
-            args.put(JsonWriter.PRETTY_PRINT, true);
-            args.put(JsonWriter.SKIP_NULL_FIELDS, true);
-            args.put(JsonWriter.FORCE_MAP_FORMAT_ARRAY_KEYS_ITEMS, true);
-            String json = JsonWriter.objectToJson(loadedArmature, args);
-            BufferedWriter writer = null;
-            try {
-                writer = new BufferedWriter(new FileWriter("Humanoid_Holding_Item.json"));
-                writer.write(json);
-
-            } catch (IOException e) {
-            } finally {
-                try {
-                    if (writer != null)
-                        writer.close();
-                } catch (IOException e) {
-                }
-            }
+            ewbik.data.EWBIKSaver newSaver = new ewbik.data.EWBIKSaver();
+            newSaver.saveArmature(loadedArmature, "Humanoid_Holding_Item.arm");
         } else if (key == 'l') {
-            loadArmatureJson();
+            loadedArmature = ewbik.processing.IO.LoadArmature("Humanoid_Holding_Item.arm");
             loadedArmature.updateBonechains();
             loadedArmature.IKSolver(loadedArmature.getRootBone(), 0.5f, 20, 1);
 
