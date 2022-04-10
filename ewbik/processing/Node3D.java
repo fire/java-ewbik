@@ -17,14 +17,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
  */
 
+import ewbik.math.*;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
 import processing.core.PMatrix3D;
 import processing.core.PVector;
-import processing.math.Quaternion;
-import processing.math.Ray3D;
-import processing.math.Transform3D;
-import processing.math.Vector3;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -54,7 +51,7 @@ public class Node3D implements ewbik.asj.Saveable {
     private DependencyReference<Node3D> parent = null;
     private int slipType = 0;
 
-    public Node3D(Transform3D b, Node3D parent) {
+    public Node3D(ewbik.math.Transform3D b, Node3D parent) {
         this.globalMBasis = ((Transform3D) b).copy();
         createTempVars(((Transform3D) b).getOrigin());
         if (this.getParentAxes() != null)
@@ -809,7 +806,7 @@ public class Node3D implements ewbik.asj.Saveable {
         this.markDirty();
     }
 
-    public void rotateBy(Quaternion apply) {
+    public void rotateBy(ewbik.math.Quaternion apply) {
         this.updateGlobal();
         if (parent != null) {
             Quaternion newRot = this.getParentAxes().getGlobalMBasis().getLocalOfRotation(apply);

@@ -22,14 +22,13 @@ package processing;
 import ewbik.asj.LoadManager;
 import ewbik.asj.SaveManager;
 import ewbik.asj.Saveable;
-import processing.math.MathUtils;
+import ewbik.math.*;
+import ewbik.math.MathUtils;
 import ik.Bone;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
 import processing.core.PVector;
-import processing.math.Quaternion;
-import processing.math.Vector3;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +54,7 @@ public class Skeleton3D implements Saveable {
     // debug code -- use to set a minimum distance an effector must move
     // in order to trigger a chain iteration
     float debugMag = 5f;
-    Vector3 lastEffectorPos = new Vector3();
+    ewbik.math.Vector3 lastEffectorPos = new ewbik.math.Vector3();
     boolean monitorPerformance = false;
     private boolean abilityBiasing = false;
 
@@ -75,8 +74,8 @@ public class Skeleton3D implements Saveable {
 
     protected void initializeRootBone(
             Skeleton3D armature,
-            Vector3 tipHeading,
-            Vector3 rollHeading,
+            ewbik.math.Vector3 tipHeading,
+            ewbik.math.Vector3 rollHeading,
             String inputTag,
             float boneHeight,
             Bone.frameType coordinateType) {
@@ -136,8 +135,8 @@ public class Skeleton3D implements Saveable {
         return rootBone;
     }
 
-    private <V extends Vector3> Bone createRootBone(V tipHeading, V rollHeading, String boneName,
-                                                    float boneHeight, Bone.frameType coordinateType) {
+    private <V extends ewbik.math.Vector3> Bone createRootBone(V tipHeading, V rollHeading, String boneName,
+            float boneHeight, Bone.frameType coordinateType) {
         initializeRootBone(this, tipHeading, rollHeading, boneName, boneHeight, coordinateType);
         this.shadowNode3D = new ewbik.ik.ShadowNode3D(rootBone);
         fauxParent = rootBone.localAxes().getGlobalCopy();
@@ -494,9 +493,9 @@ public class Skeleton3D implements Saveable {
      * @param b
      * @return
      */
-    public Quaternion getRotationBetween(Node3D a,
-                                         Node3D b) {
-        return new Quaternion(a.calculateX().heading(), a.calculateY().heading(), b.calculateX().heading(),
+    public ewbik.math.Quaternion getRotationBetween(Node3D a,
+                                                    Node3D b) {
+        return new ewbik.math.Quaternion(a.calculateX().heading(), a.calculateY().heading(), b.calculateX().heading(),
                 b.calculateY().heading());
     }
 

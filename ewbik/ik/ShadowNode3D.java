@@ -18,11 +18,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package ewbik.ik;
 
+import ewbik.math.*;
 import ewbik.processing.singlePrecision.Kusudama;
 import ik.Bone;
 import ik.IKPin;
 import processing.Node3D;
-import processing.math.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,11 +56,6 @@ public class ShadowNode3D {
     private boolean processed = false;
     private boolean simAligned = false;
 
-    public ShadowNode3D() {
-        generateArmatureBonechains();
-        ensureAxesHeirarchy();
-    }
-    
     public ShadowNode3D(Bone rootBone) {
         bonechainRoot = armatureRootBone(rootBone);
         generateArmatureBonechains();
@@ -162,11 +157,11 @@ public class ShadowNode3D {
                 innerWeightArray.add(pin.getPinWeight() * currentFalloff);
                 float maxPinWeight = 0f;
                 if ((modeCode & IKPin.XDir) != 0)
-                    maxPinWeight = MathUtils.max(maxPinWeight, pin.getXPriority());
+                    maxPinWeight = ewbik.math.MathUtils.max(maxPinWeight, pin.getXPriority());
                 if ((modeCode & IKPin.YDir) != 0)
-                    maxPinWeight = MathUtils.max(maxPinWeight, pin.getYPriority());
+                    maxPinWeight = ewbik.math.MathUtils.max(maxPinWeight, pin.getYPriority());
                 if ((modeCode & IKPin.ZDir) != 0)
-                    maxPinWeight = MathUtils.max(maxPinWeight, pin.getZPriority());
+                    maxPinWeight = ewbik.math.MathUtils.max(maxPinWeight, pin.getZPriority());
 
                 if (maxPinWeight == 0f)
                     maxPinWeight = 1f;
