@@ -100,15 +100,11 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
                 tempTip = ((Bone) par).localAxes().getGlobalOf(tipHeadingRay.heading());
                 tempRoll = ((Bone) par).localAxes().getGlobalOf(rollHeadingRay.heading());
             } else {
-
                 System.out.println("WOAH WOAH WOAH");
             }
 
             tempX = tempTip.crossCopy(tempRoll);
-            // TODO: this commented out one is correct. Using old version test chirality
-            // code.
             tempRoll = tempX.crossCopy(tempTip);
-            // tempRoll = tempTip.crossCopy(tempX);
 
             tempX.normalize();
             tempTip.normalize();
