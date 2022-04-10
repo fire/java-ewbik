@@ -1,0 +1,5465 @@
+{
+  "kusudamas": [
+    {
+      "limitAxes": "367858367-Node3D",
+      "painfulness": 0.05000000074505806,
+      "identityHash": "1452303227-Kusudama",
+      "limitCones": [
+        "705592110-LimitCone",
+        "769819125-LimitCone"
+      ],
+      "minAxialAngle": -1.7000000476837158,
+      "attachedTo": "1906142336-Bone",
+      "axialRange": 1.7000000476837158,
+      "axiallyConstrained": true,
+      "orientationallyConstrained": true
+    },
+    {
+      "limitAxes": "429448798-Node3D",
+      "painfulness": 0,
+      "identityHash": "49456969-Kusudama",
+      "limitCones": ["802539134-LimitCone"],
+      "minAxialAngle": -0.1745329201221466,
+      "attachedTo": "1594307161-Bone",
+      "axialRange": 0.3490658402442932,
+      "axiallyConstrained": true,
+      "orientationallyConstrained": true
+    },
+    {
+      "limitAxes": "1883790755-Node3D",
+      "painfulness": 0.05000000074505806,
+      "identityHash": "853071160-Kusudama",
+      "limitCones": [
+        "1063638155-LimitCone",
+        "978512658-LimitCone"
+      ],
+      "minAxialAngle": -0.30000001192092896,
+      "attachedTo": "1541853115-Bone",
+      "axialRange": 1.7000000476837158,
+      "axiallyConstrained": true,
+      "orientationallyConstrained": true
+    },
+    {
+      "limitAxes": "1753548880-Node3D",
+      "painfulness": 0,
+      "identityHash": "2144231375-Kusudama",
+      "limitCones": [
+        "774206207-LimitCone",
+        "609168623-LimitCone"
+      ],
+      "minAxialAngle": 0,
+      "attachedTo": "1099256423-Bone",
+      "axialRange": 2.700000047683716,
+      "axiallyConstrained": true,
+      "orientationallyConstrained": true
+    },
+    {
+      "limitAxes": "1733753957-Node3D",
+      "painfulness": 0,
+      "identityHash": "333296758-Kusudama",
+      "limitCones": ["540226319-LimitCone"],
+      "minAxialAngle": 0.0010000000474974513,
+      "attachedTo": "1845810670-Bone",
+      "axialRange": 0.0020000000949949026,
+      "axiallyConstrained": true,
+      "orientationallyConstrained": true
+    },
+    {
+      "limitAxes": "2126244643-Node3D",
+      "painfulness": 0,
+      "identityHash": "1949199359-Kusudama",
+      "limitCones": ["1883844344-LimitCone"],
+      "minAxialAngle": -0.1745329201221466,
+      "attachedTo": "880432564-Bone",
+      "axialRange": 0.3490658402442932,
+      "axiallyConstrained": true,
+      "orientationallyConstrained": true
+    },
+    {
+      "limitAxes": "791264788-Node3D",
+      "painfulness": 0,
+      "identityHash": "363196355-Kusudama",
+      "limitCones": ["1964908523-LimitCone"],
+      "minAxialAngle": -0.1745329201221466,
+      "attachedTo": "1243073314-Bone",
+      "axialRange": 0.3490658402442932,
+      "axiallyConstrained": true,
+      "orientationallyConstrained": true
+    },
+    {
+      "limitAxes": "2128062082-Node3D",
+      "painfulness": 0,
+      "identityHash": "1378207991-Kusudama",
+      "limitCones": [
+        "2018505886-LimitCone",
+        "798247159-LimitCone"
+      ],
+      "minAxialAngle": -2.700000047683716,
+      "attachedTo": "94894541-Bone",
+      "axialRange": 2.700000047683716,
+      "axiallyConstrained": true,
+      "orientationallyConstrained": true
+    },
+    {
+      "limitAxes": "980238660-Node3D",
+      "painfulness": 0,
+      "identityHash": "364412993-Kusudama",
+      "limitCones": [
+        "1350259583-LimitCone",
+        "828697762-LimitCone"
+      ],
+      "minAxialAngle": 0.009999999776482582,
+      "attachedTo": "2077664577-Bone",
+      "axialRange": 0.019999999552965164,
+      "axiallyConstrained": true,
+      "orientationallyConstrained": true
+    },
+    {
+      "limitAxes": "1774128164-Node3D",
+      "painfulness": 0,
+      "identityHash": "1627858255-Kusudama",
+      "limitCones": ["1484843385-LimitCone"],
+      "minAxialAngle": -0.1745329201221466,
+      "attachedTo": "1670317276-Bone",
+      "axialRange": 0.3490658402442932,
+      "axiallyConstrained": true,
+      "orientationallyConstrained": true
+    },
+    {
+      "limitAxes": "741380708-Node3D",
+      "painfulness": 0.10000000149011612,
+      "identityHash": "1730642147-Kusudama",
+      "limitCones": ["321058858-LimitCone"],
+      "minAxialAngle": -0.699999988079071,
+      "attachedTo": "288711059-Bone",
+      "axialRange": 1,
+      "axiallyConstrained": true,
+      "orientationallyConstrained": true
+    },
+    {
+      "limitAxes": "717927872-Node3D",
+      "painfulness": 0,
+      "identityHash": "1737889623-Kusudama",
+      "limitCones": ["1718737901-LimitCone"],
+      "minAxialAngle": -0.1745329201221466,
+      "attachedTo": "1494011799-Bone",
+      "axialRange": 0.3490658402442932,
+      "axiallyConstrained": true,
+      "orientationallyConstrained": true
+    },
+    {
+      "limitAxes": "1184228711-Node3D",
+      "painfulness": 0.10000000149011612,
+      "identityHash": "549238606-Kusudama",
+      "limitCones": ["1977779097-LimitCone"],
+      "minAxialAngle": -0.30000001192092896,
+      "attachedTo": "964586744-Bone",
+      "axialRange": 1,
+      "axiallyConstrained": true,
+      "orientationallyConstrained": true
+    },
+    {
+      "limitAxes": "2065897008-Node3D",
+      "painfulness": 0,
+      "identityHash": "1629544622-Kusudama",
+      "limitCones": ["1335855194-LimitCone"],
+      "minAxialAngle": -0.1745329201221466,
+      "attachedTo": "764602382-Bone",
+      "axialRange": 0.3490658402442932,
+      "axiallyConstrained": true,
+      "orientationallyConstrained": true
+    },
+    {
+      "limitAxes": "1285448803-Node3D",
+      "painfulness": 0,
+      "identityHash": "523681483-Kusudama",
+      "limitCones": [
+        "1639368543-LimitCone",
+        "1487158061-LimitCone"
+      ],
+      "minAxialAngle": -0.009999999776482582,
+      "attachedTo": "1062188210-Bone",
+      "axialRange": 0.019999999552965164,
+      "axiallyConstrained": true,
+      "orientationallyConstrained": true
+    },
+    {
+      "limitAxes": "1061441351-Node3D",
+      "painfulness": 0,
+      "identityHash": "268132753-Kusudama",
+      "limitCones": ["1732082992-LimitCone"],
+      "minAxialAngle": -0.1745329201221466,
+      "attachedTo": "100431630-Bone",
+      "axialRange": 0.3490658402442932,
+      "axiallyConstrained": true,
+      "orientationallyConstrained": true
+    }
+  ],
+  "limit_cones": [
+    {
+      "identityHash": "1883844344-LimitCone",
+      "parentKusudama": "1949199359-Kusudama",
+      "radius": 0.1745329201221466,
+      "controlPoint": {"vec": [
+        3.1432119129704006E-9,
+        1,
+        -3.2596272347973354E-8
+      ]}
+    },
+    {
+      "identityHash": "978512658-LimitCone",
+      "parentKusudama": "853071160-Kusudama",
+      "radius": 1,
+      "controlPoint": {"vec": [
+        0.023231737315654755,
+        0.9996626377105713,
+        -0.011615809053182602
+      ]}
+    },
+    {
+      "identityHash": "828697762-LimitCone",
+      "parentKusudama": "364412993-Kusudama",
+      "radius": 0.7853981852531433,
+      "controlPoint": {"vec": [
+        -7.450577186318696E-7,
+        0.7071071267127991,
+        0.7071064710617065
+      ]}
+    },
+    {
+      "identityHash": "540226319-LimitCone",
+      "parentKusudama": "333296758-Kusudama",
+      "radius": 0.009999999776482582,
+      "controlPoint": {"vec": [
+        1.0244564307981818E-8,
+        1,
+        2.980236857297314E-8
+      ]}
+    },
+    {
+      "identityHash": "1063638155-LimitCone",
+      "parentKusudama": "853071160-Kusudama",
+      "radius": 1,
+      "controlPoint": {"vec": [
+        -0.023233508691191673,
+        0.9996626377105713,
+        0.011616694740951061
+      ]}
+    },
+    {
+      "identityHash": "1964908523-LimitCone",
+      "parentKusudama": "363196355-Kusudama",
+      "radius": 0.1745329201221466,
+      "controlPoint": {"vec": [
+        9.313221305262687E-10,
+        1,
+        -9.313221305262687E-9
+      ]}
+    },
+    {
+      "identityHash": "705592110-LimitCone",
+      "parentKusudama": "1452303227-Kusudama",
+      "radius": 1,
+      "controlPoint": {"vec": [
+        0.02323257178068161,
+        0.9996626377105713,
+        0.011616241186857224
+      ]}
+    },
+    {
+      "identityHash": "798247159-LimitCone",
+      "parentKusudama": "1378207991-Kusudama",
+      "radius": 0.02500000037252903,
+      "controlPoint": {"vec": [
+        1.788140025382745E-6,
+        0.09950444847345352,
+        -0.9950371980667114
+      ]}
+    },
+    {
+      "identityHash": "1977779097-LimitCone",
+      "parentKusudama": "549238606-Kusudama",
+      "radius": 0.699999988079071,
+      "controlPoint": {"vec": [
+        1.0728834922701935E-6,
+        1,
+        2.9802318834981634E-8
+      ]}
+    },
+    {
+      "identityHash": "1335855194-LimitCone",
+      "parentKusudama": "1629544622-Kusudama",
+      "radius": 0.6981316804885864,
+      "controlPoint": {"vec": [
+        -2.3283019956465978E-9,
+        1,
+        -2.048905756169006E-8
+      ]}
+    },
+    {
+      "identityHash": "1487158061-LimitCone",
+      "parentKusudama": "523681483-Kusudama",
+      "radius": 0.7853981852531433,
+      "controlPoint": {"vec": [
+        1.1697409263433656E-6,
+        0.7071075439453125,
+        0.7071060538291931
+      ]}
+    },
+    {
+      "identityHash": "1484843385-LimitCone",
+      "parentKusudama": "1627858255-Kusudama",
+      "radius": 0.1745329201221466,
+      "controlPoint": {"vec": [
+        -4.656611096720553E-9,
+        1,
+        -8.381900507004048E-9
+      ]}
+    },
+    {
+      "identityHash": "2018505886-LimitCone",
+      "parentKusudama": "1378207991-Kusudama",
+      "radius": 0.02500000037252903,
+      "controlPoint": {"vec": [
+        -5.960463340670685E-7,
+        0.09950361400842667,
+        0.9950371980667114
+      ]}
+    },
+    {
+      "identityHash": "1350259583-LimitCone",
+      "parentKusudama": "364412993-Kusudama",
+      "radius": 0.7853981852531433,
+      "controlPoint": {"vec": [
+        -5.662441253662109E-7,
+        0.707107663154602,
+        -0.7071059942245483
+      ]}
+    },
+    {
+      "identityHash": "769819125-LimitCone",
+      "parentKusudama": "1452303227-Kusudama",
+      "radius": 1,
+      "controlPoint": {"vec": [
+        -0.023230845108628273,
+        0.9996626377105713,
+        -0.011615884490311146
+      ]}
+    },
+    {
+      "identityHash": "1718737901-LimitCone",
+      "parentKusudama": "1737889623-Kusudama",
+      "radius": 0.1745329201221466,
+      "controlPoint": {"vec": [
+        -1.3387757569205405E-9,
+        1,
+        -2.793966658032332E-8
+      ]}
+    },
+    {
+      "identityHash": "774206207-LimitCone",
+      "parentKusudama": "2144231375-Kusudama",
+      "radius": 0.02500000037252903,
+      "controlPoint": {"vec": [
+        5.364418598219345E-7,
+        0.09950269758701324,
+        0.995037317276001
+      ]}
+    },
+    {
+      "identityHash": "1639368543-LimitCone",
+      "parentKusudama": "523681483-Kusudama",
+      "radius": 0.7853981852531433,
+      "controlPoint": {"vec": [
+        2.980227122861834E-7,
+        0.7071069478988647,
+        -0.7071066498756409
+      ]}
+    },
+    {
+      "identityHash": "802539134-LimitCone",
+      "parentKusudama": "49456969-Kusudama",
+      "radius": 0.1745329201221466,
+      "controlPoint": {"vec": [
+        5.704344108181658E-9,
+        1,
+        3.7252858575698156E-9
+      ]}
+    },
+    {
+      "identityHash": "609168623-LimitCone",
+      "parentKusudama": "2144231375-Kusudama",
+      "radius": 0.02500000037252903,
+      "controlPoint": {"vec": [
+        -1.1920926112907182E-7,
+        0.0995054617524147,
+        -0.9950370788574219
+      ]}
+    },
+    {
+      "identityHash": "321058858-LimitCone",
+      "parentKusudama": "1730642147-Kusudama",
+      "radius": 0.699999988079071,
+      "controlPoint": {"vec": [
+        -1.7285346984863281E-6,
+        1,
+        5.9604644775390625E-8
+      ]}
+    },
+    {
+      "identityHash": "1732082992-LimitCone",
+      "parentKusudama": "268132753-Kusudama",
+      "radius": 0.1745329201221466,
+      "controlPoint": {"vec": [
+        -1.259341322104704E-16,
+        1,
+        2.862293735361732E-17
+      ]}
+    }
+  ],
+  "bones": [
+    {
+      "localAxes": "1670954592-Node3D",
+      "identityHash": "1494011799-Bone",
+      "majorRotationAxes": "717927872-Node3D",
+      "children": ["880432564-Bone"],
+      "parentArmature": "1495136169-Skeleton3D",
+      "boneHeight": 10,
+      "tag": "c3",
+      "stiffness": 0.8,
+      "constraints": "1737889623-Kusudama"
+    },
+    {
+      "localAxes": "421470224-Node3D",
+      "identityHash": "1541853115-Bone",
+      "majorRotationAxes": "1883790755-Node3D",
+      "children": ["1099256423-Bone"],
+      "parentArmature": "1495136169-Skeleton3D",
+      "boneHeight": 40,
+      "tag": "left upper arm",
+      "stiffness": 0,
+      "constraints": "853071160-Kusudama"
+    },
+    {
+      "localAxes": "229351548-Node3D",
+      "identityHash": "1670317276-Bone",
+      "majorRotationAxes": "1774128164-Node3D",
+      "children": ["1494011799-Bone"],
+      "parentArmature": "1495136169-Skeleton3D",
+      "boneHeight": 10,
+      "tag": "c2",
+      "stiffness": 0.8,
+      "constraints": "1627858255-Kusudama"
+    },
+    {
+      "localAxes": "437164651-Node3D",
+      "identityHash": "1666012656-Bone",
+      "majorRotationAxes": "172885429-Node3D",
+      "children": ["100431630-Bone"],
+      "parentArmature": "1495136169-Skeleton3D",
+      "boneHeight": 1,
+      "IKPin": "1662467828-IKPin",
+      "tag": "example : rootBone",
+      "stiffness": 0
+    },
+    {
+      "localAxes": "600256971-Node3D",
+      "identityHash": "1906142336-Bone",
+      "majorRotationAxes": "367858367-Node3D",
+      "children": ["94894541-Bone"],
+      "parentArmature": "1495136169-Skeleton3D",
+      "boneHeight": 40,
+      "tag": "right upper arm",
+      "stiffness": 0,
+      "constraints": "1452303227-Kusudama"
+    },
+    {
+      "localAxes": "1456299346-Node3D",
+      "identityHash": "1062188210-Bone",
+      "majorRotationAxes": "1285448803-Node3D",
+      "children": [],
+      "parentArmature": "1495136169-Skeleton3D",
+      "boneHeight": 10,
+      "IKPin": "449977149-IKPin",
+      "tag": "right hand",
+      "stiffness": 0,
+      "constraints": "523681483-Kusudama"
+    },
+    {
+      "localAxes": "1945123216-Node3D",
+      "identityHash": "964586744-Bone",
+      "majorRotationAxes": "1184228711-Node3D",
+      "children": ["1906142336-Bone"],
+      "parentArmature": "1495136169-Skeleton3D",
+      "boneHeight": 15,
+      "tag": "right collar bone",
+      "stiffness": 0,
+      "constraints": "549238606-Kusudama"
+    },
+    {
+      "localAxes": "1378625956-Node3D",
+      "identityHash": "1243073314-Bone",
+      "majorRotationAxes": "791264788-Node3D",
+      "children": ["764602382-Bone"],
+      "parentArmature": "1495136169-Skeleton3D",
+      "boneHeight": 12,
+      "tag": "neck 2",
+      "stiffness": 0,
+      "constraints": "363196355-Kusudama"
+    },
+    {
+      "localAxes": "2057777719-Node3D",
+      "identityHash": "764602382-Bone",
+      "majorRotationAxes": "2065897008-Node3D",
+      "children": [],
+      "parentArmature": "1495136169-Skeleton3D",
+      "boneHeight": 15,
+      "IKPin": "1884422453-IKPin",
+      "tag": "head",
+      "stiffness": 0,
+      "constraints": "1629544622-Kusudama"
+    },
+    {
+      "localAxes": "1045489280-Node3D",
+      "identityHash": "94894541-Bone",
+      "majorRotationAxes": "2128062082-Node3D",
+      "children": ["1062188210-Bone"],
+      "parentArmature": "1495136169-Skeleton3D",
+      "boneHeight": 40,
+      "tag": "right lower arm",
+      "stiffness": 0,
+      "constraints": "1378207991-Kusudama"
+    },
+    {
+      "localAxes": "807457434-Node3D",
+      "identityHash": "880432564-Bone",
+      "majorRotationAxes": "2126244643-Node3D",
+      "children": ["1594307161-Bone"],
+      "parentArmature": "1495136169-Skeleton3D",
+      "boneHeight": 10,
+      "tag": "c4",
+      "stiffness": 0.8,
+      "constraints": "1949199359-Kusudama"
+    },
+    {
+      "localAxes": "1232749186-Node3D",
+      "identityHash": "1099256423-Bone",
+      "majorRotationAxes": "1753548880-Node3D",
+      "children": ["2077664577-Bone"],
+      "parentArmature": "1495136169-Skeleton3D",
+      "boneHeight": 40,
+      "tag": "right lower arm",
+      "stiffness": 0,
+      "constraints": "2144231375-Kusudama"
+    },
+    {
+      "localAxes": "142255855-Node3D",
+      "identityHash": "2077664577-Bone",
+      "majorRotationAxes": "980238660-Node3D",
+      "children": [],
+      "parentArmature": "1495136169-Skeleton3D",
+      "boneHeight": 10,
+      "IKPin": "753680640-IKPin",
+      "tag": "left hand",
+      "stiffness": 0,
+      "constraints": "364412993-Kusudama"
+    },
+    {
+      "localAxes": "579705629-Node3D",
+      "identityHash": "100431630-Bone",
+      "majorRotationAxes": "1061441351-Node3D",
+      "children": ["1670317276-Bone"],
+      "parentArmature": "1495136169-Skeleton3D",
+      "boneHeight": 10,
+      "tag": "c1",
+      "stiffness": 0.8,
+      "constraints": "268132753-Kusudama"
+    },
+    {
+      "localAxes": "1624784034-Node3D",
+      "identityHash": "1594307161-Bone",
+      "majorRotationAxes": "429448798-Node3D",
+      "children": [
+        "1845810670-Bone",
+        "964586744-Bone",
+        "288711059-Bone"
+      ],
+      "parentArmature": "1495136169-Skeleton3D",
+      "boneHeight": 10,
+      "tag": "c5",
+      "stiffness": 0.8,
+      "constraints": "49456969-Kusudama"
+    },
+    {
+      "localAxes": "330450685-Node3D",
+      "identityHash": "1845810670-Bone",
+      "majorRotationAxes": "1733753957-Node3D",
+      "children": ["1243073314-Bone"],
+      "parentArmature": "1495136169-Skeleton3D",
+      "boneHeight": 12,
+      "tag": "neck 1",
+      "stiffness": 0.8,
+      "constraints": "333296758-Kusudama"
+    },
+    {
+      "localAxes": "1372866071-Node3D",
+      "identityHash": "288711059-Bone",
+      "majorRotationAxes": "741380708-Node3D",
+      "children": ["1541853115-Bone"],
+      "parentArmature": "1495136169-Skeleton3D",
+      "boneHeight": 15,
+      "tag": "left collar bone",
+      "stiffness": 0,
+      "constraints": "1730642147-Kusudama"
+    }
+  ],
+  "skeleton_3d": [{
+    "localAxes": "100135434-Node3D",
+    "rootBone": "1666012656-Bone",
+    "identityHash": "1495136169-Skeleton3D",
+    "defaultIterations": 15,
+    "tag": "example",
+    "dampening": 0.05000000074505806
+  }],
+  "node_3d": [
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "-1",
+      "identityHash": "1552903139-Node3D",
+      "rotation": [
+        0.7110235095024109,
+        0.06220649555325508,
+        -0.6977459788322449,
+        0.06104486435651779
+      ],
+      "translation": [
+        0,
+        50,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "766961358-Node3D",
+      "identityHash": "750528448-Node3D",
+      "rotation": [
+        1,
+        -6.938893903907228E-18,
+        2.7755575615628914E-17,
+        2.7755575615628914E-17
+      ],
+      "translation": [
+        9.947598300641403E-14,
+        40,
+        1.0658141036401503E-13
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1932668336-Node3D",
+      "identityHash": "373928189-Node3D",
+      "rotation": [
+        -0.8238423466682434,
+        0.05634782090783119,
+        0.08261379599571228,
+        -0.5579281449317932
+      ],
+      "translation": [
+        2.9802322387695312E-8,
+        10.000000953674316,
+        3.427267074584961E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1313239781-Node3D",
+      "identityHash": "551376180-Node3D",
+      "rotation": [
+        0.99955815076828,
+        -1.1244868801441044E-5,
+        -0.029724545776844025,
+        2.8644550184253603E-5
+      ],
+      "translation": [
+        2.6645352591003757E-15,
+        10,
+        1.887379141862766E-14
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1891596004-Node3D",
+      "identityHash": "69885134-Node3D",
+      "rotation": [
+        0.9999808073043823,
+        -0.004980483092367649,
+        -0.003660819726064801,
+        4.070118011441082E-4
+      ],
+      "translation": [
+        -1.259341322104704E-16,
+        1,
+        2.862293735361732E-17
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "100135434-Node3D",
+      "identityHash": "1442529420-Node3D",
+      "rotation": [
+        1,
+        1.734723475976807E-17,
+        1.951563910473908E-18,
+        0
+      ],
+      "translation": [
+        -0.19034311175346375,
+        -0.4376944303512573,
+        -0.8716934323310852
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "860436612-Node3D",
+      "identityHash": "837297138-Node3D",
+      "rotation": [
+        -0.6796696186065674,
+        0.04473574459552765,
+        -0.21553625166416168,
+        0.6997085809707642
+      ],
+      "translation": [
+        2.47955322265625E-5,
+        15,
+        -4.5299530029296875E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "551376180-Node3D",
+      "identityHash": "600228761-Node3D",
+      "rotation": [
+        1,
+        0,
+        -5.572799166575493E-17,
+        0
+      ],
+      "translation": [
+        1.6653345369377348E-15,
+        10,
+        7.993605777301127E-15
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "2101354392-Node3D",
+      "identityHash": "1216837468-Node3D",
+      "rotation": [
+        1,
+        -1.6443662431697703E-8,
+        -7.457855666359592E-9,
+        3.6088745325457694E-9
+      ],
+      "translation": [
+        2.9802322387695312E-8,
+        10.000000953674316,
+        3.427267074584961E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "421470224-Node3D",
+      "identityHash": "1753548880-Node3D",
+      "rotation": [
+        0.7071070671081543,
+        -0.7071065902709961,
+        -1.6252879504463635E-6,
+        1.6516296454938129E-6
+      ],
+      "translation": [
+        1.1444091796875E-5,
+        40,
+        3.814697265625E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1932668336-Node3D",
+      "identityHash": "1865645009-Node3D",
+      "rotation": [
+        0.9999873042106628,
+        0.004103257320821285,
+        -7.769683143123984E-4,
+        -0.0028571095317602158
+      ],
+      "translation": [
+        2.9802322387695312E-8,
+        10.000000953674316,
+        3.427267074584961E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "837297138-Node3D",
+      "identityHash": "234244641-Node3D",
+      "rotation": [
+        0.4271652102470398,
+        -0.900374174118042,
+        -0.023751825094223022,
+        -0.07932353019714355
+      ],
+      "translation": [
+        1.1444091796875E-5,
+        40.00000762939453,
+        5.7220458984375E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1938716721-Node3D",
+      "identityHash": "1195185814-Node3D",
+      "rotation": [
+        -1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        -4.377216100692749E-8,
+        10,
+        -5.21540641784668E-8
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "689438756-Node3D",
+      "identityHash": "1594475442-Node3D",
+      "rotation": [
+        -0.8238422870635986,
+        0.056347817182540894,
+        0.08261378854513168,
+        -0.5579280853271484
+      ],
+      "translation": [
+        2.3592239273284576E-16,
+        10,
+        1.1546319456101628E-14
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1552903139-Node3D",
+      "identityHash": "808193782-Node3D",
+      "rotation": [
+        -6.123234262925839E-17,
+        0,
+        0,
+        1
+      ],
+      "translation": [
+        0.19034311175346375,
+        0.4376944303512573,
+        -0.8716934323310852
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1624784034-Node3D",
+      "identityHash": "330450685-Node3D",
+      "rotation": [
+        0.9999873042106628,
+        0.004103257320821285,
+        -7.769479416310787E-4,
+        -0.0028571095317602158
+      ],
+      "translation": [
+        2.9802322387695312E-8,
+        10.000000953674316,
+        2.8312206268310547E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "837297138-Node3D",
+      "identityHash": "1384968274-Node3D",
+      "rotation": [
+        -0.7071068286895752,
+        0.7071068286895752,
+        -2.2351741790771484E-8,
+        0
+      ],
+      "translation": [
+        1.1444091796875E-5,
+        40.00000762939453,
+        5.7220458984375E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1442529420-Node3D",
+      "identityHash": "719358790-Node3D",
+      "rotation": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        4.163336342344337E-17,
+        1,
+        3.608224830031759E-16
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1932668336-Node3D",
+      "identityHash": "860436612-Node3D",
+      "rotation": [
+        -0.8239303827285767,
+        0.05596950650215149,
+        -0.08266878128051758,
+        0.5578280091285706
+      ],
+      "translation": [
+        2.9802322387695312E-8,
+        10.000000953674316,
+        3.427267074584961E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1045489280-Node3D",
+      "identityHash": "1456299346-Node3D",
+      "rotation": [
+        -0.995923638343811,
+        0.026341410353779793,
+        0.004979659803211689,
+        0.08612474054098129
+      ],
+      "translation": [
+        -1.049041748046875E-5,
+        40.00000762939453,
+        -2.6702880859375E-5
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "551133352-Node3D",
+      "identityHash": "735771137-Node3D",
+      "rotation": [
+        0.9962007999420166,
+        -2.960138226626441E-5,
+        -0.08708702772855759,
+        3.7815829273313284E-5
+      ],
+      "translation": [
+        3.632158041000366E-8,
+        10.000000953674316,
+        -3.203749656677246E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1847333331-Node3D",
+      "identityHash": "994959726-Node3D",
+      "rotation": [
+        1,
+        -3.7252894102834944E-9,
+        4.097818262494002E-8,
+        3.7252894102834944E-9
+      ],
+      "translation": [
+        1.9073486328125E-6,
+        40.000030517578125,
+        -1.9073486328125E-5
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "735771137-Node3D",
+      "identityHash": "1045055805-Node3D",
+      "rotation": [
+        1,
+        1.7066668078768998E-9,
+        -1.4938592585167498E-8,
+        -7.206836016848683E-9
+      ],
+      "translation": [
+        9.220093488693237E-8,
+        9.999998092651367,
+        -5.9604644775390625E-8
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1624784034-Node3D",
+      "identityHash": "1184228711-Node3D",
+      "rotation": [
+        0.8280671834945679,
+        4.976300260750577E-9,
+        -4.494953742550933E-9,
+        0.5606288909912109
+      ],
+      "translation": [
+        2.9802322387695312E-8,
+        10.000000953674316,
+        2.8312206268310547E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1232749186-Node3D",
+      "identityHash": "980238660-Node3D",
+      "rotation": [
+        1,
+        9.313225746154785E-8,
+        0,
+        7.599592208862305E-7
+      ],
+      "translation": [
+        2.09808349609375E-5,
+        40.000003814697266,
+        -3.814697265625E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1969167088-Node3D",
+      "identityHash": "1255488095-Node3D",
+      "rotation": [
+        -1,
+        9.222274055531443E-10,
+        7.451943062619648E-9,
+        4.36557352767597E-11
+      ],
+      "translation": [
+        3.725290298461914E-9,
+        12.000003814697266,
+        3.2782554626464844E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1624784034-Node3D",
+      "identityHash": "1945123216-Node3D",
+      "rotation": [
+        -0.8238422870635986,
+        0.056347817182540894,
+        0.08261378854513168,
+        -0.5579280853271484
+      ],
+      "translation": [
+        2.9802322387695312E-8,
+        10.000000953674316,
+        2.8312206268310547E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1635315205-Node3D",
+      "identityHash": "1114347269-Node3D",
+      "rotation": [
+        0.9213657379150391,
+        0.0598941370844841,
+        -0.004606872797012329,
+        0.38402700424194336
+      ],
+      "translation": [
+        2.09808349609375E-5,
+        40.00001525878906,
+        3.814697265625E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1442529420-Node3D",
+      "identityHash": "1001352210-Node3D",
+      "rotation": [
+        0.9999808073043823,
+        -0.004980483092367649,
+        -0.003660819726064801,
+        4.070118011441082E-4
+      ],
+      "translation": [
+        2.7755575615628914E-17,
+        1,
+        3.608224830031759E-16
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "373928189-Node3D",
+      "identityHash": "838493763-Node3D",
+      "rotation": [
+        -0.9074914455413818,
+        0.18786123394966125,
+        3.7252898543727042E-9,
+        -0.3757225275039673
+      ],
+      "translation": [
+        -1.239776611328125E-5,
+        15.00000286102295,
+        -3.0994415283203125E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1232749186-Node3D",
+      "identityHash": "142255855-Node3D",
+      "rotation": [
+        0.9213656783103943,
+        0.05989415943622589,
+        -0.004606866743415594,
+        0.38402700424194336
+      ],
+      "translation": [
+        2.09808349609375E-5,
+        40.000003814697266,
+        -3.814697265625E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "2101354392-Node3D",
+      "identityHash": "252565878-Node3D",
+      "rotation": [
+        -0.8239303827285767,
+        0.05596950650215149,
+        -0.08266878128051758,
+        0.5578280091285706
+      ],
+      "translation": [
+        2.9802322387695312E-8,
+        10.000000953674316,
+        3.427267074584961E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "711572724-Node3D",
+      "identityHash": "1635315205-Node3D",
+      "rotation": [
+        0.4271652102470398,
+        -0.900374174118042,
+        -0.023751825094223022,
+        -0.07932353019714355
+      ],
+      "translation": [
+        1.1444091796875E-5,
+        40.00000762939453,
+        5.7220458984375E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "437164651-Node3D",
+      "identityHash": "579705629-Node3D",
+      "rotation": [
+        0.9999808073043823,
+        -0.004980483092367649,
+        -0.003660819726064801,
+        4.070118011441082E-4
+      ],
+      "translation": [
+        -1.259341322104704E-16,
+        1,
+        2.862293735361732E-17
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "100135434-Node3D",
+      "identityHash": "52008704-Node3D",
+      "rotation": [
+        1,
+        1.431146867680866E-17,
+        4.3368086899420177E-19,
+        1.734723475976807E-18
+      ],
+      "translation": [
+        -0.19034311175346375,
+        -0.4376944303512573,
+        -0.8716934323310852
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "689438756-Node3D",
+      "identityHash": "282194353-Node3D",
+      "rotation": [
+        0.8280672430992126,
+        -1.700029006457271E-16,
+        1.3183898417423734E-16,
+        0.5606288313865662
+      ],
+      "translation": [
+        3.7470027081099033E-16,
+        10,
+        7.993605777301127E-15
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "768047866-Node3D",
+      "identityHash": "1362200497-Node3D",
+      "rotation": [
+        0.9994512796401978,
+        0.005872202571481466,
+        0.03258436918258667,
+        -9.22077801078558E-4
+      ],
+      "translation": [
+        3.725290298461914E-9,
+        12.000003814697266,
+        3.2782554626464844E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1372866071-Node3D",
+      "identityHash": "1883790755-Node3D",
+      "rotation": [
+        0.9074914455413818,
+        -0.18786124885082245,
+        -2.3592239273284576E-16,
+        -0.3757224977016449
+      ],
+      "translation": [
+        2.6702880859375E-5,
+        15.000001907348633,
+        -5.0067901611328125E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "579705629-Node3D",
+      "identityHash": "1774128164-Node3D",
+      "rotation": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        -4.377216100692749E-8,
+        10,
+        -5.21540641784668E-8
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1945123216-Node3D",
+      "identityHash": "367858367-Node3D",
+      "rotation": [
+        0.9074914455413818,
+        -0.18786124885082245,
+        1.942890293094024E-16,
+        0.3757224977016449
+      ],
+      "translation": [
+        -9.5367431640625E-6,
+        15.00000286102295,
+        -2.384185791015625E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "72768421-Node3D",
+      "identityHash": "2106834283-Node3D",
+      "rotation": [
+        0.9074914455413818,
+        -0.18786124885082245,
+        -2.498001805406602E-16,
+        -0.3757224977016449
+      ],
+      "translation": [
+        1.9539925233402755E-14,
+        15,
+        -5.773159728050814E-15
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "252565878-Node3D",
+      "identityHash": "711572724-Node3D",
+      "rotation": [
+        -0.6796696186065674,
+        0.04473574459552765,
+        -0.21553625166416168,
+        0.6997085809707642
+      ],
+      "translation": [
+        2.47955322265625E-5,
+        15,
+        -4.5299530029296875E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1552903139-Node3D",
+      "identityHash": "400272227-Node3D",
+      "rotation": [
+        -6.123234262925839E-17,
+        0,
+        0,
+        1
+      ],
+      "translation": [
+        -9.184850891462946E-15,
+        -75,
+        -1.7763568394002505E-15
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "766961358-Node3D",
+      "identityHash": "636598108-Node3D",
+      "rotation": [
+        -0.995923638343811,
+        0.026341410353779793,
+        0.004979659803211689,
+        0.08612474054098129
+      ],
+      "translation": [
+        2.0605739337042905E-13,
+        40,
+        1.8474111129762605E-13
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "679126859-Node3D",
+      "identityHash": "934905740-Node3D",
+      "rotation": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        1.609823385706477E-15,
+        12,
+        1.1102230246251565E-14
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1945123216-Node3D",
+      "identityHash": "600256971-Node3D",
+      "rotation": [
+        0.842450737953186,
+        -0.060700468719005585,
+        -0.0842943862080574,
+        0.5286650061607361
+      ],
+      "translation": [
+        -9.5367431640625E-6,
+        15.00000286102295,
+        -2.384185791015625E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1089887916-Node3D",
+      "identityHash": "768047866-Node3D",
+      "rotation": [
+        -0.9965147376060486,
+        -9.355694055557251E-5,
+        -0.08341677486896515,
+        7.327098865061998E-5
+      ],
+      "translation": [
+        -2.0489096641540527E-8,
+        12.000000953674316,
+        -2.9802322387695312E-8
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "2101354392-Node3D",
+      "identityHash": "1537148410-Node3D",
+      "rotation": [
+        0.8280672430992126,
+        0,
+        -4.6566128730773926E-9,
+        0.5606288909912109
+      ],
+      "translation": [
+        2.9802322387695312E-8,
+        10.000000953674316,
+        3.427267074584961E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "100135434-Node3D",
+      "identityHash": "467440527-Node3D",
+      "rotation": [
+        1,
+        -0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1552903139-Node3D",
+      "identityHash": "454200912-Node3D",
+      "rotation": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        -13,
+        -27,
+        32
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "681464428-Node3D",
+      "identityHash": "228919620-Node3D",
+      "rotation": [
+        -1,
+        -2.2737367544323206E-12,
+        1.4901317513249523E-8,
+        -2.9103830456733704E-11
+      ],
+      "translation": [
+        -4.0046870708465576E-8,
+        9.999998092651367,
+        -8.195638656616211E-8
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "2101354392-Node3D",
+      "identityHash": "2084966506-Node3D",
+      "rotation": [
+        0.8280671834945679,
+        -1.4901159417490817E-8,
+        -1.862644971595273E-8,
+        -0.5606289505958557
+      ],
+      "translation": [
+        2.9802322387695312E-8,
+        10.000000953674316,
+        3.427267074584961E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "689438756-Node3D",
+      "identityHash": "72768421-Node3D",
+      "rotation": [
+        -0.8239303231239319,
+        0.0559694878757,
+        -0.08266878128051758,
+        0.5578280091285706
+      ],
+      "translation": [
+        2.3592239273284576E-16,
+        10,
+        1.1546319456101628E-14
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "100135434-Node3D",
+      "identityHash": "1891596004-Node3D",
+      "rotation": [
+        1,
+        1.431146867680866E-17,
+        4.3368086899420177E-19,
+        1.734723475976807E-18
+      ],
+      "translation": [
+        -0.19034311175346375,
+        -0.4376944303512573,
+        -0.8716934323310852
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "579705629-Node3D",
+      "identityHash": "229351548-Node3D",
+      "rotation": [
+        0.9998754262924194,
+        -1.09567508843611E-6,
+        0.0157836452126503,
+        -1.2048310054524336E-5
+      ],
+      "translation": [
+        -4.377216100692749E-8,
+        10,
+        -5.21540641784668E-8
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "100135434-Node3D",
+      "identityHash": "1393715242-Node3D",
+      "rotation": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        -3.5915327223171327E-16,
+        -5.398069504446731E-16,
+        -3.1106905940670284E-15
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "551133352-Node3D",
+      "identityHash": "1471175460-Node3D",
+      "rotation": [
+        1,
+        -4.6566123179658803E-10,
+        -1.1368682416908887E-13,
+        -7.275956746821688E-12
+      ],
+      "translation": [
+        3.632158041000366E-8,
+        10.000000953674316,
+        -3.203749656677246E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1806524194-Node3D",
+      "identityHash": "1384462301-Node3D",
+      "rotation": [
+        -0.5069501996040344,
+        0.7812936902046204,
+        -0.18680275976657867,
+        -0.3125484883785248
+      ],
+      "translation": [
+        -5.7220458984375E-6,
+        40.000030517578125,
+        9.5367431640625E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "234244641-Node3D",
+      "identityHash": "117871778-Node3D",
+      "rotation": [
+        -1,
+        3.725290298461914E-9,
+        0,
+        -1.4901161193847656E-8
+      ],
+      "translation": [
+        2.09808349609375E-5,
+        40.00001525878906,
+        3.814697265625E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1828212021-Node3D",
+      "identityHash": "1375229382-Node3D",
+      "rotation": [
+        0.7048690915107727,
+        -0.7048690915107727,
+        -0.05621040612459183,
+        0.05621040239930153
+      ],
+      "translation": [
+        20.92888641357422,
+        -0.6100978851318359,
+        -11.049810409545898
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1552903139-Node3D",
+      "identityHash": "1828212021-Node3D",
+      "rotation": [
+        1,
+        -0,
+        -0,
+        -0
+      ],
+      "translation": [
+        -13,
+        -27,
+        32
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1378625956-Node3D",
+      "identityHash": "2057777719-Node3D",
+      "rotation": [
+        0.9994513392448425,
+        0.005872203968465328,
+        0.03258437663316727,
+        -9.220777428708971E-4
+      ],
+      "translation": [
+        1.4901161193847656E-8,
+        12.000003814697266,
+        3.129243850708008E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "860436612-Node3D",
+      "identityHash": "851307120-Node3D",
+      "rotation": [
+        -0.9074914455413818,
+        0.18786123394966125,
+        2.9802318834981634E-8,
+        0.3757225573062897
+      ],
+      "translation": [
+        2.47955322265625E-5,
+        15,
+        -4.5299530029296875E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "676456615-Node3D",
+      "identityHash": "681464428-Node3D",
+      "rotation": [
+        0.9962007999420166,
+        -2.960138226626441E-5,
+        -0.08708702772855759,
+        3.7815829273313284E-5
+      ],
+      "translation": [
+        3.632158041000366E-8,
+        10.000000953674316,
+        -3.203749656677246E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1421115661-Node3D",
+      "identityHash": "689438756-Node3D",
+      "rotation": [
+        0.9999258518218994,
+        -0.005106854252517223,
+        -0.010515584610402584,
+        0.0034054494462907314
+      ],
+      "translation": [
+        9.159339953157541E-16,
+        10,
+        1.4876988529977098E-14
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1932668336-Node3D",
+      "identityHash": "169504924-Node3D",
+      "rotation": [
+        -1,
+        -2.9103826987286752E-11,
+        7.4505797087454084E-9,
+        -1.1641530794914701E-10
+      ],
+      "translation": [
+        2.9802322387695312E-8,
+        10.000000953674316,
+        3.427267074584961E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1891596004-Node3D",
+      "identityHash": "1323341836-Node3D",
+      "rotation": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        -1.259341322104704E-16,
+        1,
+        2.862293735361732E-17
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "52008704-Node3D",
+      "identityHash": "1938716721-Node3D",
+      "rotation": [
+        0.9999808073043823,
+        -0.004980483092367649,
+        -0.003660819726064801,
+        4.070118011441082E-4
+      ],
+      "translation": [
+        -1.259341322104704E-16,
+        1,
+        2.862293735361732E-17
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1624784034-Node3D",
+      "identityHash": "1372866071-Node3D",
+      "rotation": [
+        -0.8239303231239319,
+        0.0559694878757,
+        -0.08266878128051758,
+        0.5578280091285706
+      ],
+      "translation": [
+        2.9802322387695312E-8,
+        10.000000953674316,
+        2.8312206268310547E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "865930578-Node3D",
+      "identityHash": "676456615-Node3D",
+      "rotation": [
+        0.9995582103729248,
+        -1.1244910638197325E-5,
+        -0.029724547639489174,
+        2.864452835638076E-5
+      ],
+      "translation": [
+        -9.313225746154785E-9,
+        10,
+        -2.4586915969848633E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "735771137-Node3D",
+      "identityHash": "2101354392-Node3D",
+      "rotation": [
+        0.9999258518218994,
+        -0.005106853786855936,
+        -0.010515592060983181,
+        0.0034054494462907314
+      ],
+      "translation": [
+        9.220093488693237E-8,
+        9.999998092651367,
+        -5.9604644775390625E-8
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1670954592-Node3D",
+      "identityHash": "2126244643-Node3D",
+      "rotation": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        3.632158041000366E-8,
+        10.000000953674316,
+        -3.2782554626464844E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1670954592-Node3D",
+      "identityHash": "807457434-Node3D",
+      "rotation": [
+        0.9962007999420166,
+        -2.960083475045394E-5,
+        -0.08708704262971878,
+        3.781589475693181E-5
+      ],
+      "translation": [
+        3.632158041000366E-8,
+        10.000000953674316,
+        -3.2782554626464844E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "421470224-Node3D",
+      "identityHash": "1232749186-Node3D",
+      "rotation": [
+        0.4271651804447174,
+        -0.9003741145133972,
+        -0.023751845583319664,
+        -0.07932351529598236
+      ],
+      "translation": [
+        1.1444091796875E-5,
+        40,
+        3.814697265625E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "52008704-Node3D",
+      "identityHash": "1230222515-Node3D",
+      "rotation": [
+        -1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        -1.259341322104704E-16,
+        1,
+        2.862293735361732E-17
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1594475442-Node3D",
+      "identityHash": "582248423-Node3D",
+      "rotation": [
+        0.9074914455413818,
+        -0.18786124885082245,
+        2.2898349882893854E-16,
+        0.3757224977016449
+      ],
+      "translation": [
+        8.881784197001252E-15,
+        15,
+        1.021405182655144E-14
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1498022362-Node3D",
+      "identityHash": "1010017961-Node3D",
+      "rotation": [
+        0.7071068286895752,
+        -0.7071068286895752,
+        -6.106227164833953E-16,
+        -1.1102231569740545E-16
+      ],
+      "translation": [
+        -3.552713678800501E-15,
+        40,
+        3.907985046680551E-14
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1498022362-Node3D",
+      "identityHash": "766961358-Node3D",
+      "rotation": [
+        -0.5069501996040344,
+        0.7812935709953308,
+        -0.18680277466773987,
+        -0.3125484883785248
+      ],
+      "translation": [
+        3.552713678800501E-15,
+        40,
+        3.552713678800501E-14
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "100135434-Node3D",
+      "identityHash": "1130252911-Node3D",
+      "rotation": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1089887916-Node3D",
+      "identityHash": "1585567452-Node3D",
+      "rotation": [
+        1,
+        7.639755494892597E-11,
+        7.44648787076585E-9,
+        -6.984919309616089E-10
+      ],
+      "translation": [
+        -2.0489096641540527E-8,
+        12.000000953674316,
+        -2.9802322387695312E-8
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1384462301-Node3D",
+      "identityHash": "838502088-Node3D",
+      "rotation": [
+        -1,
+        3.7252894102834944E-9,
+        -4.097818262494002E-8,
+        -3.7252894102834944E-9
+      ],
+      "translation": [
+        1.9073486328125E-6,
+        40.000030517578125,
+        -1.9073486328125E-5
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "100135434-Node3D",
+      "identityHash": "437164651-Node3D",
+      "rotation": [
+        -1,
+        -1.431146867680866E-17,
+        -4.3368086899420177E-19,
+        -1.734723475976807E-18
+      ],
+      "translation": [
+        -0.19034311175346375,
+        -0.4376944303512573,
+        -0.8716934323310852
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "689438756-Node3D",
+      "identityHash": "31872646-Node3D",
+      "rotation": [
+        1,
+        -5.421010862427522E-20,
+        -1.0842021724855044E-19,
+        -8.673617379884035E-19
+      ],
+      "translation": [
+        3.7470027081099033E-16,
+        10,
+        7.993605777301127E-15
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1001352210-Node3D",
+      "identityHash": "1102488959-Node3D",
+      "rotation": [
+        1,
+        2.7755575615628914E-17,
+        2.1684043449710089E-19,
+        -5.204170427930421E-18
+      ],
+      "translation": [
+        6.106226635438361E-16,
+        10,
+        4.218847493575595E-15
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "676456615-Node3D",
+      "identityHash": "1949118261-Node3D",
+      "rotation": [
+        -1,
+        4.6566123179658803E-10,
+        1.1368682416908887E-13,
+        7.275956746821688E-12
+      ],
+      "translation": [
+        3.632158041000366E-8,
+        10.000000953674316,
+        -3.203749656677246E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1401154377-Node3D",
+      "identityHash": "2069953842-Node3D",
+      "rotation": [
+        1,
+        1.734723475976807E-18,
+        2.7755575615628914E-17,
+        -1.3877787807814457E-17
+      ],
+      "translation": [
+        -4.973799150320701E-14,
+        40,
+        -1.4210854715202004E-14
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "366374386-Node3D",
+      "identityHash": "1056638950-Node3D",
+      "rotation": [
+        0.842450737953186,
+        -0.06070047989487648,
+        -0.0842943787574768,
+        0.5286650657653809
+      ],
+      "translation": [
+        -1.239776611328125E-5,
+        15.00000286102295,
+        -3.5762786865234375E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "689438756-Node3D",
+      "identityHash": "1525644077-Node3D",
+      "rotation": [
+        0.8280672430992126,
+        -1.5612511283791264E-16,
+        -1.3183898417423734E-16,
+        -0.5606288313865662
+      ],
+      "translation": [
+        3.7470027081099033E-16,
+        10,
+        7.993605777301127E-15
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1378625956-Node3D",
+      "identityHash": "2065897008-Node3D",
+      "rotation": [
+        1,
+        1.0293661922844421E-8,
+        4.547474050965727E-13,
+        -1.1787052445200175E-9
+      ],
+      "translation": [
+        1.4901161193847656E-8,
+        12.000003814697266,
+        3.129243850708008E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "229351548-Node3D",
+      "identityHash": "1670954592-Node3D",
+      "rotation": [
+        0.99955815076828,
+        -1.1244868801441044E-5,
+        -0.029724545776844025,
+        2.8644550184253603E-5
+      ],
+      "translation": [
+        -1.1175870895385742E-8,
+        10,
+        -2.905726432800293E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1635315205-Node3D",
+      "identityHash": "592195671-Node3D",
+      "rotation": [
+        1,
+        8.568167686462402E-8,
+        0,
+        7.748603820800781E-7
+      ],
+      "translation": [
+        2.09808349609375E-5,
+        40.00001525878906,
+        3.814697265625E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1969167088-Node3D",
+      "identityHash": "328349217-Node3D",
+      "rotation": [
+        0.9994513988494873,
+        0.005872203502804041,
+        0.03258437290787697,
+        -9.220779174938798E-4
+      ],
+      "translation": [
+        3.725290298461914E-9,
+        12.000003814697266,
+        3.2782554626464844E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1594475442-Node3D",
+      "identityHash": "1498022362-Node3D",
+      "rotation": [
+        0.842450737953186,
+        -0.060700468719005585,
+        -0.0842943862080574,
+        0.5286650061607361
+      ],
+      "translation": [
+        1.7763568394002505E-15,
+        15,
+        2.1316282072803006E-14
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1552903139-Node3D",
+      "identityHash": "1076906417-Node3D",
+      "rotation": [
+        -1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        -13.020305633544922,
+        -24.729616165161133,
+        30.993497848510742
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "373928189-Node3D",
+      "identityHash": "1806524194-Node3D",
+      "rotation": [
+        0.842450737953186,
+        -0.06070047989487648,
+        -0.0842943787574768,
+        0.5286650657653809
+      ],
+      "translation": [
+        -1.239776611328125E-5,
+        15.00000286102295,
+        -3.0994415283203125E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "330450685-Node3D",
+      "identityHash": "1378625956-Node3D",
+      "rotation": [
+        -0.9965147376060486,
+        -9.355609654448926E-5,
+        -0.08341675996780396,
+        7.327127968892455E-5
+      ],
+      "translation": [
+        -2.421438694000244E-8,
+        12.000000953674316,
+        1.4901161193847656E-8
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1828212021-Node3D",
+      "identityHash": "784852125-Node3D",
+      "rotation": [
+        -0.7071068286895752,
+        0.7071068286895752,
+        -1.561256790516552E-9,
+        -1.5612531267805707E-9
+      ],
+      "translation": [
+        -20.37940216064453,
+        -0.5074214935302734,
+        -9.662364959716797
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "711572724-Node3D",
+      "identityHash": "1151710934-Node3D",
+      "rotation": [
+        0.7071070671081543,
+        -0.7071065306663513,
+        -1.6242265701293945E-6,
+        1.6540288925170898E-6
+      ],
+      "translation": [
+        1.1444091796875E-5,
+        40.00000762939453,
+        5.7220458984375E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "2101354392-Node3D",
+      "identityHash": "366374386-Node3D",
+      "rotation": [
+        -0.8238423466682434,
+        0.05634782090783119,
+        0.08261379599571228,
+        -0.5579281449317932
+      ],
+      "translation": [
+        2.9802322387695312E-8,
+        10.000000953674316,
+        3.427267074584961E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "366374386-Node3D",
+      "identityHash": "1408435505-Node3D",
+      "rotation": [
+        0.9074914455413818,
+        -0.18786123394966125,
+        -3.7252898543727042E-9,
+        0.3757225275039673
+      ],
+      "translation": [
+        -1.239776611328125E-5,
+        15.00000286102295,
+        -3.5762786865234375E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1938716721-Node3D",
+      "identityHash": "865930578-Node3D",
+      "rotation": [
+        0.9998754858970642,
+        -1.0960807230731007E-6,
+        0.0157836452126503,
+        -1.2048294593114406E-5
+      ],
+      "translation": [
+        -4.377216100692749E-8,
+        10,
+        -5.21540641784668E-8
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "100135434-Node3D",
+      "identityHash": "172885429-Node3D",
+      "rotation": [
+        -1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "234244641-Node3D",
+      "identityHash": "1996611075-Node3D",
+      "rotation": [
+        0.9213657379150391,
+        0.0598941370844841,
+        -0.004606872797012329,
+        0.38402700424194336
+      ],
+      "translation": [
+        2.09808349609375E-5,
+        40.00001525878906,
+        3.814697265625E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1056638950-Node3D",
+      "identityHash": "1575945686-Node3D",
+      "rotation": [
+        0.7071067690849304,
+        -0.7071068286895752,
+        -4.470347647611561E-8,
+        -5.960463766996327E-8
+      ],
+      "translation": [
+        -5.7220458984375E-6,
+        40.000030517578125,
+        1.9073486328125E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "291868121-Node3D",
+      "identityHash": "1854318139-Node3D",
+      "rotation": [
+        1,
+        -4.66570726498361E-10,
+        9.310950899177328E-10,
+        -3.2741805794378465E-11
+      ],
+      "translation": [
+        -9.313225746154785E-9,
+        10,
+        -2.4586915969848633E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "807457434-Node3D",
+      "identityHash": "429448798-Node3D",
+      "rotation": [
+        1,
+        1.7062120605260134E-9,
+        -3.738875875569647E-11,
+        -7.254129741340876E-9
+      ],
+      "translation": [
+        9.12696123123169E-8,
+        9.999998092651367,
+        -5.9604644775390625E-8
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1552903139-Node3D",
+      "identityHash": "100135434-Node3D",
+      "rotation": [
+        6.123234262925839E-17,
+        0,
+        0,
+        -1
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1313239781-Node3D",
+      "identityHash": "1616018128-Node3D",
+      "rotation": [
+        1,
+        4.3368086899420177E-19,
+        2.1684043449710089E-19,
+        1.734723475976807E-18
+      ],
+      "translation": [
+        1.5543122344752192E-15,
+        10,
+        9.547918011776346E-15
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1624784034-Node3D",
+      "identityHash": "1733753957-Node3D",
+      "rotation": [
+        1,
+        -1.6472766262154437E-8,
+        -3.637978373410844E-12,
+        3.7252898543727042E-9
+      ],
+      "translation": [
+        2.9802322387695312E-8,
+        10.000000953674316,
+        2.8312206268310547E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "291868121-Node3D",
+      "identityHash": "551133352-Node3D",
+      "rotation": [
+        0.9995582103729248,
+        -1.1244910638197325E-5,
+        -0.029724547639489174,
+        2.864452835638076E-5
+      ],
+      "translation": [
+        -9.313225746154785E-9,
+        10,
+        -2.4586915969848633E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1045489280-Node3D",
+      "identityHash": "1285448803-Node3D",
+      "rotation": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        -1.049041748046875E-5,
+        40.00000762939453,
+        -2.6702880859375E-5
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1421115661-Node3D",
+      "identityHash": "617223528-Node3D",
+      "rotation": [
+        1,
+        -1.3769367590565906E-17,
+        1.0842021724855044E-19,
+        2.6020852139652106E-18
+      ],
+      "translation": [
+        3.469446951953614E-16,
+        10,
+        6.8833827526759706E-15
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "516709751-Node3D",
+      "identityHash": "1401154377-Node3D",
+      "rotation": [
+        0.4271651804447174,
+        -0.9003741145133972,
+        -0.023751845583319664,
+        -0.07932351529598236
+      ],
+      "translation": [
+        7.105427357601002E-14,
+        40,
+        1.7763568394002505E-14
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1056638950-Node3D",
+      "identityHash": "1847333331-Node3D",
+      "rotation": [
+        -0.5069501996040344,
+        0.7812936902046204,
+        -0.18680275976657867,
+        -0.3125484883785248
+      ],
+      "translation": [
+        -5.7220458984375E-6,
+        40.000030517578125,
+        1.9073486328125E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1620944463-Node3D",
+      "identityHash": "158171992-Node3D",
+      "rotation": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        5.689893001203927E-16,
+        12,
+        1.1546319456101628E-14
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "600256971-Node3D",
+      "identityHash": "1045489280-Node3D",
+      "rotation": [
+        -0.5069501996040344,
+        0.7812935709953308,
+        -0.18680277466773987,
+        -0.3125484883785248
+      ],
+      "translation": [
+        -5.7220458984375E-6,
+        40,
+        9.5367431640625E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1001352210-Node3D",
+      "identityHash": "1313239781-Node3D",
+      "rotation": [
+        0.9998754262924194,
+        -1.09567508843611E-6,
+        0.0157836452126503,
+        -1.2048310054524336E-5
+      ],
+      "translation": [
+        1.7208456881689926E-15,
+        10,
+        1.0880185641326534E-14
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "252565878-Node3D",
+      "identityHash": "1653301377-Node3D",
+      "rotation": [
+        0.9074914455413818,
+        -0.18786123394966125,
+        -2.9802318834981634E-8,
+        -0.3757225573062897
+      ],
+      "translation": [
+        2.47955322265625E-5,
+        15,
+        -4.5299530029296875E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "551376180-Node3D",
+      "identityHash": "1421115661-Node3D",
+      "rotation": [
+        0.9962007999420166,
+        -2.960083475045394E-5,
+        -0.08708704262971878,
+        3.781589475693181E-5
+      ],
+      "translation": [
+        1.8041124150158794E-15,
+        10,
+        1.3100631690576847E-14
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "679126859-Node3D",
+      "identityHash": "974905578-Node3D",
+      "rotation": [
+        0.9994513392448425,
+        0.005872203968465328,
+        0.03258437663316727,
+        -9.220777428708971E-4
+      ],
+      "translation": [
+        2.7200464103316335E-15,
+        12,
+        2.1760371282653068E-14
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1932668336-Node3D",
+      "identityHash": "1038410317-Node3D",
+      "rotation": [
+        -0.8280673027038574,
+        7.450580596923828E-9,
+        5.122274160385132E-9,
+        -0.5606288313865662
+      ],
+      "translation": [
+        2.9802322387695312E-8,
+        10.000000953674316,
+        3.427267074584961E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1847333331-Node3D",
+      "identityHash": "500348635-Node3D",
+      "rotation": [
+        -0.995923638343811,
+        0.02634146809577942,
+        0.004979624878615141,
+        0.08612474054098129
+      ],
+      "translation": [
+        1.9073486328125E-6,
+        40.000030517578125,
+        -1.9073486328125E-5
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "689438756-Node3D",
+      "identityHash": "1620944463-Node3D",
+      "rotation": [
+        0.9999873042106628,
+        0.004103257320821285,
+        -7.769479416310787E-4,
+        -0.0028571095317602158
+      ],
+      "translation": [
+        2.3592239273284576E-16,
+        10,
+        1.1546319456101628E-14
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "516709751-Node3D",
+      "identityHash": "822526369-Node3D",
+      "rotation": [
+        0.7071068286895752,
+        -0.7071068286895752,
+        4.093947932700857E-16,
+        2.7755578924351364E-17
+      ],
+      "translation": [
+        5.3290705182007514E-14,
+        40,
+        1.7763568394002505E-14
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "69885134-Node3D",
+      "identityHash": "579808961-Node3D",
+      "rotation": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        -4.377216100692749E-8,
+        10,
+        -5.21540641784668E-8
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "865930578-Node3D",
+      "identityHash": "2087923126-Node3D",
+      "rotation": [
+        -1,
+        4.66570726498361E-10,
+        -9.310950899177328E-10,
+        3.2741805794378465E-11
+      ],
+      "translation": [
+        -9.313225746154785E-9,
+        10,
+        -2.4586915969848633E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "229351548-Node3D",
+      "identityHash": "717927872-Node3D",
+      "rotation": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        -1.1175870895385742E-8,
+        10,
+        -2.905726432800293E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "600256971-Node3D",
+      "identityHash": "2128062082-Node3D",
+      "rotation": [
+        0.7071068286895752,
+        -0.7071068286895752,
+        -4.831708865199024E-16,
+        8.03370632210995E-18
+      ],
+      "translation": [
+        -5.7220458984375E-6,
+        40,
+        9.5367431640625E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "768047866-Node3D",
+      "identityHash": "753991376-Node3D",
+      "rotation": [
+        1,
+        9.371430742532993E-9,
+        -7.451488315268762E-9,
+        -1.2223605461159082E-9
+      ],
+      "translation": [
+        3.725290298461914E-9,
+        12.000003814697266,
+        3.2782554626464844E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1384462301-Node3D",
+      "identityHash": "816815024-Node3D",
+      "rotation": [
+        -0.995923638343811,
+        0.02634146809577942,
+        0.004979624878615141,
+        0.08612474054098129
+      ],
+      "translation": [
+        1.9073486328125E-6,
+        40.000030517578125,
+        -1.9073486328125E-5
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1932668336-Node3D",
+      "identityHash": "1176769011-Node3D",
+      "rotation": [
+        -0.8280672430992126,
+        7.4505797087454084E-9,
+        9.778886145284105E-9,
+        0.5606287717819214
+      ],
+      "translation": [
+        2.9802322387695312E-8,
+        10.000000953674316,
+        3.427267074584961E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1865645009-Node3D",
+      "identityHash": "1969167088-Node3D",
+      "rotation": [
+        -0.9965147376060486,
+        -9.355694055557251E-5,
+        -0.08341677486896515,
+        7.327098865061998E-5
+      ],
+      "translation": [
+        -2.0489096641540527E-8,
+        12.000000953674316,
+        -2.9802322387695312E-8
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "72768421-Node3D",
+      "identityHash": "516709751-Node3D",
+      "rotation": [
+        -0.6796696782112122,
+        0.04473574459552765,
+        -0.21553626656532288,
+        0.6997085809707642
+      ],
+      "translation": [
+        4.618527782440651E-14,
+        15,
+        0
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1401154377-Node3D",
+      "identityHash": "1306335880-Node3D",
+      "rotation": [
+        0.9213656783103943,
+        0.05989415943622589,
+        -0.004606866743415594,
+        0.38402700424194336
+      ],
+      "translation": [
+        -3.730349362740526E-14,
+        40,
+        -2.1316282072803006E-14
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1806524194-Node3D",
+      "identityHash": "160473162-Node3D",
+      "rotation": [
+        -0.7071067690849304,
+        0.7071068286895752,
+        4.470347647611561E-8,
+        5.960463766996327E-8
+      ],
+      "translation": [
+        -5.7220458984375E-6,
+        40.000030517578125,
+        9.5367431640625E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1624784034-Node3D",
+      "identityHash": "741380708-Node3D",
+      "rotation": [
+        0.8280671834945679,
+        -1.2464349552487874E-8,
+        -2.109626695556699E-9,
+        -0.5606289505958557
+      ],
+      "translation": [
+        2.9802322387695312E-8,
+        10.000000953674316,
+        2.8312206268310547E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "2101354392-Node3D",
+      "identityHash": "1089887916-Node3D",
+      "rotation": [
+        0.9999873042106628,
+        0.004103257320821285,
+        -7.769683143123984E-4,
+        -0.0028571095317602158
+      ],
+      "translation": [
+        2.9802322387695312E-8,
+        10.000000953674316,
+        3.427267074584961E-7
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "807457434-Node3D",
+      "identityHash": "1624784034-Node3D",
+      "rotation": [
+        0.9999258518218994,
+        -0.005106854252517223,
+        -0.010515584610402584,
+        0.0034054494462907314
+      ],
+      "translation": [
+        9.12696123123169E-8,
+        9.999998092651367,
+        -5.9604644775390625E-8
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1372866071-Node3D",
+      "identityHash": "421470224-Node3D",
+      "rotation": [
+        -0.6796696782112122,
+        0.04473574459552765,
+        -0.21553626656532288,
+        0.6997085809707642
+      ],
+      "translation": [
+        2.6702880859375E-5,
+        15.000001907348633,
+        -5.0067901611328125E-6
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1865645009-Node3D",
+      "identityHash": "1045183783-Node3D",
+      "rotation": [
+        -1,
+        3.2741809263825417E-11,
+        -7.451944838976488E-9,
+        -2.3283064365386963E-10
+      ],
+      "translation": [
+        -2.0489096641540527E-8,
+        12.000000953674316,
+        -2.9802322387695312E-8
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "69885134-Node3D",
+      "identityHash": "291868121-Node3D",
+      "rotation": [
+        0.9998754858970642,
+        -1.0960807230731007E-6,
+        0.0157836452126503,
+        -1.2048294593114406E-5
+      ],
+      "translation": [
+        -4.377216100692749E-8,
+        10,
+        -5.21540641784668E-8
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "437164651-Node3D",
+      "identityHash": "1061441351-Node3D",
+      "rotation": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        -1.259341322104704E-16,
+        1,
+        2.862293735361732E-17
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "681464428-Node3D",
+      "identityHash": "1932668336-Node3D",
+      "rotation": [
+        0.9999258518218994,
+        -0.005106853786855936,
+        -0.010515592060983181,
+        0.0034054494462907314
+      ],
+      "translation": [
+        -4.0046870708465576E-8,
+        9.999998092651367,
+        -8.195638656616211E-8
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "330450685-Node3D",
+      "identityHash": "791264788-Node3D",
+      "rotation": [
+        1,
+        1.0550138540565968E-10,
+        -5.6843418860808015E-12,
+        -9.313225746154785E-10
+      ],
+      "translation": [
+        -2.421438694000244E-8,
+        12.000000953674316,
+        1.4901161193847656E-8
+      ],
+      "slipType": 0
+    },
+    {
+      "bases": {
+        "x": [
+          1,
+          0,
+          0
+        ],
+        "y": [
+          0,
+          1,
+          0
+        ],
+        "z": [
+          0,
+          0,
+          1
+        ]
+      },
+      "parent": "1620944463-Node3D",
+      "identityHash": "679126859-Node3D",
+      "rotation": [
+        -0.9965147376060486,
+        -9.355609654448926E-5,
+        -0.08341675996780396,
+        7.327127968892455E-5
+      ],
+      "translation": [
+        4.996003610813204E-16,
+        12,
+        1.509903313490213E-14
+      ],
+      "slipType": 0
+    }
+  ],
+  "ik_pins": [
+    {
+      "pinWeight": 1,
+      "priorities": {
+        "x": 1,
+        "y": 0,
+        "z": 1
+      },
+      "identityHash": "449977149-IKPin",
+      "forBone": "1062188210-Bone",
+      "isEnabled": true,
+      "axes": "784852125-Node3D",
+      "depthFalloff": 0
+    },
+    {
+      "pinWeight": 1,
+      "priorities": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "identityHash": "1662467828-IKPin",
+      "forBone": "1666012656-Bone",
+      "isEnabled": true,
+      "axes": "808193782-Node3D",
+      "depthFalloff": 0
+    },
+    {
+      "pinWeight": 1,
+      "priorities": {
+        "x": 1.5,
+        "y": 1.5,
+        "z": 1.5
+      },
+      "identityHash": "1884422453-IKPin",
+      "forBone": "764602382-Bone",
+      "isEnabled": true,
+      "axes": "400272227-Node3D",
+      "depthFalloff": 0
+    },
+    {
+      "pinWeight": 1,
+      "priorities": {
+        "x": 1,
+        "y": 0,
+        "z": 1
+      },
+      "identityHash": "753680640-IKPin",
+      "forBone": "2077664577-Bone",
+      "isEnabled": true,
+      "axes": "1375229382-Node3D",
+      "depthFalloff": 0
+    }
+  ]
+}

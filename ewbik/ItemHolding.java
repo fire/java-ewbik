@@ -7,18 +7,9 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import processing.event.MouseEvent;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-
-import com.cedarsoftware.util.io.JsonReader;
-import com.cedarsoftware.util.io.JsonWriter;
 
 import ewbik.processing.singlePrecision.Kusudama;
 import processing.core.PConstants;
@@ -73,8 +64,8 @@ class UI {
     }
 
     public void drawPins(PGraphics pg, IKPin activePin,
-            float zoomScalar, float drawSize,
-            boolean cubeMode, Node3D cubeNode3D) {
+                         float zoomScalar, float drawSize,
+                         boolean cubeMode, Node3D cubeNode3D) {
 
         if (activePin != null) {
             Node3D ellipseAx;
@@ -128,11 +119,11 @@ class UI {
     }
 
     public void drawPinEffectorHints(PGraphics pg,
-            PVector pinLoc,
-            PVector pinX, PVector pinY, PVector pinZ,
-            PVector effectorO,
-            PVector effectorX, PVector effectorY, PVector effectorZ,
-            float xPriority, float yPriority, float zPriority, float totalpriorities) {
+                                     PVector pinLoc,
+                                     PVector pinX, PVector pinY, PVector pinZ,
+                                     PVector effectorO,
+                                     PVector effectorX, PVector effectorY, PVector effectorZ,
+                                     float xPriority, float yPriority, float zPriority, float totalpriorities) {
 
         pg.line(pinLoc.x, pinLoc.y, pinLoc.z, effectorO.x, effectorO.y, effectorO.z);
         pg.stroke(2, 58, 0, 150);
@@ -160,10 +151,10 @@ class UI {
     }
 
     public void drawScene(float zoomScalar, float drawSize,
-            Runnable additionalDraw,
-            Skeleton3D armature,
-            String usageInstructions,
-            IKPin activePin, Node3D cubeNode3D, boolean cubeEnabled) {
+                          Runnable additionalDraw,
+                          Skeleton3D armature,
+                          String usageInstructions,
+                          IKPin activePin, Node3D cubeNode3D, boolean cubeEnabled) {
         currentDrawSurface = display;
         display.beginDraw();
         setSceneAndCamera(display, zoomScalar);
@@ -300,7 +291,7 @@ public class ItemHolding extends PApplet {
                 cubeNode3D,
                 cubeMode);
     }
-
+    
     public void drawHoldCube() {
         PGraphics currentDisplay = ui.getCurrentDrawSurface();
         if (ui.display == currentDisplay) {
@@ -348,36 +339,10 @@ public class ItemHolding extends PApplet {
             cubeMode = !cubeMode;
         } else if (key == 's') {
             println("Saving");
-            String json = JsonWriter.objectToJson(loadedArmature);
-            BufferedWriter writer = null;
-            try {
-                writer = new BufferedWriter(new FileWriter("Humanoid_Holding_Item.json"));
-                writer.write(json);
-
-            } catch (IOException e) {
-            } finally {
-                try {
-                    if (writer != null)
-                        writer.close();
-                } catch (IOException e) {
-                }
-            }
+            ewbik.data.EWBIKSaver newSaver = new ewbik.data.EWBIKSaver();
+            newSaver.saveArmature(loadedArmature, "Humanoid_Holding_Item.arm");
         } else if (key == 'l') {
-
-            try(BufferedReader br = new BufferedReader(new FileReader("Humanoid_Holding_Item.json"))) {
-                StringBuilder sb = new StringBuilder();
-                String line = br.readLine();
-            
-                while (line != null) {
-                    sb.append(line);
-                    sb.append(System.lineSeparator());
-                    line = br.readLine();
-                }
-                String json = sb.toString();
-                loadedArmature = (Skeleton3D) JsonReader.jsonToJava(json);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            loadedArmature = ewbik.processing.IO.LoadArmature("Humanoid_Holding_Item.arm");
             loadedArmature.updateBonechains();
             loadedArmature.IKSolver(loadedArmature.getRootBone(), 0.5f, 20, 1);
 
