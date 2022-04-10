@@ -8,7 +8,7 @@ public class Transform3D {
     public static final int X = 0;
     public static final int Y = 1;
     public static final int Z = 2;
-    public int chirality = RIGHT;
+    // Chirality is always right.
     public Quaternion rotation = new Quaternion();
     public Quaternion inverseRotation = new Quaternion();
     /**
@@ -379,7 +379,7 @@ public class Transform3D {
         float xMag = xh.mag();
         float yMag = yh.mag();
         float zMag = zh.mag();
-        String chirality = this.chirality == LEFT ? "LEFT" : "RIGHT";
+        String chirality = "RIGHT";
         String result = "-----------\n"
                 + chirality + " handed \n"
                 + "origin: " + this.translate.toVec3f() + "\n"

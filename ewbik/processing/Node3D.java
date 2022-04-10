@@ -553,16 +553,6 @@ public class Node3D implements ewbik.asj.Saveable {
         }
     }
 
-    public int getGlobalChirality() {
-        this.updateGlobal();
-        return this.getGlobalMBasis().chirality;
-    }
-
-    public int getLocalChirality() {
-        this.updateGlobal();
-        return this.getLocalMBasis().chirality;
-    }
-
     /**
      * True if the input axis of this Axes object in global coordinates should be
      * multiplied by negative one after rotation.

@@ -514,7 +514,6 @@ public class Kusudama implements Saveable {
             float distToMin = MathUtils.abs(signedAngleDifference(angleDelta2, TAU - this.minAxialAngle()));
             float distToMax = MathUtils.abs(signedAngleDifference(angleDelta2, TAU - (this.minAxialAngle() + range)));
             float turnDiff = 1f;
-            turnDiff *= limitingNode3D.getGlobalChirality();
             if (distToMin < distToMax) {
                 turnDiff = turnDiff * (fromMinToAngleDelta);
                 toSet.rotateAboutY(turnDiff, true);
@@ -554,8 +553,7 @@ public class Kusudama implements Saveable {
         Quaternion[] decomposition = alignRot.getSwingTwist(new Vector3(0, 1, 0));
 
         float angleDelta = decomposition[1].getAngle() * decomposition[1].getAxis().y * -1;
-        angleDelta *= limitingNode3D.getGlobalChirality()
-                * (limitingNode3D.isGlobalAxisFlipped(Node3D.Y) ? -1 : 1);
+        angleDelta *= (limitingNode3D.isGlobalAxisFlipped(Node3D.Y) ? -1 : 1);
 
         angleDelta = toTau(angleDelta);
         float fromMinToAngleDelta = toTau(signedAngleDifference(angleDelta, TAU - this.minAxialAngle()));
