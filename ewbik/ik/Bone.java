@@ -121,7 +121,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
             Bone.this.generateAxes(Bone.this.parent.getTip_(), tempX, tempTip, tempRoll);
             Bone.this.localNode3D.setParent(Bone.this.parent.localNode3D);
 
-            Bone.this.previousOrientation = Bone.this.localNode3D.attachedCopy(true);
+            Bone.this.previousOrientation = Bone.this.localNode3D.attachedCopy();
 
             Bone.this.majorRotationNode3D = Bone.this.parent.localAxes().getGlobalCopy();
             Bone.this.majorRotationNode3D.translateTo(Bone.this.parent.getTip_());
@@ -195,7 +195,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
             generateAxes(parentArmature.localNode3D.calculatePosition(), tempX, tempTip, tempRoll);
             localNode3D.setParent(parentArmature.localNode3D);
-            previousOrientation = localNode3D.attachedCopy(true);
+            previousOrientation = localNode3D.attachedCopy();
 
             majorRotationNode3D = parentArmature.localAxes().getGlobalCopy();
             majorRotationNode3D.setParent(parentArmature.localAxes());
@@ -261,7 +261,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
                     tempNode3D.calculateY().heading(),
                     tempNode3D.calculateZ().heading());
             Bone.this.localNode3D.setParent(Bone.this.parent.localNode3D);
-            Bone.this.previousOrientation = Bone.this.localNode3D.attachedCopy(true);
+            Bone.this.previousOrientation = Bone.this.localNode3D.attachedCopy();
 
             Bone.this.majorRotationNode3D = Bone.this.parent.localAxes().getGlobalCopy();
             Bone.this.majorRotationNode3D.translateTo(Bone.this.parent.getTip_());
@@ -301,7 +301,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
                     tempNode3D.calculateY().heading(),
                     tempNode3D.calculateZ().heading());
             Bone.this.localNode3D.setParent(Bone.this.parent.localNode3D);
-            Bone.this.previousOrientation = Bone.this.localNode3D.attachedCopy(true);
+            Bone.this.previousOrientation = Bone.this.localNode3D.attachedCopy();
 
             Bone.this.majorRotationNode3D = Bone.this.parent.localAxes().getGlobalCopy();
             Bone.this.majorRotationNode3D.translateTo(Bone.this.parent.getTip_());

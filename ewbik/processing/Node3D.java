@@ -31,7 +31,6 @@ import java.util.function.Consumer;
 
 public class Node3D implements ewbik.asj.Saveable {
     public static final int NORMAL = 0;
-    public static final int IGNORE = 1;
     public static final int FORWARD = 2;
     public static final int RIGHT = 1;
     public static final int LEFT = -1;
@@ -49,7 +48,6 @@ public class Node3D implements ewbik.asj.Saveable {
     float[][] outMatGlobal = new float[4][4];
     Vector3 tempOrigin;
     private DependencyReference<Node3D> parent = null;
-    private int slipType = 0;
 
     public Node3D(ewbik.math.Transform3D b, Node3D parent) {
         this.globalMBasis = ((Transform3D) b).copy();
@@ -423,12 +421,10 @@ public class Node3D implements ewbik.asj.Saveable {
      * @param slipAware
      * @return
      */
-    public Node3D attachedCopy(boolean slipAware) {
+    public Node3D attachedCopy() {
         this.updateGlobal();
         Node3D copy = new Node3D(getGlobalMBasis(),
                 this.getParentAxes());
-        if (!slipAware)
-            copy.setSlipType(IGNORE);
         copy.getLocalMBasis().adoptValues(this.localMBasis);
         copy.markDirty();
         return copy;
@@ -770,21 +766,6 @@ public class Node3D implements ewbik.asj.Saveable {
 
     }
 
-    public int getSlipType() {
-        return this.slipType;
-    }
-
-    public void setSlipType(int type) {
-        if (this.getParentAxes() != null) {
-            if (type == IGNORE) {
-                this.getParentAxes().dependentsRegistry.remove(this);
-            } else if (type == NORMAL || type == FORWARD) {
-                this.getParentAxes().registerDependent(this);
-            }
-        }
-        this.slipType = type;
-    }
-
     public void rotateAboutX(float angle, boolean orthonormalized) {
         this.updateGlobal();
         Quaternion xRot = new Quaternion(getGlobalMBasis().getXHeading(), angle);
@@ -1017,7 +998,6 @@ public class Node3D implements ewbik.asj.Saveable {
         if (getParentAxes() != null)
             parentHash = ((ewbik.asj.Saveable) getParentAxes()).getIdentityHash();
         thisAxes.setString("parent", parentHash);
-        thisAxes.setInt("slipType", this.getSlipType());
         thisAxes.setString("identityHash", this.getIdentityHash());
         return thisAxes;
     }
@@ -1026,15 +1006,10 @@ public class Node3D implements ewbik.asj.Saveable {
                                 Node3D globalAfterSlipping, Node3D actualAxis,
                                 ArrayList<Object> dontWarn) {
         this.updateGlobal();
-        if (this.slipType == NORMAL) {
-            if (this.getParentAxes() != null) {
-                Node3D globalVals = globalPriorToSlipping;
-                this.getLocalMBasis().adoptValues(globalMBasis);
-                this.markDirty();
-            }
-        } else if (this.slipType == FORWARD) {
-            Node3D globalAfterVals = this.relativeTo(globalAfterSlipping);
-            this.notifyDependentsOfSlip(globalAfterVals, dontWarn);
+        if (this.getParentAxes() != null) {
+            Node3D globalVals = globalPriorToSlipping;
+            this.getLocalMBasis().adoptValues(globalMBasis);
+            this.markDirty();
         }
     }
 
@@ -1219,7 +1194,6 @@ public class Node3D implements ewbik.asj.Saveable {
             par = l.getObjectFor(Node3D.class, j, "parent");
             if (par != null)
                 this.setRelativeToParent(par);
-            this.setSlipType(j.getInt("slipType"));
         } catch (Exception e) {
             e.printStackTrace();
         }
