@@ -215,13 +215,13 @@ public class Transform3D {
         this.updateRays();
     }
 
-    public <V extends Vector3> V getLocalOf(V v) {
-        V result = (V) v.copy();
+    public Vector3 getLocalOf(Vector3 v) {
+        Vector3 result = (Vector3) v.copy();
         setToLocalOf(v, result);
         return result;
     }
 
-    public <V extends Vector3> void setToLocalOf(V input, V output) {
+    public void setToLocalOf(Vector3 input, Vector3 output) {
         output.set(input);
         output.sub(this.translate);
         inverseRotation.applyTo(output, output);
