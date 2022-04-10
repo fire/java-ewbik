@@ -10,12 +10,13 @@ repositories {
 }
 
 application {
-    mainClass = 'ItemHolding'
+    mainClass = 'processing.ItemHolding'
 }
 
 
 dependencies {
     implementation 'com.github.micycle1:processing-core-4:4.0b6c'
+    implementation 'com.cedarsoftware:json-io:4.13.0'
 }
 
 version = '0.0.1-' + new Date().format("yyyyMMdd'T'HHmmss'Z'", TimeZone.getTimeZone("UTC")) 
@@ -36,8 +37,8 @@ sourceSets {
 distributions {
     main {
         contents {
-            from ('Humanoid_Holding_Item.arm') {                
-                rename 'Humanoid_Holding_Item.arm', 'bin/Humanoid_Holding_Item.arm'
+            from ('Humanoid_Holding_Item.json') {                
+                rename 'Humanoid_Holding_Item.json', 'bin/Humanoid_Holding_Item.json'
             }
             from ('kusudama_vert.glsl') {                
                 rename 'kusudama_vert.glsl', 'bin/kusudama_vert.glsl'

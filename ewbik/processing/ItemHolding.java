@@ -1,15 +1,26 @@
+package processing;
+
 import ik.Bone;
 import ik.IKPin;
-import processing.Node3D;
-import processing.Skeleton3D;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import processing.event.MouseEvent;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.cedarsoftware.util.io.JsonReader;
+import com.cedarsoftware.util.io.JsonWriter;
 
 import ewbik.processing.singlePrecision.Kusudama;
 import processing.core.PConstants;
@@ -64,8 +75,8 @@ class UI {
     }
 
     public void drawPins(PGraphics pg, IKPin activePin,
-                         float zoomScalar, float drawSize,
-                         boolean cubeMode, Node3D cubeNode3D) {
+            float zoomScalar, float drawSize,
+            boolean cubeMode, Node3D cubeNode3D) {
 
         if (activePin != null) {
             Node3D ellipseAx;
@@ -119,11 +130,11 @@ class UI {
     }
 
     public void drawPinEffectorHints(PGraphics pg,
-                                     PVector pinLoc,
-                                     PVector pinX, PVector pinY, PVector pinZ,
-                                     PVector effectorO,
-                                     PVector effectorX, PVector effectorY, PVector effectorZ,
-                                     float xPriority, float yPriority, float zPriority, float totalpriorities) {
+            PVector pinLoc,
+            PVector pinX, PVector pinY, PVector pinZ,
+            PVector effectorO,
+            PVector effectorX, PVector effectorY, PVector effectorZ,
+            float xPriority, float yPriority, float zPriority, float totalpriorities) {
 
         pg.line(pinLoc.x, pinLoc.y, pinLoc.z, effectorO.x, effectorO.y, effectorO.z);
         pg.stroke(2, 58, 0, 150);
@@ -151,10 +162,10 @@ class UI {
     }
 
     public void drawScene(float zoomScalar, float drawSize,
-                          Runnable additionalDraw,
-                          Skeleton3D armature,
-                          String usageInstructions,
-                          IKPin activePin, Node3D cubeNode3D, boolean cubeEnabled) {
+            Runnable additionalDraw,
+            Skeleton3D armature,
+            String usageInstructions,
+            IKPin activePin, Node3D cubeNode3D, boolean cubeEnabled) {
         currentDrawSurface = display;
         display.beginDraw();
         setSceneAndCamera(display, zoomScalar);
@@ -227,16 +238,38 @@ public class ItemHolding extends PApplet {
     boolean cubeMode = true;
 
     public static void main(String[] args) {
-        PApplet.main("ItemHolding");
+        PApplet.main("processing.ItemHolding");
     }
 
     public void settings() {
         size(1200, 900, P3D);
     }
 
+    public void loadArmature() {
+        loadedArmature = ewbik.processing.IO.LoadArmature("Humanoid_Holding_Item.arm");
+    }
+
+    public void loadArmatureJson() {
+        try (BufferedReader br = new BufferedReader(new FileReader("Humanoid_Holding_Item.json"))) {
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
+
+            while (line != null) {
+                sb.append(line);
+                sb.append(System.lineSeparator());
+                line = br.readLine();
+            }
+            String json = sb.toString();
+            Map args = new HashMap();
+            loadedArmature= (Skeleton3D) JsonReader.jsonToJava(json, args);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void setup() {
         ui = new UI(this);
-        loadedArmature = ewbik.processing.IO.LoadArmature("Humanoid_Holding_Item.arm");
+        loadArmature();
         worldNode3D = (Node3D) loadedArmature.localAxes().getParentAxes();
         if (worldNode3D == null) {
             worldNode3D = new Node3D();
@@ -291,7 +324,7 @@ public class ItemHolding extends PApplet {
                 cubeNode3D,
                 cubeMode);
     }
-    
+
     public void drawHoldCube() {
         PGraphics currentDisplay = ui.getCurrentDrawSurface();
         if (ui.display == currentDisplay) {
@@ -339,10 +372,26 @@ public class ItemHolding extends PApplet {
             cubeMode = !cubeMode;
         } else if (key == 's') {
             println("Saving");
-            ewbik.data.EWBIKSaver newSaver = new ewbik.data.EWBIKSaver();
-            newSaver.saveArmature(loadedArmature, "Humanoid_Holding_Item.arm");
+            Map args = new HashMap();
+            args.put(JsonWriter.PRETTY_PRINT, true);
+            args.put(JsonWriter.SKIP_NULL_FIELDS, true);
+            args.put(JsonWriter.FORCE_MAP_FORMAT_ARRAY_KEYS_ITEMS, true);
+            String json = JsonWriter.objectToJson(loadedArmature, args);
+            BufferedWriter writer = null;
+            try {
+                writer = new BufferedWriter(new FileWriter("Humanoid_Holding_Item.json"));
+                writer.write(json);
+
+            } catch (IOException e) {
+            } finally {
+                try {
+                    if (writer != null)
+                        writer.close();
+                } catch (IOException e) {
+                }
+            }
         } else if (key == 'l') {
-            loadedArmature = ewbik.processing.IO.LoadArmature("Humanoid_Holding_Item.arm");
+            loadArmatureJson();
             loadedArmature.updateBonechains();
             loadedArmature.IKSolver(loadedArmature.getRootBone(), 0.5f, 20, 1);
 
