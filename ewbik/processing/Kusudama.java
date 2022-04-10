@@ -19,9 +19,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package ewbik.processing.singlePrecision;
 
-import ewbik.asj.LoadManager;
-import ewbik.asj.SaveManager;
-import ewbik.asj.Saveable;
 import ewbik.ik.ShadowNode3D;
 import ewbik.math.*;
 import ik.Bone;
@@ -40,7 +37,7 @@ import java.util.ArrayList;
  * Kusudama. Please refer to the {@link Kusudama
  * Kusudama docs.}
  */
-public class Kusudama implements Saveable {
+public class Kusudama {
 
     public static final float TAU = MathUtils.PI * 2;
     public static final float PI = MathUtils.PI;
@@ -121,7 +118,7 @@ public class Kusudama implements Saveable {
      * {@inheritDoc}
      **/
     public ewbik.processing.singlePrecision.LimitCone createLimitConeForIndex(int insertAt, Vector3 newPoint,
-                                                                                  float radius) {
+            float radius) {
         return new LimitCone(Node3D.toPVector(newPoint), radius, this);
     }
 
@@ -355,7 +352,7 @@ public class Kusudama implements Saveable {
      * @param toSet
      */
     public void setAxesToSnapped(Node3D toSet,
-                                 Node3D limitingNode3D, float cosHalfAngleDampen) {
+            Node3D limitingNode3D, float cosHalfAngleDampen) {
         if (limitingNode3D != null) {
             if (orientationallyConstrained) {
                 setAxesToOrientationSnap(toSet, limitingNode3D, cosHalfAngleDampen);
@@ -367,8 +364,8 @@ public class Kusudama implements Saveable {
     }
 
     public void setAxesToReturnfulled(Node3D toSet,
-                                      Node3D limitingNode3D, float cosHalfReturnfullness,
-                                      float angleReturnfullness) {
+            Node3D limitingNode3D, float cosHalfReturnfullness,
+            float angleReturnfullness) {
         if (limitingNode3D != null && painfullness > 0f) {
             if (orientationallyConstrained) {
                 Vector3 origin = toSet.calculatePosition();
@@ -437,7 +434,7 @@ public class Kusudama implements Saveable {
      * @param toSet
      */
     public void setAxesToOrientationSnap(Node3D toSet,
-                                         Node3D limitingNode3D, float cosHalfAngleDampen) {
+            Node3D limitingNode3D, float cosHalfAngleDampen) {
         float[] inBounds = { 1f };
         limitingNode3D.updateGlobal();
         boneRay.p1().set(limitingNode3D.calculatePosition());
@@ -455,7 +452,7 @@ public class Kusudama implements Saveable {
     }
 
     public boolean isInOrientationLimits(Node3D globalNode3D,
-                                         Node3D limitingNode3D) {
+            Node3D limitingNode3D) {
         float[] inBounds = { 1f };
         Vector3 inLimits = this.pointInLimits(limitingNode3D.getLocalOf(globalNode3D.calculateY().p2()), inBounds);
         if (inBounds[0] == -1l) {
@@ -498,7 +495,7 @@ public class Kusudama implements Saveable {
      *         is already in twist limits)
      */
     public float snapToTwistLimits(Node3D toSet,
-                                   Node3D limitingNode3D) {
+            Node3D limitingNode3D) {
 
         if (!axiallyConstrained)
             return 0f;
@@ -528,7 +525,7 @@ public class Kusudama implements Saveable {
     }
 
     public float angleToTwistCenter(Node3D toSet,
-                                    Node3D limitingNode3D) {
+            Node3D limitingNode3D) {
 
         if (!axiallyConstrained)
             return 0f;
@@ -545,7 +542,7 @@ public class Kusudama implements Saveable {
     }
 
     public boolean inTwistLimits(Node3D boneNode3D,
-                                 Node3D limitingNode3D) {
+            Node3D limitingNode3D) {
 
         limitingNode3D.updateGlobal();
         Quaternion alignRot = limitingNode3D.getGlobalMBasis().getInverseRotation()
@@ -901,64 +898,5 @@ public class Kusudama implements Saveable {
      **/
     public void setStrength(float newStrength) {
         this.strength = MathUtils.max(0f, MathUtils.min(1f, newStrength));
-    }
-
-    @Override
-    public void makeSaveable(SaveManager saveManager) {
-        saveManager.addToSaveState(this);
-        for (ewbik.processing.singlePrecision.LimitCone lc : limitCones) {
-            lc.makeSaveable(saveManager);
-        }
-    }
-
-    @Override
-    public ewbik.asj.data.JSONObject getSaveJSON(SaveManager saveManager) {
-        ewbik.asj.data.JSONObject saveJSON = new ewbik.asj.data.JSONObject();
-        saveJSON.setString("identityHash", this.getIdentityHash());
-        saveJSON.setString("limitAxes", limitingAxes().getIdentityHash());
-        saveJSON.setString("attachedTo", attachedTo().getIdentityHash());
-        saveJSON.setJSONArray("limitCones", saveManager.arrayListToJSONArray(limitCones));
-        saveJSON.setFloat("minAxialAngle", minAxialAngle);
-        saveJSON.setFloat("axialRange", range);
-        saveJSON.setBoolean("axiallyConstrained", this.axiallyConstrained);
-        saveJSON.setBoolean("orientationallyConstrained", this.orientationallyConstrained);
-        saveJSON.setFloat("painfulness", this.painfullness);
-        return saveJSON;
-    }
-
-    public void loadFromJSONObject(ewbik.asj.data.JSONObject j, LoadManager l) {
-        this.attachedTo = l.getObjectFor(Bone.class, j, "attachedTo");
-        this.limitingNode3D = l.getObjectFor(Node3D.class, j, "limitAxes");
-        limitCones = new ArrayList<>();
-        l.arrayListFromJSONArray(j.getJSONArray("limitCones"), limitCones,
-                ewbik.processing.singlePrecision.LimitCone.class);
-        this.minAxialAngle = j.getFloat("minAxialAngle");
-        this.range = j.getFloat("axialRange");
-        this.axiallyConstrained = j.getBoolean("axiallyConstrained");
-        this.orientationallyConstrained = j.getBoolean("orientationallyConstrained");
-        this.painfullness = j.getFloat("painfulness");
-    }
-
-    @Override
-    public void notifyOfSaveIntent(SaveManager saveManager) {
-    }
-
-    @Override
-    public void notifyOfSaveCompletion(SaveManager saveManager) {
-    }
-
-    @Override
-    public void notifyOfLoadCompletion() {
-        this.constraintUpdateNotification();
-        this.optimizeLimitingAxes();
-    }
-
-    @Override
-    public boolean isLoading() {
-        return false;
-    }
-
-    @Override
-    public void setLoading(boolean loading) {
     }
 }

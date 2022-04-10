@@ -9,11 +9,6 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 
-application {
-    mainClass = 'processing.ItemHolding'
-}
-
-
 dependencies {
     implementation 'com.github.micycle1:processing-core-4:4.0b6c'
 }

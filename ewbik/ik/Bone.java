@@ -33,7 +33,7 @@ import processing.core.PVector;
 
 import java.util.ArrayList;
 
-public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
+public class Bone implements Comparable<Bone> {
     public static boolean drawKusudamas = false;
     public Skeleton3D parentArmature;
     public Kusudama constraints;
@@ -500,15 +500,15 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      * it presumes KusudamaExample constraints
      */
     public void setAxesToSnapped(Node3D toSet,
-                                 Node3D limitingNode3D, float cosHalfAngleDampen) {
+            Node3D limitingNode3D, float cosHalfAngleDampen) {
         if (constraints != null && Kusudama.class.isAssignableFrom(constraints.getClass())) {
             ((Kusudama) constraints).setAxesToSnapped(toSet, limitingNode3D, cosHalfAngleDampen);
         }
     }
 
     public void setAxesToReturnfulled(Node3D toSet,
-                                      Node3D limitingNode3D, float cosHalfAngleDampen,
-                                      float angleDampen) {
+            Node3D limitingNode3D, float cosHalfAngleDampen,
+            float angleDampen) {
         if (constraints != null && Kusudama.class.isAssignableFrom(constraints.getClass())) {
             ((Kusudama) constraints).setAxesToReturnfulled(toSet, limitingNode3D, cosHalfAngleDampen,
                     angleDampen);
@@ -1101,90 +1101,6 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
                 }
             }
         }
-    }
-
-    @Override
-    public void loadFromJSONObject(ewbik.asj.data.JSONObject j, ewbik.asj.LoadManager l) {
-        this.localNode3D = (Node3D) l
-                .getObjectFromClassMaps(Node3D.class, j.getString("localAxes"));
-        this.majorRotationNode3D = (Node3D) l.getObjectFromClassMaps(
-                Node3D.class,
-                j.getString("majorRotationAxes"));
-        this.parentArmature = (Skeleton3D) l.getObjectFromClassMaps(Skeleton3D.class,
-                j.getString("parentArmature"));
-        l.arrayListFromJSONArray(j.getJSONArray("children"), this.children, this.getClass());
-        this.boneHeight = j.getFloat("boneHeight");
-        if (j.hasKey("stiffness"))
-            this.setStiffness(j.getFloat("stiffness"));
-        if (j.hasKey("constraints"))
-            this.constraints = (ewbik.processing.singlePrecision.Kusudama) l.getObjectFromClassMaps(
-                    ewbik.processing.singlePrecision.Kusudama.class, j.getString("constraints"));
-        if (j.hasKey("IKPin"))
-            this.pin = (IKPin) l.getObjectFromClassMaps(IKPin.class, j.getString("IKPin"));
-        this.tag = j.getString("tag");
-    }
-
-    @Override
-    public ewbik.asj.data.JSONObject getSaveJSON(ewbik.asj.SaveManager saveManager) {
-        ewbik.asj.data.JSONObject thisBone = new ewbik.asj.data.JSONObject();
-        thisBone.setString("identityHash", this.getIdentityHash());
-        thisBone.setString("localAxes", this.localNode3D.getIdentityHash());
-        thisBone.setString("majorRotationAxes", majorRotationNode3D.getIdentityHash());
-        thisBone.setString("parentArmature", ((ewbik.asj.Saveable) parentArmature).getIdentityHash());
-        ewbik.asj.data.JSONArray children = saveManager.arrayListToJSONArray(getChildren());
-        thisBone.setJSONArray("children", children);
-        if (constraints != null) {
-            thisBone.setString("constraints", constraints.getIdentityHash());
-        }
-        if (pin != null)
-            thisBone.setString("IKPin", pin.getIdentityHash());
-
-        thisBone.setFloat("boneHeight", this.getBoneHeight());
-        thisBone.setFloat("stiffness", this.getStiffness());
-        thisBone.setString("tag", this.getTag());
-
-        return thisBone;
-    }
-
-    @Override
-    public void makeSaveable(ewbik.asj.SaveManager saveManager) {
-        saveManager.addToSaveState(this);
-        if (this.getIKPin() != null) {
-            this.getIKPin().makeSaveable(saveManager);
-        }
-        for (Bone b : this.children) {
-            b.makeSaveable(saveManager);
-        }
-        if (this.getConstraint() != null) {
-            this.getConstraint().makeSaveable(saveManager);
-        }
-    }
-
-    @Override
-    public void notifyOfSaveIntent(ewbik.asj.SaveManager saveManager) {
-    }
-
-    @Override
-    public void notifyOfSaveCompletion(ewbik.asj.SaveManager saveManager) {
-    }
-
-    @Override
-    public void notifyOfLoadCompletion() {
-        this.setBoneHeight(boneHeight);
-        for (Bone b : this.children) {
-            b.attachToParent(this);
-        }
-        this.parentArmature.addToBoneList(this);
-    }
-
-    @Override
-    public boolean isLoading() {
-        return false;
-    }
-
-    @Override
-    public void setLoading(boolean loading) {
-
     }
 
     @Override

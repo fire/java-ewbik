@@ -1,10 +1,6 @@
 package ewbik.math;
 
-import data.agnosticsavior.CanLoad;
-import ewbik.asj.data.JSONArray;
-import ewbik.asj.data.JSONObject;
-
-public class Vector3 implements CanLoad {
+public class Vector3 {
 
     public final static int X = 0, Y = 1, Z = 2;
     private static final long serialVersionUID = 3840054589595372522L;
@@ -64,19 +60,6 @@ public class Vector3 implements CanLoad {
         return (float) MathUtils.sqrt(x * x + y * y + z * z);
     }
 
-    public Vector3(JSONObject j) {
-        JSONArray components = j.getJSONArray("vec");
-        this.x = components.getFloat(0);
-        this.y = components.getFloat(1);
-        this.z = components.getFloat(2);
-    }
-
-    public Vector3(JSONArray j) {
-        this.x = j.getFloat(0);
-        this.y = j.getFloat(1);
-        this.z = j.getFloat(2);
-    }
-
     /**
      * @return a copy of this vector
      */
@@ -89,14 +72,6 @@ public class Vector3 implements CanLoad {
      */
     public ewbik.math.Vector3 toVec3f() {
         return new ewbik.math.Vector3((float) x, (float) y, (float) z);
-    }
-
-    public JSONArray toJSONArray() {
-        JSONArray vec = new JSONArray();
-        vec.append(this.x);
-        vec.append(this.y);
-        vec.append(this.z);
-        return vec;
     }
 
     /**
@@ -1022,26 +997,6 @@ public class Vector3 implements CanLoad {
      */
     public float getZ() {
         return this.z;
-    }
-
-    @Override
-    public CanLoad populateSelfFromJSON(JSONObject j) {
-        JSONArray components = j.getJSONArray("vec");
-        this.x = components.getFloat(0);
-        this.y = components.getFloat(1);
-        this.z = components.getFloat(2);
-        return this;
-    }
-
-    @Override
-    public JSONObject toJSONObject() {
-        JSONObject j = new JSONObject();
-        JSONArray components = new JSONArray();
-        components.append(this.x);
-        components.append(this.y);
-        components.append(this.z);
-        j.setJSONArray("vec", components);
-        return j;
     }
 
     /**

@@ -19,9 +19,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package processing;
 
-import ewbik.asj.LoadManager;
-import ewbik.asj.SaveManager;
-import ewbik.asj.Saveable;
 import ewbik.math.*;
 import ewbik.math.MathUtils;
 import ik.Bone;
@@ -33,7 +30,7 @@ import processing.core.PVector;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Skeleton3D implements Saveable {
+public class Skeleton3D {
 
     public Node3D localNode3D;
     public HashMap<Bone, ewbik.ik.ShadowNode3D> boneSegmentMap = new HashMap<Bone, ewbik.ik.ShadowNode3D>();
@@ -494,7 +491,7 @@ public class Skeleton3D implements Saveable {
      * @return
      */
     public ewbik.math.Quaternion getRotationBetween(Node3D a,
-                                                    Node3D b) {
+            Node3D b) {
         return new ewbik.math.Quaternion(a.calculateX().heading(), a.calculateY().heading(), b.calculateX().heading(),
                 b.calculateY().heading());
     }
@@ -523,65 +520,6 @@ public class Skeleton3D implements Saveable {
 
     public void setPerformanceMonitor(boolean state) {
         monitorPerformance = state;
-    }
-
-    @Override
-    public void makeSaveable(SaveManager saveManager) {
-        saveManager.addToSaveState(this);
-        if (this.localAxes().getParentAxes() != null)
-            this.localAxes().getParentAxes().makeSaveable(saveManager);
-        else
-            this.localAxes().makeSaveable(saveManager);
-        this.rootBone.makeSaveable(saveManager);
-    }
-
-    @Override
-    public ewbik.asj.data.JSONObject getSaveJSON(SaveManager saveManager) {
-        ewbik.asj.data.JSONObject saveJSON = new ewbik.asj.data.JSONObject();
-        saveJSON.setString("identityHash", this.getIdentityHash());
-        saveJSON.setString("localAxes", localAxes().getIdentityHash());
-        saveJSON.setString("rootBone", getRootBone().getIdentityHash());
-        saveJSON.setInt("defaultIterations", getDefaultIterations());
-        saveJSON.setFloat("dampening", this.getDampening());
-        saveJSON.setString("tag", this.getName());
-        return saveJSON;
-    }
-
-    public void loadFromJSONObject(ewbik.asj.data.JSONObject j, LoadManager l) {
-        try {
-            this.localNode3D = l.getObjectFor(Node3D.class, j, "localAxes");
-            this.rootBone = l.getObjectFor(Bone.class, j, "rootBone");
-            this.IKIterations = j.getInt("defaultIterations");
-            this.dampening = j.getFloat("dampening");
-            this.name = j.getString("tag");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void notifyOfSaveIntent(SaveManager saveManager) {
-        this.makeSaveable(saveManager);
-    }
-
-    @Override
-    public void notifyOfSaveCompletion(SaveManager saveManager) {
-    }
-
-    @Override
-    public void notifyOfLoadCompletion() {
-        this.createRootBone(rootBone);
-        refreshArmaturePins();
-        updateBonechains();
-    }
-
-    @Override
-    public boolean isLoading() {
-        return false;
-    }
-
-    @Override
-    public void setLoading(boolean loading) {
     }
 
     public class PerformanceStats {

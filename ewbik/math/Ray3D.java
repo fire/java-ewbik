@@ -19,13 +19,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package ewbik.math;
 
-import data.agnosticsavior.CanLoad;
-import ewbik.asj.data.JSONObject;
-
 /**
  * @author Eron Gjoni
  */
-public class Ray3D implements CanLoad {
+public class Ray3D {
     public static final int X = 0, Y = 1, Z = 2;
     protected Vector3 p1;
     protected Vector3 p2;
@@ -972,34 +969,4 @@ public class Ray3D implements CanLoad {
     public <V extends Vector3> void setP1(V p1) {
         this.p1 = p1;
     }
-
-    @Override
-    public CanLoad populateSelfFromJSON(JSONObject j) {
-        if (this.p1 != null)
-            this.p2 = this.p1.copy();
-        if (this.p2 != null)
-            this.p1 = this.p2.copy();
-
-        if (this.p1 == null)
-            this.p1 = new Vector3(j.getJSONObject("p1"));
-        else {
-            this.p1.set(new Vector3(j.getJSONObject("p1")));
-        }
-
-        if (this.p2 == null)
-            this.p2 = new Vector3(j.getJSONObject("p2"));
-        else
-            this.p2.set(new Vector3(j.getJSONObject("p2")));
-
-        return this;
-    }
-
-    @Override
-    public JSONObject toJSONObject() {
-        JSONObject result = new JSONObject();
-        result.setJSONObject("p1", p1.toJSONObject());
-        result.setJSONObject("p2", p2.toJSONObject());
-        return result;
-    }
-
 }

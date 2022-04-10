@@ -1,21 +1,21 @@
 package processing;/*
-
-Copyright (c) 2015 Eron Gjoni
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
-associated documentation files (the "Software"), to deal in the Software without restriction, including 
-without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
-copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
-
- */
+                   
+                   Copyright (c) 2015 Eron Gjoni
+                   
+                   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
+                   associated documentation files (the "Software"), to deal in the Software without restriction, including 
+                   without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+                   copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+                   
+                   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+                   
+                   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+                   INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+                   PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+                   DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
+                   WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+                   
+                   */
 
 import ewbik.math.*;
 import processing.core.PGraphics;
@@ -29,7 +29,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 
-public class Node3D implements ewbik.asj.Saveable {
+public class Node3D {
     public static final int NORMAL = 0;
     public static final int FORWARD = 2;
     public static final int RIGHT = 1;
@@ -63,18 +63,18 @@ public class Node3D implements ewbik.asj.Saveable {
     }
 
     /**
-     * @param origin              the center of this axes basis. The basis vector
-     *                            parameters will be automatically ADDED to the
-     *                            origin in order to create this basis vector.
-     * @param inX                 the direction of the X basis vector in global
-     *                            coordinates, given as an offset from this base's
-     *                            origin in global coordinates.
-     * @param inY                 the direction of the Y basis vector in global
-     *                            coordinates, given as an offset from this base's
-     *                            origin in global coordinates.
-     * @param inZ                 the direction of the Z basis vector in global
-     *                            coordinates, given as an offset from this base's
-     *                            origin in global coordinates.
+     * @param origin the center of this axes basis. The basis vector
+     *               parameters will be automatically ADDED to the
+     *               origin in order to create this basis vector.
+     * @param inX    the direction of the X basis vector in global
+     *               coordinates, given as an offset from this base's
+     *               origin in global coordinates.
+     * @param inY    the direction of the Y basis vector in global
+     *               coordinates, given as an offset from this base's
+     *               origin in global coordinates.
+     * @param inZ    the direction of the Z basis vector in global
+     *               coordinates, given as an offset from this base's
+     *               origin in global coordinates.
      */
     public Node3D(PVector origin,
             PVector inX,
@@ -934,38 +934,9 @@ public class Node3D implements ewbik.asj.Saveable {
         return localMBasis;
     }
 
-    @Override
-    public ewbik.asj.data.JSONObject getSaveJSON(ewbik.asj.SaveManager saveManager) {
-        this.updateGlobal();
-        ewbik.asj.data.JSONObject thisAxes = new ewbik.asj.data.JSONObject();
-        ewbik.asj.data.JSONObject shearScale = new ewbik.asj.data.JSONObject();
-        Vector3 xShear = new Vector3();
-        Vector3 yShear = new Vector3();
-        Vector3 zShear = new Vector3();
-
-        this.getLocalMBasis().setToShearXBase(xShear);
-        this.getLocalMBasis().setToShearYBase(yShear);
-        this.getLocalMBasis().setToShearZBase(zShear);
-
-        shearScale.setJSONArray("x", xShear.toJSONArray());
-        shearScale.setJSONArray("y", yShear.toJSONArray());
-        shearScale.setJSONArray("z", zShear.toJSONArray());
-
-        thisAxes.setJSONArray("translation", (new Vector3(getLocalMBasis().translate)).toJSONArray());
-        thisAxes.setJSONArray("rotation", getLocalMBasis().rotation.toJsonArray());
-        thisAxes.setJSONObject("bases", shearScale);
-
-        String parentHash = "-1";
-        if (getParentAxes() != null)
-            parentHash = ((ewbik.asj.Saveable) getParentAxes()).getIdentityHash();
-        thisAxes.setString("parent", parentHash);
-        thisAxes.setString("identityHash", this.getIdentityHash());
-        return thisAxes;
-    }
-
     public void axisSlipWarning(Node3D globalPriorToSlipping,
-                                Node3D globalAfterSlipping, Node3D actualAxis,
-                                ArrayList<Object> dontWarn) {
+            Node3D globalAfterSlipping, Node3D actualAxis,
+            ArrayList<Object> dontWarn) {
         this.updateGlobal();
         if (this.getParentAxes() != null) {
             Node3D globalVals = globalPriorToSlipping;
@@ -975,12 +946,12 @@ public class Node3D implements ewbik.asj.Saveable {
     }
 
     public void axisSlipWarning(Node3D globalPriorToSlipping,
-                                Node3D globalAfterSlipping, Node3D actualAxis) {
+            Node3D globalAfterSlipping, Node3D actualAxis) {
 
     }
 
     public void axisSlipCompletionNotice(Node3D globalPriorToSlipping,
-                                         Node3D globalAfterSlipping, Node3D thisAxis) {
+            Node3D globalAfterSlipping, Node3D thisAxis) {
 
     }
 
@@ -1065,7 +1036,7 @@ public class Node3D implements ewbik.asj.Saveable {
     }
 
     public void notifyDependentsOfSlipCompletion(Node3D globalAxisPriorToSlipping,
-                                                 ArrayList<Object> dontWarn) {
+            ArrayList<Object> dontWarn) {
         for (int i = 0; i < dependentsRegistry.size(); i++) {
             if (!dontWarn.contains(dependentsRegistry.get(i)))
                 dependentsRegistry.get(i).get().axisSlipCompletionNotice(globalAxisPriorToSlipping,
@@ -1107,58 +1078,14 @@ public class Node3D implements ewbik.asj.Saveable {
         return global + "\n" + local;
     }
 
-    @Override
-    public void notifyOfSaveIntent(ewbik.asj.SaveManager saveManager) {
-    }
-
-    @Override
-    public void notifyOfSaveCompletion(ewbik.asj.SaveManager saveManager) {
-    }
-
-    @Override
-    public boolean isLoading() {
-        return false;
-    }
-
-    @Override
-    public void setLoading(boolean loading) {
-    }
-
-    @Override
-    public void makeSaveable(ewbik.asj.SaveManager saveManager) {
-        saveManager.addToSaveState(this);
-        forEachDependent(
-                (ad) -> {
-                    if (ewbik.asj.Saveable.class.isAssignableFrom(ad.get().getClass()))
-                        ((ewbik.asj.Saveable) ad.get()).makeSaveable(saveManager);
-                });
-    }
-
     public void parentChangeWarning(Node3D warningBy,
-                                    Node3D oldParent, Node3D intendedParent,
-                                    Object requestedBy) {
+            Node3D oldParent, Node3D intendedParent,
+            Object requestedBy) {
     }
 
     public void parentChangeCompletionNotice(Node3D warningBy,
-                                             Node3D oldParent, Node3D intendedParent,
-                                             Object requestedBy) {
-    }
-
-    public void loadFromJSONObject(ewbik.asj.data.JSONObject j, ewbik.asj.LoadManager l) {
-        Vector3 origin = new Vector3(j.getJSONArray("translation"));
-        Quaternion rotation = new Quaternion(j.getJSONArray("rotation"));
-        this.getLocalMBasis().translate = origin;
-        this.getLocalMBasis().rotation = rotation;
-        this.getLocalMBasis().refreshPrecomputed();
-        Node3D par;
-        try {
-            par = l.getObjectFor(Node3D.class, j, "parent");
-            if (par != null)
-                this.setRelativeToParent(par);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+            Node3D oldParent, Node3D intendedParent,
+            Object requestedBy) {
     }
 
     /**
