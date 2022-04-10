@@ -54,6 +54,7 @@ public final class MathUtils {
     static private final int BIG_ENOUGH_INT = 16 * 1024;
     static private final double BIG_ENOUGH_FLOOR = BIG_ENOUGH_INT;
     static private final double CEIL = 0.9999999;
+    static private final double BIG_ENOUGH_ROUND = BIG_ENOUGH_INT + 0.5f;
 
     /**
      * Returns the sine in radians from a lookup table.
@@ -229,6 +230,32 @@ public final class MathUtils {
     }
 
     /**
+     * Returns the smallest integer greater than or equal to the specified double.
+     * This method will only properly ceil doubles that
+     * are positive.
+     */
+    static public int ceilPositive(double value) {
+        return (int) (value + CEIL);
+    }
+
+    /**
+     * Returns the closest integer to the specified double. This method will only
+     * properly round doubles from -(2^14) to
+     * (double.MAX_VALUE - 2^14).
+     */
+    static public int round(double value) {
+        return (int) (value + BIG_ENOUGH_ROUND) - BIG_ENOUGH_INT;
+    }
+
+    /**
+     * Returns the closest integer to the specified double. This method will only
+     * properly round doubles that are positive.
+     */
+    static public int roundPositive(double value) {
+        return (int) (value + 0.5f);
+    }
+
+    /**
      * Returns true if the value is zero (using the default tolerance as upper
      * bound)
      */
@@ -255,6 +282,32 @@ public final class MathUtils {
      */
     static public boolean isEqual(double a, double b) {
         return Math.abs(a - b) <= DOUBLE_ROUNDING_ERROR;
+    }
+
+    /**
+     * Returns true if a is nearly equal to b.
+     *
+     * @param a         the first value.
+     * @param b         the second value.
+     * @param tolerance represent an upper bound below which the two values are
+     *                  considered equal.
+     */
+    static public boolean isEqual(double a, double b, double tolerance) {
+        return Math.abs(a - b) <= tolerance;
+    }
+
+    /**
+     * @return the logarithm of value with base a
+     */
+    static public double log(double a, double value) {
+        return (double) (Math.log(value) / Math.log(a));
+    }
+
+    /**
+     * @return the logarithm of value with base 2
+     */
+    static public double log2(double value) {
+        return log(2, value);
     }
 
     public static float pow(float val, float power) {

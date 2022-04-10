@@ -203,7 +203,7 @@ public class Transform3D {
         return resultNew;
     }
 
-    public void setToLocalOf(Transform3D global_input, Transform3D local_output) {
+    public <B extends ewbik.math.Transform3D> void setToLocalOf(B global_input, B local_output) {
         local_output.translate = this.getLocalOf(global_input.translate);
         inverseRotation.applyTo(global_input.rotation, local_output.rotation);
 
@@ -215,14 +215,14 @@ public class Transform3D {
         this.updateRays();
     }
 
-    public Vector3 getLocalOf(Vector3 v) {
-        Vector3 result = v;
+    public <V extends Vector3> V getLocalOf(V v) {
+        V result = (V) v.copy();
         setToLocalOf(v, result);
         return result;
     }
 
-    public void setToLocalOf(Vector3 input, Vector3 output) {
-        output = input;
+    public <V extends Vector3> void setToLocalOf(V input, V output) {
+        output.set(input);
         output.sub(this.translate);
         inverseRotation.applyTo(output, output);
     }
