@@ -332,19 +332,6 @@ public class Transform3D {
     }
 
     /**
-     * true if the input axis should be multiplied by negative one after rotation.
-     * By default, this always returns false. But can be overriden for more advanced
-     * implementations
-     * allowing for reflection transformations.
-     *
-     * @param axis
-     * @return true if axis should be flipped, false otherwise. Default is false.
-     */
-    public boolean isAxisFlipped(int axis) {
-        return false;
-    }
-
-    /**
      * @return a precomputed inverse of the rotation represented by this basis
      *         object.
      */

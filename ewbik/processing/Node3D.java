@@ -554,35 +554,6 @@ public class Node3D implements ewbik.asj.Saveable {
     }
 
     /**
-     * True if the input axis of this Axes object in global coordinates should be
-     * multiplied by negative one after rotation.
-     * By default, this always returns false. But can be overriden for more advanced
-     * implementations
-     * allowing for reflection transformations.
-     *
-     * @param axis
-     * @return true if axis should be flipped, false otherwise. Default is false.
-     */
-    public boolean isGlobalAxisFlipped(int axis) {
-        this.updateGlobal();
-        return globalMBasis.isAxisFlipped(axis);
-    }
-
-    /**
-     * True if the input axis of this Axes object in local coordinates should be
-     * multiplied by negative one after rotation.
-     * By default, this always returns false. But can be overriden for more advanced
-     * implementations
-     * allowing for reflection transformations.
-     *
-     * @param axis
-     * @return true if axis should be flipped, false otherwise. Default is false.
-     */
-    public boolean isLocalAxisFlipped(int axis) {
-        return localMBasis.isAxisFlipped(axis);
-    }
-
-    /**
      * Sets the parentAxes for this axis locally.
      * in other words, lx,ly,lz remain unchanged, but globalX, globalY, and globalZ
      * change.

@@ -553,7 +553,6 @@ public class Kusudama implements Saveable {
         Quaternion[] decomposition = alignRot.getSwingTwist(new Vector3(0, 1, 0));
 
         float angleDelta = decomposition[1].getAngle() * decomposition[1].getAxis().y * -1;
-        angleDelta *= (limitingNode3D.isGlobalAxisFlipped(Node3D.Y) ? -1 : 1);
 
         angleDelta = toTau(angleDelta);
         float fromMinToAngleDelta = toTau(signedAngleDifference(angleDelta, TAU - this.minAxialAngle()));
