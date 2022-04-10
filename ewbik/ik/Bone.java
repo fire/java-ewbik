@@ -429,10 +429,10 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
 
     @SuppressWarnings("unchecked")
     public ArrayList<Bone> getChildren() {
-        return (ArrayList<Bone>) (ArrayList<? extends Bone>) children;
+        return (ArrayList<Bone>) children;
     }
 
-    public void setChildren(ArrayList<? extends Bone> children) {
+    public void setChildren(ArrayList<Bone> children) {
         this.children = (ArrayList<Bone>) children;
     }
 
