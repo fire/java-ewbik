@@ -22,7 +22,6 @@ package ik;
 import ewbik.ik.*;
 import ewbik.ik.IKExceptions.NullParentForBoneException;
 import ewbik.ik.ShadowNode3D;
-import ewbik.math.*;
 import ewbik.processing.singlePrecision.Kusudama;
 import processing.Node3D;
 import processing.Skeleton3D;
@@ -30,6 +29,10 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
 import processing.core.PVector;
+import processing.math.Quaternion;
+import processing.math.Ray3D;
+import processing.math.RotationOrder;
+import processing.math.Vector3;
 
 import java.util.ArrayList;
 
@@ -324,12 +327,12 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     }
 
     public PVector getBase() {
-        ewbik.math.Vector3 base = (ewbik.math.Vector3) getBase_();
+        Vector3 base = (Vector3) getBase_();
         return new PVector(base.x, base.y, base.z);
     }
 
     public PVector getTip() {
-        ewbik.math.Vector3 tip = (ewbik.math.Vector3) getTip_();
+        Vector3 tip = (Vector3) getTip_();
         return new PVector(tip.x, tip.y, tip.z);
     }
 
@@ -341,11 +344,11 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     }
 
     public void enablePin(PVector pin) {
-        enablePin_(new ewbik.math.Vector3(pin.x, pin.y, pin.z));
+        enablePin_(new Vector3(pin.x, pin.y, pin.z));
     }
 
     public void setPin(PVector pin) {
-        setPin_(new ewbik.math.Vector3(pin.x, pin.y, pin.z));
+        setPin_(new Vector3(pin.x, pin.y, pin.z));
     }
 
     /**
@@ -357,7 +360,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         if (pin == null)
             return null;
         else {
-            ewbik.math.Vector3 loc = (ewbik.math.Vector3) pin.getLocation_();
+            Vector3 loc = (Vector3) pin.getLocation_();
             return new PVector(loc.x, loc.y, loc.z);
         }
     }

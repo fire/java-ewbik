@@ -2,6 +2,7 @@ package ik;
 
 import processing.Node3D;
 import processing.core.PVector;
+import processing.math.Vector3;
 
 import java.util.ArrayList;
 
@@ -240,7 +241,7 @@ public class IKPin implements ewbik.asj.Saveable {
      *
      * @param location
      */
-    public void translateTo_(ewbik.math.Vector3 location) {
+    public void translateTo_(Vector3 location) {
         this.node3D.translateTo(location);
     }
 
@@ -251,7 +252,7 @@ public class IKPin implements ewbik.asj.Saveable {
      *
      * @param location
      */
-    public void translateToArmatureLocal_(ewbik.math.Vector3 location) {
+    public void translateToArmatureLocal_(Vector3 location) {
         Node3D armNode3D = this.forBone().parentArmature.localAxes().getParentAxes();
         if (armNode3D == null) {
             this.node3D.translateTo(location);
@@ -266,14 +267,14 @@ public class IKPin implements ewbik.asj.Saveable {
      *
      * @param location
      */
-    public void translateBy_(ewbik.math.Vector3 location) {
+    public void translateBy_(Vector3 location) {
         this.node3D.translateByLocal(location);
     }
 
     /**
      * @return the pin locationin global coordinates
      */
-    public ewbik.math.Vector3 getLocation_() {
+    public Vector3 getLocation_() {
         return node3D.calculatePosition();
     }
 
