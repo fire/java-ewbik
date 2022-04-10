@@ -432,7 +432,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         return children;
     }
 
-    public void setChildren(ArrayList<? extends Bone> children) {
+    public void setChildren(ArrayList<Bone> children) {
         this.children = (ArrayList<Bone>) children;
     }
 
