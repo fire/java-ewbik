@@ -1,128 +1,123 @@
 package ewbik.math;
 
-public final class RotationOrder {
+public class RotationOrder {
 
-        public static final Vector3 X = new Vector3(1, 0, 0);
-        public static final Vector3 Y = new Vector3(0, 1, 0);
-        public static final Vector3 Z = new Vector3(0, 0, 1);
+        public static Vector3 X = new Vector3(1, 0, 0);
+        public static Vector3 Y = new Vector3(0, 1, 0);
+        public static Vector3 Z = new Vector3(0, 0, 1);
 
         /**
          * Set of Cartesian angles.
          * this ordered set of rotations is around X, then around Y, then
          * around Z
          */
-        public static final RotationOrder XYZ = new RotationOrder("XYZ", X, Y, Z);
+        public static RotationOrder XYZ = new RotationOrder("XYZ", X, Y, Z);
 
         /**
          * Set of Cartesian angles.
          * this ordered set of rotations is around X, then around Z, then
          * around Y
          */
-        public static final RotationOrder XZY = new RotationOrder("XZY", X, Z, Y);
+        public static RotationOrder XZY = new RotationOrder("XZY", X, Z, Y);
 
         /**
          * Set of Cartesian angles.
          * this ordered set of rotations is around Y, then around X, then
          * around Z
          */
-        public static final RotationOrder YXZ = new RotationOrder("YXZ", Y, X, Z);
+        public static RotationOrder YXZ = new RotationOrder("YXZ", Y, X, Z);
 
         /**
          * Set of Cartesian angles.
          * this ordered set of rotations is around Y, then around Z, then
          * around X
          */
-        public static final RotationOrder YZX = new RotationOrder("YZX", Y, Z, X);
+        public static RotationOrder YZX = new RotationOrder("YZX", Y, Z, X);
 
         /**
          * Set of Cartesian angles.
          * this ordered set of rotations is around Z, then around X, then
          * around Y
          */
-        public static final RotationOrder ZXY = new RotationOrder("ZXY", Z, X, Y);
+        public static RotationOrder ZXY = new RotationOrder("ZXY", Z, X, Y);
 
         /**
          * Set of Cartesian angles.
          * this ordered set of rotations is around Z, then around Y, then
          * around X
          */
-        public static final RotationOrder ZYX = new RotationOrder("ZYX", Z, Y, X);
+        public static RotationOrder ZYX = new RotationOrder("ZYX", Z, Y, X);
 
         /**
          * Set of Euler angles.
          * this ordered set of rotations is around X, then around Y, then
          * around X
          */
-        public static final RotationOrder XYX = new RotationOrder("XYX", X, Y, X);
+        public static RotationOrder XYX = new RotationOrder("XYX", X, Y, X);
 
         /**
          * Set of Euler angles.
          * this ordered set of rotations is around X, then around Z, then
          * around X
          */
-        public static final RotationOrder XZX = new RotationOrder("XZX", X, Z, X);
+        public static RotationOrder XZX = new RotationOrder("XZX", X, Z, X);
 
         /**
          * Set of Euler angles.
          * this ordered set of rotations is around Y, then around X, then
          * around Y
          */
-        public static final RotationOrder YXY = new RotationOrder("YXY", Y, X, Y);
+        public static RotationOrder YXY = new RotationOrder("YXY", Y, X, Y);
 
         /**
          * Set of Euler angles.
          * this ordered set of rotations is around Y, then around Z, then
          * around Y
          */
-        public static final RotationOrder YZY = new RotationOrder("YZY", Y, Z, Y);
+        public static RotationOrder YZY = new RotationOrder("YZY", Y, Z, Y);
 
         /**
          * Set of Euler angles.
          * this ordered set of rotations is around Z, then around X, then
          * around Z
          */
-        public static final RotationOrder ZXZ = new RotationOrder("ZXZ", Z, X, Z);
+        public static RotationOrder ZXZ = new RotationOrder("ZXZ", Z, X, Z);
 
         /**
          * Set of Euler angles.
          * this ordered set of rotations is around Z, then around Y, then
          * around Z
          */
-        public static final RotationOrder ZYZ = new RotationOrder("ZYZ", Z, Y, Z);
+        public static RotationOrder ZYZ = new RotationOrder("ZYZ", Z, Y, Z);
 
         /**
          * Name of the rotations order.
          */
-        private final String name;
+        private String name;
 
         /**
          * Axis of the first rotation.
          */
-        private final Vector3 a1;
+        private Vector3 a1;
 
         /**
          * Axis of the second rotation.
          */
-        private final Vector3 a2;
+        private Vector3 a2;
 
         /**
          * Axis of the third rotation.
          */
-        private final Vector3 a3;
+        private Vector3 a3;
 
         /**
-         * Private constructor.
-         * This is a utility class that cannot be instantiated by the user,
-         * so its only constructor is private.
-         *
          * @param name name of the rotation order
          * @param a1   axis of the first rotation
          * @param a2   axis of the second rotation
          * @param a3   axis of the third rotation
          */
-        private <T extends Vector3> RotationOrder(final String name,
-                        final T a1, final T a2, final T a3) {
-                this.name = name;
+        public RotationOrder(String string, Vector3 a1, Vector3 a2, Vector3 a3) {
+                this.name = string;
                 this.a1 = a1;
                 this.a2 = a2;
                 this.a3 = a3;
