@@ -135,7 +135,7 @@ public class Skeleton3D implements Saveable {
         return rootBone;
     }
 
-    private <V extends ewbik.math.Vector3> Bone createRootBone(V tipHeading, V rollHeading, String boneName,
+    private Bone createRootBone(Vector3 tipHeading, Vector3 rollHeading, String boneName,
             float boneHeight, Bone.frameType coordinateType) {
         initializeRootBone(this, tipHeading, rollHeading, boneName, boneHeight, coordinateType);
         this.shadowNode3D = new ewbik.ik.ShadowNode3D(rootBone);
@@ -171,7 +171,7 @@ public class Skeleton3D implements Saveable {
      *
      * @return all bones belonging to this armature.
      */
-    public ArrayList<? extends Bone> getBoneList() {
+    public ArrayList<Bone> getBoneList() {
         this.bones.clear();
         rootBone.addDescendantsToArmature();
         return bones;
