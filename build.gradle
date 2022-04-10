@@ -46,6 +46,9 @@ distributions {
             from ('kusudama.glsl') {                
                 rename 'kusudama.glsl', 'bin/kusudama.glsl'
             }
+            from ('LICENSE') {                
+                rename 'LICENSE', 'bin/LICENSE'
+            }
         }
     }
 }
