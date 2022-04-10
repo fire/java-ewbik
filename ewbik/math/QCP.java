@@ -95,8 +95,6 @@ public class QCP {
     private Vector3 movedCenter = new Vector3();
 
     private float e0;
-    // private Matrix3f rotmat = new Matrix3f();
-    // private Matrix4f transformation = new Matrix4f();
     private float rmsd = 0;
     private float Sxy, Sxz, Syx, Syz, Szx, Szy;
     private float SxxpSyy, Szz, mxEigenV, SyzmSzy, SxzmSzx, SxymSyx;
@@ -217,8 +215,7 @@ public class QCP {
     public <V extends Vector3> Quaternion weightedSuperpose(V[] moved, V[] target, float[] weight, boolean translate) {
         set(moved, target, weight, translate);
         Quaternion result = getRotation();
-        // transformation.set(rotmat);
-        return result;// transformation;
+        return result;
     }
 
     private Quaternion getRotation() {

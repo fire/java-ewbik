@@ -1929,13 +1929,13 @@ public class Quaternion {
         float t1, t2;
 
         final float EPSILON = 0.0001f;
-        if ((1.0f - dot) > EPSILON) // standard case (slerp)
+        if ((1.0f - dot) > EPSILON) // The standard case (slerp).
         {
             float angle = MathUtils.acos(dot);
             float sinAngle = MathUtils.sin(angle);
             t1 = MathUtils.sin((1.0f - amount) * angle) / sinAngle;
             t2 = MathUtils.sin(amount * angle) / sinAngle;
-        } else // just lerp
+        } else // lerp
         {
             t1 = 1.0f - amount;
             t2 = amount;
@@ -2291,8 +2291,7 @@ public class Quaternion {
     }
 
     public String toString() {
-        return rotation.toString();// "\n axis: "+ this.getAxis().toVec3f() +", \n angle:
-        // "+((float)MathUtils.toDegrees(this.getAngle()));
+        return rotation.toString();
     }
 
     public boolean equalTo(Quaternion m) {

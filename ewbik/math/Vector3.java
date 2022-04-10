@@ -782,9 +782,9 @@ public class Vector3 implements CanLoad {
         if (dot > 0.9995 || dot < -0.9995)
             return lerp(target, alpha);
 
-        // theta0 = angle between input vectors
+        // The theta0 is angle between input vectors.
         final float theta0 = (float) MathUtils.acos(dot);
-        // theta = angle between this vector and result
+        // The theta is angle between this vector and result.
         final float theta = theta0 * alpha;
 
         final float st = (float) MathUtils.sin(theta);

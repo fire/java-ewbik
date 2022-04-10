@@ -888,8 +888,6 @@ public class Ray3D implements CanLoad {
 
     public <V extends Vector3> void barycentric(V a, V b, V c, V p, float[] uvw) {
         if (m == null) {
-            // m=a.copy();
-            // m.set(0f,0f,0f);
             bc = b.copy();
             ca = c.copy();
             at = a.copy();

@@ -44,7 +44,6 @@ public class Node3D implements ewbik.asj.Saveable {
     public boolean dirty = true;
     public LinkedList<DependencyReference<Node3D>> dependentsRegistry = new LinkedList<DependencyReference<Node3D>>();
     protected Vector3 workingVector;
-    // public boolean forceOrthoNormality = true;
     protected boolean areGlobal = true;
     float[][] outMatLocal = new float[4][4];
     float[][] outMatGlobal = new float[4][4];
@@ -78,7 +77,6 @@ public class Node3D implements ewbik.asj.Saveable {
      * @param inZ                 the direction of the Z basis vector in global
      *                            coordinates, given as an offset from this base's
      *                            origin in global coordinates.
-     * @param forceOrthoNormality
      */
     public Node3D(PVector origin,
             PVector inX,
@@ -1015,8 +1013,6 @@ public class Node3D implements ewbik.asj.Saveable {
         thisAxes.setJSONArray("rotation", getLocalMBasis().rotation.toJsonArray());
         thisAxes.setJSONObject("bases", shearScale);
 
-        // thisAxes.setJSONArray("flippedAxes",
-        // saveManager.primitiveArrayToJSONArray(this.getLocalMBasis().flippedAxes));
         String parentHash = "-1";
         if (getParentAxes() != null)
             parentHash = ((ewbik.asj.Saveable) getParentAxes()).getIdentityHash();
@@ -1150,7 +1146,7 @@ public class Node3D implements ewbik.asj.Saveable {
     }
 
     public void notifyDependentsOfSlipCompletion(Node3D globalAxisPriorToSlipping) {
-        for (int i = 0; i < dependentsRegistry.size(); i++) {// AxisDependancy dependent : dependentsRegistry) {
+        for (int i = 0; i < dependentsRegistry.size(); i++) {
             dependentsRegistry.get(i).get().axisSlipCompletionNotice(globalAxisPriorToSlipping, this.getGlobalCopy(),
                     this);
         }

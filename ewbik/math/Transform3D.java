@@ -379,7 +379,6 @@ public class Transform3D {
         float xMag = xh.mag();
         float yMag = yh.mag();
         float zMag = zh.mag();
-        // this.chirality = this.composedMatrix. ? RIGHT : LEFT;
         String chirality = this.chirality == LEFT ? "LEFT" : "RIGHT";
         String result = "-----------\n"
                 + chirality + " handed \n"

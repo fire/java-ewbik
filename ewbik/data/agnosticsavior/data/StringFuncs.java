@@ -3233,7 +3233,7 @@ public class StringFuncs implements Constants {
             try {
                 is.close();
             } catch (IOException e) {
-                // printStackTrace(e); // shouldn't happen
+                // shouldn't happen
             }
             return outgoing;
         }
