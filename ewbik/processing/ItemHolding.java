@@ -244,7 +244,7 @@ public class ItemHolding extends PApplet {
 
     public void setup() {
         ui = new UI(this);
-        loadedArmature = ewbik.processing.IO.LoadArmature("Humanoid_Holding_Item.arm");
+        loadedArmature = ewbik.processing.IO.LoadArmature("Humanoid_Holding_Item.json");
         worldNode3D = (Node3D) loadedArmature.localAxes().getParentAxes();
         if (worldNode3D == null) {
             worldNode3D = new Node3D();
@@ -348,9 +348,9 @@ public class ItemHolding extends PApplet {
         } else if (key == 's') {
             println("Saving");
             ewbik.data.EWBIKSaver newSaver = new ewbik.data.EWBIKSaver();
-            newSaver.saveArmature(loadedArmature, "Humanoid_Holding_Item.arm");
+            newSaver.saveArmature(loadedArmature, "Humanoid_Holding_Item.json");
         } else if (key == 'l') {
-            loadedArmature = ewbik.processing.IO.LoadArmature("Humanoid_Holding_Item.arm");
+            loadedArmature = ewbik.processing.IO.LoadArmature("Humanoid_Holding_Item.json");
             loadedArmature.updateBonechains();
             loadedArmature.IKSolver(loadedArmature.getRootBone(), 0.5f, 20, 1);
 
