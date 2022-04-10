@@ -628,7 +628,7 @@ public class Node3D implements ewbik.asj.Saveable {
         return new Ray3D(this.getGlobalOf(in.p1()), this.getGlobalOf(in.p2()));
     }
 
-    public Vector3 getLocalOf(Vector3 in) {
+    public <V extends Vector3> V getLocalOf(V in) {
         this.updateGlobal();
         return getGlobalMBasis().getLocalOf(in);
     }
