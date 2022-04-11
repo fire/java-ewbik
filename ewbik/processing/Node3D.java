@@ -29,7 +29,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 
-public class Node3D {
+public class Node3D implements ewbik.asj.Saveable {
     public static final int NORMAL = 0;
     public static final int FORWARD = 2;
     public static final int RIGHT = 1;
@@ -931,6 +931,35 @@ public class Node3D {
         return localMBasis;
     }
 
+    @Override
+    public ewbik.asj.data.JSONObject getSaveJSON(ewbik.asj.SaveManager saveManager) {
+        this.updateGlobal();
+        ewbik.asj.data.JSONObject thisAxes = new ewbik.asj.data.JSONObject();
+        ewbik.asj.data.JSONObject shearScale = new ewbik.asj.data.JSONObject();
+        Vector3 xShear = new Vector3();
+        Vector3 yShear = new Vector3();
+        Vector3 zShear = new Vector3();
+
+        this.getLocalMBasis().setToShearXBase(xShear);
+        this.getLocalMBasis().setToShearYBase(yShear);
+        this.getLocalMBasis().setToShearZBase(zShear);
+
+        shearScale.setJSONArray("x", xShear.toJSONArray());
+        shearScale.setJSONArray("y", yShear.toJSONArray());
+        shearScale.setJSONArray("z", zShear.toJSONArray());
+
+        thisAxes.setJSONArray("translation", (new Vector3(getLocalMBasis().translate)).toJSONArray());
+        thisAxes.setJSONArray("rotation", getLocalMBasis().rotation.toJsonArray());
+        thisAxes.setJSONObject("bases", shearScale);
+
+        String parentHash = "-1";
+        if (getParentAxes() != null)
+            parentHash = getParentAxes().getIdentityHash();
+        thisAxes.setString("parent", parentHash);
+        thisAxes.setString("identityHash", this.getIdentityHash());
+        return thisAxes;
+    }
+
     public void axisSlipWarning(Node3D globalPriorToSlipping,
             Node3D globalAfterSlipping, Node3D actualAxis,
             ArrayList<Object> dontWarn) {
@@ -1075,6 +1104,33 @@ public class Node3D {
         return global + "\n" + local;
     }
 
+    @Override
+    public void notifyOfSaveIntent(ewbik.asj.SaveManager saveManager) {
+    }
+
+    @Override
+    public void notifyOfSaveCompletion(ewbik.asj.SaveManager saveManager) {
+    }
+
+    @Override
+    public boolean isLoading() {
+        return false;
+    }
+
+    @Override
+    public void setLoading(boolean loading) {
+    }
+
+    @Override
+    public void makeSaveable(ewbik.asj.SaveManager saveManager) {
+        saveManager.addToSaveState(this);
+        forEachDependent(
+                (ad) -> {
+                    if (ewbik.asj.Saveable.class.isAssignableFrom(ad.get().getClass()))
+                        ((ewbik.asj.Saveable) ad.get()).makeSaveable(saveManager);
+                });
+    }
+
     public void parentChangeWarning(Node3D warningBy,
             Node3D oldParent, Node3D intendedParent,
             Object requestedBy) {
@@ -1083,6 +1139,23 @@ public class Node3D {
     public void parentChangeCompletionNotice(Node3D warningBy,
             Node3D oldParent, Node3D intendedParent,
             Object requestedBy) {
+    }
+
+    public void loadFromJSONObject(ewbik.asj.data.JSONObject j, ewbik.asj.LoadManager l) {
+        Vector3 origin = new Vector3(j.getJSONArray("translation"));
+        Quaternion rotation = new Quaternion(j.getJSONArray("rotation"));
+        this.getLocalMBasis().translate = origin;
+        this.getLocalMBasis().rotation = rotation;
+        this.getLocalMBasis().refreshPrecomputed();
+        Node3D par;
+        try {
+            par = l.getObjectFor(Node3D.class, j, "parent");
+            if (par != null)
+                this.setRelativeToParent(par);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
