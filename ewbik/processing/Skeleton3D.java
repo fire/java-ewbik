@@ -494,7 +494,7 @@ public class Skeleton3D implements Saveable {
      * @return
      */
     public ewbik.math.Quaternion getRotationBetween(Node3D a,
-                                                    Node3D b) {
+            Node3D b) {
         return new ewbik.math.Quaternion(a.calculateX().heading(), a.calculateY().heading(), b.calculateX().heading(),
                 b.calculateY().heading());
     }

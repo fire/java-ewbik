@@ -78,7 +78,7 @@ public class LimitCone implements Saveable {
      * @return
      */
     public boolean inBoundsFromThisToNext(ewbik.processing.singlePrecision.LimitCone next, Vector3 input,
-                                          Vector3 collisionPoint) {
+            Vector3 collisionPoint) {
         boolean isInBounds = false;
         Vector3 closestCollision = getClosestCollision(next, input);
         if (closestCollision == null) {
@@ -106,7 +106,7 @@ public class LimitCone implements Saveable {
      *         if the point was out of bounds.
      */
     public Vector3 getClosestCollision(ewbik.processing.singlePrecision.LimitCone next,
-                                                           Vector3 input) {
+            Vector3 input) {
         Vector3 result = getOnGreatTangentTriangle(next, input);
         if (result == null) {
             boolean[] inBounds = { false };
@@ -116,7 +116,7 @@ public class LimitCone implements Saveable {
     }
 
     public Vector3 getClosestPathPoint(ewbik.processing.singlePrecision.LimitCone next,
-                                                           Vector3 input) {
+            Vector3 input) {
         Vector3 result = getOnPathSequence(next, input);
         if (result == null) {
             result = closestCone(next, input);
@@ -230,7 +230,7 @@ public class LimitCone implements Saveable {
     }
 
     public Vector3 getOnGreatTangentTriangle(ewbik.processing.singlePrecision.LimitCone next,
-                                                                 Vector3 input) {
+            Vector3 input) {
         Vector3 c1xc2 = controlPoint.crossCopy(next.controlPoint);
         float c1c2fir = input.dot(c1xc2);
         if (c1c2fir < 0.0) {
@@ -274,8 +274,8 @@ public class LimitCone implements Saveable {
      * @return
      */
     public Vector3 closestPointOnClosestCone(ewbik.processing.singlePrecision.LimitCone next,
-                                                                 Vector3 input,
-                                                                 boolean[] inBounds) {
+            Vector3 input,
+            boolean[] inBounds) {
         Vector3 closestToFirst = this.closestToCone(input, inBounds);
         if (inBounds[0]) {
             return closestToFirst;

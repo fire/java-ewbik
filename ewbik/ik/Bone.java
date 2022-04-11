@@ -500,15 +500,15 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
      * it presumes KusudamaExample constraints
      */
     public void setAxesToSnapped(Node3D toSet,
-                                 Node3D limitingNode3D, float cosHalfAngleDampen) {
+            Node3D limitingNode3D, float cosHalfAngleDampen) {
         if (constraints != null && Kusudama.class.isAssignableFrom(constraints.getClass())) {
             constraints.setAxesToSnapped(toSet, limitingNode3D, cosHalfAngleDampen);
         }
     }
 
     public void setAxesToReturnfulled(Node3D toSet,
-                                      Node3D limitingNode3D, float cosHalfAngleDampen,
-                                      float angleDampen) {
+            Node3D limitingNode3D, float cosHalfAngleDampen,
+            float angleDampen) {
         if (constraints != null && Kusudama.class.isAssignableFrom(constraints.getClass())) {
             constraints.setAxesToReturnfulled(toSet, limitingNode3D, cosHalfAngleDampen,
                     angleDampen);

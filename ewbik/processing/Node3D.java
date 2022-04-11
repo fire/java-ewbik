@@ -1,21 +1,21 @@
 package processing;/*
-
-Copyright (c) 2015 Eron Gjoni
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
-associated documentation files (the "Software"), to deal in the Software without restriction, including 
-without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
-copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
-
- */
+                   
+                   Copyright (c) 2015 Eron Gjoni
+                   
+                   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
+                   associated documentation files (the "Software"), to deal in the Software without restriction, including 
+                   without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+                   copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+                   
+                   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+                   
+                   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+                   INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+                   PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+                   DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
+                   WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+                   
+                   */
 
 import ewbik.math.*;
 import processing.core.PGraphics;
@@ -63,18 +63,18 @@ public class Node3D implements ewbik.asj.Saveable {
     }
 
     /**
-     * @param origin              the center of this axes basis. The basis vector
-     *                            parameters will be automatically ADDED to the
-     *                            origin in order to create this basis vector.
-     * @param inX                 the direction of the X basis vector in global
-     *                            coordinates, given as an offset from this base's
-     *                            origin in global coordinates.
-     * @param inY                 the direction of the Y basis vector in global
-     *                            coordinates, given as an offset from this base's
-     *                            origin in global coordinates.
-     * @param inZ                 the direction of the Z basis vector in global
-     *                            coordinates, given as an offset from this base's
-     *                            origin in global coordinates.
+     * @param origin the center of this axes basis. The basis vector
+     *               parameters will be automatically ADDED to the
+     *               origin in order to create this basis vector.
+     * @param inX    the direction of the X basis vector in global
+     *               coordinates, given as an offset from this base's
+     *               origin in global coordinates.
+     * @param inY    the direction of the Y basis vector in global
+     *               coordinates, given as an offset from this base's
+     *               origin in global coordinates.
+     * @param inZ    the direction of the Z basis vector in global
+     *               coordinates, given as an offset from this base's
+     *               origin in global coordinates.
      */
     public Node3D(PVector origin,
             PVector inX,
@@ -961,8 +961,8 @@ public class Node3D implements ewbik.asj.Saveable {
     }
 
     public void axisSlipWarning(Node3D globalPriorToSlipping,
-                                Node3D globalAfterSlipping, Node3D actualAxis,
-                                ArrayList<Object> dontWarn) {
+            Node3D globalAfterSlipping, Node3D actualAxis,
+            ArrayList<Object> dontWarn) {
         this.updateGlobal();
         if (this.getParentAxes() != null) {
             Node3D globalVals = globalPriorToSlipping;
@@ -972,12 +972,12 @@ public class Node3D implements ewbik.asj.Saveable {
     }
 
     public void axisSlipWarning(Node3D globalPriorToSlipping,
-                                Node3D globalAfterSlipping, Node3D actualAxis) {
+            Node3D globalAfterSlipping, Node3D actualAxis) {
 
     }
 
     public void axisSlipCompletionNotice(Node3D globalPriorToSlipping,
-                                         Node3D globalAfterSlipping, Node3D thisAxis) {
+            Node3D globalAfterSlipping, Node3D thisAxis) {
 
     }
 
@@ -1062,7 +1062,7 @@ public class Node3D implements ewbik.asj.Saveable {
     }
 
     public void notifyDependentsOfSlipCompletion(Node3D globalAxisPriorToSlipping,
-                                                 ArrayList<Object> dontWarn) {
+            ArrayList<Object> dontWarn) {
         for (int i = 0; i < dependentsRegistry.size(); i++) {
             if (!dontWarn.contains(dependentsRegistry.get(i)))
                 dependentsRegistry.get(i).get().axisSlipCompletionNotice(globalAxisPriorToSlipping,
@@ -1132,13 +1132,13 @@ public class Node3D implements ewbik.asj.Saveable {
     }
 
     public void parentChangeWarning(Node3D warningBy,
-                                    Node3D oldParent, Node3D intendedParent,
-                                    Object requestedBy) {
+            Node3D oldParent, Node3D intendedParent,
+            Object requestedBy) {
     }
 
     public void parentChangeCompletionNotice(Node3D warningBy,
-                                             Node3D oldParent, Node3D intendedParent,
-                                             Object requestedBy) {
+            Node3D oldParent, Node3D intendedParent,
+            Object requestedBy) {
     }
 
     public void loadFromJSONObject(ewbik.asj.data.JSONObject j, ewbik.asj.LoadManager l) {

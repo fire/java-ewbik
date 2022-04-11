@@ -65,7 +65,8 @@ public class Ray3D implements CanLoad {
      * @return a sgRay along the line of intersection of these two planes, or null
      *         if inputs are coplanar
      */
-    public static ewbik.math.Ray3D planePlaneIntersect(Vector3 a1, Vector3 a2, Vector3 a3, Vector3 b1, Vector3 b2, Vector3 b3) {
+    public static ewbik.math.Ray3D planePlaneIntersect(Vector3 a1, Vector3 a2, Vector3 a3, Vector3 b1, Vector3 b2,
+            Vector3 b3) {
         ewbik.math.Ray3D a1a2 = new ewbik.math.Ray3D(a1, a2);
         ewbik.math.Ray3D a1a3 = new ewbik.math.Ray3D(a1, a3);
         ewbik.math.Ray3D a2a3 = new ewbik.math.Ray3D(a2, a3);
@@ -773,7 +774,8 @@ public class Ray3D implements CanLoad {
     public boolean intersectsTriangle(Vector3 ta, Vector3 tb, Vector3 tc, Vector3 result) {
         float[] uvw = new float[3];
         result.set(intersectsPlane(ta, tb, tc, uvw));
-        return !Float.isNaN(uvw[0]) && !Float.isNaN(uvw[1]) && !Float.isNaN(uvw[2]) && !(uvw[0] < 0) && !(uvw[1] < 0) && !(uvw[2] < 0);
+        return !Float.isNaN(uvw[0]) && !Float.isNaN(uvw[1]) && !Float.isNaN(uvw[2]) && !(uvw[0] < 0) && !(uvw[1] < 0)
+                && !(uvw[2] < 0);
     }
 
     private Vector3 planeIntersectTest(Vector3 ta, Vector3 tb, Vector3 tc, float[] uvw) {

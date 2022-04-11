@@ -55,7 +55,7 @@ public class Basis {
      *                           before using them
      */
     public Basis(float q0, float q1, float q2, float q3,
-                 boolean needsNormalization) {
+            boolean needsNormalization) {
 
         this.q0 = q0;
         this.q1 = q1;
@@ -175,9 +175,11 @@ public class Basis {
      *                  difference between two steps of the Frobenius norm of the
      *                  correction is below this threshold)
      * @throws Precision.NotARotationMatrixException if the matrix is not a 3X3
-     *                                               matrix, or if it cannot be transformed
+     *                                               matrix, or if it cannot be
+     *                                               transformed
      *                                               into an orthogonal matrix
-     *                                               with the given threshold, or if the
+     *                                               with the given threshold, or if
+     *                                               the
      *                                               determinant of the resulting
      *                                               orthogonal matrix is negative
      */
@@ -254,9 +256,11 @@ public class Basis {
      *                  difference between two steps of the Frobenius norm of the
      *                  correction is below this threshold)
      * @throws Precision.NotARotationMatrixException if the matrix is not a 3X3
-     *                                               matrix, or if it cannot be transformed
+     *                                               matrix, or if it cannot be
+     *                                               transformed
      *                                               into an orthogonal matrix
-     *                                               with the given threshold, or if the
+     *                                               with the given threshold, or if
+     *                                               the
      *                                               determinant of the resulting
      *                                               orthogonal matrix is negative
      */
@@ -316,9 +320,12 @@ public class Basis {
      * @param u2 second vector of the origin pair
      * @param v1 desired image of u1 by the rotation
      * @param v2 desired image of u2 by the rotation
-     * @throws Precision.MathArithmeticException if the norm of one of the vectors is zero,
-     *                                           or if one of the pair is degenerated (i.e.
-     *                                           the vectors of the pair are colinear)
+     * @throws Precision.MathArithmeticException if the norm of one of the vectors
+     *                                           is zero,
+     *                                           or if one of the pair is
+     *                                           degenerated (i.e.
+     *                                           the vectors of the pair are
+     *                                           colinear)
      */
     public Basis(Vector3 u1, Vector3 u2, Vector3 v1, Vector3 v2) {
 
@@ -502,7 +509,8 @@ public class Basis {
      *
      * @param u origin vector
      * @param v desired image of u by the rotation
-     * @throws Precision.MathArithmeticException if the norm of one of the vectors is zero
+     * @throws Precision.MathArithmeticException if the norm of one of the vectors
+     *                                           is zero
      */
     public Basis(Vector3 u, Vector3 v) {
 
@@ -568,7 +576,7 @@ public class Basis {
      * @param alpha3 angle of the third elementary rotation
      */
     public Basis(RotationOrder order,
-                 float alpha1, float alpha2, float alpha3) {
+            float alpha1, float alpha2, float alpha3) {
         Basis r1 = new Basis(order.getA1(), alpha1);
         Basis r2 = new Basis(order.getA2(), alpha2);
         Basis r3 = new Basis(order.getA3(), alpha3);
@@ -677,7 +685,7 @@ public class Basis {
      * @return the dot product of {@code q1} and {@code q2}.
      */
     public static float dotProduct(final Basis q1,
-                                   final Basis q2) {
+            final Basis q2) {
         return q1.getQ0() * q2.getQ0() +
                 q1.getQ1() * q2.getQ1() +
                 q1.getQ2() * q2.getQ2() +
@@ -773,7 +781,7 @@ public class Basis {
      * instance is not changed.
      *
      * @return a new rotation whose effect is the reverse of the effect
-     * of the instance
+     *         of the instance
      */
     public Basis revert() {
         return new Basis(-q0, q1, q2, q3, false);
@@ -985,7 +993,8 @@ public class Basis {
      * @param order rotation order to use
      * @return an array of three angles, in the order specified by the set
      * @throws Precision.CardanEulerSingularityException if the rotation is
-     *                                                   singular with respect to the angles
+     *                                                   singular with respect to
+     *                                                   the angles
      *                                                   set specified
      */
     public float[] getAngles(RotationOrder order) {
@@ -1007,7 +1016,7 @@ public class Basis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(-(v1.y), v1.z),
                     MathUtils.asin(v2.z),
                     MathUtils.atan2(-(v2.y), v2.x)
@@ -1029,7 +1038,7 @@ public class Basis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(v1.z, v1.y),
                     -MathUtils.asin(v2.y),
                     MathUtils.atan2(v2.z, v2.x)
@@ -1051,7 +1060,7 @@ public class Basis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(v1.x, v1.z),
                     -MathUtils.asin(v2.z),
                     MathUtils.atan2(v2.x, v2.y)
@@ -1073,7 +1082,7 @@ public class Basis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(-(v1.z), v1.x),
                     MathUtils.asin(v2.x),
                     MathUtils.atan2(-(v2.z), v2.y)
@@ -1095,7 +1104,7 @@ public class Basis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(-(v1.x), v1.y),
                     MathUtils.asin(v2.y),
                     MathUtils.atan2(-(v2.x), v2.z)
@@ -1117,7 +1126,7 @@ public class Basis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(v1.y, v1.x),
                     -MathUtils.asin(v2.x),
                     MathUtils.atan2(v2.y, v2.z)
@@ -1139,7 +1148,7 @@ public class Basis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(v1.y, -v1.z),
                     MathUtils.acos(v2.x),
                     MathUtils.atan2(v2.y, v2.z)
@@ -1161,7 +1170,7 @@ public class Basis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(v1.z, v1.y),
                     MathUtils.acos(v2.x),
                     MathUtils.atan2(v2.z, -v2.y)
@@ -1183,7 +1192,7 @@ public class Basis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(v1.x, v1.z),
                     MathUtils.acos(v2.y),
                     MathUtils.atan2(v2.x, -v2.z)
@@ -1205,7 +1214,7 @@ public class Basis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(v1.z, -v1.x),
                     MathUtils.acos(v2.y),
                     MathUtils.atan2(v2.z, v2.x)
@@ -1227,7 +1236,7 @@ public class Basis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(v1.x, -v1.y),
                     MathUtils.acos(v2.z),
                     MathUtils.atan2(v2.x, v2.y)
@@ -1249,7 +1258,7 @@ public class Basis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[]{
+            return new float[] {
                     MathUtils.atan2(v1.y, v1.x),
                     MathUtils.acos(v2.z),
                     MathUtils.atan2(v2.y, -v2.x)
@@ -1534,7 +1543,7 @@ public class Basis {
      *
      * @param r rotation to apply the rotation to
      * @return a new rotation which is the composition of r by the inverse
-     * of the instance
+     *         of the instance
      */
     public Basis applyInverseTo(Basis r) {
         return new Basis(-r.q0 * q0 - (r.q1 * q1 + r.q2 * q2 + r.q3 * q3),
@@ -1578,7 +1587,7 @@ public class Basis {
      * @param r      rotation to apply the rotation to
      * @param output the rotation to store the result in
      * @return a new rotation which is the composition of r by the inverse
-     * of the instance
+     *         of the instance
      */
     public void applyInverseTo(Basis r, Basis output) {
         output.set(-r.q0 * q0 - (r.q1 * q1 + r.q2 * q2 + r.q3 * q3),
@@ -1596,7 +1605,7 @@ public class Basis {
     }
 
     public void set(float q0, float q1, float q2, float q3,
-                    boolean needsNormalization) {
+            boolean needsNormalization) {
 
         this.q0 = q0;
         this.q1 = q1;
@@ -1716,7 +1725,8 @@ public class Basis {
      *                  correction is below this threshold)
      * @return an orthogonal matrix close to m
      * @throws Precision.NotARotationMatrixException if the matrix cannot be
-     *                                               orthogonalized with the given threshold
+     *                                               orthogonalized with the given
+     *                                               threshold
      *                                               after 10 iterations
      */
     private float[][] orthogonalizeMatrix(float[][] m, float threshold) {

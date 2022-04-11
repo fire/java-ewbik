@@ -121,7 +121,7 @@ public class Kusudama implements Saveable {
      * {@inheritDoc}
      **/
     public ewbik.processing.singlePrecision.LimitCone createLimitConeForIndex(int insertAt, Vector3 newPoint,
-                                                                                  float radius) {
+            float radius) {
         return new LimitCone(Node3D.toPVector(newPoint), radius, this);
     }
 
@@ -355,7 +355,7 @@ public class Kusudama implements Saveable {
      * @param toSet
      */
     public void setAxesToSnapped(Node3D toSet,
-                                 Node3D limitingNode3D, float cosHalfAngleDampen) {
+            Node3D limitingNode3D, float cosHalfAngleDampen) {
         if (limitingNode3D != null) {
             if (orientationallyConstrained) {
                 setAxesToOrientationSnap(toSet, limitingNode3D, cosHalfAngleDampen);
@@ -367,8 +367,8 @@ public class Kusudama implements Saveable {
     }
 
     public void setAxesToReturnfulled(Node3D toSet,
-                                      Node3D limitingNode3D, float cosHalfReturnfullness,
-                                      float angleReturnfullness) {
+            Node3D limitingNode3D, float cosHalfReturnfullness,
+            float angleReturnfullness) {
         if (limitingNode3D != null && painfullness > 0f) {
             if (orientationallyConstrained) {
                 Vector3 origin = toSet.calculatePosition();
@@ -437,7 +437,7 @@ public class Kusudama implements Saveable {
      * @param toSet
      */
     public void setAxesToOrientationSnap(Node3D toSet,
-                                         Node3D limitingNode3D, float cosHalfAngleDampen) {
+            Node3D limitingNode3D, float cosHalfAngleDampen) {
         float[] inBounds = { 1f };
         limitingNode3D.updateGlobal();
         boneRay.p1().set(limitingNode3D.calculatePosition());
@@ -455,7 +455,7 @@ public class Kusudama implements Saveable {
     }
 
     public boolean isInOrientationLimits(Node3D globalNode3D,
-                                         Node3D limitingNode3D) {
+            Node3D limitingNode3D) {
         float[] inBounds = { 1f };
         Vector3 inLimits = this.pointInLimits(limitingNode3D.getLocalOf(globalNode3D.calculateY().p2()), inBounds);
         return inBounds[0] != -1l;
@@ -494,7 +494,7 @@ public class Kusudama implements Saveable {
      *         is already in twist limits)
      */
     public float snapToTwistLimits(Node3D toSet,
-                                   Node3D limitingNode3D) {
+            Node3D limitingNode3D) {
 
         if (!axiallyConstrained)
             return 0f;
@@ -524,7 +524,7 @@ public class Kusudama implements Saveable {
     }
 
     public float angleToTwistCenter(Node3D toSet,
-                                    Node3D limitingNode3D) {
+            Node3D limitingNode3D) {
 
         if (!axiallyConstrained)
             return 0f;
@@ -541,7 +541,7 @@ public class Kusudama implements Saveable {
     }
 
     public boolean inTwistLimits(Node3D boneNode3D,
-                                 Node3D limitingNode3D) {
+            Node3D limitingNode3D) {
 
         limitingNode3D.updateGlobal();
         Quaternion alignRot = limitingNode3D.getGlobalMBasis().getInverseRotation()

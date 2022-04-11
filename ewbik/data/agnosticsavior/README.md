@@ -22,4 +22,4 @@ class. This library is for situations where you'd prefer not to).
 To every class you want to save, implement the \`Saveable\` interface offered by this library. To each class
 implementing the \`Saveable\` interface, add the following method
 
-``` @Override makeSaveable(Savemanager s) { someObjectThisDependsOn.makeSaveable(s); someOtherObjectThisDependsOn.makeSaveable(s); anotherObjectThisDependsOn.makeSaveable(s); s.addToSaveState(this); } ```
+`@Override makeSaveable(Savemanager s) { someObjectThisDependsOn.makeSaveable(s); someOtherObjectThisDependsOn.makeSaveable(s); anotherObjectThisDependsOn.makeSaveable(s); s.addToSaveState(this); }`

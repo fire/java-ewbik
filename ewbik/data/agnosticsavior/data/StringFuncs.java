@@ -2582,7 +2582,7 @@ public class StringFuncs implements Constants {
      * @see StringFuncs#subset(boolean[], int, int)
      */
     static final public boolean[] splice(boolean[] list,
-                                         boolean value, int index) {
+            boolean value, int index) {
         boolean[] outgoing = new boolean[list.length + 1];
         System.arraycopy(list, 0, outgoing, 0, index);
         outgoing[index] = value;
@@ -2592,7 +2592,7 @@ public class StringFuncs implements Constants {
     }
 
     static final public boolean[] splice(boolean[] list,
-                                         boolean[] value, int index) {
+            boolean[] value, int index) {
         boolean[] outgoing = new boolean[list.length + value.length];
         System.arraycopy(list, 0, outgoing, 0, index);
         System.arraycopy(value, 0, outgoing, index, value.length);
@@ -2602,7 +2602,7 @@ public class StringFuncs implements Constants {
     }
 
     static final public byte[] splice(byte[] list,
-                                      byte value, int index) {
+            byte value, int index) {
         byte[] outgoing = new byte[list.length + 1];
         System.arraycopy(list, 0, outgoing, 0, index);
         outgoing[index] = value;
@@ -2612,7 +2612,7 @@ public class StringFuncs implements Constants {
     }
 
     static final public byte[] splice(byte[] list,
-                                      byte[] value, int index) {
+            byte[] value, int index) {
         byte[] outgoing = new byte[list.length + value.length];
         System.arraycopy(list, 0, outgoing, 0, index);
         System.arraycopy(value, 0, outgoing, index, value.length);
@@ -2622,7 +2622,7 @@ public class StringFuncs implements Constants {
     }
 
     static final public char[] splice(char[] list,
-                                      char value, int index) {
+            char value, int index) {
         char[] outgoing = new char[list.length + 1];
         System.arraycopy(list, 0, outgoing, 0, index);
         outgoing[index] = value;
@@ -2632,7 +2632,7 @@ public class StringFuncs implements Constants {
     }
 
     static final public char[] splice(char[] list,
-                                      char[] value, int index) {
+            char[] value, int index) {
         char[] outgoing = new char[list.length + value.length];
         System.arraycopy(list, 0, outgoing, 0, index);
         System.arraycopy(value, 0, outgoing, index, value.length);
@@ -2642,7 +2642,7 @@ public class StringFuncs implements Constants {
     }
 
     static final public int[] splice(int[] list,
-                                     int value, int index) {
+            int value, int index) {
         int[] outgoing = new int[list.length + 1];
         System.arraycopy(list, 0, outgoing, 0, index);
         outgoing[index] = value;
@@ -2655,7 +2655,7 @@ public class StringFuncs implements Constants {
     // (expand() is also functionally equivalent)
 
     static final public int[] splice(int[] list,
-                                     int[] value, int index) {
+            int[] value, int index) {
         int[] outgoing = new int[list.length + value.length];
         System.arraycopy(list, 0, outgoing, 0, index);
         System.arraycopy(value, 0, outgoing, index, value.length);
@@ -2665,7 +2665,7 @@ public class StringFuncs implements Constants {
     }
 
     static final public float[] splice(float[] list,
-                                       float value, int index) {
+            float value, int index) {
         float[] outgoing = new float[list.length + 1];
         System.arraycopy(list, 0, outgoing, 0, index);
         outgoing[index] = value;
@@ -2675,7 +2675,7 @@ public class StringFuncs implements Constants {
     }
 
     static final public float[] splice(float[] list,
-                                       float[] value, int index) {
+            float[] value, int index) {
         float[] outgoing = new float[list.length + value.length];
         System.arraycopy(list, 0, outgoing, 0, index);
         System.arraycopy(value, 0, outgoing, index, value.length);
@@ -2685,7 +2685,7 @@ public class StringFuncs implements Constants {
     }
 
     static final public String[] splice(String[] list,
-                                        String value, int index) {
+            String value, int index) {
         String[] outgoing = new String[list.length + 1];
         System.arraycopy(list, 0, outgoing, 0, index);
         outgoing[index] = value;
@@ -2695,7 +2695,7 @@ public class StringFuncs implements Constants {
     }
 
     static final public String[] splice(String[] list,
-                                        String[] value, int index) {
+            String[] value, int index) {
         String[] outgoing = new String[list.length + value.length];
         System.arraycopy(list, 0, outgoing, 0, index);
         System.arraycopy(value, 0, outgoing, index, value.length);
