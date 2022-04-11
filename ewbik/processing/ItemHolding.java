@@ -2,8 +2,6 @@ package processing;
 
 import ik.Bone;
 import ik.IKPin;
-import processing.Node3D;
-import processing.Skeleton3D;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
@@ -20,9 +18,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.cedarsoftware.util.io.JsonReader;
-import com.cedarsoftware.util.io.JsonWriter;
 
 import ewbik.processing.singlePrecision.Kusudama;
 import processing.core.PConstants;
@@ -352,39 +347,10 @@ public class ItemHolding extends PApplet {
             cubeMode = !cubeMode;
         } else if (key == 's') {
             println("Saving");
-            Map args = new HashMap();
-            args.put(JsonWriter.PRETTY_PRINT, true);
-            args.put(JsonWriter.SKIP_NULL_FIELDS, true);
-            String json = JsonWriter.objectToJson(loadedArmature, args);
-            BufferedWriter writer = null;
-            try {
-                writer = new BufferedWriter(new FileWriter("Humanoid_Holding_Item.json"));
-                writer.write(json);
-
-            } catch (IOException e) {
-            } finally {
-                try {
-                    if (writer != null)
-                        writer.close();
-                } catch (IOException e) {
-                }
-            }
+            ewbik.data.EWBIKSaver newSaver = new ewbik.data.EWBIKSaver();
+            newSaver.saveArmature(loadedArmature, "Humanoid_Holding_Item.json");
         } else if (key == 'l') {
-
-            try(BufferedReader br = new BufferedReader(new FileReader("Humanoid_Holding_Item.json"))) {
-                StringBuilder sb = new StringBuilder();
-                String line = br.readLine();
-            
-                while (line != null) {
-                    sb.append(line);
-                    sb.append(System.lineSeparator());
-                    line = br.readLine();
-                }
-                String json = sb.toString();
-                loadedArmature = (Skeleton3D) JsonReader.jsonToJava(json);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            loadedArmature = ewbik.processing.IO.LoadArmature("Humanoid_Holding_Item.json");
             loadedArmature.updateBonechains();
             loadedArmature.IKSolver(loadedArmature.getRootBone(), 0.5f, 20, 1);
 

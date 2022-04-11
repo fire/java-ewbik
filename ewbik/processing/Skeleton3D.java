@@ -79,9 +79,9 @@ public class Skeleton3D implements Saveable {
             String inputTag,
             float boneHeight,
             Bone.frameType coordinateType) {
-        this.rootBone = new Bone(armature,
-                new Vector3(tipHeading.x, tipHeading.y, tipHeading.z),
-                new Vector3(rollHeading.x, rollHeading.y, rollHeading.z),
+        this.rootBone = new Bone(armature.getRootBone(),
+                new PVector(tipHeading.x, tipHeading.y, tipHeading.z),
+                new PVector(rollHeading.x, rollHeading.y, rollHeading.z),
                 inputTag,
                 boneHeight,
                 coordinateType);

@@ -452,7 +452,7 @@ public class Node3D implements ewbik.asj.Saveable {
         if (this.dirty) {
             if (this.areGlobal) {
                 globalMBasis.adoptValues(this.localMBasis);
-            } else if (getParentAxes() != null){
+            } else {
                 getParentAxes().updateGlobal();
                 getParentAxes().getGlobalMBasis().setToGlobalOf(this.localMBasis, this.globalMBasis);
             }

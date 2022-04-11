@@ -16,7 +16,6 @@ application {
 
 dependencies {
     implementation 'com.github.micycle1:processing-core-4:4.0b6c'
-    implementation 'com.cedarsoftware:json-io:4.13.0'
 }
 
 version = '0.0.1-' + new Date().format("yyyyMMdd'T'HHmmss'Z'", TimeZone.getTimeZone("UTC")) 

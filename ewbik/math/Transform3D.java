@@ -125,18 +125,6 @@ public class Transform3D {
 
     }
 
-    public Transform3D(Quaternion rotation, Quaternion inverseRotation, Vector3 translate, Vector3 xBase, Vector3 yBase, Vector3 zBase, Ray3D xRay, Ray3D yRay, Ray3D zRay) {
-        this.rotation = rotation;
-        this.inverseRotation = inverseRotation;
-        this.translate = translate;
-        this.xBase = xBase;
-        this.yBase = yBase;
-        this.zBase = zBase;
-        this.xRay = xRay;
-        this.yRay = yRay;
-        this.zRay = zRay;
-    }
-
     public ewbik.math.Transform3D copy() {
         return new ewbik.math.Transform3D(this);
     }
