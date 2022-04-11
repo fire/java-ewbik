@@ -24,8 +24,6 @@ package ewbik.math;
  * @author Nathan Sweet
  */
 public final class MathUtils {
-    static public final double nanoToSec = 1 / 1000000000f;
-
     static public final float FLOAT_ROUNDING_ERROR = 0.000001f; // 32 bits, 23 of which may hold the significand for a
                                                                 // precision of 6 digits
     static public final double DOUBLE_ROUNDING_ERROR = 0.000000000000001d; // 64, 52 of which represent the significand
@@ -33,24 +31,14 @@ public final class MathUtils {
     static public final float PI = (float) Math.PI;
     static public final float PI2 = PI * 2f;
     static public final float HALF_PI = (float) (Math.PI / 2d);
-    static public final float E = (float) Math.E;
     /**
      * multiply by this to convert from radians to degrees
      */
     static public final float radiansToDegrees = 180f / PI;
-    static public final float radDeg = radiansToDegrees;
     /**
      * multiply by this to convert from degrees to radians
      */
     static public final float degreesToRadians = PI / 180f;
-    static public final float degRad = degreesToRadians;
-    static private final float degFull = 360;
-    static private final int SIN_BITS = 9; // Adjust for accuracy (eats memory).
-    static private final int SIN_MASK = ~(-1 << SIN_BITS);
-    static private final int SIN_COUNT = SIN_MASK + 1;
-    static private final float degToIndex = SIN_COUNT / degFull;
-    static private final float radFull = PI * 2;
-    static private final float radToIndex = SIN_COUNT / radFull;
     static private final int BIG_ENOUGH_INT = 16 * 1024;
     static private final double BIG_ENOUGH_FLOOR = BIG_ENOUGH_INT;
     static private final double CEIL = 0.9999999;
@@ -70,12 +58,6 @@ public final class MathUtils {
         return (float) Math.cos(radians);
     }
 
-    /**
-     * Returns the cosine in radians from a lookup table.
-     */
-    static public float cosDeg(float degrees) {
-        return Sin.table[(int) ((degrees + 90) * degToIndex) & SIN_MASK];
-    }
 
     /**
      * Returns atan2 in radians, faster but less accurate than Math.atan2. Average
@@ -100,11 +82,6 @@ public final class MathUtils {
         atan = PI / 2 - z / (z * z + 0.28f);
         return y < 0f ? atan - PI : atan;
     }
-
-    public static float lerp(float a, float b, float t) {
-        return (1 - t) * a + t * b;
-    }
-
     /**
      * Returns the next power of two. Returns the specified value if the value is
      * already a power of two.
@@ -344,23 +321,5 @@ public final class MathUtils {
 
     public static float min(float a, float b) {
         return a < b ? a : b;
-    }
-
-    public static float invSqrt(float x) {
-        float xhalf = 0.5f * x;
-        int i = Float.floatToIntBits(x);
-        i = 0x5f3759df - (i >> 1);
-        x = Float.intBitsToFloat(i);
-        x *= (1.5f - xhalf * x * x);
-        return x;
-    }
-
-    static private class Sin {
-        static final float[] table = new float[SIN_COUNT];
-
-        static {
-            for (int i = 0; i < SIN_COUNT; i++)
-                table[i] = (float) Math.sin((float) (i) / SIN_COUNT * radFull);
-        }
     }
 }
