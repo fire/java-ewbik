@@ -72,11 +72,12 @@ class UI {
     }
 
     public void drawPins(PGraphics pg, IKPin activePin,
-            float zoomScalar, float drawSize) {
+            float zoomScalar, float drawSize,
+            boolean cubeMode, Node3D cubeNode3D) {
 
         if (activePin != null) {
             Node3D ellipseAx;
-            ellipseAx = activePin.getAxes();
+            ellipseAx = cubeMode ? cubeNode3D : activePin.getAxes();
             PVector pinLoc = screenOf(pg, ellipseAx.origin(), zoomScalar);
             PVector pinX = screenOf(pg,
                     Node3D.toPVector(ellipseAx.calculateX().getScaledTo(drawSize)),
@@ -110,16 +111,18 @@ class UI {
                     zoomScalar);
             pg.stroke(255, 255, 255, 150);
 
-            float xPriority = activePin.getXPriority();
-            float yPriority = activePin.getYPriority();
-            float zPriority = activePin.getZPriority();
-            drawPinEffectorHints(
-                    pg,
-                    pinLoc,
-                    pinX, pinY, pinZ,
-                    effectorO,
-                    effectorX, effectorY, effectorZ,
-                    xPriority, yPriority, zPriority, totalPriorities);
+            if (!cubeMode) {
+                float xPriority = activePin.getXPriority();
+                float yPriority = activePin.getYPriority();
+                float zPriority = activePin.getZPriority();
+                drawPinEffectorHints(
+                        pg,
+                        pinLoc,
+                        pinX, pinY, pinZ,
+                        effectorO,
+                        effectorX, effectorY, effectorZ,
+                        xPriority, yPriority, zPriority, totalPriorities);
+            }
         }
     }
 
@@ -156,13 +159,14 @@ class UI {
     }
 
     public void drawScene(float zoomScalar, float drawSize,
+            Runnable additionalDraw,
             Skeleton3D armature,
             String usageInstructions,
-            IKPin activePin) {
+            IKPin activePin, Node3D cubeNode3D, boolean cubeEnabled) {
         currentDrawSurface = display;
         display.beginDraw();
         setSceneAndCamera(display, zoomScalar);
-        drawPass(drawSize, null, display, armature);
+        drawPass(drawSize, additionalDraw, display, armature);
         display.endDraw();
 
         currentDrawSurface = pa.g;
@@ -171,13 +175,13 @@ class UI {
         pa.imageMode(PConstants.CENTER);
         pa.image(display, 0, 0, orthoWidth, orthoHeight);
         pa.resetMatrix();
-        drawPins(pa.g, activePin, zoomScalar, drawSize);
+        drawPins(pa.g, activePin, zoomScalar, drawSize, cubeEnabled, cubeNode3D);
         pa.resetMatrix();
         float cx = pa.width;
         float cy = pa.height;
         pa.ortho(-cx / 2f, cx / 2f, -cy / 2f, cy / 2f, -1000, 1000);
         drawInstructions(pa.g, usageInstructions);
-        drawPins(pa.g, activePin, drawSize, zoomScalar);
+        drawPins(pa.g, activePin, drawSize, zoomScalar, cubeEnabled, cubeNode3D);
         drawInstructions(pa.g, usageInstructions);
 
     }
@@ -226,8 +230,9 @@ public class ItemHolding extends PApplet {
     ArrayList<IKPin> pins = new ArrayList<>();
     UI ui;
     IKPin activePin;
-    Node3D worldNode3D;
+    Node3D worldNode3D, cubeNode3D;
     float zoomScalar = 200f / height;
+    boolean cubeMode = true;
 
     public static void main(String[] args) {
         PApplet.main("processing.ItemHolding");
@@ -237,8 +242,8 @@ public class ItemHolding extends PApplet {
         size(1200, 900, P3D);
     }
 
-    public void setupArmature() {
-
+    public void setup() {
+        ui = new UI(this);
         loadedArmature = ewbik.processing.IO.LoadArmature("Humanoid_Holding_Item.json");
         worldNode3D = loadedArmature.localAxes().getParentAxes();
         if (worldNode3D == null) {
@@ -246,37 +251,76 @@ public class ItemHolding extends PApplet {
             loadedArmature.localAxes().setParent(worldNode3D);
         }
         updatePinList();
+        cubeNode3D = new Node3D();
+
         activePin = pins.get(pins.size() - 1);
 
         loadedArmature.setPerformanceMonitor(true); // print performance stats
 
         // Tell the Bone class that all bones should draw their kusudamas.
         Bone.setDrawKusudamas(false);
-    }
 
-    public void setup() {
-        ui = new UI(this);
-        setupArmature();
+        /**
+         * The armature we're loading is already posed such that its hands touch
+         * a box. So all we need to do is , first
+         * move our box into the appropriate position
+         */
+        cubeNode3D.translateTo(new PVector(-13, -27, 32));
+        cubeNode3D.setRelativeToParent(worldNode3D);
+        /**
+         * and then specify that the transformations of the left hand and right hand
+         * pins
+         * should be computed relative to the axes of the cube we're drawing,
+         * Thereby, any time we transform the parent cube's axes, the pins will follow.
+         */
+        loadedArmature.getBoneName("left hand").getIKPin().getAxes().setParent(cubeNode3D);
+        loadedArmature.getBoneName("right hand").getIKPin().getAxes().setParent(cubeNode3D);
+
     }
 
     public void draw() {
         if (mousePressed) {
-            activePin.translateTo(new PVector(ui.mouse.x, ui.mouse.y, activePin.getLocation_().z));
+            if (cubeMode) {
+                cubeNode3D.translateTo(new PVector(ui.mouse.x, ui.mouse.y, cubeNode3D.calculatePosition().z));
+            } else {
+                activePin.translateTo(new PVector(ui.mouse.x, ui.mouse.y, activePin.getLocation_().z));
+            }
             loadedArmature.IKSolver(loadedArmature.getRootBone());
         } else {
             worldNode3D.rotateAboutY(0.0f, true);
         }
 
-        String additionalInstructions = "\n HIT THE S KEY TO SAVE."
+        String additionalInstructions = "Hit the 'C' key to select or deselect the cube";
+        additionalInstructions += "\n HIT THE S KEY TO SAVE."
                 + "\n HIT THE L KEY TO LOAD THE CURRENT ARMATURE CONFIGURATION.";
         // Decrease the numerator to increase the zoom.
         zoomScalar = 200f / height;
-        ui.drawScene(zoomScalar, 12f, loadedArmature, additionalInstructions, activePin);
+        ui.drawScene(zoomScalar, 12f, () -> drawHoldCube(), loadedArmature, additionalInstructions, activePin,
+                cubeNode3D,
+                cubeMode);
+    }
+
+    public void drawHoldCube() {
+        PGraphics currentDisplay = ui.getCurrentDrawSurface();
+        if (ui.display == currentDisplay) {
+            currentDisplay.fill(60, 60, 60);
+            currentDisplay.strokeWeight(1);
+            currentDisplay.stroke(255);
+        } else {
+            currentDisplay.fill(0, 0, 0, 255);
+            currentDisplay.emissive(0);
+            currentDisplay.noStroke();
+        }
+        currentDisplay.pushMatrix();
+        currentDisplay.applyMatrix(cubeNode3D.getGlobalPMatrix());
+        currentDisplay.box(40, 20, 20);
+        currentDisplay.popMatrix();
     }
 
     public void mouseWheel(MouseEvent event) {
         float e = event.getCount();
-        Node3D node3D = activePin.getAxes();
+        Node3D node3D = cubeMode ? cubeNode3D
+                : activePin.getAxes();
         if (event.isShiftDown()) {
             node3D.rotateAboutZ(e / TAU, true);
         } else if (event.isControlDown()) {
@@ -290,19 +334,27 @@ public class ItemHolding extends PApplet {
     public void keyPressed() {
         if (key == CODED) {
             if (keyCode == DOWN) {
+                cubeMode = false;
                 int currentPinIndex = (pins.indexOf(activePin) + 1) % pins.size();
                 activePin = pins.get(currentPinIndex);
             } else if (keyCode == UP) {
+                cubeMode = false;
                 int idx = pins.indexOf(activePin);
                 int currentPinIndex = (pins.size() - 1) - (((pins.size() - 1) - (idx - 1)) % pins.size());
                 activePin = pins.get(currentPinIndex);
             }
+        } else if (key == 'c') {
+            cubeMode = !cubeMode;
         } else if (key == 's') {
             println("Saving");
             ewbik.data.EWBIKSaver newSaver = new ewbik.data.EWBIKSaver();
             newSaver.saveArmature(loadedArmature, "Humanoid_Holding_Item.json");
         } else if (key == 'l') {
-            setupArmature();
+            loadedArmature = ewbik.processing.IO.LoadArmature("Humanoid_Holding_Item.json");
+            loadedArmature.updateBonechains();
+            loadedArmature.IKSolver(loadedArmature.getRootBone(), 0.5f, 20, 1);
+
+            Bone.setDrawKusudamas(true);
         }
     }
 
