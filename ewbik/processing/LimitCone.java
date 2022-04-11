@@ -105,8 +105,8 @@ public class LimitCone implements Saveable {
      *         rectified position
      *         if the point was out of bounds.
      */
-    public <V extends Vector3> Vector3 getClosestCollision(ewbik.processing.singlePrecision.LimitCone next,
-                                                           V input) {
+    public Vector3 getClosestCollision(ewbik.processing.singlePrecision.LimitCone next,
+                                                           Vector3 input) {
         Vector3 result = getOnGreatTangentTriangle(next, input);
         if (result == null) {
             boolean[] inBounds = { false };
@@ -115,8 +115,8 @@ public class LimitCone implements Saveable {
         return result;
     }
 
-    public <V extends Vector3> Vector3 getClosestPathPoint(ewbik.processing.singlePrecision.LimitCone next,
-                                                           V input) {
+    public Vector3 getClosestPathPoint(ewbik.processing.singlePrecision.LimitCone next,
+                                                           Vector3 input) {
         Vector3 result = getOnPathSequence(next, input);
         if (result == null) {
             result = closestCone(next, input);
@@ -193,14 +193,14 @@ public class LimitCone implements Saveable {
         }
     }
 
-    public <V extends Vector3> Vector3 closestCone(ewbik.processing.singlePrecision.LimitCone next, V input) {
+    public Vector3 closestCone(ewbik.processing.singlePrecision.LimitCone next, Vector3 input) {
         if (input.dot(controlPoint) > input.dot(next.controlPoint))
             return this.controlPoint.copy();
         else
             return next.controlPoint.copy();
     }
 
-    public <V extends Vector3> Vector3 getOnPathSequence(ewbik.processing.singlePrecision.LimitCone next, V input) {
+    public Vector3 getOnPathSequence(ewbik.processing.singlePrecision.LimitCone next, Vector3 input) {
         Vector3 c1xc2 = controlPoint.crossCopy(next.controlPoint);
         float c1c2fir = input.dot(c1xc2);
         if (c1c2fir < 0.0) {
@@ -229,8 +229,8 @@ public class LimitCone implements Saveable {
 
     }
 
-    public <V extends Vector3> Vector3 getOnGreatTangentTriangle(ewbik.processing.singlePrecision.LimitCone next,
-                                                                 V input) {
+    public Vector3 getOnGreatTangentTriangle(ewbik.processing.singlePrecision.LimitCone next,
+                                                                 Vector3 input) {
         Vector3 c1xc2 = controlPoint.crossCopy(next.controlPoint);
         float c1c2fir = input.dot(c1xc2);
         if (c1c2fir < 0.0) {
@@ -273,8 +273,8 @@ public class LimitCone implements Saveable {
      * @param inBounds
      * @return
      */
-    public <V extends Vector3> Vector3 closestPointOnClosestCone(ewbik.processing.singlePrecision.LimitCone next,
-                                                                 V input,
+    public Vector3 closestPointOnClosestCone(ewbik.processing.singlePrecision.LimitCone next,
+                                                                 Vector3 input,
                                                                  boolean[] inBounds) {
         Vector3 closestToFirst = this.closestToCone(input, inBounds);
         if (inBounds[0]) {
@@ -303,7 +303,7 @@ public class LimitCone implements Saveable {
      * @param inBounds
      * @return
      */
-    public <V extends Vector3> Vector3 closestToCone(V input, boolean[] inBounds) {
+    public Vector3 closestToCone(Vector3 input, boolean[] inBounds) {
         float controlPointDotProduct = input.dot(this.getControlPoint());
         float radiusCosine = this.getRadiusCosine();
         if (controlPointDotProduct > radiusCosine) {

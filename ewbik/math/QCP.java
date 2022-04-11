@@ -119,8 +119,8 @@ public class QCP {
         this.eval_prec = eval_prec;
     }
 
-    public static <V extends Vector3> void translate(V trans, V[] x) {
-        for (V p : x) {
+    public static void translate(Vector3 trans, Vector3[] x) {
+        for (Vector3 p : x) {
             p.add(trans);
         }
     }
@@ -162,7 +162,7 @@ public class QCP {
      * @param moved  3f points of coordinate set for superposition
      * @param weight a weight in the inclusive range [0,1] for each point
      */
-    public <V extends Vector3> void set(V[] moved, V[] target, float[] weight, boolean translate) {
+    public void set(Vector3[] moved, Vector3[] target, float[] weight, boolean translate) {
         this.target = target;
         this.moved = moved;
         this.weight = weight;
@@ -212,7 +212,7 @@ public class QCP {
      * @param weight array of weigths for each equivalent point position
      * @return
      */
-    public <V extends Vector3> Quaternion weightedSuperpose(V[] moved, V[] target, float[] weight, boolean translate) {
+    public Quaternion weightedSuperpose(Vector3[] moved, Vector3[] target, float[] weight, boolean translate) {
         set(moved, target, weight, translate);
         Quaternion result = getRotation();
         return result;
@@ -236,7 +236,7 @@ public class QCP {
      * @param x 3f points of reference coordinate set
      * @param y 3f points of coordinate set for superposition
      */
-    private <V extends Vector3> void calcRmsd(V[] x, V[] y) {
+    private void calcRmsd(Vector3[] x, Vector3[] y) {
         // QCP doesn't handle alignment of single values, so if we only have one point
         // we just compute regular distance.
         if (x.length == 1) {
@@ -260,7 +260,7 @@ public class QCP {
      * @param coords2
      * @return
      */
-    private <V extends Vector3> void innerProduct(V[] coords1, V[] coords2) {
+    private void innerProduct(Vector3[] coords1, Vector3[] coords2) {
         float x1, x2, y1, y2, z1, z2;
         float g1 = 0f, g2 = 0f;
 
@@ -476,7 +476,7 @@ public class QCP {
         return getRmsd();
     }
 
-    public <V extends Vector3> V moveToWeightedCenter(V[] toCenter, float[] weight, V center) {
+    public Vector3 moveToWeightedCenter(Vector3[] toCenter, float[] weight, Vector3 center) {
 
         if (weight != null) {
             for (int i = 0; i < toCenter.length; i++) {

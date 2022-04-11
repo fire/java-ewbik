@@ -1652,7 +1652,7 @@ public class Basis {
                 q3 / norm);
     }
 
-    public <V extends Vector3> void set(V u, V v) {
+    public void set(Vector3 u, Vector3 v) {
 
         float normProduct = u.mag() * v.mag();
         if (normProduct == 0) {
@@ -1668,7 +1668,7 @@ public class Basis {
         if (dot < ((2.0e-15 - 1.0f) * normProduct)) {
             // special case u = -v: we select a PI angle rotation around
             // an arbitrary vector orthogonal to u
-            V w = (V) u.getOrthogonal();
+            Vector3 w = (Vector3) u.getOrthogonal();
             q0 = 0.0f;
             q1 = -w.x;
             q2 = -w.y;
@@ -1678,7 +1678,7 @@ public class Basis {
             // the shortest possible rotation: axis orthogonal to this plane
             q0 = MathUtils.sqrt(0.5f * (1.0f + dot / normProduct));
             float coeff = 1.0f / (2.0f * q0 * normProduct);
-            V q = (V) v.crossCopy(u);
+            Vector3 q = (Vector3) v.crossCopy(u);
             q1 = coeff * q.x;
             q2 = coeff * q.y;
             q3 = coeff * q.z;
@@ -1686,7 +1686,7 @@ public class Basis {
 
     }
 
-    public <V extends Vector3> void set(V axis, float angle) {
+    public void set(Vector3 axis, float angle) {
 
         float norm = axis.mag();
         if (norm == 0) {

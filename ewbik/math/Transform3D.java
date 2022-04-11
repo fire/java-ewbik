@@ -81,7 +81,7 @@ public class Transform3D {
      * @param y      basis vector direction
      * @param z      basis vector direction
      */
-    public <V extends Vector3> Transform3D(V origin, V x, V y, V z) {
+    public Transform3D(Vector3 origin, Vector3 x, Vector3 y, Vector3 z) {
         this.translate = origin.copy();
         xRay = new Ray3D(origin.copy(), origin.copy());
         yRay = new Ray3D(origin.copy(), origin.copy());
@@ -129,7 +129,7 @@ public class Transform3D {
         return new ewbik.math.Transform3D(this);
     }
 
-    private <V extends Vector3> void set(V x, V y, V z) {
+    private void set(Vector3 x, Vector3 y, Vector3 z) {
         xBase = translate.copy();
         yBase = translate.copy();
         zBase = translate.copy();
@@ -243,7 +243,7 @@ public class Transform3D {
      * but extending (affine) classes can override this to represent the direction
      * and magnitude of the x axis prior to rotation.
      */
-    public <V extends Vector3> void setToShearXBase(V vec) {
+    public void setToShearXBase(Vector3 vec) {
         vec.set(xBase);
     }
 
@@ -253,7 +253,7 @@ public class Transform3D {
      * but extending (affine) classes can override this to represent the direction
      * and magnitude of the y axis prior to rotation.
      */
-    public <V extends Vector3> void setToShearYBase(V vec) {
+    public void setToShearYBase(Vector3 vec) {
         vec.set(yBase);
     }
 
@@ -263,7 +263,7 @@ public class Transform3D {
      * but extending (affine) classes can override this to represent the direction
      * and magnitude of the z axis prior to rotation.
      */
-    public <V extends Vector3> void setToShearZBase(V vec) {
+    public void setToShearZBase(Vector3 vec) {
         vec.set(zBase);
     }
 
@@ -280,7 +280,7 @@ public class Transform3D {
         globalOutput.refreshPrecomputed();
     }
 
-    public <V extends Vector3> void setToGlobalOf(V input, V output) {
+    public void setToGlobalOf(Vector3 input, Vector3 output) {
         try {
             rotation.applyTo(input, output);
             output.add(this.translate);
@@ -289,14 +289,14 @@ public class Transform3D {
         }
     }
 
-    public <V extends Vector3> void translateBy(V transBy) {
+    public void translateBy(Vector3 transBy) {
         this.translate.x += transBy.x;
         this.translate.y += transBy.y;
         this.translate.z += transBy.z;
         updateRays();
     }
 
-    public <V extends Vector3> void translateTo(V newOrigin) {
+    public void translateTo(Vector3 newOrigin) {
         this.translate.x = newOrigin.x;
         this.translate.y = newOrigin.y;
         this.translate.z = newOrigin.z;

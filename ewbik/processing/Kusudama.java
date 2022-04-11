@@ -424,7 +424,7 @@ public class Kusudama implements Saveable {
         }
     }
 
-    public <V extends Vector3> boolean isInLimits_(V globalPoint) {
+    public boolean isInLimits_(Vector3 globalPoint) {
         float[] inBounds = { 1f };
         Vector3 inLimits = this.pointInLimits(limitingNode3D.getLocalOf(globalPoint), inBounds);
         return inBounds[0] > 0f;
@@ -597,7 +597,7 @@ public class Kusudama implements Saveable {
      * @return the original point, if it's in limits, or the closest point which is
      *         in limits.
      */
-    public <V extends Vector3> Vector3 pointInLimits(V inPoint, float[] inBounds) {
+    public Vector3 pointInLimits(Vector3 inPoint, float[] inBounds) {
 
         Vector3 point = inPoint.copy();
         point.normalize();
@@ -645,7 +645,7 @@ public class Kusudama implements Saveable {
         }
     }
 
-    public <V extends Vector3> Vector3 pointOnPathSequence(V inPoint,
+    public Vector3 pointOnPathSequence(Vector3 inPoint,
             Node3D limitingNode3D) {
         float closestPointDot = 0f;
         Vector3 point = limitingNode3D.getLocalOf(inPoint);

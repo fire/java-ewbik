@@ -436,7 +436,7 @@ public class Node3D implements ewbik.asj.Saveable {
         return (B) newBasis;
     }
 
-    public <V extends Vector3> void createTempVars(V type) {
+    public void createTempVars(Vector3 type) {
         workingVector = type.copy();
         tempOrigin = type.copy();
     }
@@ -582,8 +582,8 @@ public class Node3D implements ewbik.asj.Saveable {
      * @param in
      * @return
      */
-    public <V extends Vector3> V getGlobalOf(V in) {
-        V result = (V) in.copy();
+    public Vector3 getGlobalOf(Vector3 in) {
+        Vector3 result = (Vector3) in.copy();
         setToGlobalOf(in, result);
         return result;
     }
@@ -607,7 +607,7 @@ public class Node3D implements ewbik.asj.Saveable {
      *
      * @param in
      */
-    public <V extends Vector3> void setToGlobalOf(V input, V output) {
+    public void setToGlobalOf(Vector3 input, Vector3 output) {
         this.updateGlobal();
         getGlobalMBasis().setToGlobalOf(input, output);
     }
@@ -641,9 +641,9 @@ public class Node3D implements ewbik.asj.Saveable {
      * @return a reference to the @param in object.
      */
 
-    public <V extends Vector3> V setToLocalOf(V in) {
+    public Vector3 setToLocalOf(Vector3 in) {
         this.updateGlobal();
-        V result = (V) in.copy();
+        Vector3 result = (Vector3) in.copy();
         this.getGlobalMBasis().setToLocalOf(in, result);
         in.set(result);
         return result;
@@ -656,7 +656,7 @@ public class Node3D implements ewbik.asj.Saveable {
      * @param in
      */
 
-    public <V extends Vector3> void setToLocalOf(V in, V out) {
+    public void setToLocalOf(Vector3 in, Vector3 out) {
         this.updateGlobal();
         this.getGlobalMBasis().setToLocalOf(in, out);
     }
@@ -682,7 +682,7 @@ public class Node3D implements ewbik.asj.Saveable {
         return new Ray3D(this.getLocalOf(in.p1()), this.getLocalOf(in.p2()));
     }
 
-    public <V extends Vector3> void translateByLocal(V translate) {
+    public void translateByLocal(Vector3 translate) {
         this.updateGlobal();
         getLocalMBasis().translateBy(translate);
         this.markDirty();

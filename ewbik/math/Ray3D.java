@@ -65,7 +65,7 @@ public class Ray3D implements CanLoad {
      * @return a sgRay along the line of intersection of these two planes, or null
      *         if inputs are coplanar
      */
-    public static <V extends Vector3> ewbik.math.Ray3D planePlaneIntersect(V a1, V a2, V a3, V b1, V b2, V b3) {
+    public static ewbik.math.Ray3D planePlaneIntersect(Vector3 a1, Vector3 a2, Vector3 a3, Vector3 b1, Vector3 b2, Vector3 b3) {
         ewbik.math.Ray3D a1a2 = new ewbik.math.Ray3D(a1, a2);
         ewbik.math.Ray3D a1a3 = new ewbik.math.Ray3D(a1, a3);
         ewbik.math.Ray3D a2a3 = new ewbik.math.Ray3D(a2, a3);
@@ -98,7 +98,7 @@ public class Ray3D implements CanLoad {
         return (x1 - x2) * (y2 - y3) - (x2 - x3) * (y1 - y2);
     }
 
-    public <V extends Vector3> float distTo(V point) {
+    public float distTo(Vector3 point) {
 
         Vector3 inPoint = point.copy();
         inPoint.sub(this.p1);
@@ -115,7 +115,7 @@ public class Ray3D implements CanLoad {
      * @param point
      * @return
      */
-    public <V extends Vector3> float distToStrict(V point) {
+    public float distToStrict(Vector3 point) {
 
         Vector3 inPoint = point.copy();
         inPoint.sub(this.p1);
@@ -158,7 +158,7 @@ public class Ray3D implements CanLoad {
      * @param point
      * @return
      */
-    public <V extends Vector3> V closestPointTo(V point) {
+    public Vector3 closestPointTo(Vector3 point) {
 
         workingVector.set(point);
         workingVector.sub(this.p1);
@@ -169,13 +169,13 @@ public class Ray3D implements CanLoad {
         heading.normalize();
         float scale = workingVector.dot(heading);
 
-        return (V) this.getScaledTo(scale);
+        return (Vector3) this.getScaledTo(scale);
     }
 
-    public <V extends Vector3> Vector3 closestPointToStrict(V point) {
-        V inPoint = (V) point.copy();
+    public Vector3 closestPointToStrict(Vector3 point) {
+        Vector3 inPoint = (Vector3) point.copy();
         inPoint.sub(this.p1);
-        V heading = (V) this.heading();
+        Vector3 heading = (Vector3) this.heading();
         float scale = (inPoint.dot(heading) / (heading.mag() * inPoint.mag())) * (inPoint.mag() / heading.mag());
 
         if (scale <= 0)
@@ -219,7 +219,7 @@ public class Ray3D implements CanLoad {
         p2.set(p1);
     }
 
-    public <V extends Vector3> void heading(V newHead) {
+    public void heading(Vector3 newHead) {
         if (p2 == null)
             p2 = p1.copy();
         p2.set(p1);
@@ -513,7 +513,7 @@ public class Ray3D implements CanLoad {
         this.translateBy(transBy);
     }
 
-    public <V extends Vector3> void translateBy(V toAdd) {
+    public void translateBy(Vector3 toAdd) {
         p1.add(toAdd);
         p2.add(toAdd);
     }
@@ -727,12 +727,12 @@ public class Ray3D implements CanLoad {
      * @return the point where this ray intersects the plane specified by the
      *         triangle ta,tb,tc.
      */
-    public <V extends Vector3> Vector3 intersectsPlane(V ta, V tb, V tc) {
+    public Vector3 intersectsPlane(Vector3 ta, Vector3 tb, Vector3 tc) {
         float[] uvw = new float[3];
         return intersectsPlane(ta, tb, tc, uvw);
     }
 
-    public <V extends Vector3> Vector3 intersectsPlane(V ta, V tb, V tc, float[] uvw) {
+    public Vector3 intersectsPlane(Vector3 ta, Vector3 tb, Vector3 tc, float[] uvw) {
         if (tta == null) {
             tta = ta.copy();
             ttb = tb.copy();
@@ -746,7 +746,7 @@ public class Ray3D implements CanLoad {
         ttb.sub(p1);
         ttc.sub(p1);
 
-        Vector3 result = (V) planeIntersectTest(tta, ttb, ttc, uvw).copy();
+        Vector3 result = (Vector3) planeIntersectTest(tta, ttb, ttc, uvw).copy();
         return result.add(this.p1);
     }
 
@@ -770,13 +770,13 @@ public class Ray3D implements CanLoad {
      * @param tc     the third vertex of a triangle on the plane
      * @param result the variable in which to hold the result
      */
-    public <V extends Vector3> boolean intersectsTriangle(V ta, V tb, V tc, V result) {
+    public boolean intersectsTriangle(Vector3 ta, Vector3 tb, Vector3 tc, Vector3 result) {
         float[] uvw = new float[3];
         result.set(intersectsPlane(ta, tb, tc, uvw));
         return !Float.isNaN(uvw[0]) && !Float.isNaN(uvw[1]) && !Float.isNaN(uvw[2]) && !(uvw[0] < 0) && !(uvw[1] < 0) && !(uvw[2] < 0);
     }
 
-    private <V extends Vector3> V planeIntersectTest(V ta, V tb, V tc, float[] uvw) {
+    private Vector3 planeIntersectTest(Vector3 ta, Vector3 tb, Vector3 tc, float[] uvw) {
 
         if (u == null) {
             u = tb.copy();
@@ -809,7 +809,7 @@ public class Ray3D implements CanLoad {
         // float[] barycentric = new float[3];
         barycentric(ta, tb, tc, I, uvw);
 
-        return (V) I.copy();
+        return (Vector3) I.copy();
     }
 
     /*
@@ -827,7 +827,7 @@ public class Ray3D implements CanLoad {
      * 
      * @return number of intersections found;
      */
-    public <V extends Vector3> int intersectsSphere(V sphereCenter, float radius, V S1, V S2) {
+    public int intersectsSphere(Vector3 sphereCenter, float radius, Vector3 S1, Vector3 S2) {
         Vector3 tp1 = p1.subCopy(sphereCenter);
         Vector3 tp2 = p2.subCopy(sphereCenter);
         int result = intersectsSphere(tp1, tp2, radius, S1, S2);
@@ -849,13 +849,13 @@ public class Ray3D implements CanLoad {
      * 
      * @return number of intersections found;
      */
-    public <V extends Vector3> int intersectsSphere(V rp1, V rp2, float radius, V S1, V S2) {
-        V direction = (V) rp2.subCopy(rp1);
-        V e = (V) direction.copy(); // e=ray.dir
+    public int intersectsSphere(Vector3 rp1, Vector3 rp2, float radius, Vector3 S1, Vector3 S2) {
+        Vector3 direction = (Vector3) rp2.subCopy(rp1);
+        Vector3 e = (Vector3) direction.copy(); // e=ray.dir
         e.normalize(); // e=g/|g|
-        V h = (V) p1.copy();
+        Vector3 h = (Vector3) p1.copy();
         h.set(0f, 0f, 0f);
-        h = (V) h.sub(rp1); // h=r.o-c.M
+        h = (Vector3) h.sub(rp1); // h=r.o-c.M
         float lf = e.dot(h); // lf=e.h
         float radpow = radius * radius;
         float hdh = h.magSq();
@@ -881,7 +881,7 @@ public class Ray3D implements CanLoad {
         return result;
     }
 
-    public <V extends Vector3> void barycentric(V a, V b, V c, V p, float[] uvw) {
+    public void barycentric(Vector3 a, Vector3 b, Vector3 c, Vector3 p, float[] uvw) {
         if (m == null) {
             bc = b.copy();
             ca = c.copy();
@@ -935,11 +935,11 @@ public class Ray3D implements CanLoad {
         return result;
     }
 
-    public <V extends Vector3> void p1(V in) {
+    public void p1(Vector3 in) {
         this.p1 = in.copy();
     }
 
-    public <V extends Vector3> void p2(V in) {
+    public void p2(Vector3 in) {
         this.p2 = in.copy();
     }
 
@@ -956,7 +956,7 @@ public class Ray3D implements CanLoad {
         this.p2.set(r.p2);
     }
 
-    public <V extends Vector3> void setP2(V p2) {
+    public void setP2(Vector3 p2) {
         this.p2 = p2;
     }
 
@@ -964,7 +964,7 @@ public class Ray3D implements CanLoad {
         return p1;
     }
 
-    public <V extends Vector3> void setP1(V p1) {
+    public void setP1(Vector3 p1) {
         this.p1 = p1;
     }
 

@@ -49,11 +49,11 @@ public class Quaternion {
         rotation = new Basis(order, alpha1, alpha2, alpha3);
     }
 
-    public <V extends Vector3> Quaternion(V v1, V v2, V u1, V u2) {
+    public Quaternion(Vector3 v1, Vector3 v2, Vector3 u1, Vector3 u2) {
         rotation = new Basis(v1, v2, u1, u2);
     }
 
-    public <V extends Vector3> Quaternion(V axis, float angle) {
+    public Quaternion(Vector3 axis, float angle) {
         rotation = new Basis(axis, angle);
     }
 
@@ -61,7 +61,7 @@ public class Quaternion {
         this.rotation = new Basis(w, x, y, z, needsNormalization);
     }
 
-    public <V extends Vector3> Quaternion(V begin, V end) {
+    public Quaternion(Vector3 begin, Vector3 end) {
         rotation = new Basis(begin, end);
     }
 
@@ -260,7 +260,7 @@ public class Quaternion {
      * @param axis
      * @param angle
      */
-    public <V extends Vector3> void set(V axis, float angle) {
+    public void set(Vector3 axis, float angle) {
         this.rotation.set(axis, angle);
     }
 
@@ -271,11 +271,11 @@ public class Quaternion {
      * @param axis
      * @param angle
      */
-    public <V extends Vector3> void set(V startVec, V targetVec) {
+    public void set(Vector3 startVec, Vector3 targetVec) {
         this.rotation.set(startVec, targetVec);
     }
 
-    public <V extends Vector3> void applyTo(V v, V output) {
+    public void applyTo(Vector3 v, Vector3 output) {
         workingInput[0] = v.x;
         workingInput[1] = v.y;
         workingInput[2] = v.z;
@@ -283,7 +283,7 @@ public class Quaternion {
         output.set(workingOutput);
     }
 
-    public <V extends Vector3> void applyInverseTo(V v, V output) {
+    public void applyInverseTo(Vector3 v, Vector3 output) {
         workingInput[0] = v.x;
         workingInput[1] = v.y;
         workingInput[2] = v.z;
