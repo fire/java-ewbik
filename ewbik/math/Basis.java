@@ -110,7 +110,7 @@ public class Basis {
      * @param angle rotation angle.
      * @throws Precision.MathIllegalArgumentException if the axis norm is zero
      */
-    public <V extends Vector3> Basis(V axis, float angle) {
+    public Basis(Vector3 axis, float angle) {
 
         float norm = axis.mag();
         if (norm == 0) {
@@ -320,7 +320,7 @@ public class Basis {
      *                                           or if one of the pair is degenerated (i.e.
      *                                           the vectors of the pair are colinear)
      */
-    public <V extends Vector3> Basis(V u1, V u2, V v1, V v2) {
+    public Basis(Vector3 u1, Vector3 u2, Vector3 v1, Vector3 v2) {
 
         // norms computation
         float u1u1 = u1.dot(u1);
@@ -356,14 +356,14 @@ public class Basis {
         float v2x = alpha * v1x + beta * v2.x;
         float v2y = alpha * v1y + beta * v2.y;
         float v2z = alpha * v1z + beta * v2.z;
-        V va2 = (V) v2.copy();
+        Vector3 va2 = (Vector3) v2.copy();
         va2.set(v2x, v2y, v2z);
 
         // preliminary computation (we use explicit formulation instead
         // of relying on the Vector3 class in order to avoid building lots
         // of temporary objects)
-        V uRef = u1;
-        V vRef = (V) va1;
+        Vector3 uRef = u1;
+        Vector3 vRef = (Vector3) va1;
         float dx1 = v1x - u1.x;
         float dy1 = v1y - u1.y;
         float dz1 = v1z - u1.z;
@@ -380,7 +380,7 @@ public class Basis {
         if (MathUtils.abs(c) <= MathUtils.DOUBLE_ROUNDING_ERROR) {
             // the (q1, q2, q3) vector is in the (u1, u2) plane
             // we try other vectors
-            V u3 = (V) u1.crossCopy(u2);
+            Vector3 u3 = (Vector3) u1.crossCopy(u2);
             Vector3 v3 = va1.crossCopy(va2);
             float u3x = u3.x;
             float u3y = u3.y;
@@ -504,7 +504,7 @@ public class Basis {
      * @param v desired image of u by the rotation
      * @throws Precision.MathArithmeticException if the norm of one of the vectors is zero
      */
-    public <V extends Vector3> Basis(V u, V v) {
+    public Basis(Vector3 u, Vector3 v) {
 
         float normProduct = u.mag() * v.mag();
         if (normProduct == 0) {
@@ -522,7 +522,7 @@ public class Basis {
         if (dot < ((2.0e-15 - 1.0f) * normProduct)) {
             // special case u = -v: we select a PI angle rotation around
             // an arbitrary vector orthogonal to u
-            V w = (V) u.getOrthogonal();
+            Vector3 w = (Vector3) u.getOrthogonal();
             q0 = 0.0f;
             q1 = -w.x;
             q2 = -w.y;
@@ -532,7 +532,7 @@ public class Basis {
             // the shortest possible rotation: axis orthogonal to this plane
             q0 = MathUtils.sqrt(0.5f * (1.0f + dot / normProduct));
             float coeff = 1.0f / (2.0f * q0 * normProduct);
-            V q = (V) v.crossCopy(u);
+            Vector3 q = (Vector3) v.crossCopy(u);
             q1 = coeff * q.x;
             q2 = coeff * q.y;
             q3 = coeff * q.z;
@@ -849,7 +849,7 @@ public class Basis {
      * @param angle
      * @throws Exception
      */
-    public <T extends Vector3> void setAxis(T newAxis) throws Exception {
+    public void setAxis(Vector3 newAxis) throws Exception {
 
         float angle = this.getAngle();
         float norm = newAxis.mag();
@@ -882,7 +882,7 @@ public class Basis {
      * @return normalized axis of the rotation
      * @see #Rotation(T, float)
      */
-    public <T extends Vector3> void setToAxis(T v) {
+    public void setToAxis(Vector3 v) {
         float squaredSine = q1 * q1 + q2 * q2 + q3 * q3;
         if (squaredSine == 0) {
             v.set(1, 0, 0);

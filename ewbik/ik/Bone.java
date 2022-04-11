@@ -867,7 +867,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
         return childrenWithPinned;
     }
 
-    public ArrayList<? extends Bone> getMostImmediatelyPinnedDescendants() {
+    public ArrayList<Bone> getMostImmediatelyPinnedDescendants() {
         ArrayList<Bone> mostImmediatePinnedDescendants = new ArrayList<Bone>();
         this.addSelfIfPinned(mostImmediatePinnedDescendants);
         return mostImmediatePinnedDescendants;
