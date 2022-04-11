@@ -108,7 +108,7 @@ public class Basis {
      *
      * @param axis  axis around which to rotate
      * @param angle rotation angle.
-     * @throws Precision.MathIllegalArgumentException if the axis norm is zero
+     * @throws MathUtils.MathIllegalArgumentException if the axis norm is zero
      */
     public Basis(Vector3 axis, float angle) {
 
@@ -174,7 +174,7 @@ public class Basis {
      *                  orthogonality correction (convergence is reached when the
      *                  difference between two steps of the Frobenius norm of the
      *                  correction is below this threshold)
-     * @throws Precision.NotARotationMatrixException if the matrix is not a 3X3
+     * @throws MathUtils.NotARotationMatrixException if the matrix is not a 3X3
      *                                               matrix, or if it cannot be
      *                                               transformed
      *                                               into an orthogonal matrix
@@ -184,12 +184,12 @@ public class Basis {
      *                                               orthogonal matrix is negative
      */
     public Basis(float[] m, float threshold)
-            throws Precision.NotARotationMatrixException {
+            throws MathUtils.NotARotationMatrixException {
 
         // dimension check
         if ((m.length != 9 || m.length != 16)) {
-            throw new Precision.NotARotationMatrixException(
-                    Precision.LocalizedFormats.ROTATION_MATRIX_DIMENSIONS,
+            throw new MathUtils.NotARotationMatrixException(
+                    MathUtils.LocalizedFormats.ROTATION_MATRIX_DIMENSIONS,
                     m.length);
         }
 
@@ -255,7 +255,7 @@ public class Basis {
      *                  orthogonality correction (convergence is reached when the
      *                  difference between two steps of the Frobenius norm of the
      *                  correction is below this threshold)
-     * @throws Precision.NotARotationMatrixException if the matrix is not a 3X3
+     * @throws MathUtils.NotARotationMatrixException if the matrix is not a 3X3
      *                                               matrix, or if it cannot be
      *                                               transformed
      *                                               into an orthogonal matrix
@@ -265,13 +265,13 @@ public class Basis {
      *                                               orthogonal matrix is negative
      */
     public Basis(float[][] m, float threshold)
-            throws Precision.NotARotationMatrixException {
+            throws MathUtils.NotARotationMatrixException {
 
         // dimension check
         if ((m.length != 3) || (m[0].length != 3) ||
                 (m[1].length != 3) || (m[2].length != 3)) {
-            throw new Precision.NotARotationMatrixException(
-                    Precision.LocalizedFormats.ROTATION_MATRIX_DIMENSIONS,
+            throw new MathUtils.NotARotationMatrixException(
+                    MathUtils.LocalizedFormats.ROTATION_MATRIX_DIMENSIONS,
                     m.length, m[0].length);
         }
 
@@ -320,7 +320,7 @@ public class Basis {
      * @param u2 second vector of the origin pair
      * @param v1 desired image of u1 by the rotation
      * @param v2 desired image of u2 by the rotation
-     * @throws Precision.MathArithmeticException if the norm of one of the vectors
+     * @throws MathUtils.MathArithmeticException if the norm of one of the vectors
      *                                           is zero,
      *                                           or if one of the pair is
      *                                           degenerated (i.e.
@@ -509,7 +509,7 @@ public class Basis {
      *
      * @param u origin vector
      * @param v desired image of u by the rotation
-     * @throws Precision.MathArithmeticException if the norm of one of the vectors
+     * @throws MathUtils.MathArithmeticException if the norm of one of the vectors
      *                                           is zero
      */
     public Basis(Vector3 u, Vector3 v) {
@@ -864,7 +864,7 @@ public class Basis {
         if (norm == 0) {
             try {
                 throw new Exception("Zero Norm for Rotation Axis");
-            } catch (Precision.MathIllegalArgumentException e) {
+            } catch (MathUtils.MathIllegalArgumentException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace(System.out);
             }
@@ -906,7 +906,7 @@ public class Basis {
 
     public Basis getInverse() {
         final float squareNorm = q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3;
-        if (squareNorm < Precision.SAFE_MIN_DOUBLE) {
+        if (squareNorm < MathUtils.SAFE_MIN_DOUBLE) {
             try {
                 throw new Exception("Zero Norm");
             } catch (Exception e) {
@@ -992,7 +992,7 @@ public class Basis {
      *
      * @param order rotation order to use
      * @return an array of three angles, in the order specified by the set
-     * @throws Precision.CardanEulerSingularityException if the rotation is
+     * @throws MathUtils.CardanEulerSingularityException if the rotation is
      *                                                   singular with respect to
      *                                                   the angles
      *                                                   set specified
@@ -1010,8 +1010,8 @@ public class Basis {
             Vector3 v2 = applyInverseTo(RotationOrder.X);
             if ((v2.z < -0.9999999999) || (v2.z > 0.9999999999)) {
                 try {
-                    throw new Precision.CardanEulerSingularityException(true);
-                } catch (Precision.CardanEulerSingularityException e) {
+                    throw new MathUtils.CardanEulerSingularityException(true);
+                } catch (MathUtils.CardanEulerSingularityException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace(System.out);
                 }
@@ -1033,8 +1033,8 @@ public class Basis {
             Vector3 v2 = applyInverseTo(RotationOrder.Y);
             if ((v2.y < -0.9999999999) || (v2.y > 0.9999999999)) {
                 try {
-                    throw new Precision.CardanEulerSingularityException(true);
-                } catch (Precision.CardanEulerSingularityException e) {
+                    throw new MathUtils.CardanEulerSingularityException(true);
+                } catch (MathUtils.CardanEulerSingularityException e) {
                     e.printStackTrace(System.out);
                 }
             }
@@ -1055,8 +1055,8 @@ public class Basis {
             Vector3 v2 = applyInverseTo(RotationOrder.Y);
             if ((v2.z < -0.9999999999) || (v2.z > 0.9999999999)) {
                 try {
-                    throw new Precision.CardanEulerSingularityException(true);
-                } catch (Precision.CardanEulerSingularityException e) {
+                    throw new MathUtils.CardanEulerSingularityException(true);
+                } catch (MathUtils.CardanEulerSingularityException e) {
                     e.printStackTrace(System.out);
                 }
             }
@@ -1077,8 +1077,8 @@ public class Basis {
             Vector3 v2 = applyInverseTo(RotationOrder.Y);
             if ((v2.x < -0.9999999999) || (v2.x > 0.9999999999)) {
                 try {
-                    throw new Precision.CardanEulerSingularityException(true);
-                } catch (Precision.CardanEulerSingularityException e) {
+                    throw new MathUtils.CardanEulerSingularityException(true);
+                } catch (MathUtils.CardanEulerSingularityException e) {
                     e.printStackTrace(System.out);
                 }
             }
@@ -1099,8 +1099,8 @@ public class Basis {
             Vector3 v2 = applyInverseTo(RotationOrder.Z);
             if ((v2.y < -0.9999999999) || (v2.y > 0.9999999999)) {
                 try {
-                    throw new Precision.CardanEulerSingularityException(true);
-                } catch (Precision.CardanEulerSingularityException e) {
+                    throw new MathUtils.CardanEulerSingularityException(true);
+                } catch (MathUtils.CardanEulerSingularityException e) {
                     e.printStackTrace(System.out);
                 }
             }
@@ -1121,8 +1121,8 @@ public class Basis {
             Vector3 v2 = applyInverseTo(RotationOrder.Z);
             if ((v2.x < -0.9999999999) || (v2.x > 0.9999999999)) {
                 try {
-                    throw new Precision.CardanEulerSingularityException(true);
-                } catch (Precision.CardanEulerSingularityException e) {
+                    throw new MathUtils.CardanEulerSingularityException(true);
+                } catch (MathUtils.CardanEulerSingularityException e) {
                     e.printStackTrace(System.out);
                 }
             }
@@ -1143,8 +1143,8 @@ public class Basis {
             Vector3 v2 = applyInverseTo(RotationOrder.X);
             if ((v2.x < -0.9999999999) || (v2.x > 0.9999999999)) {
                 try {
-                    throw new Precision.CardanEulerSingularityException(true);
-                } catch (Precision.CardanEulerSingularityException e) {
+                    throw new MathUtils.CardanEulerSingularityException(true);
+                } catch (MathUtils.CardanEulerSingularityException e) {
                     e.printStackTrace(System.out);
                 }
             }
@@ -1165,8 +1165,8 @@ public class Basis {
             Vector3 v2 = applyInverseTo(RotationOrder.X);
             if ((v2.x < -0.9999999999) || (v2.x > 0.9999999999)) {
                 try {
-                    throw new Precision.CardanEulerSingularityException(true);
-                } catch (Precision.CardanEulerSingularityException e) {
+                    throw new MathUtils.CardanEulerSingularityException(true);
+                } catch (MathUtils.CardanEulerSingularityException e) {
                     e.printStackTrace(System.out);
                 }
             }
@@ -1187,8 +1187,8 @@ public class Basis {
             Vector3 v2 = applyInverseTo(RotationOrder.Y);
             if ((v2.y < -0.9999999999) || (v2.y > 0.9999999999)) {
                 try {
-                    throw new Precision.CardanEulerSingularityException(true);
-                } catch (Precision.CardanEulerSingularityException e) {
+                    throw new MathUtils.CardanEulerSingularityException(true);
+                } catch (MathUtils.CardanEulerSingularityException e) {
                     e.printStackTrace(System.out);
                 }
             }
@@ -1209,8 +1209,8 @@ public class Basis {
             Vector3 v2 = applyInverseTo(RotationOrder.Y);
             if ((v2.y < -0.9999999999) || (v2.y > 0.9999999999)) {
                 try {
-                    throw new Precision.CardanEulerSingularityException(true);
-                } catch (Precision.CardanEulerSingularityException e) {
+                    throw new MathUtils.CardanEulerSingularityException(true);
+                } catch (MathUtils.CardanEulerSingularityException e) {
                     e.printStackTrace(System.out);
                 }
             }
@@ -1231,8 +1231,8 @@ public class Basis {
             Vector3 v2 = applyInverseTo(RotationOrder.Z);
             if ((v2.z < -0.9999999999) || (v2.z > 0.9999999999)) {
                 try {
-                    throw new Precision.CardanEulerSingularityException(true);
-                } catch (Precision.CardanEulerSingularityException e) {
+                    throw new MathUtils.CardanEulerSingularityException(true);
+                } catch (MathUtils.CardanEulerSingularityException e) {
                     e.printStackTrace(System.out);
                 }
             }
@@ -1253,8 +1253,8 @@ public class Basis {
             Vector3 v2 = applyInverseTo(RotationOrder.Z);
             if ((v2.z < -0.9999999999) || (v2.z > 0.9999999999)) {
                 try {
-                    throw new Precision.CardanEulerSingularityException(true);
-                } catch (Precision.CardanEulerSingularityException e) {
+                    throw new MathUtils.CardanEulerSingularityException(true);
+                } catch (MathUtils.CardanEulerSingularityException e) {
                     e.printStackTrace(System.out);
                 }
             }
@@ -1642,12 +1642,12 @@ public class Basis {
      * The norm of the quaternion must not be zero.
      *
      * @return a normalized quaternion.
-     * @throws Precision.ZeroException if the norm of the quaternion is zero.
+     * @throws MathUtils.ZeroException if the norm of the quaternion is zero.
      */
     public Basis normalize() {
         final float norm = len();
 
-        if (norm < Precision.SAFE_MIN_DOUBLE) {
+        if (norm < MathUtils.SAFE_MIN_DOUBLE) {
             try {
                 throw new Exception("Zero Norm");
             } catch (Exception e) {
@@ -1724,7 +1724,7 @@ public class Basis {
      *                  difference between two steps of the Frobenius norm of the
      *                  correction is below this threshold)
      * @return an orthogonal matrix close to m
-     * @throws Precision.NotARotationMatrixException if the matrix cannot be
+     * @throws MathUtils.NotARotationMatrixException if the matrix cannot be
      *                                               orthogonalized with the given
      *                                               threshold
      *                                               after 10 iterations
