@@ -19,14 +19,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package ewbik.processing.singlePrecision;
 
-import ewbik.asj.LoadManager;
-import ewbik.asj.SaveManager;
-import ewbik.asj.Saveable;
 import ewbik.math.*;
 import processing.Node3D;
 import processing.core.PVector;
 
-public class LimitCone implements Saveable {
+public class LimitCone {
 
     public ewbik.processing.singlePrecision.Kusudama parentKusudama;
     public Vector3 tangentCircleCenterNext1;
@@ -450,55 +447,5 @@ public class LimitCone implements Saveable {
 
     public ewbik.processing.singlePrecision.Kusudama getParentKusudama() {
         return parentKusudama;
-    }
-
-    @Override
-    public void makeSaveable(SaveManager saveManager) {
-        saveManager.addToSaveState(this);
-    }
-
-    @Override
-    public ewbik.asj.data.JSONObject getSaveJSON(SaveManager saveManager) {
-        ewbik.asj.data.JSONObject saveJSON = new ewbik.asj.data.JSONObject();
-        saveJSON.setString("identityHash", this.getIdentityHash());
-        saveJSON.setString("parentKusudama", this.getParentKusudama().getIdentityHash());
-        saveJSON.setJSONObject("controlPoint", this.controlPoint.toJSONObject());
-        saveJSON.setFloat("radius", this.radius);
-        return saveJSON;
-    }
-
-    public void loadFromJSONObject(ewbik.asj.data.JSONObject j, LoadManager l) {
-        this.parentKusudama = (ewbik.processing.singlePrecision.Kusudama) l.getObjectFromClassMaps(
-                ewbik.processing.singlePrecision.Kusudama.class,
-                j.getString("parentKusudama"));
-        Vector3 controlPointJ = null;
-        try {
-            controlPointJ = new Vector3(j.getJSONObject("controlPoint"));
-        } catch (Exception e) {
-            controlPointJ = new Vector3(j.getJSONArray("controlPoint"));
-        }
-
-        controlPointJ.normalize();
-
-        this.controlPoint = controlPointJ;
-        this.setRadius(j.getFloat("radius"));
-    }
-
-    @Override
-    public void notifyOfSaveIntent(SaveManager saveManager) {
-
-    }
-
-    @Override
-    public void notifyOfSaveCompletion(SaveManager saveManager) {
-    }
-
-    @Override
-    public boolean isLoading() {
-        return false;
-    }
-
-    @Override
-    public void setLoading(boolean loading) {
     }
 }
