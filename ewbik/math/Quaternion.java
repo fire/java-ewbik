@@ -24,7 +24,6 @@ SOFTWARE.
 
 package ewbik.math;
 
-import ewbik.asj.data.JSONArray;
 import math.Basis;
 
 public class Quaternion {
@@ -71,21 +70,6 @@ public class Quaternion {
      */
     public Quaternion(float amount, Quaternion v1, Quaternion v2) {
         rotation = slerp(amount, v1.rotation, v2.rotation);
-    }
-
-    /**
-     * loads a rotation from a JSON array of quaternion values.
-     * <p>
-     * where
-     * jarray[0] = q0 = w;
-     * jarray[1] = q1 = x;
-     * jarray[2] = q2 = y;
-     * jarray[3] = q3 = z;
-     *
-     * @param jarray
-     */
-    public Quaternion(JSONArray jarray) {
-        rotation = new Basis(jarray.getFloat(0), jarray.getFloat(1), jarray.getFloat(2), jarray.getFloat(3), true);
     }
 
     public static Basis slerp(float amount, Basis value1, Basis value2) {
@@ -492,14 +476,4 @@ public class Quaternion {
     public void clampToQuadranceAngle(float cosHalfAngle) {
         rotation.clampToQuadranceAngle(cosHalfAngle);
     }
-
-    public JSONArray toJsonArray() {
-        JSONArray result = new JSONArray();
-        result.append(this.rotation.getQ0());
-        result.append(this.rotation.getQ1());
-        result.append(this.rotation.getQ2());
-        result.append(this.rotation.getQ3());
-        return result;
-    }
-
 }

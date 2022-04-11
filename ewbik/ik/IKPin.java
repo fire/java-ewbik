@@ -5,7 +5,7 @@ import processing.core.PVector;
 
 import java.util.ArrayList;
 
-public class IKPin implements ewbik.asj.Saveable {
+public class IKPin {
 
     public static final short XDir = 1;
     public static final short YDir = 2;
@@ -364,68 +364,5 @@ public class IKPin implements ewbik.asj.Saveable {
     public void setPinWeight(float weight) {
         this.pinWeight = weight;
         this.forBone.parentArmature.rootwardlyUpdateFalloffCacheFrom(forBone);
-    }
-
-    @Override
-    public void makeSaveable(ewbik.asj.SaveManager saveManager) {
-        saveManager.addToSaveState(this);
-        getAxes().makeSaveable(saveManager);
-    }
-
-    @Override
-    public ewbik.asj.data.JSONObject getSaveJSON(ewbik.asj.SaveManager saveManager) {
-        ewbik.asj.data.JSONObject saveJSON = new ewbik.asj.data.JSONObject();
-        saveJSON.setString("identityHash", this.getIdentityHash());
-        saveJSON.setString("axes", getAxes().getIdentityHash());
-        saveJSON.setString("forBone", forBone.getIdentityHash());
-        saveJSON.setBoolean("isEnabled", this.isEnabled());
-        saveJSON.setFloat("pinWeight", this.pinWeight);
-        ewbik.asj.data.JSONObject priorities = new ewbik.asj.data.JSONObject();
-        priorities.setFloat("x", xPriority);
-        priorities.setFloat("y", yPriority);
-        priorities.setFloat("z", zPriority);
-        saveJSON.setFloat("depthFalloff", depthFalloff);
-        saveJSON.setJSONObject("priorities", priorities);
-        return saveJSON;
-    }
-
-    public void loadFromJSONObject(ewbik.asj.data.JSONObject j, ewbik.asj.LoadManager l) {
-        this.node3D = (Node3D) l
-                .getObjectFromClassMaps(Node3D.class, j.getString("axes"));
-        this.isEnabled = j.getBoolean("isEnabled");
-        this.pinWeight = j.getFloat("pinWeight");
-        this.forBone = (Bone) l.getObjectFromClassMaps(Bone.class, j.getString("forBone"));
-        if (j.hasKey("priorities")) {
-            ewbik.asj.data.JSONObject priorities = j.getJSONObject("priorities");
-            xPriority = priorities.getFloat("x");
-            yPriority = priorities.getFloat("y");
-            zPriority = priorities.getFloat("z");
-        }
-        if (j.hasKey("depthFalloff")) {
-            this.depthFalloff = j.getFloat("depthFalloff");
-        }
-    }
-
-    @Override
-    public void notifyOfLoadCompletion() {
-        this.setTargetPriorities(xPriority, yPriority, zPriority);
-        this.setDepthFalloff(depthFalloff);
-    }
-
-    @Override
-    public void notifyOfSaveIntent(ewbik.asj.SaveManager saveManager) {
-    }
-
-    @Override
-    public void notifyOfSaveCompletion(ewbik.asj.SaveManager saveManager) {
-    }
-
-    @Override
-    public boolean isLoading() {
-        return false;
-    }
-
-    @Override
-    public void setLoading(boolean loading) {
     }
 }

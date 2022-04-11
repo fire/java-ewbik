@@ -247,9 +247,30 @@ public class ItemHolding extends PApplet {
         size(1200, 900, P3D);
     }
 
+    public void loadArmature() {
+        try (BufferedReader br = new BufferedReader(new FileReader("Humanoid_Holding_Item.json"))) {
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
+
+            while (line != null) {
+                sb.append(line);
+                sb.append(System.lineSeparator());
+                line = br.readLine();
+            }
+            String json = sb.toString();
+            loadedArmature = (Skeleton3D) JsonReader.jsonToJava(json);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        loadedArmature.updateBonechains();
+        loadedArmature.IKSolver(loadedArmature.getRootBone(), 0.5f, 20, 1);
+
+        Bone.setDrawKusudamas(true);
+    }
+
     public void setup() {
         ui = new UI(this);
-        loadedArmature = ewbik.processing.IO.LoadArmature("Humanoid_Holding_Item.json");
+        loadArmature();
         worldNode3D = loadedArmature.localAxes().getParentAxes();
         if (worldNode3D == null) {
             worldNode3D = new Node3D();
@@ -370,25 +391,7 @@ public class ItemHolding extends PApplet {
                 }
             }
         } else if (key == 'l') {
-
-            try(BufferedReader br = new BufferedReader(new FileReader("Humanoid_Holding_Item.json"))) {
-                StringBuilder sb = new StringBuilder();
-                String line = br.readLine();
-            
-                while (line != null) {
-                    sb.append(line);
-                    sb.append(System.lineSeparator());
-                    line = br.readLine();
-                }
-                String json = sb.toString();
-                loadedArmature = (Skeleton3D) JsonReader.jsonToJava(json);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            loadedArmature.updateBonechains();
-            loadedArmature.IKSolver(loadedArmature.getRootBone(), 0.5f, 20, 1);
-
-            Bone.setDrawKusudamas(true);
+            loadArmature();
         }
     }
 
