@@ -298,22 +298,22 @@ public class Quaternion {
      * @return
      */
 
-    public <T extends Vector3> T applyToCopy(T v) {
+    public Vector3 applyToCopy(Vector3 v) {
         workingInput[0] = v.x;
         workingInput[1] = v.y;
         workingInput[2] = v.z;
         rotation.applyTo(workingInput, workingOutput);
-        T copy = (T) v.copy();
-        return (T) copy.set(workingOutput[0], workingOutput[1], workingOutput[2]);
+        Vector3 copy = (Vector3) v.copy();
+        return (Vector3) copy.set(workingOutput[0], workingOutput[1], workingOutput[2]);
     }
 
-    public <T extends Vector3> T applyInverseToCopy(T v) {
+    public Vector3 applyInverseToCopy(Vector3 v) {
         workingInput[0] = v.x;
         workingInput[1] = v.y;
         workingInput[2] = v.z;
         rotation.applyInverseTo(workingInput, workingOutput);
-        T copy = (T) v.copy();
-        return (T) copy.set(workingOutput[0], workingOutput[1], workingOutput[2]);
+        Vector3 copy = (Vector3) v.copy();
+        return (Vector3) copy.set(workingOutput[0], workingOutput[1], workingOutput[2]);
     }
 
     /**
@@ -412,7 +412,7 @@ public class Quaternion {
         return result;
     }
 
-    public <T extends Vector3> void getAxis(T output) {
+    public void getAxis(Vector3 output) {
         rotation.setToAxis(output);
     }
 
@@ -481,7 +481,7 @@ public class Quaternion {
         return rotation.getAngles(order);
     }
 
-    public <T extends Vector3> T applyTo(T u) {
+    public Vector3 applyTo(Vector3 u) {
         return rotation.applyTo(u);
     }
 

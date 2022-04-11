@@ -44,7 +44,7 @@ public class Transform3D {
         refreshPrecomputed();
     }
 
-    public <T extends ewbik.math.Transform3D> Transform3D(T input) {
+    public Transform3D(Transform3D input) {
         translate = input.translate.copy();
         xBase = translate.copy();
         yBase = translate.copy();
@@ -110,7 +110,7 @@ public class Transform3D {
      * @param y basis Ray
      * @param z basis Ray
      */
-    public <R extends Ray3D> Transform3D(R x, R y, R z) {
+    public Transform3D(Ray3D x, Ray3D y, Ray3D z) {
         this.translate = x.p1().copy();
         xRay = x.copy();
         yRay = y.copy();
@@ -153,7 +153,7 @@ public class Transform3D {
      *
      * @param in
      */
-    public <T extends ewbik.math.Transform3D> void adoptValues(T in) {
+    public void adoptValues(Transform3D in) {
         this.translate.set(in.translate);
         this.rotation.set(in.rotation);
         xBase = translate.copy();
@@ -203,7 +203,7 @@ public class Transform3D {
         return resultNew;
     }
 
-    public <B extends ewbik.math.Transform3D> void setToLocalOf(B global_input, B local_output) {
+    public void setToLocalOf(Transform3D global_input, Transform3D local_output) {
         local_output.translate = this.getLocalOf(global_input.translate);
         inverseRotation.applyTo(global_input.rotation, local_output.rotation);
 
@@ -274,7 +274,7 @@ public class Transform3D {
      * @param localInput
      * @param globalOutput
      */
-    public <T extends ewbik.math.Transform3D> void setToGlobalOf(T localInput, T globalOutput) {
+    public void setToGlobalOf(Transform3D localInput, Transform3D globalOutput) {
         this.rotation.applyTo(localInput.rotation, globalOutput.rotation);
         this.setToGlobalOf(localInput.translate, globalOutput.translate);
         globalOutput.refreshPrecomputed();

@@ -396,7 +396,7 @@ public class Node3D implements ewbik.asj.Saveable {
         return this.getGlobalMBasis().getZRay();
     }
 
-    public <A extends Node3D> boolean equals(A ax) {
+    public boolean equals(Node3D ax) {
         this.updateGlobal();
         ax.updateGlobal();
 
@@ -430,10 +430,10 @@ public class Node3D implements ewbik.asj.Saveable {
         return copy;
     }
 
-    public <B extends Transform3D> B getLocalOf(B input) {
+    public Transform3D getLocalOf(Transform3D input) {
         Transform3D newBasis = new Transform3D((Transform3D) input);
         getGlobalMBasis().setToLocalOf(input, newBasis);
-        return (B) newBasis;
+        return (Transform3D) newBasis;
     }
 
     public void createTempVars(Vector3 type) {

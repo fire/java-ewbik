@@ -266,7 +266,7 @@ public class Kusudama implements Saveable {
 
     @SuppressWarnings("unchecked")
     public ArrayList<LimitCone> getLimitCones() {
-        return (ArrayList<LimitCone>) (ArrayList<? extends ewbik.processing.singlePrecision.LimitCone>) this.limitCones;
+        return (ArrayList<LimitCone>) this.limitCones;
     }
 
     public void constraintUpdateNotification() {

@@ -1391,14 +1391,14 @@ public class Basis {
      * @param u vector to apply the rotation to
      * @return a new vector which is the image of u by the rotation
      */
-    public <T extends Vector3> T applyTo(T u) {
+    public Vector3 applyTo(Vector3 u) {
 
         float x = u.x;
         float y = u.y;
         float z = u.z;
 
         float s = q1 * x + q2 * y + q3 * z;
-        T result = (T) u.copy();
+        Vector3 result = (Vector3) u.copy();
         result.set(2 * (q0 * (x * q0 - (q2 * z - q3 * y)) + s * q1) - x,
                 2 * (q0 * (y * q0 - (q3 * x - q1 * z)) + s * q2) - y,
                 2 * (q0 * (z * q0 - (q1 * y - q2 * x)) + s * q3) - z);
@@ -1465,7 +1465,7 @@ public class Basis {
      * @param u vector to apply the inverse of the rotation to
      * @return a new vector which such that u is its image by the rotation
      */
-    public <T extends Vector3> T applyInverseTo(T u) {
+    public Vector3 applyInverseTo(Vector3 u) {
 
         float x = u.x;
         float y = u.y;
@@ -1474,7 +1474,7 @@ public class Basis {
         float s = q1 * x + q2 * y + q3 * z;
         float m0 = -q0;
 
-        T result = (T) u.copy();
+        Vector3 result = (Vector3) u.copy();
         result.set(2 * (m0 * (x * m0 - (q2 * z - q3 * y)) + s * q1) - x,
                 2 * (m0 * (y * m0 - (q3 * x - q1 * z)) + s * q2) - y,
                 2 * (m0 * (z * m0 - (q1 * y - q2 * x)) + s * q3) - z);

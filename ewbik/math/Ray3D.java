@@ -951,7 +951,7 @@ public class Ray3D implements CanLoad {
         return p2;
     }
 
-    public <R extends ewbik.math.Ray3D> void set(R r) {
+    public void set(Ray3D r) {
         this.p1.set(r.p1);
         this.p2.set(r.p2);
     }
