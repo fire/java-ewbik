@@ -69,6 +69,30 @@ public class ShadowNode3D {
         generateArmatureBonechains();
     }
 
+    public ShadowNode3D(Bone bonechainRoot, Bone bonechainTip, ArrayList<ShadowNode3D> bonechainChild, ArrayList<ShadowNode3D> pinnedDescendants, HashMap<Bone, ShadowBone> simulatedBones, ArrayList<Bone> bonechainList, int distanceToRoot, int chainLength, Node3D debugTipNode3D, Node3D debugTargetNode3D, ShadowBone[] pinnedBones, boolean includeInIK, int pinDepth, Vector3[] localizedTargetHeadings, Vector3[] localizedTipHeadings, float[] weights, ShadowNode3D bonechainParent, boolean basePinned, boolean tipPinned, boolean processed, boolean simAligned) {
+        this.bonechainRoot = bonechainRoot;
+        this.bonechainTip = bonechainTip;
+        this.bonechainChild = bonechainChild;
+        this.pinnedDescendants = pinnedDescendants;
+        this.simulatedBones = simulatedBones;
+        this.bonechainList = bonechainList;
+        this.distanceToRoot = distanceToRoot;
+        this.chainLength = chainLength;
+        this.debugTipNode3D = debugTipNode3D;
+        this.debugTargetNode3D = debugTargetNode3D;
+        this.pinnedBones = pinnedBones;
+        this.includeInIK = includeInIK;
+        this.pinDepth = pinDepth;
+        this.localizedTargetHeadings = localizedTargetHeadings;
+        this.localizedTipHeadings = localizedTipHeadings;
+        this.weights = weights;
+        this.bonechainParent = bonechainParent;
+        this.basePinned = basePinned;
+        this.tipPinned = tipPinned;
+        this.processed = processed;
+        this.simAligned = simAligned;
+    }
+
     /**
      * calculates the total number of bases the immediate effectors emanating from
      * this
@@ -717,6 +741,16 @@ public class ShadowNode3D {
             } else {
                 springy = false;
             }
+        }
+
+        public ShadowBone(Bone forBone, Node3D simLocalNode3D, Node3D simConstraintNode3D, float cosHalfDampen, float[] cosHalfReturnfullnessDampened, float[] halfReturnfullnessDampened, boolean springy) {
+            this.forBone = forBone;
+            this.simLocalNode3D = simLocalNode3D;
+            this.simConstraintNode3D = simConstraintNode3D;
+            this.cosHalfDampen = cosHalfDampen;
+            this.cosHalfReturnfullnessDampened = cosHalfReturnfullnessDampened;
+            this.halfReturnfullnessDampened = halfReturnfullnessDampened;
+            this.springy = springy;
         }
 
         public void updateCosDampening() {
