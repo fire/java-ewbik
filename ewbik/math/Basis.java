@@ -183,14 +183,14 @@ public class Basis {
      *                                               determinant of the resulting
      *                                               orthogonal matrix is negative
      */
-    public Basis(float[] m, float threshold)
-            throws MathUtils.NotARotationMatrixException {
-
+    public Basis(float[] m, float threshold) {
         // dimension check
         if ((m.length != 9 || m.length != 16)) {
-            throw new MathUtils.NotARotationMatrixException(
-                    MathUtils.LocalizedFormats.ROTATION_MATRIX_DIMENSIONS,
-                    m.length);
+            this.q0 = 1.0f;
+            this.q1 = 0.0f;
+            this.q2 = 0.0f;
+            this.q3 = 0.0f;
+            return;
         }
 
         float[][] im = new float[3][3];
@@ -214,12 +214,11 @@ public class Basis {
                 ort[1][0] * (ort[0][1] * ort[2][2] - ort[2][1] * ort[0][2]) +
                 ort[2][0] * (ort[0][1] * ort[1][2] - ort[1][1] * ort[0][2]);
         if (det < 0.0f) {
-            try {
-                throw new Exception("Closest Orthogonal Has Negative Determinant");
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace(System.out);
-            }
+            this.q0 = 1.0f;
+            this.q1 = 0.0f;
+            this.q2 = 0.0f;
+            this.q3 = 0.0f;
+            return;
         }
 
         float[] quat = mat2quat(ort);
@@ -1724,10 +1723,6 @@ public class Basis {
      *                  difference between two steps of the Frobenius norm of the
      *                  correction is below this threshold)
      * @return an orthogonal matrix close to m
-     * @throws MathUtils.NotARotationMatrixException if the matrix cannot be
-     *                                               orthogonalized with the given
-     *                                               threshold
-     *                                               after 10 iterations
      */
     private float[][] orthogonalizeMatrix(float[][] m, float threshold) {
         float[] m0 = m[0];
@@ -1809,13 +1804,8 @@ public class Basis {
             x22 = o2[2];
             fn = fn1;
         }
-        // the algorithm did not converge after 10 iterations
-        try {
-            throw new Exception("Failed to converge on orthogonal matrix after 10 iterations");
-        } catch (Exception e) {
-            e.printStackTrace(System.out);
-        }
-        return null;
+        Basis returnMatrix = new Basis(1.0f, 0.0f ,0.0f, 0.0f, false);
+        return new float[][]{returnMatrix.getMatrix3Val()};
     }
 
     public boolean equalTo(Basis m) {
