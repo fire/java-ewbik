@@ -342,37 +342,11 @@ public final class MathUtils {
         public static String ROTATION_MATRIX_DIMENSIONS = "a {0}x{1} matrix cannot be a rotation matrix";
     }
 
-    public static class ZeroException extends Exception {
-
-        public ZeroException(String nORM, float squareNorm) {
-            // TODO Auto-generated constructor stub
-        }
-
-    }
 
     public static class CardanEulerSingularityException extends Exception {
 
         public CardanEulerSingularityException(boolean b) {
             // TODO Auto-generated constructor stub
-        }
-
-    }
-
-    public static class NotARotationMatrixException extends Exception {
-
-        public NotARotationMatrixException(String rOTATION_MATRIX_DIMENSIONS, int length, int length2) {
-            // TODO Auto-generated constructor stub
-        }
-
-        public NotARotationMatrixException(String cLOSEST_ORTHOGONAL_MATRIX_HAS_NEGATIVE_DETERMINANT, float det) {
-            // TODO Auto-generated constructor stub
-        }
-
-    }
-
-    public class MathArithmeticException extends Exception {
-
-        public MathArithmeticException(String zERO_NORM_FOR_ROTATION_DEFINING_VECTOR) {
         }
 
     }

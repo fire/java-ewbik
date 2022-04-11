@@ -263,15 +263,16 @@ public class Basis {
      *                                               determinant of the resulting
      *                                               orthogonal matrix is negative
      */
-    public Basis(float[][] m, float threshold)
-            throws MathUtils.NotARotationMatrixException {
+    public Basis(float[][] m, float threshold) {
 
         // dimension check
         if ((m.length != 3) || (m[0].length != 3) ||
                 (m[1].length != 3) || (m[2].length != 3)) {
-            throw new MathUtils.NotARotationMatrixException(
-                    MathUtils.LocalizedFormats.ROTATION_MATRIX_DIMENSIONS,
-                    m.length, m[0].length);
+            q0 = 1.0f;
+            q1 = 0.0f;
+            q2 = 0.0f;
+            q3 = 0.0f;
+            return;
         }
 
         // compute a "close" orthogonal matrix
@@ -282,11 +283,11 @@ public class Basis {
                 ort[1][0] * (ort[0][1] * ort[2][2] - ort[2][1] * ort[0][2]) +
                 ort[2][0] * (ort[0][1] * ort[1][2] - ort[1][1] * ort[0][2]);
         if (det < 0.0f) {
-            try {
-                throw new Exception("Closest Orthogonal Has Negative Determinant");
-            } catch (Exception e) {
-                e.printStackTrace(System.out);
-            }
+            q0 = 1.0f;
+            q1 = 0.0f;
+            q2 = 0.0f;
+            q3 = 0.0f;
+            return;
         }
 
         float[] quat = mat2quat(ort);
