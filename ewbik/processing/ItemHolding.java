@@ -1,5 +1,6 @@
 package processing;
 
+import ewbik.asj.SaveManager;
 import ik.Bone;
 import ik.IKPin;
 import processing.core.PApplet;
@@ -337,7 +338,7 @@ public class ItemHolding extends PApplet {
             cubeMode = !cubeMode;
         } else if (key == 's') {
             println("Saving");
-            ewbik.data.EWBIKSaver newSaver = new ewbik.data.EWBIKSaver();
+            SaveManager.EWBIKSaver newSaver = new SaveManager.EWBIKSaver();
             newSaver.saveArmature(loadedArmature, "Humanoid_Holding_Item.json");
         } else if (key == 'l') {
             loadedArmature = Skeleton3D.LoadArmature("Humanoid_Holding_Item.json");

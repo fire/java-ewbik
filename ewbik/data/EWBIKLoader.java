@@ -18,7 +18,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public class EWBIKLoader {
-    FloatBackedLoader floatBackedLoader = new FloatBackedLoader();
+    ewbik.asj.LoadManager floatBackedLoader = new ewbik.asj.LoadManager();
 
     public static Object parsePrimitive(Class keyClass, String toParse) {
         if (keyClass == String.class)

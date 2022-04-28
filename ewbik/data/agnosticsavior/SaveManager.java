@@ -8,9 +8,7 @@ import processing.Node3D;
 import processing.Skeleton3D;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
-import ewbik.asj.Saveable;
 
 public abstract class SaveManager {
 
@@ -233,5 +231,9 @@ public abstract class SaveManager {
     public void save(String savePath) {
         ewbik.asj.data.JSONObject fileContent = getSaveObject();
         ewbik.asj.data.StringFuncs.saveJSONObject(fileContent, savePath);
+    }
+
+    public static class EWBIKSaver extends SaveManager {
+
     }
 }

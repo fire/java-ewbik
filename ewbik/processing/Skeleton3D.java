@@ -81,7 +81,7 @@ public class Skeleton3D implements Saveable {
      * @param loadInto
      */
     public static void SaveArmature(String path, Skeleton3D toSave) {
-        ewbik.data.EWBIKSaver newSaver = new ewbik.data.EWBIKSaver();
+        SaveManager.EWBIKSaver newSaver = new SaveManager.EWBIKSaver();
         newSaver.saveArmature(toSave, path);
     }
 

@@ -15,7 +15,7 @@ import java.util.Map;
 import ewbik.data.EWBIKLoader;
 import ewbik.asj.Saveable;
 
-public abstract class LoadManager {
+public class LoadManager {
 
     private final boolean Load = false;
     public HashMap<Class, HashMap<String, JSONObject>> jsonObjects = new HashMap<>();
