@@ -283,12 +283,12 @@ public class ItemHolding extends PApplet {
                 + "\n HIT THE L KEY TO LOAD THE CURRENT ARMATURE CONFIGURATION.";
         // Decrease the numerator to increase the zoom.
         zoomScalar = 200f / height;
-        ui.drawScene(zoomScalar, 12f, () -> drawHoldCube(), loadedArmature, additionalInstructions, activePin,
+        ui.drawScene(zoomScalar, 12f, () -> drawHeldCube(), loadedArmature, additionalInstructions, activePin,
                 cubeNode3D,
                 cubeMode);
     }
 
-    public void drawHoldCube() {
+    public void drawHeldCube() {
         PGraphics currentDisplay = ui.getCurrentDrawSurface();
         if (ui.display == currentDisplay) {
             currentDisplay.fill(60, 60, 60);
@@ -348,10 +348,10 @@ public class ItemHolding extends PApplet {
 
     public void updatePinList() {
         pins.clear();
-        recursivelyAddToPinnedList(pins, loadedArmature.getRootBone());
+        recursiveAddToPinnedList(pins, loadedArmature.getRootBone());
     }
 
-    public void recursivelyAddToPinnedList(ArrayList<IKPin> pins, Bone descendedFrom) {
+    public void recursiveAddToPinnedList(ArrayList<IKPin> pins, Bone descendedFrom) {
         @SuppressWarnings("unchecked")
         ArrayList<Bone> pinnedChildren = (ArrayList<Bone>) descendedFrom.getMostImmediatelyPinnedDescendants();
         for (Bone b : pinnedChildren) {
@@ -361,7 +361,7 @@ public class ItemHolding extends PApplet {
         for (Bone b : pinnedChildren) {
             ArrayList<Bone> children = b.getChildren();
             for (Bone b2 : children) {
-                recursivelyAddToPinnedList(pins, b2);
+                recursiveAddToPinnedList(pins, b2);
             }
         }
     }
