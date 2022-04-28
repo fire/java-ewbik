@@ -25,7 +25,7 @@ SOFTWARE.
 package ewbik.math;
 
 import ewbik.asj.data.JSONArray;
-import math.Basis;
+import processing.math.Basis;
 
 public class Quaternion {
     public Basis rotation = Basis.IDENTITY;

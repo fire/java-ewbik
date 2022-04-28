@@ -1,4 +1,4 @@
-package math;
+package processing.math;
 
 import ewbik.math.*;
 
