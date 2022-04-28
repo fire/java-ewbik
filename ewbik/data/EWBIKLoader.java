@@ -113,19 +113,6 @@ public class EWBIKLoader {
         return floatBackedLoader.hashMapFromJSON(json, result, ti);
     }
 
-    /*
-     * public Object parsePrimitive(Class keyClass, String toParse) {
-     * if(keyClass == String.class) return toParse;
-     * if(keyClass == Float.class) return Float.parseFloat(toParse);
-     * if(keyClass == Double.class) return Double.parseDouble(toParse);
-     * if(keyClass == Long.class) return Long.parseLong(toParse);
-     * if(keyClass == Boolean.class) return Boolean.parseBoolean(toParse);
-     * if(keyClass == Integer.class) return Integer.parseInt(toParse);
-     * if(keyClass == Byte.class) return Byte.parseByte(toParse);
-     * else return null;
-     * }
-     */
-
     /**
      * takes a JSONObject and parses it into the format specified by the
      * TypeIdentifier.
