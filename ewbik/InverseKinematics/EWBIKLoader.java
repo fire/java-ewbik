@@ -97,33 +97,6 @@ public class EWBIKLoader {
     }
 
     /**
-     * takes a JSONObject and parses it into the format specified by the
-     * TypeIdentifier.
-     * The Value parameter can be another hashmap, and this
-     * will nest hashmaps from jsonObjects accordingly.
-     *
-     * @param json
-     * @param result
-     */
-    public <T extends Object, V extends Object> HashMap<T, V> hashMapFromJSON(JSONObject json, HashMap<T, V> result,
-            TypeIdentifier ti) {
-        return floatBackedLoader.hashMapFromJSON(json, result, ti);
-    }
-
-    /**
-     * takes a JSONObject and parses it into the format specified by the
-     * TypeIdentifier.
-     * The Value parameter can be another hashmap, and this
-     * will nest hashmaps from jsonObjects accordingly.
-     *
-     * @param json
-     * @param result
-     */
-    public <T extends Object, V extends Object> HashMap<T, V> hashMapFromJSON(JSONObject json, TypeIdentifier ti) {
-        return floatBackedLoader.hashMapFromJSON(json, ti);
-    }
-
-    /**
      * returns the appropriate object from the load hashmaps based on the
      * identityHash and keyClass.
      * if the object is not found, returns null

@@ -32,10 +32,6 @@ public class LoadManager {
     public boolean fileCorruptionDetected = false;
     private String tempLoadDirectory;
 
-    public static TypeIdentifier getNewTypeIdentifier(Object k, Object v) {
-        return new TypeIdentifier(k, v);
-    }
-
     public <T> void createEmptyLoadMaps(Map<String, JSONObject> jMap, Map<String, ? super T> oMap, JSONArray jArr,
             Class<T> c) {
         try {
@@ -187,95 +183,6 @@ public class LoadManager {
         } else {
             return currentFilePath.getAbsolutePath();
         }
-    }
-
-    /**
-     * takes a JSONObject and parses it into the format specified by the
-     * TypeIdentifier.
-     * The Value parameter can be another hashmap, and this
-     * will nest hashmaps from jsonObjects accordingly.
-     *
-     * @param json
-     * @param result
-     */
-    public <T extends Object, V extends Object> HashMap<T, V> hashMapFromJSON(JSONObject json, HashMap<T, V> result,
-            TypeIdentifier ti) {
-        Class keyClass = null;
-        if (ti.key.getClass() == Class.class) {
-            keyClass = (Class) ti.key;
-        }
-        Class valueClass = ti.value.getClass();
-        if (valueClass == TypeIdentifier.class && keyClass != null) {
-            Collection<String> jKeys = json.keys();
-            for (String jk : jKeys) {
-                JSONObject jValue = json.getJSONObject(jk);
-                T keyObject = (T) getObjectFromClassMaps(keyClass, jk);
-
-                HashMap<?, ?> innerHash = new HashMap<>();
-                hashMapFromJSON(jValue, innerHash, (TypeIdentifier) ti.value);
-
-                result.put(keyObject, (V) innerHash);
-                return result;
-            }
-        } else {
-            valueClass = (Class) ti.value;
-            Collection<String> jKeys = json.keys();
-            for (String jk : jKeys) {
-
-                boolean javaClass = keyClass.getName().startsWith("java.lang");
-                Object keyObject = javaClass ? LoadManager.parsePrimitive(keyClass, jk) : getObjectFromClassMaps(keyClass, jk);
-                Object valueObject = null;
-                Object obj = json.get(jk);
-                valueObject = valueClass.getName().startsWith("java.lang") ? LoadManager.parsePrimitive(valueClass, "" + obj)
-                        : getObjectFromClassMaps(valueClass, json.getString(jk));
-                result.put((T) keyObject, (V) valueObject);
-            }
-            return result;
-        }
-        return result;
-    }
-
-    /**
-     * takes a JSONObject and parses it into the format specified by the
-     * TypeIdentifier.
-     * The Value parameter can be another hashmap, and this
-     * will nest hashmaps from jsonObjects accordingly.
-     *
-     * @param json
-     * @param result
-     */
-    public <T extends Object, V extends Object> HashMap<T, V> hashMapFromJSON(JSONObject json, TypeIdentifier ti) {
-        Class keyClass = null;
-        if (ti.key.getClass() == Class.class) {
-            keyClass = (Class) ti.key;
-        }
-        Class valueClass = ti.value.getClass();
-        HashMap<T, V> result = new HashMap<>();
-        if (valueClass == TypeIdentifier.class && keyClass != null) {
-            Collection<String> jKeys = json.keys();
-            for (String jk : jKeys) {
-                JSONObject jValue = json.getJSONObject(jk);
-                T keyObject = (T) getObjectFromClassMaps(keyClass, jk);
-                HashMap<?, ?> innerHash = new HashMap<>();
-                hashMapFromJSON(jValue, innerHash, (TypeIdentifier) ti.value);
-                result.put(keyObject, (V) innerHash);
-                return result;
-            }
-        } else {
-            valueClass = (Class) ti.value;
-            Collection<String> jKeys = json.keys();
-            for (String jk : jKeys) {
-
-                boolean javaClass = keyClass.getName().startsWith("java.lang");
-                Object keyObject = javaClass ? LoadManager.parsePrimitive(keyClass, jk) : getObjectFromClassMaps(keyClass, jk);
-                Object valueObject = null;
-                String hash = json.getString(jk);
-                valueObject = getObjectFromClassMaps(valueClass, hash);
-                result.put((T) keyObject, (V) valueObject);
-            }
-            return result;
-        }
-        return result;
     }
 
     public <T extends Saveable> T getObjectFor(Class objectClass, JSONObject j, String hash) {
