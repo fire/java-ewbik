@@ -17,7 +17,7 @@ class UI {
     PVector cameraPosition = new PVector(0, 0, 70);
     PVector lookAt = new PVector(0, 0, 0);
     PVector up = new PVector(0, 1, 0);
-    float orthoHeight, orthoWidth;
+    float orthographicHeight, orthographicWidth;
     private PGraphics currentDrawSurface;
 
     public UI(PApplet p) {
@@ -142,8 +142,8 @@ class UI {
 
     public PVector screenOf(PGraphics pg, PVector pt, float zoomScalar) {
         return new PVector(
-                (pg.screenX(pt.x, pt.y, pt.z) * zoomScalar) - orthoWidth / 2f,
-                (pg.screenY(pt.x, pt.y, pt.z) * zoomScalar) - orthoHeight / 2f);
+                (pg.screenX(pt.x, pt.y, pt.z) * zoomScalar) - orthographicWidth / 2f,
+                (pg.screenY(pt.x, pt.y, pt.z) * zoomScalar) - orthographicHeight / 2f);
     }
 
     public void drawScene(float zoomScalar, float drawSize,
@@ -161,7 +161,7 @@ class UI {
         setCamera(pa.g, zoomScalar);
         pa.background(169, 202, 239);
         pa.imageMode(PConstants.CENTER);
-        pa.image(display, 0, 0, orthoWidth, orthoHeight);
+        pa.image(display, 0, 0, orthographicWidth, orthographicHeight);
         pa.resetMatrix();
         drawPins(pa.g, activePin, zoomScalar, drawSize, cubeEnabled, cubeNode3D);
         pa.resetMatrix();
@@ -193,12 +193,12 @@ class UI {
 
     public void setCamera(PGraphics pg, float zoomScalar) {
         pg.clear();
-        orthoHeight = pa.height * zoomScalar;
-        orthoWidth = ((float) pa.width / (float) pa.height) * orthoHeight;
-        mouse.x = (pa.mouseX - (pa.width / 2f)) * (orthoWidth / pa.width);
-        mouse.y = (pa.mouseY - (pa.height / 2f)) * (orthoHeight / pa.height);
+        orthographicHeight = pa.height * zoomScalar;
+        orthographicWidth = ((float) pa.width / (float) pa.height) * orthographicHeight;
+        mouse.x = (pa.mouseX - (pa.width / 2f)) * (orthographicWidth / pa.width);
+        mouse.y = (pa.mouseY - (pa.height / 2f)) * (orthographicHeight / pa.height);
         camera(cameraPosition, lookAt, up, pg);
-        pg.ortho(-orthoWidth / 2f, orthoWidth / 2f, -orthoHeight / 2f, orthoHeight / 2f, -1000, 1000);
+        pg.ortho(-orthographicWidth / 2f, orthographicWidth / 2f, -orthographicHeight / 2f, orthographicHeight / 2f, -1000, 1000);
     }
 
     /**
