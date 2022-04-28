@@ -2,21 +2,21 @@ package processing;
 
 import InverseKinematics.*;
 import processing.core.PApplet;
-import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import processing.event.MouseEvent;
 
 import java.util.ArrayList;
 
+import processing.core.PConstants;
 
 class UI {
-    static final PVector up = new PVector(0, 1, 0);
     PApplet processingApplet;
     PGraphics display;
     PVector mouse = new PVector(0, 0, 0);
     PVector cameraPosition = new PVector(0, 0, 70);
     PVector lookAt = new PVector(0, 0, 0);
+    static final PVector up = new PVector(0, 1, 0);
     float orthographicHeight, orthographicWidth;
     private PGraphics currentDrawSurface;
 
@@ -60,8 +60,8 @@ class UI {
     }
 
     public void drawPins(PGraphics pg, IKPin activePin,
-                         float zoomScalar, float drawSize,
-                         boolean cubeMode, Node3D cubeNode3D) {
+            float zoomScalar, float drawSize,
+            boolean cubeMode, Node3D cubeNode3D) {
 
         if (activePin != null) {
             Node3D ellipseAx;
@@ -115,11 +115,11 @@ class UI {
     }
 
     public void drawPinEffectorHints(PGraphics pg,
-                                     PVector pinLoc,
-                                     PVector pinX, PVector pinY, PVector pinZ,
-                                     PVector effectorO,
-                                     PVector effectorX, PVector effectorY, PVector effectorZ,
-                                     float xPriority, float yPriority, float zPriority, float totalpriorities) {
+            PVector pinLoc,
+            PVector pinX, PVector pinY, PVector pinZ,
+            PVector effectorO,
+            PVector effectorX, PVector effectorY, PVector effectorZ,
+            float xPriority, float yPriority, float zPriority, float totalpriorities) {
 
         pg.line(pinLoc.x, pinLoc.y, pinLoc.z, effectorO.x, effectorO.y, effectorO.z);
         pg.stroke(2, 58, 0, 150);
@@ -147,10 +147,10 @@ class UI {
     }
 
     public void drawScene(float zoomScalar, float drawSize,
-                          Runnable additionalDraw,
-                          Skeleton3D armature,
-                          String usageInstructions,
-                          IKPin activePin, Node3D cubeNode3D, boolean cubeEnabled) {
+            Runnable additionalDraw,
+            Skeleton3D armature,
+            String usageInstructions,
+            IKPin activePin, Node3D cubeNode3D, boolean cubeEnabled) {
         currentDrawSurface = display;
         display.beginDraw();
         setSceneAndCamera(display, zoomScalar);
@@ -203,8 +203,8 @@ class UI {
 
     /**
      * @return the draw surface this class is currently operating on.
-     * This is used as kind of hack, so I don't have to bother writing
-     * interfaces just to render a box when using multi-pass.
+     *         This is used as kind of hack, so I don't have to bother writing
+     *         interfaces just to render a box when using multi-pass.
      */
     public PGraphics getCurrentDrawSurface() {
         return currentDrawSurface;
@@ -212,143 +212,108 @@ class UI {
 
 }
 
+public class ItemHolding extends PApplet {
 
-public class KusudamaVisualizer extends PApplet {
-    public static void main(String[] args) {
-        PApplet.main("processing.KusudamaVisualizer");
-    }
-    public void settings(){
-        size(1200, 900, P3D);
-        noSmooth();
-    }
-
-    float zoomScalar = 7f/height;
-    float orthographicHeight = height;
-    float orthographicWidth = width;
-
-    Skeleton3D simpleArmature;
-    Bone  rootBone, initialBone,
-            seconBone, thirBone;
-
-    UI ui;
-
-    Node3D worldAxes;
+    Skeleton3D loadedArmature;
     ArrayList<IKPin> pins = new ArrayList<>();
-    public static IKPin activePin;
+    UI ui;
+    IKPin activePin;
+    Node3D worldNode3D, cubeNode3D;
+    float zoomScalar = 200f / height;
+    boolean cubeMode = true;
+
+    public static void main(String[] args) {
+        PApplet.main("processing.ItemHolding");
+    }
+
+    public void settings() {
+        size(1200, 900, P3D);
+    }
 
     public void setup() {
         ui = new UI(this);
-
-        //Create global axes so we can easily manipulate the whole scene. (not necessary, just convenient)
-        worldAxes = new Node3D();
-
-        //Create an armature
-        simpleArmature = new Skeleton3D("example");
-
-        //attach the armature to the world axes (not necessary, just convenient)
-        simpleArmature.localAxes().setParent(worldAxes);
-
-        //translate everything down to where the user can see it,
-        //and rotate it 180 degrees about the z-axis so it's not upside down.
-        worldAxes.translateTo(new PVector(0, 150, 0));
-        simpleArmature.localAxes().rotateAboutZ(PI, true);
-
-        //specify that we want the solver to run 10 iteration whenever we call it.
-        simpleArmature.setDefaultIterations(10);
-        //specify the maximum amount any bone is allowed to rotate per iteration (slower convergence, nicer results)
-        simpleArmature.setDefaultDampening(0.03f);
-        //specify that the armature should avoid degenerate solutions.
-        simpleArmature.setDefaultStabilizingPassCount(1);
-        //benchmark performance
-        simpleArmature.setPerformanceMonitor(true);
-
-        initializeBones();
-        setBoneConstraints();
-
-
+        worldNode3D = loadedArmature.localAxes().getParentAxes();
+        if (worldNode3D == null) {
+            worldNode3D = new Node3D();
+            loadedArmature.localAxes().setParent(worldNode3D);
+        }
         updatePinList();
+        cubeNode3D = new Node3D();
 
-        //Tell the Bone class that all bones should draw their kusudamas.
-        Bone.setDrawKusudamas(true);
-    }
+        activePin = pins.get(pins.size() - 1);
 
-    public void initializeBones() {
-        rootBone = simpleArmature.getRootBone();
-        rootBone.setBoneHeight(20f);
-        initialBone = new Bone(rootBone, "initial", 74f);
-        seconBone = new Bone(initialBone, "seconBone", 86f);
-        thirBone = new Bone(seconBone, "thirBone", 98f);
+        loadedArmature.setPerformanceMonitor(true); // print performance stats
 
-        initialBone.rotAboutFrameX(.01f);
+        // Tell the Bone class that all bones should draw their kusudamas.
+        Bone.setDrawKusudamas(false);
 
-        //pin the root
-        rootBone.enablePin();
+        /**
+         * The armature we're loading is already posed such that its hands touch
+         * a box. So all we need to do is , first
+         * move our box into the appropriate position
+         */
+        cubeNode3D.translateTo(new PVector(-13, -27, 32));
+        cubeNode3D.setRelativeToParent(worldNode3D);
+        /**
+         * and then specify that the transformations of the left hand and right hand
+         * pins
+         * should be computed relative to the axes of the cube we're drawing,
+         * Thereby, any time we transform the parent cube's axes, the pins will follow.
+         */
+        loadedArmature.getBoneName("left hand").getIKPin().getAxes().setParent(cubeNode3D);
+        loadedArmature.getBoneName("right hand").getIKPin().getAxes().setParent(cubeNode3D);
 
-        //intermediary pin a few bones up the chain.
-        thirBone.enablePin();
-
-        //determine how much precedence each of this pin's axes get
-        //in relation to other axes on other pins being considered by the solver.
-        //this line state that the solver should care about this bone's X and Y headings
-        //aligning with its targets about 5 times as much as it cares about the X and Y headings of any other bones.
-        //it also tells the solver to ignore the z heading entirely.
-        thirBone.getIKPin().setTargetPriorities(5f, 5f,0f);
-    }
-
-    public void setBoneConstraints() {
-
-        Kusudama firstConstraint = new Kusudama(initialBone);
-        firstConstraint.addLimitConeAtIndex(0, new PVector(.5f, 1f, 0f), 0.5f);
-        firstConstraint.addLimitConeAtIndex(1, new PVector(-.5f, 1f, 0f), 0.7f);
-        firstConstraint.setAxialLimits(0.01f,0.03f);
-        firstConstraint.enable();
-        initialBone.addConstraint(firstConstraint);
-
-        Kusudama secondConstraint = new Kusudama(seconBone);
-        secondConstraint.addLimitConeAtIndex(0, new PVector(.5f, 1f, 0f),0.6f);
-        secondConstraint.addLimitConeAtIndex(1, new PVector(-1f, 1f, 0f), 0.2f);
-        secondConstraint.setAxialLimits(0.1f,0.9f);
-        secondConstraint.enable();
-        seconBone.addConstraint(secondConstraint);
-
-        Kusudama thirdConstraint = new Kusudama(thirBone);
-        thirdConstraint.addLimitConeAtIndex(0, new PVector(.5f, 1f, 0f), 0.8f);
-        thirdConstraint.addLimitConeAtIndex(1, new PVector(-.5f, 1f, 0f), 0.8f);
-        thirdConstraint.setAxialLimits(0.1f,0.3f);
-        thirdConstraint.enable();
-        thirBone.addConstraint(thirdConstraint);
     }
 
     public void draw() {
-        if(mousePressed) {
-            //Set the selected pin to the position of the mouse if the user is dragging it.
-            activePin.translateTo(
-                    new PVector(
-                            ui.mouse.x,
-                            ui.mouse.y,
-                            activePin.getLocation_().z));
-
-            //run the IK solver on the armature.
-            simpleArmature.IKSolver(rootBone);
-
-        }else {
-            //rotate the world so the user can inspect the pose
-            worldAxes.rotateAboutY(PI/500f, true);
+        if (mousePressed) {
+            if (cubeMode) {
+                cubeNode3D.translateTo(new PVector(ui.mouse.x, ui.mouse.y, cubeNode3D.calculatePosition().z));
+            } else {
+                activePin.translateTo(new PVector(ui.mouse.x, ui.mouse.y, activePin.getLocation_().z));
+            }
+            loadedArmature.IKSolver(loadedArmature.getRootBone());
+        } else {
+            worldNode3D.rotateAboutY(0.0f, true);
         }
 
-        zoomScalar = 350f/height;
-        ui.drawScene(zoomScalar, 20f, null, simpleArmature, null, activePin, null, false);
+        String additionalInstructions = "Hit the 'C' key to select or deselect the cube";
+        additionalInstructions += "\n HIT THE S KEY TO SAVE."
+                + "\n HIT THE L KEY TO LOAD THE CURRENT ARMATURE CONFIGURATION.";
+        // Decrease the numerator to increase the zoom.
+        zoomScalar = 200f / height;
+        ui.drawScene(zoomScalar, 12f, () -> drawHeldCube(), loadedArmature, additionalInstructions, activePin,
+                cubeNode3D,
+                cubeMode);
     }
 
+    public void drawHeldCube() {
+        PGraphics currentDisplay = ui.getCurrentDrawSurface();
+        if (ui.display == currentDisplay) {
+            currentDisplay.fill(60, 60, 60);
+            currentDisplay.strokeWeight(1);
+            currentDisplay.stroke(255);
+        } else {
+            currentDisplay.fill(0, 0, 0, 255);
+            currentDisplay.emissive(0);
+            currentDisplay.noStroke();
+        }
+        currentDisplay.pushMatrix();
+        currentDisplay.applyMatrix(cubeNode3D.getGlobalPMatrix());
+        currentDisplay.box(40, 20, 20);
+        currentDisplay.popMatrix();
+    }
 
     public void mouseWheel(MouseEvent event) {
         float e = event.getCount();
-        if(event.isShiftDown()) {
-            activePin.getAxes().rotateAboutZ(e/TAU, true);
-        }else if (event.isControlDown()) {
-            activePin.getAxes().rotateAboutX(e/TAU, true);
-        }  else {
-            activePin.getAxes().rotateAboutY(e/TAU, true);
+        Node3D node3D = cubeMode ? cubeNode3D
+                : activePin.getAxes();
+        if (event.isShiftDown()) {
+            node3D.rotateAboutZ(e / TAU, true);
+        } else if (event.isControlDown()) {
+            node3D.rotateAboutX(e / TAU, true);
+        } else {
+            node3D.rotateAboutY(e / TAU, true);
         }
         activePin.solveIKForThisAndChildren();
     }
@@ -356,36 +321,45 @@ public class KusudamaVisualizer extends PApplet {
     public void keyPressed() {
         if (key == CODED) {
             if (keyCode == DOWN) {
-                int currentPinIndex =(pins.indexOf(activePin) + 1) % pins.size();
-                activePin  = pins.get(currentPinIndex);
+                cubeMode = false;
+                int currentPinIndex = (pins.indexOf(activePin) + 1) % pins.size();
+                activePin = pins.get(currentPinIndex);
             } else if (keyCode == UP) {
+                cubeMode = false;
                 int idx = pins.indexOf(activePin);
-                int currentPinIndex =  (pins.size()-1) -(((pins.size()-1) - (idx - 1)) % pins.size());
-                activePin  = pins.get(currentPinIndex);
+                int currentPinIndex = (pins.size() - 1) - (((pins.size() - 1) - (idx - 1)) % pins.size());
+                activePin = pins.get(currentPinIndex);
             }
+        } else if (key == 'c') {
+            cubeMode = !cubeMode;
+        } else if (key == 's') {
+            println("Saving");
+        } else if (key == 'l') {
+            loadedArmature.updateBonechains();
+            loadedArmature.IKSolver(loadedArmature.getRootBone(), 0.5f, 20, 1);
+
+            Bone.setDrawKusudamas(true);
         }
     }
-
 
     public void updatePinList() {
         pins.clear();
-        recursivelyAddToPinnedList(pins, simpleArmature.getRootBone());
-        if(pins .size() > 0) {
-            activePin = pins.get(pins.size()-1);
-        }
+        recursiveAddToPinnedList(pins, loadedArmature.getRootBone());
     }
 
-    public void recursivelyAddToPinnedList(ArrayList<IKPin> pins, Bone descendedFrom) {
+    public void recursiveAddToPinnedList(ArrayList<IKPin> pins, Bone descendedFrom) {
+        @SuppressWarnings("unchecked")
         ArrayList<Bone> pinnedChildren = (ArrayList<Bone>) descendedFrom.getMostImmediatelyPinnedDescendants();
-        for(Bone b : pinnedChildren) {
-            pins.add((IKPin)b.getIKPin());
-            b.getIKPin().getAxes().setParent(worldAxes);
+        for (Bone b : pinnedChildren) {
+            IKPin pin = b.getIKPin();
+            pins.add(pin);
         }
-        for(Bone b : pinnedChildren) {
+        for (Bone b : pinnedChildren) {
             ArrayList<Bone> children = b.getChildren();
-            for(Bone b2 : children) {
-                recursivelyAddToPinnedList(pins, b2);
+            for (Bone b2 : children) {
+                recursiveAddToPinnedList(pins, b2);
             }
         }
     }
+
 }

@@ -11,7 +11,7 @@ repositories {
 }
 
 application {
-    mainClass = 'processing.KusudamaVisualizer'
+    mainClass = 'processing.ItemHolding'
 }
 
 
@@ -38,6 +38,9 @@ sourceSets {
 distributions {
     main {
         contents {
+            from ('Humanoid_Holding_Item.json') {                
+                rename 'Humanoid_Holding_Item.json', 'bin/Humanoid_Holding_Item.json'
+            }
             from ('kusudama_vert.glsl') {                
                 rename 'kusudama_vert.glsl', 'bin/kusudama_vert.glsl'
             }
