@@ -19,8 +19,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package InverseKinematics;
 
-import ewbik.math.*;
-
 import java.util.ArrayList;
 
 /**
@@ -119,11 +117,11 @@ public class Kusudama {
         PMatrix localMat = limitingAxes().getLocalPMatrix();
         p.applyMatrix(localMat);
         float circumference = attachedTo().getBoneHeight() / 2.5f;
-        ewbik.math.Vector3 min = new ewbik.math.Vector3(0f, 0f, circumference);
-        ewbik.math.Vector3 current = new ewbik.math.Vector3(0f, 0f, circumference);
-        Quaternion minRot = new Quaternion(new ewbik.math.Vector3(0, 1, 0), minAxialAngle());
+        InverseKinematics.Vector3 min = new InverseKinematics.Vector3(0f, 0f, circumference);
+        InverseKinematics.Vector3 current = new InverseKinematics.Vector3(0f, 0f, circumference);
+        Quaternion minRot = new Quaternion(new InverseKinematics.Vector3(0, 1, 0), minAxialAngle());
         float absAngle = minAxialAngle + range;
-        Quaternion maxRot = new Quaternion(new ewbik.math.Vector3(0, 1, 0), absAngle);
+        Quaternion maxRot = new Quaternion(new InverseKinematics.Vector3(0, 1, 0), absAngle);
 
         float pieces = 20f;
         float granularity = 1f / pieces;
@@ -132,7 +130,7 @@ public class Kusudama {
         p.fill(0, 150, 0, 120);
         p.vertex(0, 0, 0);
         for (float i = 0; i <= pieces + (3 * granularity); i++) {
-            ewbik.math.Quaternion interp = new ewbik.math.Quaternion(i * granularity, minRot, minRot);
+            InverseKinematics.Quaternion interp = new InverseKinematics.Quaternion(i * granularity, minRot, minRot);
             current = interp.applyTo(min);
             p.vertex(current.x, current.y, current.z);
         }
@@ -154,10 +152,10 @@ public class Kusudama {
         Quaternion alignRot = limitingNode3D.getGlobalMBasis().getInverseRotation()
                 .applyTo(attachedTo().localAxes().getGlobalMBasis().rotation);
 
-        Quaternion[] decomposition = alignRot.getSwingTwist(new ewbik.math.Vector3(0, 1, 0));
+        Quaternion[] decomposition = alignRot.getSwingTwist(new InverseKinematics.Vector3(0, 1, 0));
         float angle = decomposition[1].getAngle() * decomposition[1].getAxis().y;
-        Quaternion zRot = new Quaternion(new ewbik.math.Vector3(0, 1, 0), angle);
-        ewbik.math.Vector3 yaw = new ewbik.math.Vector3(0, 0, circumference);
+        Quaternion zRot = new Quaternion(new InverseKinematics.Vector3(0, 1, 0), angle);
+        InverseKinematics.Vector3 yaw = new InverseKinematics.Vector3(0, 0, circumference);
         yaw = zRot.applyToCopy(yaw);
         p.stroke(25, 25, 195);
         p.strokeWeight(4);
@@ -175,9 +173,9 @@ public class Kusudama {
 
         int idx = 0;
         for (LimitCone lc : getLimitCones()) {
-            ewbik.math.Vector3 controlPoint = lc.getControlPoint();
-            ewbik.math.Vector3 leftTangent = lc.tangentCircleCenterNext1;
-            ewbik.math.Vector3 rightTangent = lc.tangentCircleCenterNext2;
+            Vector3 controlPoint = lc.getControlPoint();
+            Vector3 leftTangent = lc.tangentCircleCenterNext1;
+            Vector3 rightTangent = lc.tangentCircleCenterNext2;
             leftTangent = leftTangent.normalize();
             controlPoint = controlPoint.normalize();
             rightTangent = rightTangent.normalize();

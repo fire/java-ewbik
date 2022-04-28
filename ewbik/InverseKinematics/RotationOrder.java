@@ -1,4 +1,4 @@
-package ewbik.math;
+package InverseKinematics;
 
 public final class RotationOrder {
 

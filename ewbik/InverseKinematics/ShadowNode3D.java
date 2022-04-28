@@ -18,8 +18,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package InverseKinematics;
 
-import ewbik.math.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -150,11 +148,11 @@ public class ShadowNode3D {
                 innerWeightArray.add(pin.getPinWeight() * currentFalloff);
                 float maxPinWeight = 0f;
                 if ((modeCode & IKPin.XDir) != 0)
-                    maxPinWeight = ewbik.math.MathUtils.max(maxPinWeight, pin.getXPriority());
+                    maxPinWeight = MathUtils.max(maxPinWeight, pin.getXPriority());
                 if ((modeCode & IKPin.YDir) != 0)
-                    maxPinWeight = ewbik.math.MathUtils.max(maxPinWeight, pin.getYPriority());
+                    maxPinWeight = MathUtils.max(maxPinWeight, pin.getYPriority());
                 if ((modeCode & IKPin.ZDir) != 0)
-                    maxPinWeight = ewbik.math.MathUtils.max(maxPinWeight, pin.getZPriority());
+                    maxPinWeight = MathUtils.max(maxPinWeight, pin.getZPriority());
 
                 if (maxPinWeight == 0f)
                     maxPinWeight = 1f;

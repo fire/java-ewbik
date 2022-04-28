@@ -1,6 +1,4 @@
-package InverseKinematics.math;
-
-import ewbik.math.*;
+package InverseKinematics;
 
 public class Basis {
     public static final Basis IDENTITY = new Basis(1.0f, 0.0f, 0.0f, 0.0f, false);

@@ -22,9 +22,7 @@ SOFTWARE.
 
  */
 
-package ewbik.math;
-
-import InverseKinematics.math.Basis;
+package InverseKinematics;
 
 public class Quaternion {
     public Basis rotation = Basis.IDENTITY;

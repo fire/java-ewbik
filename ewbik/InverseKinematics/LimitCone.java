@@ -19,8 +19,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package InverseKinematics;
 
-import ewbik.math.*;
-
 public class LimitCone {
 
     public Kusudama parentKusudama;
@@ -55,7 +53,7 @@ public class LimitCone {
     public LimitCone() {
     }
 
-    public LimitCone(ewbik.math.Vector3 location, float rad, Kusudama attachedTo) {
+    public LimitCone(Vector3 location, float rad, Kusudama attachedTo) {
         Vector3 location1 = location;
         setControlPoint(location1);
         LimitCone.this.tangentCircleCenterNext1 = location1.getOrthogonal();

@@ -19,8 +19,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package InverseKinematics;
 
-import ewbik.math.*;
-
 import java.util.ArrayList;
 
 public class Bone implements Comparable<Bone> {
@@ -57,16 +55,16 @@ public class Bone implements Comparable<Bone> {
      * @throws NullParentForBoneException
      */
     public Bone(Bone par, // parent bone
-                ewbik.math.Vector3 tipHeading, // the orienational heading of this bone (global vs relative coords specified in
+                Vector3 tipHeading, // the orienational heading of this bone (global vs relative coords specified in
                 // coordinateType)
-                ewbik.math.Vector3 rollHeading, // axial rotation heading of the bone (it's z-axis)
+                Vector3 rollHeading, // axial rotation heading of the bone (it's z-axis)
                 String inputTag, // some user specified name for the bone, if desired
                 float inputBoneHeight, // bone length
                 frameType coordinateType) {
-        ewbik.math.Vector3 tipHeading1 = tipHeading;
-        ewbik.math.Vector3 rollHeading1 = rollHeading;
+        Vector3 tipHeading1 = tipHeading;
+        Vector3 rollHeading1 = rollHeading;
 
-        this.lastRotation = new ewbik.math.Quaternion();
+        this.lastRotation = new Quaternion();
         if (par != null) {
             if (inputTag == null || inputTag == "") {
                 this.tag = Integer.toString(System.identityHashCode(this));
@@ -329,11 +327,11 @@ public class Bone implements Comparable<Bone> {
      *         indicating
      *         the spatial target of the pin.
      */
-    public ewbik.math.Vector3 getPinLocation() {
+    public Vector3 getPinLocation() {
         if (pin == null)
             return null;
         else {
-            ewbik.math.Vector3 loc = pin.getLocation_();
+            Vector3 loc = pin.getLocation_();
             return loc;
         }
     }

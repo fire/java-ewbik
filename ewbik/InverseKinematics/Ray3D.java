@@ -17,7 +17,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
  */
 
-package ewbik.math;
+package InverseKinematics;
 
 /**
  * @author Eron Gjoni
@@ -62,11 +62,11 @@ public class Ray3D {
      * @return a sgRay along the line of intersection of these two planes, or null
      *         if inputs are coplanar
      */
-    public static ewbik.math.Ray3D planePlaneIntersect(Vector3 a1, Vector3 a2, Vector3 a3, Vector3 b1, Vector3 b2,
-            Vector3 b3) {
-        ewbik.math.Ray3D a1a2 = new ewbik.math.Ray3D(a1, a2);
-        ewbik.math.Ray3D a1a3 = new ewbik.math.Ray3D(a1, a3);
-        ewbik.math.Ray3D a2a3 = new ewbik.math.Ray3D(a2, a3);
+    public static Ray3D planePlaneIntersect(Vector3 a1, Vector3 a2, Vector3 a3, Vector3 b1, Vector3 b2,
+                                            Vector3 b3) {
+        Ray3D a1a2 = new Ray3D(a1, a2);
+        Ray3D a1a3 = new Ray3D(a1, a3);
+        Ray3D a2a3 = new Ray3D(a2, a3);
 
         Vector3 interceptsa1a2 = a1a2.intersectsPlane(b1, b2, b3);
         Vector3 interceptsa1a3 = a1a3.intersectsPlane(b1, b2, b3);
@@ -87,7 +87,7 @@ public class Ray3D {
             }
         }
         if (notNull1 != null && notNull2 != null)
-            return new ewbik.math.Ray3D(notNull1, notNull2);
+            return new Ray3D(notNull1, notNull2);
         else
             return null;
     }
@@ -136,7 +136,7 @@ public class Ray3D {
      * @param r
      * @return
      */
-    public float distTo(ewbik.math.Ray3D r) {
+    public float distTo(Ray3D r) {
         Vector3 closestOnThis = this.closestPointToRay3D(r);
         return r.distTo(closestOnThis);
     }
@@ -145,7 +145,7 @@ public class Ray3D {
      * returns the distance between this ray as a line segment, and the input ray
      * treated as a line segment
      */
-    public float distToStrict(ewbik.math.Ray3D r) {
+    public float distToStrict(Ray3D r) {
         Vector3 closestOnThis = this.closestPointToSegment3D(r);
         return closestOnThis.dist(r.closestPointToStrict(closestOnThis));
     }
@@ -205,7 +205,7 @@ public class Ray3D {
      *
      * @param target
      */
-    public void alignTo(ewbik.math.Ray3D target) {
+    public void alignTo(Ray3D target) {
         p1.set(target.p1);
         p2.set(target.p2);
     }
@@ -237,8 +237,8 @@ public class Ray3D {
     /**
      * @return a copy of this ray with its z-component set to 0;
      */
-    public ewbik.math.Ray3D get2DCopy() {
-        return this.get2DCopy(ewbik.math.Ray3D.Z);
+    public Ray3D get2DCopy() {
+        return this.get2DCopy(Ray3D.Z);
     }
 
     /**
@@ -248,17 +248,17 @@ public class Ray3D {
      * @param collapseOnAxis the axis on which to collapse the ray.
      * @return
      */
-    public ewbik.math.Ray3D get2DCopy(int collapseOnAxis) {
-        ewbik.math.Ray3D result = this.copy();
-        if (collapseOnAxis == ewbik.math.Ray3D.X) {
+    public Ray3D get2DCopy(int collapseOnAxis) {
+        Ray3D result = this.copy();
+        if (collapseOnAxis == Ray3D.X) {
             result.p1.setX_(0);
             result.p2.setX_(0);
         }
-        if (collapseOnAxis == ewbik.math.Ray3D.Y) {
+        if (collapseOnAxis == Ray3D.Y) {
             result.p1.setY_(0);
             result.p2.setY_(0);
         }
-        if (collapseOnAxis == ewbik.math.Ray3D.Z) {
+        if (collapseOnAxis == Ray3D.Z) {
             result.p1.setZ_(0);
             result.p2.setZ_(0);
         }
@@ -404,8 +404,8 @@ public class Ray3D {
         this.p2.set((Vector3) p2Heading.addCopy(p2Add).addCopy(midPoint));
     }
 
-    public ewbik.math.Ray3D copy() {
-        return new ewbik.math.Ray3D(this.p1, this.p2);
+    public Ray3D copy() {
+        return new Ray3D(this.p1, this.p2);
     }
 
     public void reverse() {
@@ -414,12 +414,12 @@ public class Ray3D {
         this.p2 = temp;
     }
 
-    public ewbik.math.Ray3D getReversed() {
-        return new ewbik.math.Ray3D(this.p2, this.p1);
+    public Ray3D getReversed() {
+        return new Ray3D(this.p2, this.p1);
     }
 
-    public ewbik.math.Ray3D getRayScaledTo(float scalar) {
-        return new ewbik.math.Ray3D(p1, this.getScaledTo(scalar));
+    public Ray3D getRayScaledTo(float scalar) {
+        return new Ray3D(p1, this.getScaledTo(scalar));
     }
 
     /*
@@ -427,7 +427,7 @@ public class Ray3D {
      * has a positive dot product with the heading of r
      * if dot product is already positive, does nothing.
      */
-    public void pointWith(ewbik.math.Ray3D r) {
+    public void pointWith(Ray3D r) {
         if (this.heading().dot(r.heading()) < 0)
             this.reverse();
     }
@@ -437,8 +437,8 @@ public class Ray3D {
             this.reverse();
     }
 
-    public ewbik.math.Ray3D getRayScaledBy(float scalar) {
-        return new ewbik.math.Ray3D(p1, this.getMultipledBy(scalar));
+    public Ray3D getRayScaledBy(float scalar) {
+        return new Ray3D(p1, this.getMultipledBy(scalar));
     }
 
     /*
@@ -520,7 +520,7 @@ public class Ray3D {
         this.mag(1);
     }
 
-    public Vector3 intercepts2D(ewbik.math.Ray3D r) {
+    public Vector3 intercepts2D(Ray3D r) {
         Vector3 result = p1.copy();
 
         float p0_x = this.p1.x;
@@ -558,7 +558,7 @@ public class Ray3D {
      * @param r
      * @return
      */
-    public Vector3 closestPointToSegment3D(ewbik.math.Ray3D r) {
+    public Vector3 closestPointToSegment3D(Ray3D r) {
         Vector3 closestToThis = r.closestPointToRay3DStrict(this);
         return this.closestPointTo(closestToThis);
     }
@@ -570,7 +570,7 @@ public class Ray3D {
      * @return
      */
 
-    public Vector3 closestPointToRay3D(ewbik.math.Ray3D r) {
+    public Vector3 closestPointToRay3D(Ray3D r) {
         Vector3 result = null;
 
         workingVector.set(p2);
@@ -600,7 +600,7 @@ public class Ray3D {
         return result;
     }
 
-    public Vector3 closestPointToRay3DStrict(ewbik.math.Ray3D r) {
+    public Vector3 closestPointToRay3DStrict(Ray3D r) {
         Vector3 result = null;
 
         workingVector.set(p2);
@@ -644,7 +644,7 @@ public class Ray3D {
      * @param r
      * @return
      */
-    public Vector3 closestPointToRay3DBounded(ewbik.math.Ray3D r) {
+    public Vector3 closestPointToRay3DBounded(Ray3D r) {
         Vector3 result = null;
 
         workingVector.set(p2);
@@ -681,13 +681,13 @@ public class Ray3D {
     }
 
     // returns a ray perpendicular to this ray on the XY plane;
-    public ewbik.math.Ray3D getPerpendicular2D() {
+    public Ray3D getPerpendicular2D() {
         Vector3 heading = this.heading();
         workingVector.set(heading.x - 1f, heading.x, 0f);
-        return new ewbik.math.Ray3D(this.p1, workingVector.add(this.p1));
+        return new Ray3D(this.p1, workingVector.add(this.p1));
     }
 
-    public Vector3 intercepts2DStrict(ewbik.math.Ray3D r) {
+    public Vector3 intercepts2DStrict(Ray3D r) {
         // will also return null if the intersection does not occur on the
         // line segment specified by the ray.
         Vector3 result = p1.copy();

@@ -1,4 +1,4 @@
-package ewbik.math;
+package InverseKinematics;
 
 public class Transform3D {
 
@@ -125,8 +125,8 @@ public class Transform3D {
 
     }
 
-    public ewbik.math.Transform3D copy() {
-        return new ewbik.math.Transform3D(this);
+    public Transform3D copy() {
+        return new Transform3D(this);
     }
 
     private void set(Vector3 x, Vector3 y, Vector3 z) {
@@ -191,8 +191,8 @@ public class Transform3D {
 
         Vector3[] from = { origin, x_identity, y_identity, z_identity };
         Vector3[] to = { origin.copy(), xHeading, yHeading, zHeading };
-        QCP alignHeads = new QCP(ewbik.math.MathUtils.FLOAT_ROUNDING_ERROR,
-                ewbik.math.MathUtils.FLOAT_ROUNDING_ERROR);
+        QCP alignHeads = new QCP(MathUtils.FLOAT_ROUNDING_ERROR,
+                MathUtils.FLOAT_ROUNDING_ERROR);
         alignHeads.setMaxIterations(50);
         Quaternion rotation = alignHeads.weightedSuperpose(from, to, null, false);
         return rotation;

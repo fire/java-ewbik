@@ -17,8 +17,6 @@ package InverseKinematics;/*
                    
                    */
 
-import ewbik.math.*;
-
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -45,7 +43,7 @@ public class Node3D {
     Vector3 tempOrigin;
     private DependencyReference<Node3D> parent = null;
 
-    public Node3D(ewbik.math.Transform3D b, Node3D parent) {
+    public Node3D(Transform3D b, Node3D parent) {
         this.globalMBasis = ((Transform3D) b).copy();
         createTempVars(((Transform3D) b).getOrigin());
         if (this.getParentAxes() != null)
@@ -72,7 +70,7 @@ public class Node3D {
      *               coordinates, given as an offset from this base's
      *               origin in global coordinates.
      */
-    public Node3D(ewbik.math.Vector3 origin,
+    public Node3D(Vector3 origin,
                   Vector3 inX,
                   Vector3 inY,
                   Vector3 inZ,
@@ -608,7 +606,7 @@ public class Node3D {
         this.markDirty();
     }
 
-    public void rotateBy(ewbik.math.Quaternion apply) {
+    public void rotateBy(Quaternion apply) {
         this.updateGlobal();
         if (parent != null) {
             Quaternion newRot = this.getParentAxes().getGlobalMBasis().getLocalOfRotation(apply);

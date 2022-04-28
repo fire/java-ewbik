@@ -19,12 +19,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package InverseKinematics;
 
-import ewbik.math.*;
-import ewbik.math.MathUtils;
-import ewbik.math.Vector3;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 public class Skeleton3D {
@@ -48,7 +43,7 @@ public class Skeleton3D {
     // debug code -- use to set a minimum distance an effector must move
     // in order to trigger a chain iteration
     float debugMag = 5f;
-    ewbik.math.Vector3 lastEffectorPos = new ewbik.math.Vector3();
+    Vector3 lastEffectorPos = new Vector3();
     boolean monitorPerformance = false;
     private boolean abilityBiasing = false;
 
@@ -68,8 +63,8 @@ public class Skeleton3D {
 
     protected void initializeRootBone(
             Skeleton3D armature,
-            ewbik.math.Vector3 tipHeading,
-            ewbik.math.Vector3 rollHeading,
+            Vector3 tipHeading,
+            Vector3 rollHeading,
             String inputTag,
             float boneHeight,
             Bone.frameType coordinateType) {
@@ -475,9 +470,9 @@ public class Skeleton3D {
      * @param b
      * @return
      */
-    public ewbik.math.Quaternion getRotationBetween(Node3D a,
-            Node3D b) {
-        return new ewbik.math.Quaternion(a.calculateX().heading(), a.calculateY().heading(), b.calculateX().heading(),
+    public Quaternion getRotationBetween(Node3D a,
+                                         Node3D b) {
+        return new Quaternion(a.calculateX().heading(), a.calculateY().heading(), b.calculateX().heading(),
                 b.calculateY().heading());
     }
 

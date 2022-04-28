@@ -1,4 +1,4 @@
-package ewbik.math;
+package InverseKinematics;
 
 public class Vector3 {
 
@@ -39,7 +39,7 @@ public class Vector3 {
      *
      * @param vector The vector
      */
-    public Vector3(ewbik.math.Vector3 vector) {
+    public Vector3(Vector3 vector) {
         this.set(vector);
     }
 
@@ -63,15 +63,15 @@ public class Vector3 {
     /**
      * @return a copy of this vector
      */
-    public ewbik.math.Vector3 copy() {
+    public Vector3 copy() {
         return new Vector3(this);
     }
 
     /**
      * @return a copy of this Vector cast to a single precision analog.
      */
-    public ewbik.math.Vector3 toVec3f() {
-        return new ewbik.math.Vector3(x, y, z);
+    public Vector3 toVec3f() {
+        return new Vector3(x, y, z);
     }
 
 
@@ -111,7 +111,7 @@ public class Vector3 {
         return x1 * x2 + y1 * y2 + z1 * z2;
     }
 
-    public static float dot(ewbik.math.Vector3 u, ewbik.math.Vector3 v) {
+    public static float dot(Vector3 u, Vector3 v) {
         return u.dot(v);
     }
 
@@ -228,7 +228,7 @@ public class Vector3 {
      * @usage web_application
      * @brief Calculate and return the angle between two vectors
      */
-    static public float angleBetween(ewbik.math.Vector3 v1, ewbik.math.Vector3 v2) {
+    static public float angleBetween(Vector3 v1, Vector3 v2) {
 
         // We get NaN if we pass in a zero vector which can cause problems
         // Zero seems like a reasonable angle between a (0,0,0) vector and something
@@ -263,14 +263,14 @@ public class Vector3 {
      * @param z
      * @return This vector for chaining
      */
-    public ewbik.math.Vector3 set(float x, float y, float z) {
+    public Vector3 set(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
         return this;
     }
 
-    public ewbik.math.Vector3 set(final ewbik.math.Vector3 vector) {
+    public Vector3 set(final Vector3 vector) {
         return this.set(vector.getX(), vector.getY(), vector.getZ());
     }
 
@@ -279,7 +279,7 @@ public class Vector3 {
      *
      * @param v The vector
      */
-    public ewbik.math.Vector3 set(final float[] values) {
+    public Vector3 set(final float[] values) {
         return this.set(values[0], values[1], values[2]);
     }
 
@@ -290,7 +290,7 @@ public class Vector3 {
      * @param polarAngle     The angle between z-axis in radians [0, pi]
      * @return This vector for chaining
      */
-    public ewbik.math.Vector3 setFromSpherical(float azimuthalAngle, float polarAngle) {
+    public Vector3 setFromSpherical(float azimuthalAngle, float polarAngle) {
         float cosPolar = MathUtils.cos(polarAngle);
         float sinPolar = MathUtils.sin(polarAngle);
 
@@ -310,7 +310,7 @@ public class Vector3 {
         return this.add(vector.getX(), vector.getY(), vector.getZ());
     }
 
-    public ewbik.math.Vector3 add(float[] v) {
+    public Vector3 add(float[] v) {
         return this.add(v[0], v[1], v[2]);
     }
 
@@ -322,7 +322,7 @@ public class Vector3 {
      * @param z The z-component of the other vector
      * @return This vector for chaining.
      */
-    public ewbik.math.Vector3 add(float x, float y, float z) {
+    public Vector3 add(float x, float y, float z) {
         this.x += x;
         this.y += y;
         this.z += z;
@@ -335,7 +335,7 @@ public class Vector3 {
      * @param values The value
      * @return This vector for chaining
      */
-    public ewbik.math.Vector3 add(float values) {
+    public Vector3 add(float values) {
         return set(this.x + values, this.y + values, this.z + values);
     }
 
@@ -357,7 +357,7 @@ public class Vector3 {
      * @param z The z-component of the other vector
      * @return This vector for chaining
      */
-    public ewbik.math.Vector3 sub(float x, float y, float z) {
+    public Vector3 sub(float x, float y, float z) {
         return this.set(this.x - x, this.y - y, this.z - z);
     }
 
@@ -367,7 +367,7 @@ public class Vector3 {
      * @param value The value
      * @return This vector for chaining
      */
-    public ewbik.math.Vector3 sub(float value) {
+    public Vector3 sub(float value) {
         return this.set(this.x - value, this.y - value, this.z - value);
     }
 
@@ -388,7 +388,7 @@ public class Vector3 {
      * @param vz Z value
      * @return This vector for chaining
      */
-    public ewbik.math.Vector3 multiply(float vx, float vy, float vz) {
+    public Vector3 multiply(float vx, float vy, float vz) {
         return this.set(this.x * vx, this.y * vy, this.z * vz);
     }
 
@@ -404,7 +404,7 @@ public class Vector3 {
      * @usage web_application
      * @brief Divide a vector by a scalar
      */
-    public ewbik.math.Vector3 divide(float n) {
+    public Vector3 divide(float n) {
         x /= n;
         y /= n;
         z /= n;
@@ -460,7 +460,7 @@ public class Vector3 {
      * @param vector The other vector
      * @return Whether this and the other vector are equal
      */
-    public boolean idt(final ewbik.math.Vector3 vector) {
+    public boolean idt(final Vector3 vector) {
         return x == vector.x && y == vector.y && z == vector.z;
     }
 
@@ -468,7 +468,7 @@ public class Vector3 {
      * @param v The other vector
      * @return the distance between this and the other vector
      */
-    public float dist(final ewbik.math.Vector3 vector) {
+    public float dist(final Vector3 vector) {
         final float a = vector.x - x;
         final float b = vector.y - y;
         final float c = vector.z - z;
@@ -494,7 +494,7 @@ public class Vector3 {
      * @param v The other vector
      * @return the squared distance between this and the other vector
      */
-    public float distSq(ewbik.math.Vector3 point) {
+    public float distSq(Vector3 point) {
         final float a = point.x - x;
         final float b = point.y - y;
         final float c = point.z - z;
@@ -521,7 +521,7 @@ public class Vector3 {
      *
      * @return This vector for chaining
      */
-    public ewbik.math.Vector3 normalize() {
+    public Vector3 normalize() {
         final float len2 = this.mag();
         if (len2 == 0f || len2 == 1f)
             return this;
@@ -566,7 +566,7 @@ public class Vector3 {
      * @param z The z-component of the other vector
      * @return This vector for chaining
      */
-    public ewbik.math.Vector3 crs(float x, float y, float z) {
+    public Vector3 crs(float x, float y, float z) {
         return this.set(this.y * z - this.z * y, this.z * x - this.x * z, this.x * y - this.y * x);
     }
 
@@ -578,7 +578,7 @@ public class Vector3 {
      * @param matrix The matrix
      * @return This vector for chaining
      */
-    public ewbik.math.Vector3 mul4x3(float[] matrix) {
+    public Vector3 mul4x3(float[] matrix) {
         return set(x * matrix[0] + y * matrix[3] + z * matrix[6] + matrix[9],
                 x * matrix[1] + y * matrix[4] + z * matrix[7]
                         + matrix[10],
@@ -594,7 +594,7 @@ public class Vector3 {
      * @param p2 vector representing second edge of plane
      * @return
      */
-    public ewbik.math.Vector3 getPlaneProjectionOf(ewbik.math.Vector3 p1, ewbik.math.Vector3 p2) {
+    public Vector3 getPlaneProjectionOf(Vector3 p1, Vector3 p2) {
         return this.getPlaneProjectionOf(p1.crossCopy(p2));
     }
 
@@ -605,9 +605,9 @@ public class Vector3 {
      * @param norm
      * @return
      */
-    public ewbik.math.Vector3 getPlaneProjectionOf(ewbik.math.Vector3 rawNorm) {
-        ewbik.math.Vector3 norm = rawNorm.copy().normalize();
-        ewbik.math.Vector3 normProj = norm.multCopy(this.dot(norm));
+    public Vector3 getPlaneProjectionOf(Vector3 rawNorm) {
+        Vector3 norm = rawNorm.copy().normalize();
+        Vector3 normProj = norm.multCopy(this.dot(norm));
         normProj.multiply(-1);
 
         return normProj.addCopy(this);
@@ -645,7 +645,7 @@ public class Vector3 {
      * @return true if this vector is in line with the other vector (either in the
      *         same or the opposite direction)
      */
-    public boolean isOnLine(ewbik.math.Vector3 other, float epsilon) {
+    public boolean isOnLine(Vector3 other, float epsilon) {
         return magSq(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x) <= epsilon;
     }
 
@@ -653,7 +653,7 @@ public class Vector3 {
      * @return true if this vector is in line with the other vector (either in the
      *         same or the opposite direction)
      */
-    public boolean isOnLine(ewbik.math.Vector3 other) {
+    public boolean isOnLine(Vector3 other) {
         return magSq(y * other.z - z * other.y, z * other.x - x * other.z,
                 x * other.y - y * other.x) <= MathUtils.DOUBLE_ROUNDING_ERROR;
     }
@@ -663,7 +663,7 @@ public class Vector3 {
      *         ({@link #isOnLine(Vector3, float)} &&
      *         {@link #hasSameDirection(Vector3)}).
      */
-    public boolean isCollinear(ewbik.math.Vector3 other, float epsilon) {
+    public boolean isCollinear(Vector3 other, float epsilon) {
         return isOnLine(other, epsilon) && hasSameDirection(other);
     }
 
@@ -672,7 +672,7 @@ public class Vector3 {
      *         ({@link #isOnLine(Vector3)} &&
      *         {@link #hasSameDirection(Vector3)}).
      */
-    public boolean isCollinear(ewbik.math.Vector3 other) {
+    public boolean isCollinear(Vector3 other) {
         return isOnLine(other) && hasSameDirection(other);
     }
 
@@ -681,7 +681,7 @@ public class Vector3 {
      *         ({@link #isOnLine(Vector3, float)} &&
      *         {@link #hasOppositeDirection(Vector3)}).
      */
-    public boolean isCollinearOpposite(ewbik.math.Vector3 other, float epsilon) {
+    public boolean isCollinearOpposite(Vector3 other, float epsilon) {
         return isOnLine(other, epsilon) && hasOppositeDirection(other);
     }
 
@@ -690,7 +690,7 @@ public class Vector3 {
      *         ({@link #isOnLine(Vector3)} &&
      *         {@link #hasOppositeDirection(Vector3)}).
      */
-    public boolean isCollinearOpposite(ewbik.math.Vector3 other) {
+    public boolean isCollinearOpposite(Vector3 other) {
         return isOnLine(other) && hasOppositeDirection(other);
     }
 
@@ -698,7 +698,7 @@ public class Vector3 {
      * @return Whether this vector is perpendicular with the other vector. True if
      *         the dot product is 0.
      */
-    public boolean isPerpendicular(ewbik.math.Vector3 vector) {
+    public boolean isPerpendicular(Vector3 vector) {
         return MathUtils.isZero(dot(vector));
     }
 
@@ -707,7 +707,7 @@ public class Vector3 {
      * @return Whether this vector is perpendicular with the other vector. True if
      *         the dot product is 0.
      */
-    public boolean isPerpendicular(ewbik.math.Vector3 vector, float epsilon) {
+    public boolean isPerpendicular(Vector3 vector, float epsilon) {
         return MathUtils.isZero(dot(vector), epsilon);
     }
 
@@ -715,7 +715,7 @@ public class Vector3 {
      * @return Whether this vector has similar direction compared to the other
      *         vector. True if the normalized dot product is > 0.
      */
-    public boolean hasSameDirection(ewbik.math.Vector3 vector) {
+    public boolean hasSameDirection(Vector3 vector) {
         return dot(vector) > 0;
     }
 
@@ -723,7 +723,7 @@ public class Vector3 {
      * @return Whether this vector has opposite direction compared to the other
      *         vector. True if the normalized dot product is < 0.
      */
-    public boolean hasOppositeDirection(ewbik.math.Vector3 vector) {
+    public boolean hasOppositeDirection(Vector3 vector) {
         return dot(vector) < 0;
     }
 
@@ -736,7 +736,7 @@ public class Vector3 {
      * @param alpha  The interpolation coefficient
      * @return This vector for chaining.
      */
-    public ewbik.math.Vector3 lerp(final ewbik.math.Vector3 target, float alpha) {
+    public Vector3 lerp(final Vector3 target, float alpha) {
         x += alpha * (target.x - x);
         y += alpha * (target.y - y);
         z += alpha * (target.z - z);
@@ -752,7 +752,7 @@ public class Vector3 {
      * @param alpha  The interpolation coefficient
      * @return This vector for chaining.
      */
-    public ewbik.math.Vector3 slerp(final ewbik.math.Vector3 target, float alpha) {
+    public Vector3 slerp(final Vector3 target, float alpha) {
         final float dot = dot(target);
         // If the inputs are too close for comfort, simply linearly interpolate.
         if (dot > 0.9995 || dot < -0.9995)
@@ -789,7 +789,7 @@ public class Vector3 {
      * @param limit desired maximum length for this vector
      * @return this vector for chaining
      */
-    public ewbik.math.Vector3 limit(float limit) {
+    public Vector3 limit(float limit) {
         return limitSq(limit * limit);
     }
 
@@ -803,7 +803,7 @@ public class Vector3 {
      * @return this vector for chaining
      * @see #magSq()
      */
-    public ewbik.math.Vector3 limitSq(float limit2) {
+    public Vector3 limitSq(float limit2) {
         float len2 = magSq();
         if (len2 > limit2) {
             multiply((float) MathUtils.sqrt(limit2 / len2));
@@ -817,7 +817,7 @@ public class Vector3 {
      * @param len desired length for this vector
      * @return this vector for chaining
      */
-    public ewbik.math.Vector3 setMag(float len) {
+    public Vector3 setMag(float len) {
         return setMagSq(len * len);
     }
 
@@ -831,7 +831,7 @@ public class Vector3 {
      * @return this vector for chaining
      * @see #magSq()
      */
-    public ewbik.math.Vector3 setMagSq(float len2) {
+    public Vector3 setMagSq(float len2) {
         float oldLen2 = magSq();
         return (oldLen2 == 0 || oldLen2 == len2) ? this
                 : multiply((float) MathUtils.sqrt(len2 / oldLen2));
@@ -844,7 +844,7 @@ public class Vector3 {
      * @param max Max length
      * @return This vector for chaining
      */
-    public ewbik.math.Vector3 clamp(float min, float max) {
+    public Vector3 clamp(float min, float max) {
         final float len2 = magSq();
         if (len2 == 0f)
             return this;
@@ -894,7 +894,7 @@ public class Vector3 {
      *
      * @return This vector for chaining
      */
-    public ewbik.math.Vector3 setZero() {
+    public Vector3 setZero() {
         this.x = 0;
         this.y = 0;
         this.z = 0;
@@ -943,8 +943,8 @@ public class Vector3 {
         this.z = z;
     }
 
-    public ewbik.math.Vector3 getOrthogonal() {
-        ewbik.math.Vector3 result = this.copy();
+    public Vector3 getOrthogonal() {
+        Vector3 result = this.copy();
         result.set(0, 0, 0);
         float threshold = this.mag() * 0.6f;
         if (threshold > 0) {
@@ -968,7 +968,7 @@ public class Vector3 {
      * @param scalar The scalar
      * @return This vector for chaining
      */
-    public ewbik.math.Vector3 multiply(float scalar) {
+    public Vector3 multiply(float scalar) {
         this.x *= scalar;
         this.y *= scalar;
         this.z *= scalar;
@@ -983,7 +983,7 @@ public class Vector3 {
      *
      * @param v
      */
-    public void adoptValuesOf(ewbik.math.Vector3 v) {
+    public void adoptValuesOf(Vector3 v) {
         setX_(v.getX());
         setY_(v.getY());
         setZ_(v.getZ());

@@ -37,15 +37,15 @@ public class IKPin {
         setTargetPriorities(IKPin.this.xPriority, IKPin.this.yPriority, IKPin.this.zPriority);
     }
 
-    public ewbik.math.Vector3 getLocation() {
+    public Vector3 getLocation() {
         return getLocation_();
     }
 
-    public void translateTo(ewbik.math.Vector3 v) {
+    public void translateTo(Vector3 v) {
         translateTo_(v);
     }
 
-    public void translateBy(ewbik.math.Vector3 v) {
+    public void translateBy(Vector3 v) {
         translateBy_(v);
     }
 
@@ -237,7 +237,7 @@ public class IKPin {
      *
      * @param location
      */
-    public void translateTo_(ewbik.math.Vector3 location) {
+    public void translateTo_(Vector3 location) {
         this.node3D.translateTo(location);
     }
 
@@ -248,7 +248,7 @@ public class IKPin {
      *
      * @param location
      */
-    public void translateToArmatureLocal_(ewbik.math.Vector3 location) {
+    public void translateToArmatureLocal_(Vector3 location) {
         Node3D armNode3D = this.forBone().parentArmature.localAxes().getParentAxes();
         if (armNode3D == null) {
             this.node3D.translateTo(location);
@@ -263,14 +263,14 @@ public class IKPin {
      *
      * @param location
      */
-    public void translateBy_(ewbik.math.Vector3 location) {
+    public void translateBy_(Vector3 location) {
         this.node3D.translateByLocal(location);
     }
 
     /**
      * @return the pin locationin global coordinates
      */
-    public ewbik.math.Vector3 getLocation_() {
+    public Vector3 getLocation_() {
         return node3D.calculatePosition();
     }
 
