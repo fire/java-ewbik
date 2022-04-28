@@ -2,13 +2,20 @@ package ewbik.asj;
 
 import data.agnosticsavior.CanLoad;
 import ewbik.asj.data.*;
+import ik.Bone;
+import ik.IKPin;
+import processing.Node3D;
+import processing.Skeleton3D;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
+import ewbik.asj.Saveable;
 
 public abstract class SaveManager {
 
     protected HashMap<Class, JSONArray> classes = new HashMap<>();
-    WeakHashMap<Saveable, Boolean> saveables = new WeakHashMap<Saveable, Boolean>();
+    WeakHashMap<Saveable, Boolean> saveables = new WeakHashMap<ewbik.asj.Saveable, Boolean>();
 
     public void registerSaveableClass(Class c) throws ClassNotSaveableException {
         if (!Saveable.class.isAssignableFrom(c)) {
@@ -141,10 +148,90 @@ public abstract class SaveManager {
         return result;
     }
 
+    public void saveAs(String savePath) {
+        currentFilePath = savePath;
+        save();
+    }
+
+    public void save() {
+        ewbik.asj.data.JSONObject fileContent = getSaveObject();
+        ewbik.asj.data.StringFuncs.saveJSONObject(fileContent, tempDir + File.separator + "structure");
+        try {
+            File cFile = new File(currentFilePath);
+            if (cFile != null) {
+                cFile.getParentFile().mkdirs();
+            }
+        } catch (Exception e) {
+            System.out.println("failed to save");
+        }
+    }
+
     public class ClassNotSaveableException extends Exception {
         public ClassNotSaveableException(Class c) {
             super(c.toString()
                     + " does not implement the Saveable interface and therefore cannot be registered with Saveable.");
         }
+    }
+    public static String currentFilePath;
+    public static String tempDir;
+
+    public void saveArmature(Skeleton3D toSave, String path) {
+        clearSaveState();
+        toSave.notifyOfSaveIntent(this);
+        saveAs(path);
+        notifyCurrentSaveablesOfSaveCompletion();
+    }
+
+    public void notifyCurrentSaveablesOfSaveCompletion() {
+        ArrayList<ewbik.asj.Saveable> sarr = new ArrayList<>(saveables.keySet());
+        for (ewbik.asj.Saveable s : sarr) {
+            s.notifyOfSaveCompletion(this);
+        }
+        clearSaveState();
+    }
+
+    public ewbik.asj.data.JSONObject getSaveObject() {
+
+        ewbik.asj.data.JSONArray axesJSON = new ewbik.asj.data.JSONArray();
+        ewbik.asj.data.JSONArray armaturesJSON = new ewbik.asj.data.JSONArray();
+        ewbik.asj.data.JSONArray bonesJSON = new ewbik.asj.data.JSONArray();
+        ewbik.asj.data.JSONArray kusudamaJSON = new ewbik.asj.data.JSONArray();
+        ewbik.asj.data.JSONArray limitConeJSON = new ewbik.asj.data.JSONArray();
+        ewbik.asj.data.JSONArray IKPinsJSON = new ewbik.asj.data.JSONArray();
+
+        Collection<ewbik.asj.Saveable> sk = saveables.keySet();
+
+        ewbik.asj.data.JSONObject saveObject = new ewbik.asj.data.JSONObject();
+
+        for (ewbik.asj.Saveable s : sk) {
+            ewbik.asj.data.JSONObject jsonObj = s.getSaveJSON(this);
+            if (jsonObj != null) {
+                if (Node3D.class.isAssignableFrom(s.getClass()))
+                    axesJSON.append(jsonObj);
+                if (Skeleton3D.class.isAssignableFrom(s.getClass()))
+                    armaturesJSON.append(jsonObj);
+                if (Bone.class.isAssignableFrom(s.getClass()))
+                    bonesJSON.append(jsonObj);
+                if (ewbik.processing.singlePrecision.Kusudama.class.isAssignableFrom(s.getClass()))
+                    kusudamaJSON.append(jsonObj);
+                if (ewbik.processing.singlePrecision.LimitCone.class.isAssignableFrom(s.getClass()))
+                    limitConeJSON.append(jsonObj);
+                if (IKPin.class.isAssignableFrom(s.getClass()))
+                    IKPinsJSON.append(jsonObj);
+            }
+        }
+
+        saveObject.setJSONArray("node_3d", axesJSON);
+        saveObject.setJSONArray("skeleton_3d", armaturesJSON);
+        saveObject.setJSONArray("bones", bonesJSON);
+        saveObject.setJSONArray("kusudamas", kusudamaJSON);
+        saveObject.setJSONArray("limit_cones", limitConeJSON);
+        saveObject.setJSONArray("ik_pins", IKPinsJSON);
+        return saveObject;
+    }
+
+    public void save(String savePath) {
+        ewbik.asj.data.JSONObject fileContent = getSaveObject();
+        ewbik.asj.data.StringFuncs.saveJSONObject(fileContent, savePath);
     }
 }
