@@ -31,14 +31,14 @@ public class IKQuaternion {
 
     public IKQuaternion() {
         this.rotation = new IKBasis(
-                IKBasis.IDENTITY.getQ0(),
-                IKBasis.IDENTITY.getQ1(),
-                IKBasis.IDENTITY.getQ2(),
-                IKBasis.IDENTITY.getQ3(), false);
+                IKBasis.IDENTITY.getW(),
+                IKBasis.IDENTITY.getX(),
+                IKBasis.IDENTITY.getY(),
+                IKBasis.IDENTITY.getZ(), false);
     }
 
     public IKQuaternion(IKBasis r) {
-        this.rotation = new IKBasis(r.getQ0(), r.getQ1(), r.getQ2(), r.getQ3());
+        this.rotation = new IKBasis(r.getW(), r.getX(), r.getY(), r.getZ());
     }
 
     public IKQuaternion(IKRotationOrder order,
@@ -73,7 +73,7 @@ public class IKQuaternion {
     public static IKBasis slerp(float amount, IKBasis value1, IKBasis value2) {
 
         if (Float.isNaN(amount)) {
-            return new IKBasis(value1.getQ0(), value1.getQ1(), value1.getQ2(), value1.getQ3());
+            return new IKBasis(value1.getW(), value1.getX(), value1.getY(), value1.getZ());
         }
         if (amount < 0.0f)
             return value1;
@@ -82,10 +82,10 @@ public class IKQuaternion {
 
         float dot = value1.dotProduct(value2);
         float x2, y2, z2, w2;
-        x2 = value2.getQ1();
-        y2 = value2.getQ2();
-        z2 = value2.getQ3();
-        w2 = value2.getQ0();
+        x2 = value2.getX();
+        y2 = value2.getY();
+        z2 = value2.getZ();
+        w2 = value2.getW();
 
         float t1, t2;
 
@@ -103,10 +103,10 @@ public class IKQuaternion {
         }
 
         return new IKBasis(
-                (value1.getQ0() * t1) + (w2 * t2),
-                (value1.getQ1() * t1) + (x2 * t2),
-                (value1.getQ2() * t1) + (y2 * t2),
-                (value1.getQ3() * t1) + (z2 * t2));
+                (value1.getW() * t1) + (w2 * t2),
+                (value1.getX() * t1) + (x2 * t2),
+                (value1.getY() * t1) + (y2 * t2),
+                (value1.getZ() * t1) + (z2 * t2));
     }
 
     public static IKQuaternion nlerp(IKQuaternion[] rotations, float[] weights) {
@@ -123,10 +123,10 @@ public class IKQuaternion {
             for (int i = 0; i < rotations.length; i++) {
                 IKBasis r = rotations[i].rotation;
                 float weight = weights[i];
-                q0 += r.getQ0() * weight;
-                q1 += r.getQ1() * weight;
-                q2 += r.getQ2() * weight;
-                q3 += r.getQ3() * weight;
+                q0 += r.getW() * weight;
+                q1 += r.getX() * weight;
+                q2 += r.getY() * weight;
+                q3 += r.getZ() * weight;
                 total += weight;
             }
 
@@ -148,10 +148,10 @@ public class IKQuaternion {
 
         for (int i = 0; i < rotations.length; i++) {
             IKBasis r = rotations[i].rotation;
-            q0 += r.getQ0();
-            q1 += r.getQ1();
-            q2 += r.getQ2();
-            q3 += r.getQ3();
+            q0 += r.getW();
+            q1 += r.getX();
+            q2 += r.getY();
+            q3 += r.getZ();
         }
         q0 /= total;
         q1 /= total;
@@ -208,7 +208,7 @@ public class IKQuaternion {
 
     public IKQuaternion copy() {
         return new IKQuaternion(
-                new IKBasis(rotation.getQ0(), rotation.getQ1(), rotation.getQ2(), rotation.getQ3(), false));
+                new IKBasis(rotation.getW(), rotation.getX(), rotation.getY(), rotation.getZ(), false));
     }
 
     /**
@@ -218,7 +218,7 @@ public class IKQuaternion {
      */
     public void set(IKBasis r) {
         if (r != null)
-            this.rotation.set(r.getQ0(), r.getQ1(), r.getQ2(), r.getQ3(), false);
+            this.rotation.set(r.getW(), r.getX(), r.getY(), r.getZ(), false);
         else
             this.set(IKBasis.IDENTITY);
     }
@@ -313,7 +313,7 @@ public class IKQuaternion {
      */
 
     private IKQuaternion getNormalized(IKBasis r) {
-        return new IKQuaternion(new IKBasis(r.getQ0(), r.getQ1(), r.getQ2(), r.getQ3(), true));
+        return new IKQuaternion(new IKBasis(r.getW(), r.getX(), r.getY(), r.getZ(), true));
     }
 
     public IKRay3D applyToCopy(IKRay3D rIn) {
@@ -342,10 +342,10 @@ public class IKQuaternion {
         IKBasis r = rot.rotation;
         IKBasis tr = this.rotation;
         storeIn.rotation.set(
-                r.getQ0() * tr.getQ0() - (r.getQ1() * tr.getQ1() + r.getQ2() * tr.getQ2() + r.getQ3() * tr.getQ3()),
-                r.getQ1() * tr.getQ0() + r.getQ0() * tr.getQ1() + (r.getQ2() * tr.getQ3() - r.getQ3() * tr.getQ2()),
-                r.getQ2() * tr.getQ0() + r.getQ0() * tr.getQ2() + (r.getQ3() * tr.getQ1() - r.getQ1() * tr.getQ3()),
-                r.getQ3() * tr.getQ0() + r.getQ0() * tr.getQ3() + (r.getQ1() * tr.getQ2() - r.getQ2() * tr.getQ1()),
+                r.getW() * tr.getW() - (r.getX() * tr.getX() + r.getY() * tr.getY() + r.getZ() * tr.getZ()),
+                r.getX() * tr.getW() + r.getW() * tr.getX() + (r.getY() * tr.getZ() - r.getZ() * tr.getY()),
+                r.getY() * tr.getW() + r.getW() * tr.getY() + (r.getZ() * tr.getX() - r.getX() * tr.getZ()),
+                r.getZ() * tr.getW() + r.getW() * tr.getZ() + (r.getX() * tr.getY() - r.getY() * tr.getX()),
                 true);
     }
 
@@ -353,10 +353,10 @@ public class IKQuaternion {
         IKBasis r = rot.rotation;
         IKBasis tr = this.rotation;
         storeIn.rotation.set(
-                -r.getQ0() * tr.getQ0() - (r.getQ1() * tr.getQ1() + r.getQ2() * tr.getQ2() + r.getQ3() * tr.getQ3()),
-                -r.getQ1() * tr.getQ0() + r.getQ0() * tr.getQ1() + (r.getQ2() * tr.getQ3() - r.getQ3() * tr.getQ2()),
-                -r.getQ2() * tr.getQ0() + r.getQ0() * tr.getQ2() + (r.getQ3() * tr.getQ1() - r.getQ1() * tr.getQ3()),
-                -r.getQ3() * tr.getQ0() + r.getQ0() * tr.getQ3() + (r.getQ1() * tr.getQ2() - r.getQ2() * tr.getQ1()),
+                -r.getW() * tr.getW() - (r.getX() * tr.getX() + r.getY() * tr.getY() + r.getZ() * tr.getZ()),
+                -r.getX() * tr.getW() + r.getW() * tr.getX() + (r.getY() * tr.getZ() - r.getZ() * tr.getY()),
+                -r.getY() * tr.getW() + r.getW() * tr.getY() + (r.getZ() * tr.getX() - r.getX() * tr.getZ()),
+                -r.getZ() * tr.getW() + r.getW() * tr.getZ() + (r.getX() * tr.getY() - r.getY() * tr.getX()),
                 true);
     }
 
@@ -364,10 +364,10 @@ public class IKQuaternion {
         IKBasis r = rot.rotation;
         IKBasis tr = this.rotation;
         IKBasis result = new IKBasis(
-                r.getQ0() * tr.getQ0() - (r.getQ1() * tr.getQ1() + r.getQ2() * tr.getQ2() + r.getQ3() * tr.getQ3()),
-                r.getQ1() * tr.getQ0() + r.getQ0() * tr.getQ1() + (r.getQ2() * tr.getQ3() - r.getQ3() * tr.getQ2()),
-                r.getQ2() * tr.getQ0() + r.getQ0() * tr.getQ2() + (r.getQ3() * tr.getQ1() - r.getQ1() * tr.getQ3()),
-                r.getQ3() * tr.getQ0() + r.getQ0() * tr.getQ3() + (r.getQ1() * tr.getQ2() - r.getQ2() * tr.getQ1()),
+                r.getW() * tr.getW() - (r.getX() * tr.getX() + r.getY() * tr.getY() + r.getZ() * tr.getZ()),
+                r.getX() * tr.getW() + r.getW() * tr.getX() + (r.getY() * tr.getZ() - r.getZ() * tr.getY()),
+                r.getY() * tr.getW() + r.getW() * tr.getY() + (r.getZ() * tr.getX() - r.getX() * tr.getZ()),
+                r.getZ() * tr.getW() + r.getW() * tr.getZ() + (r.getX() * tr.getY() - r.getY() * tr.getX()),
                 true);
         return new IKQuaternion(result);
     }
@@ -376,10 +376,10 @@ public class IKQuaternion {
         IKBasis r = rot.rotation;
         IKBasis tr = this.rotation;
         IKBasis result = new IKBasis(
-                -r.getQ0() * tr.getQ0() - (r.getQ1() * tr.getQ1() + r.getQ2() * tr.getQ2() + r.getQ3() * tr.getQ3()),
-                -r.getQ1() * tr.getQ0() + r.getQ0() * tr.getQ1() + (r.getQ2() * tr.getQ3() - r.getQ3() * tr.getQ2()),
-                -r.getQ2() * tr.getQ0() + r.getQ0() * tr.getQ2() + (r.getQ3() * tr.getQ1() - r.getQ1() * tr.getQ3()),
-                -r.getQ3() * tr.getQ0() + r.getQ0() * tr.getQ3() + (r.getQ1() * tr.getQ2() - r.getQ2() * tr.getQ1()),
+                -r.getW() * tr.getW() - (r.getX() * tr.getX() + r.getY() * tr.getY() + r.getZ() * tr.getZ()),
+                -r.getX() * tr.getW() + r.getW() * tr.getX() + (r.getY() * tr.getZ() - r.getZ() * tr.getY()),
+                -r.getY() * tr.getW() + r.getW() * tr.getY() + (r.getZ() * tr.getX() - r.getX() * tr.getZ()),
+                -r.getZ() * tr.getW() + r.getW() * tr.getZ() + (r.getX() * tr.getY() - r.getY() * tr.getX()),
                 true);
         return new IKQuaternion(result);
     }
@@ -434,10 +434,10 @@ public class IKQuaternion {
      */
     public IKQuaternion[] getSwingTwist(IKVector3 axis) {
         IKQuaternion twistRot = new IKQuaternion(
-                new IKBasis(rotation.getQ0(), rotation.getQ1(), rotation.getQ2(), rotation.getQ3()));
-        final float d = IKVector3.dot(twistRot.rotation.getQ1(), twistRot.rotation.getQ2(), twistRot.rotation.getQ3(),
+                new IKBasis(rotation.getW(), rotation.getX(), rotation.getY(), rotation.getZ()));
+        final float d = IKVector3.dot(twistRot.rotation.getX(), twistRot.rotation.getY(), twistRot.rotation.getZ(),
                 axis.x, axis.y, axis.z);
-        twistRot.rotation.set(rotation.getQ0(), axis.x * d, axis.y * d, axis.z * d, true);
+        twistRot.rotation.set(rotation.getW(), axis.x * d, axis.y * d, axis.z * d, true);
         if (d < 0)
             twistRot.rotation.multiply(-1f);
 

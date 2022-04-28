@@ -7,22 +7,22 @@ public class IKBasis {
      * Scalar coordinate of the quaternion.
      */
 
-    private float q0;
+    private float w;
 
     /**
      * First coordinate of the vectorial part of the quaternion.
      */
-    private float q1;
+    private float x;
 
     /**
      * Second coordinate of the vectorial part of the quaternion.
      */
-    private float q2;
+    private float y;
 
     /**
      * Third coordinate of the vectorial part of the quaternion.
      */
-    private float q3;
+    private float z;
 
     /**
      * Build a rotation from the quaternion coordinates.
@@ -55,10 +55,10 @@ public class IKBasis {
     public IKBasis(float q0, float q1, float q2, float q3,
                    boolean needsNormalization) {
 
-        this.q0 = q0;
-        this.q1 = q1;
-        this.q2 = q2;
-        this.q3 = q3;
+        this.w = q0;
+        this.x = q1;
+        this.y = q2;
+        this.z = q3;
 
         if (needsNormalization)
             setToNormalized();
@@ -122,10 +122,10 @@ public class IKBasis {
         float halfAngle = -0.5f * angle;
         float coeff = IKMathUtils.sin(halfAngle) / norm;
 
-        q0 = IKMathUtils.cos(halfAngle);
-        q1 = coeff * axis.x;
-        q2 = coeff * axis.y;
-        q3 = coeff * axis.z;
+        w = IKMathUtils.cos(halfAngle);
+        x = coeff * axis.x;
+        y = coeff * axis.y;
+        z = coeff * axis.z;
     }
 
     /**
@@ -184,10 +184,10 @@ public class IKBasis {
     public IKBasis(float[] m, float threshold) {
         // dimension check
         if ((m.length != 9 || m.length != 16)) {
-            this.q0 = 1.0f;
-            this.q1 = 0.0f;
-            this.q2 = 0.0f;
-            this.q3 = 0.0f;
+            this.w = 1.0f;
+            this.x = 0.0f;
+            this.y = 0.0f;
+            this.z = 0.0f;
             return;
         }
 
@@ -212,18 +212,18 @@ public class IKBasis {
                 ort[1][0] * (ort[0][1] * ort[2][2] - ort[2][1] * ort[0][2]) +
                 ort[2][0] * (ort[0][1] * ort[1][2] - ort[1][1] * ort[0][2]);
         if (det < 0.0f) {
-            this.q0 = 1.0f;
-            this.q1 = 0.0f;
-            this.q2 = 0.0f;
-            this.q3 = 0.0f;
+            this.w = 1.0f;
+            this.x = 0.0f;
+            this.y = 0.0f;
+            this.z = 0.0f;
             return;
         }
 
         float[] quat = mat2quat(ort);
-        q0 = quat[0];
-        q1 = quat[1];
-        q2 = quat[2];
-        q3 = quat[3];
+        w = quat[0];
+        x = quat[1];
+        y = quat[2];
+        z = quat[3];
     }
 
     /**
@@ -266,10 +266,10 @@ public class IKBasis {
         // dimension check
         if ((m.length != 3) || (m[0].length != 3) ||
                 (m[1].length != 3) || (m[2].length != 3)) {
-            q0 = 1.0f;
-            q1 = 0.0f;
-            q2 = 0.0f;
-            q3 = 0.0f;
+            w = 1.0f;
+            x = 0.0f;
+            y = 0.0f;
+            z = 0.0f;
             return;
         }
 
@@ -281,20 +281,20 @@ public class IKBasis {
                 ort[1][0] * (ort[0][1] * ort[2][2] - ort[2][1] * ort[0][2]) +
                 ort[2][0] * (ort[0][1] * ort[1][2] - ort[1][1] * ort[0][2]);
         if (det < 0.0f) {
-            q0 = 1.0f;
-            q1 = 0.0f;
-            q2 = 0.0f;
-            q3 = 0.0f;
+            w = 1.0f;
+            x = 0.0f;
+            y = 0.0f;
+            z = 0.0f;
             return;
         }
 
         float[] quat = mat2quat(ort);
-        q0 = quat[0];
-        q1 = quat[1];
-        q2 = quat[2];
-        q3 = quat[3];
-        if (Float.isNaN(q0) || Float.isNaN(q1) || Float.isNaN(q2) || Float.isNaN(q3)
-                || !(Float.isFinite(q0) && Float.isFinite(q1) && Float.isFinite(q2) && Float.isFinite(q3))) {
+        w = quat[0];
+        x = quat[1];
+        y = quat[2];
+        z = quat[3];
+        if (Float.isNaN(w) || Float.isNaN(x) || Float.isNaN(y) || Float.isNaN(z)
+                || !(Float.isFinite(w) && Float.isFinite(x) && Float.isFinite(y) && Float.isFinite(z))) {
             System.out.println("errror");
         }
     }
@@ -417,10 +417,10 @@ public class IKBasis {
                 if (IKMathUtils.abs(c) <= IKMathUtils.DOUBLE_ROUNDING_ERROR) {
                     // the (q1, q2, q3) vector is aligned with everything
                     // this is really the identity rotation
-                    q0 = 1.0f;
-                    q1 = 0.0f;
-                    q2 = 0.0f;
-                    q3 = 0.0f;
+                    w = 1.0f;
+                    x = 0.0f;
+                    y = 0.0f;
+                    z = 0.0f;
                     return;
                 }
 
@@ -435,16 +435,16 @@ public class IKBasis {
         // compute the vectorial part
         c = (float) IKMathUtils.sqrt(c);
         float inv = 1.0f / (c + c);
-        q1 = inv * k.x;
-        q2 = inv * k.y;
-        q3 = inv * k.z;
+        x = inv * k.x;
+        y = inv * k.y;
+        z = inv * k.z;
 
         // compute the scalar part
-        k = new IKVector3(uRef.y * q3 - uRef.z * q2,
-                uRef.z * q1 - uRef.x * q3,
-                uRef.x * q2 - uRef.y * q1);
+        k = new IKVector3(uRef.y * z - uRef.z * y,
+                uRef.z * x - uRef.x * z,
+                uRef.x * y - uRef.y * x);
         c = k.dot(k);
-        q0 = vRef.dot(k) / (c + c);
+        w = vRef.dot(k) / (c + c);
 
         /*
          * // build orthonormalized base from u1, u2
@@ -487,8 +487,8 @@ public class IKBasis {
          * q3 = quat[3];
          */
 
-        if (Float.isNaN(q0) || Float.isNaN(q1) || Float.isNaN(q2) || Float.isNaN(q3)
-                || !(Float.isFinite(q0) && Float.isFinite(q1) && Float.isFinite(q2) && Float.isFinite(q3))) {
+        if (Float.isNaN(w) || Float.isNaN(x) || Float.isNaN(y) || Float.isNaN(z)
+                || !(Float.isFinite(w) && Float.isFinite(x) && Float.isFinite(y) && Float.isFinite(z))) {
             System.out.println("errror");
         }
 
@@ -516,10 +516,10 @@ public class IKBasis {
         if (normProduct == 0) {
             // throw new
             // MathArithmeticException(LocalizedFormats.ZERO_NORM_FOR_ROTATION_DEFINING_VECTOR);
-            this.q0 = 1f;
-            this.q1 = 0f;
-            this.q2 = 0f;
-            this.q3 = 0f;
+            this.w = 1f;
+            this.x = 0f;
+            this.y = 0f;
+            this.z = 0f;
             return;
         }
 
@@ -529,23 +529,23 @@ public class IKBasis {
             // special case u = -v: we select a PI angle rotation around
             // an arbitrary vector orthogonal to u
             IKVector3 w = (IKVector3) u.getOrthogonal();
-            q0 = 0.0f;
-            q1 = -w.x;
-            q2 = -w.y;
-            q3 = -w.z;
+            this.w = 0.0f;
+            x = -w.x;
+            y = -w.y;
+            z = -w.z;
         } else {
             // general case: (u, v) defines a plane, we select
             // the shortest possible rotation: axis orthogonal to this plane
-            q0 = IKMathUtils.sqrt(0.5f * (1.0f + dot / normProduct));
-            float coeff = 1.0f / (2.0f * q0 * normProduct);
+            w = IKMathUtils.sqrt(0.5f * (1.0f + dot / normProduct));
+            float coeff = 1.0f / (2.0f * w * normProduct);
             IKVector3 q = (IKVector3) v.crossCopy(u);
-            q1 = coeff * q.x;
-            q2 = coeff * q.y;
-            q3 = coeff * q.z;
+            x = coeff * q.x;
+            y = coeff * q.y;
+            z = coeff * q.z;
         }
 
-        if (Float.isNaN(q0) || Float.isNaN(q1) || Float.isNaN(q2) || Float.isNaN(q3)
-                || !(Float.isFinite(q0) && Float.isFinite(q1) && Float.isFinite(q2) && Float.isFinite(q3))) {
+        if (Float.isNaN(w) || Float.isNaN(x) || Float.isNaN(y) || Float.isNaN(z)
+                || !(Float.isFinite(w) && Float.isFinite(x) && Float.isFinite(y) && Float.isFinite(z))) {
             System.out.println("errror");
         }
     }
@@ -579,13 +579,13 @@ public class IKBasis {
         IKBasis r2 = new IKBasis(order.getA2(), alpha2);
         IKBasis r3 = new IKBasis(order.getA3(), alpha3);
         IKBasis composed = r1.applyTo(r2.applyTo(r3));
-        q0 = composed.q0;
-        q1 = composed.q1;
-        q2 = composed.q2;
-        q3 = composed.q3;
+        w = composed.w;
+        x = composed.x;
+        y = composed.y;
+        z = composed.z;
 
-        if (Float.isNaN(q0) || Float.isNaN(q1) || Float.isNaN(q2) || Float.isNaN(q3)
-                || !(Float.isFinite(q0) && Float.isFinite(q1) && Float.isFinite(q2) && Float.isFinite(q3))) {
+        if (Float.isNaN(w) || Float.isNaN(x) || Float.isNaN(y) || Float.isNaN(z)
+                || !(Float.isFinite(w) && Float.isFinite(x) && Float.isFinite(y) && Float.isFinite(z))) {
             System.out.println("errror");
         }
     }
@@ -655,16 +655,16 @@ public class IKBasis {
 
     public static IKBasis multiply(final IKBasis q1, final IKBasis q2) {
         // Components of the first quaternion.
-        final float q1a = q1.getQ0();
-        final float q1b = q1.getQ1();
-        final float q1c = q1.getQ2();
-        final float q1f = q1.getQ3();
+        final float q1a = q1.getW();
+        final float q1b = q1.getX();
+        final float q1c = q1.getY();
+        final float q1f = q1.getZ();
 
         // Components of the second quaternion.
-        final float q2a = q2.getQ0();
-        final float q2b = q2.getQ1();
-        final float q2c = q2.getQ2();
-        final float q2f = q2.getQ3();
+        final float q2a = q2.getW();
+        final float q2b = q2.getX();
+        final float q2c = q2.getY();
+        final float q2f = q2.getZ();
 
         // Components of the product.
         final float w = q1a * q2a - q1b * q2b - q1c * q2c - q1f * q2f;
@@ -684,10 +684,10 @@ public class IKBasis {
      */
     public static float dotProduct(final IKBasis q1,
             final IKBasis q2) {
-        return q1.getQ0() * q2.getQ0() +
-                q1.getQ1() * q2.getQ1() +
-                q1.getQ2() * q2.getQ2() +
-                q1.getQ3() * q2.getQ3();
+        return q1.getW() * q2.getW() +
+                q1.getX() * q2.getX() +
+                q1.getY() * q2.getY() +
+                q1.getZ() * q2.getZ();
     }
 
     /**
@@ -735,14 +735,14 @@ public class IKBasis {
      * @param angle
      */
     public void setQuadranceAngle(float cosHalfAngle) {
-        float squaredSine = q1 * q1 + q2 * q2 + q3 * q3;
+        float squaredSine = x * x + y * y + z * z;
         if (squaredSine != 0) {
             float inverseCoeff = IKMathUtils.sqrt(((1 - (cosHalfAngle * cosHalfAngle)) / squaredSine));
             // inverseCoeff = cosHalfAngle < 0 ? -inverseCoeff : inverseCoeff;
-            q0 = q0 < 0 ? -cosHalfAngle : cosHalfAngle;
-            q1 = inverseCoeff * q1;
-            q2 = inverseCoeff * q2;
-            q3 = inverseCoeff * q3;
+            w = w < 0 ? -cosHalfAngle : cosHalfAngle;
+            x = inverseCoeff * x;
+            y = inverseCoeff * y;
+            z = inverseCoeff * z;
         }
     }
 
@@ -753,15 +753,15 @@ public class IKBasis {
 
     public void clampToQuadranceAngle(float cosHalfAngle) {
         float newCoeff = 1f - (cosHalfAngle * cosHalfAngle);
-        float currentCoeff = q1 * q1 + q2 * q2 + q3 * q3;
+        float currentCoeff = x * x + y * y + z * z;
         if (newCoeff > currentCoeff)
             return;
         else {
-            q0 = q0 < 0 ? -cosHalfAngle : cosHalfAngle;
+            w = w < 0 ? -cosHalfAngle : cosHalfAngle;
             float compositeCoeff = IKMathUtils.sqrt(newCoeff / currentCoeff);
-            q1 *= compositeCoeff;
-            q2 *= compositeCoeff;
-            q3 *= compositeCoeff;
+            x *= compositeCoeff;
+            y *= compositeCoeff;
+            z *= compositeCoeff;
         }
     }
 
@@ -769,7 +769,7 @@ public class IKBasis {
      * @return a copy of this MRotation
      */
     public IKBasis copy() {
-        return new IKBasis(getQ0(), getQ1(), getQ2(), getQ3());
+        return new IKBasis(getW(), getX(), getY(), getZ());
     }
 
     /**
@@ -782,7 +782,7 @@ public class IKBasis {
      *         of the instance
      */
     public IKBasis revert() {
-        return new IKBasis(-q0, q1, q2, q3, false);
+        return new IKBasis(-w, x, y, z, false);
     }
 
     /**
@@ -791,7 +791,7 @@ public class IKBasis {
      * @param storeIN
      */
     public void revert(IKBasis storeIn) {
-        storeIn.set(-q0, q1, q2, q3, true);
+        storeIn.set(-w, x, y, z, true);
     }
 
     /**
@@ -799,8 +799,8 @@ public class IKBasis {
      *
      * @return scalar coordinate of the quaternion
      */
-    public float getQ0() {
-        return q0;
+    public float getW() {
+        return w;
     }
 
     /**
@@ -808,8 +808,8 @@ public class IKBasis {
      *
      * @return first coordinate of the vectorial part of the quaternion
      */
-    public float getQ1() {
-        return q1;
+    public float getX() {
+        return x;
     }
 
     /**
@@ -817,8 +817,8 @@ public class IKBasis {
      *
      * @return second coordinate of the vectorial part of the quaternion
      */
-    public float getQ2() {
-        return q2;
+    public float getY() {
+        return y;
     }
 
     /**
@@ -826,8 +826,8 @@ public class IKBasis {
      *
      * @return third coordinate of the vectorial part of the quaternion
      */
-    public float getQ3() {
-        return q3;
+    public float getZ() {
+        return z;
     }
 
     /**
@@ -837,15 +837,15 @@ public class IKBasis {
      * @see #Rotation(T, float)
      */
     public IKVector3 getAxis() {
-        float squaredSine = q1 * q1 + q2 * q2 + q3 * q3;
+        float squaredSine = x * x + y * y + z * z;
         if (squaredSine == 0) {
             return new IKVector3(1, 0, 0);
-        } else if (q0 < 0) {
+        } else if (w < 0) {
             float inverse = 1 / IKMathUtils.sqrt(squaredSine);
-            return new IKVector3(q1 * inverse, q2 * inverse, q3 * inverse);
+            return new IKVector3(x * inverse, y * inverse, z * inverse);
         }
         float inverse = -1 / IKMathUtils.sqrt(squaredSine);
-        return new IKVector3(q1 * inverse, q2 * inverse, q3 * inverse);
+        return new IKVector3(x * inverse, y * inverse, z * inverse);
     }
 
     /**
@@ -871,13 +871,13 @@ public class IKBasis {
         float halfAngle = -0.5f * angle;
         float coeff = IKMathUtils.sin(halfAngle) / norm;
 
-        q0 = IKMathUtils.cos(halfAngle);
-        q1 = coeff * newAxis.x;
-        q2 = coeff * newAxis.y;
-        q3 = coeff * newAxis.z;
+        w = IKMathUtils.cos(halfAngle);
+        x = coeff * newAxis.x;
+        y = coeff * newAxis.y;
+        z = coeff * newAxis.z;
 
-        if (Float.isNaN(q0) || Float.isNaN(q1) || Float.isNaN(q2) || Float.isNaN(q3)
-                || !(Float.isFinite(q0) && Float.isFinite(q1) && Float.isFinite(q2) && Float.isFinite(q3))) {
+        if (Float.isNaN(w) || Float.isNaN(x) || Float.isNaN(y) || Float.isNaN(z)
+                || !(Float.isFinite(w) && Float.isFinite(x) && Float.isFinite(y) && Float.isFinite(z))) {
             System.out.println("errror");
         }
     }
@@ -889,21 +889,21 @@ public class IKBasis {
      * @see #Rotation(T, float)
      */
     public void setToAxis(IKVector3 v) {
-        float squaredSine = q1 * q1 + q2 * q2 + q3 * q3;
+        float squaredSine = x * x + y * y + z * z;
         if (squaredSine == 0) {
             v.set(1, 0, 0);
             return;
-        } else if (q0 < 0) {
+        } else if (w < 0) {
             float inverse = 1 / IKMathUtils.sqrt(squaredSine);
-            v.set(q1 * inverse, q2 * inverse, q3 * inverse);
+            v.set(x * inverse, y * inverse, z * inverse);
             return;
         }
         float inverse = -1 / IKMathUtils.sqrt(squaredSine);
-        v.set(q1 * inverse, q2 * inverse, q3 * inverse);
+        v.set(x * inverse, y * inverse, z * inverse);
     }
 
     public IKBasis getInverse() {
-        final float squareNorm = q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3;
+        final float squareNorm = w * w + x * x + y * y + z * z;
         if (squareNorm < IKMathUtils.SAFE_MIN_DOUBLE) {
             try {
                 throw new Exception("Zero Norm");
@@ -912,10 +912,10 @@ public class IKBasis {
             }
         }
 
-        return new IKBasis(q0 / squareNorm,
-                -q1 / squareNorm,
-                -q2 / squareNorm,
-                -q3 / squareNorm);
+        return new IKBasis(w / squareNorm,
+                -x / squareNorm,
+                -y / squareNorm,
+                -z / squareNorm);
     }
 
     /**
@@ -925,12 +925,12 @@ public class IKBasis {
      * @see #Rotation(T, float)
      */
     public float getAngle() {
-        if ((q0 < -0.1) || (q0 > 0.1)) {
-            return 2 * IKMathUtils.asin(IKMathUtils.sqrt(q1 * q1 + q2 * q2 + q3 * q3));
-        } else if (q0 < 0) {
-            return 2 * IKMathUtils.acos(-q0);
+        if ((w < -0.1) || (w > 0.1)) {
+            return 2 * IKMathUtils.asin(IKMathUtils.sqrt(x * x + y * y + z * z));
+        } else if (w < 0) {
+            return 2 * IKMathUtils.acos(-w);
         }
-        return 2 * IKMathUtils.acos(q0);
+        return 2 * IKMathUtils.acos(w);
     }
 
     /**
@@ -940,7 +940,7 @@ public class IKBasis {
      * @param angle
      */
     public void setAngle(float newAngle) {
-        float squaredSine = q1 * q1 + q2 * q2 + q3 * q3;
+        float squaredSine = x * x + y * y + z * z;
         if (squaredSine != 0) {
             float halfAngle = -0.5f * newAngle;
             float cosHalfAngle = IKMathUtils.cos(halfAngle);
@@ -948,10 +948,10 @@ public class IKBasis {
             float inverseCoeff = IKMathUtils.sqrt(((1f - (cosHalfAngle * cosHalfAngle)) / squaredSine));
             inverseCoeff = newAngle < 0 ? -inverseCoeff : inverseCoeff;
 
-            q0 = q0 < 0 ? -cosHalfAngle : cosHalfAngle;
-            q1 = inverseCoeff * q1;
-            q2 = inverseCoeff * q2;
-            q3 = inverseCoeff * q3;
+            w = w < 0 ? -cosHalfAngle : cosHalfAngle;
+            x = inverseCoeff * x;
+            y = inverseCoeff * y;
+            z = inverseCoeff * z;
         }
     }
 
@@ -1298,16 +1298,16 @@ public class IKBasis {
     public void setToMatrix3Val(float[] storeIn) {
 
         // products
-        float q0q0 = q0 * q0;
-        float q0q1 = q0 * q1;
-        float q0q2 = q0 * q2;
-        float q0q3 = q0 * q3;
-        float q1q1 = q1 * q1;
-        float q1q2 = q1 * q2;
-        float q1q3 = q1 * q3;
-        float q2q2 = q2 * q2;
-        float q2q3 = q2 * q3;
-        float q3q3 = q3 * q3;
+        float q0q0 = w * w;
+        float q0q1 = w * x;
+        float q0q2 = w * y;
+        float q0q3 = w * z;
+        float q1q1 = x * x;
+        float q1q2 = x * y;
+        float q1q3 = x * z;
+        float q2q2 = y * y;
+        float q2q3 = y * z;
+        float q3q3 = z * z;
 
         // create the matrix
         storeIn[0] = 2.0f * (q0q0 + q1q1) - 1.0f;
@@ -1354,16 +1354,16 @@ public class IKBasis {
      *                corresponding to this rotation.
      */
     public float[] toMatrix4Val(float[] storeIn, boolean zeroOut) {
-        float q0q0 = q0 * q0;
-        float q0q1 = q0 * q1;
-        float q0q2 = q0 * q2;
-        float q0q3 = q0 * q3;
-        float q1q1 = q1 * q1;
-        float q1q2 = q1 * q2;
-        float q1q3 = q1 * q3;
-        float q2q2 = q2 * q2;
-        float q2q3 = q2 * q3;
-        float q3q3 = q3 * q3;
+        float q0q0 = w * w;
+        float q0q1 = w * x;
+        float q0q2 = w * y;
+        float q0q3 = w * z;
+        float q1q1 = x * x;
+        float q1q2 = x * y;
+        float q1q3 = x * z;
+        float q2q2 = y * y;
+        float q2q3 = y * z;
+        float q3q3 = z * z;
 
         // create the matrix
         storeIn[0] = 2.0f * (q0q0 + q1q1) - 1.0f;
@@ -1404,11 +1404,11 @@ public class IKBasis {
         float y = u.y;
         float z = u.z;
 
-        float s = q1 * x + q2 * y + q3 * z;
+        float s = this.x * x + this.y * y + this.z * z;
         IKVector3 result = (IKVector3) u.copy();
-        result.set(2 * (q0 * (x * q0 - (q2 * z - q3 * y)) + s * q1) - x,
-                2 * (q0 * (y * q0 - (q3 * x - q1 * z)) + s * q2) - y,
-                2 * (q0 * (z * q0 - (q1 * y - q2 * x)) + s * q3) - z);
+        result.set(2 * (w * (x * w - (this.y * z - this.z * y)) + s * this.x) - x,
+                2 * (w * (y * w - (this.z * x - this.x * z)) + s * this.y) - y,
+                2 * (w * (z * w - (this.x * y - this.y * x)) + s * this.z) - z);
         return result;
     }
 
@@ -1419,10 +1419,10 @@ public class IKBasis {
      * @return a scaled quaternion.
      */
     public IKBasis multiply(final float alpha) {
-        return new IKBasis(alpha * q0,
-                alpha * q1,
-                alpha * q2,
-                alpha * q3);
+        return new IKBasis(alpha * w,
+                alpha * x,
+                alpha * y,
+                alpha * z);
     }
 
     /**
@@ -1458,11 +1458,11 @@ public class IKBasis {
         final float y = in[1];
         final float z = in[2];
 
-        final float s = q1 * x + q2 * y + q3 * z;
+        final float s = this.x * x + this.y * y + this.z * z;
 
-        out[0] = 2 * (q0 * (x * q0 - (q2 * z - q3 * y)) + s * q1) - x;
-        out[1] = 2 * (q0 * (y * q0 - (q3 * x - q1 * z)) + s * q2) - y;
-        out[2] = 2 * (q0 * (z * q0 - (q1 * y - q2 * x)) + s * q3) - z;
+        out[0] = 2 * (w * (x * w - (this.y * z - this.z * y)) + s * this.x) - x;
+        out[1] = 2 * (w * (y * w - (this.z * x - this.x * z)) + s * this.y) - y;
+        out[2] = 2 * (w * (z * w - (this.x * y - this.y * x)) + s * this.z) - z;
 
     }
 
@@ -1478,13 +1478,13 @@ public class IKBasis {
         float y = u.y;
         float z = u.z;
 
-        float s = q1 * x + q2 * y + q3 * z;
-        float m0 = -q0;
+        float s = this.x * x + this.y * y + this.z * z;
+        float m0 = -w;
 
         IKVector3 result = (IKVector3) u.copy();
-        result.set(2 * (m0 * (x * m0 - (q2 * z - q3 * y)) + s * q1) - x,
-                2 * (m0 * (y * m0 - (q3 * x - q1 * z)) + s * q2) - y,
-                2 * (m0 * (z * m0 - (q1 * y - q2 * x)) + s * q3) - z);
+        result.set(2 * (m0 * (x * m0 - (this.y * z - this.z * y)) + s * this.x) - x,
+                2 * (m0 * (y * m0 - (this.z * x - this.x * z)) + s * this.y) - y,
+                2 * (m0 * (z * m0 - (this.x * y - this.y * x)) + s * this.z) - z);
         return result;
 
     }
@@ -1502,12 +1502,12 @@ public class IKBasis {
         final float y = in[1];
         final float z = in[2];
 
-        final float s = q1 * x + q2 * y + q3 * z;
-        final float m0 = -q0;
+        final float s = this.x * x + this.y * y + this.z * z;
+        final float m0 = -w;
 
-        out[0] = 2 * (m0 * (x * m0 - (q2 * z - q3 * y)) + s * q1) - x;
-        out[1] = 2 * (m0 * (y * m0 - (q3 * x - q1 * z)) + s * q2) - y;
-        out[2] = 2 * (m0 * (z * m0 - (q1 * y - q2 * x)) + s * q3) - z;
+        out[0] = 2 * (m0 * (x * m0 - (this.y * z - this.z * y)) + s * this.x) - x;
+        out[1] = 2 * (m0 * (y * m0 - (this.z * x - this.x * z)) + s * this.y) - y;
+        out[2] = 2 * (m0 * (z * m0 - (this.x * y - this.y * x)) + s * this.z) - z;
 
     }
 
@@ -1523,10 +1523,10 @@ public class IKBasis {
      * @return a new rotation which is the composition of r by the instance
      */
     public IKBasis applyTo(IKBasis r) {
-        return new IKBasis(r.q0 * q0 - (r.q1 * q1 + r.q2 * q2 + r.q3 * q3),
-                r.q1 * q0 + r.q0 * q1 + (r.q2 * q3 - r.q3 * q2),
-                r.q2 * q0 + r.q0 * q2 + (r.q3 * q1 - r.q1 * q3),
-                r.q3 * q0 + r.q0 * q3 + (r.q1 * q2 - r.q2 * q1),
+        return new IKBasis(r.w * w - (r.x * x + r.y * y + r.z * z),
+                r.x * w + r.w * x + (r.y * z - r.z * y),
+                r.y * w + r.w * y + (r.z * x - r.x * z),
+                r.z * w + r.w * z + (r.x * y - r.y * x),
                 false);
     }
 
@@ -1544,10 +1544,10 @@ public class IKBasis {
      *         of the instance
      */
     public IKBasis applyInverseTo(IKBasis r) {
-        return new IKBasis(-r.q0 * q0 - (r.q1 * q1 + r.q2 * q2 + r.q3 * q3),
-                -r.q1 * q0 + r.q0 * q1 + (r.q2 * q3 - r.q3 * q2),
-                -r.q2 * q0 + r.q0 * q2 + (r.q3 * q1 - r.q1 * q3),
-                -r.q3 * q0 + r.q0 * q3 + (r.q1 * q2 - r.q2 * q1),
+        return new IKBasis(-r.w * w - (r.x * x + r.y * y + r.z * z),
+                -r.x * w + r.w * x + (r.y * z - r.z * y),
+                -r.y * w + r.w * y + (r.z * x - r.x * z),
+                -r.z * w + r.w * z + (r.x * y - r.y * x),
                 false);
     }
 
@@ -1565,10 +1565,10 @@ public class IKBasis {
      * @return a new rotation which is the composition of r by the instance
      */
     public void applyTo(IKBasis r, IKBasis output) {
-        output.set(r.q0 * q0 - (r.q1 * q1 + r.q2 * q2 + r.q3 * q3),
-                r.q1 * q0 + r.q0 * q1 + (r.q2 * q3 - r.q3 * q2),
-                r.q2 * q0 + r.q0 * q2 + (r.q3 * q1 - r.q1 * q3),
-                r.q3 * q0 + r.q0 * q3 + (r.q1 * q2 - r.q2 * q1),
+        output.set(r.w * w - (r.x * x + r.y * y + r.z * z),
+                r.x * w + r.w * x + (r.y * z - r.z * y),
+                r.y * w + r.w * y + (r.z * x - r.x * z),
+                r.z * w + r.w * z + (r.x * y - r.y * x),
                 false);
     }
 
@@ -1588,27 +1588,27 @@ public class IKBasis {
      *         of the instance
      */
     public void applyInverseTo(IKBasis r, IKBasis output) {
-        output.set(-r.q0 * q0 - (r.q1 * q1 + r.q2 * q2 + r.q3 * q3),
-                -r.q1 * q0 + r.q0 * q1 + (r.q2 * q3 - r.q3 * q2),
-                -r.q2 * q0 + r.q0 * q2 + (r.q3 * q1 - r.q1 * q3),
-                -r.q3 * q0 + r.q0 * q3 + (r.q1 * q2 - r.q2 * q1),
+        output.set(-r.w * w - (r.x * x + r.y * y + r.z * z),
+                -r.x * w + r.w * x + (r.y * z - r.z * y),
+                -r.y * w + r.w * y + (r.z * x - r.x * z),
+                -r.z * w + r.w * z + (r.x * y - r.y * x),
                 false);
     }
 
     public IKBasis setToConjugate() {
-        q1 = -q1;
-        q2 = -q2;
-        q3 = -q3;
+        x = -x;
+        y = -y;
+        z = -z;
         return this;
     }
 
     public void set(float q0, float q1, float q2, float q3,
             boolean needsNormalization) {
 
-        this.q0 = q0;
-        this.q1 = q1;
-        this.q2 = q2;
-        this.q3 = q3;
+        this.w = q0;
+        this.x = q1;
+        this.y = q2;
+        this.z = q3;
 
         if (needsNormalization)
             setToNormalized();
@@ -1616,11 +1616,11 @@ public class IKBasis {
 
     public void setToNormalized() {
         // normalization preprocessing
-        float inv = 1.0f / IKMathUtils.sqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
-        q0 *= inv;
-        q1 *= inv;
-        q2 *= inv;
-        q3 *= inv;
+        float inv = 1.0f / IKMathUtils.sqrt(w * w + x * x + y * y + z * z);
+        w *= inv;
+        x *= inv;
+        y *= inv;
+        z *= inv;
     }
 
     /**
@@ -1629,10 +1629,10 @@ public class IKBasis {
      * @return the norm.
      */
     public float len() {
-        return IKMathUtils.sqrt(q0 * q0 +
-                q1 * q1 +
-                q2 * q2 +
-                q3 * q3);
+        return IKMathUtils.sqrt(w * w +
+                x * x +
+                y * y +
+                z * z);
     }
 
     /**
@@ -1653,10 +1653,10 @@ public class IKBasis {
             }
         }
 
-        return new IKBasis(q0 / norm,
-                q1 / norm,
-                q2 / norm,
-                q3 / norm);
+        return new IKBasis(w / norm,
+                x / norm,
+                y / norm,
+                z / norm);
     }
 
     public void set(IKVector3 u, IKVector3 v) {
@@ -1676,19 +1676,19 @@ public class IKBasis {
             // special case u = -v: we select a PI angle rotation around
             // an arbitrary vector orthogonal to u
             IKVector3 w = (IKVector3) u.getOrthogonal();
-            q0 = 0.0f;
-            q1 = -w.x;
-            q2 = -w.y;
-            q3 = -w.z;
+            this.w = 0.0f;
+            x = -w.x;
+            y = -w.y;
+            z = -w.z;
         } else {
             // general case: (u, v) defines a plane, we select
             // the shortest possible rotation: axis orthogonal to this plane
-            q0 = IKMathUtils.sqrt(0.5f * (1.0f + dot / normProduct));
-            float coeff = 1.0f / (2.0f * q0 * normProduct);
+            w = IKMathUtils.sqrt(0.5f * (1.0f + dot / normProduct));
+            float coeff = 1.0f / (2.0f * w * normProduct);
             IKVector3 q = (IKVector3) v.crossCopy(u);
-            q1 = coeff * q.x;
-            q2 = coeff * q.y;
-            q3 = coeff * q.z;
+            x = coeff * q.x;
+            y = coeff * q.y;
+            z = coeff * q.z;
         }
 
     }
@@ -1707,10 +1707,10 @@ public class IKBasis {
         float halfAngle = -0.5f * angle;
         float coeff = IKMathUtils.sin(halfAngle) / norm;
 
-        q0 = IKMathUtils.cos(halfAngle);
-        q1 = coeff * axis.x;
-        q2 = coeff * axis.y;
-        q3 = coeff * axis.z;
+        w = IKMathUtils.cos(halfAngle);
+        x = coeff * axis.x;
+        y = coeff * axis.y;
+        z = coeff * axis.z;
     }
 
     /**
