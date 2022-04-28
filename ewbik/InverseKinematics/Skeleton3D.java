@@ -113,6 +113,8 @@ public class Skeleton3D implements Saveable {
                 inputTag,
                 boneHeight,
                 coordinateType);
+        this.shadowNode3D = new ShadowNode3D(rootBone);
+        fauxParent = rootBone.localAxes().getGlobalCopy();
     }
 
     public void drawMe(PApplet p, int color, float pinSize) {
