@@ -17,18 +17,14 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
  */
 
-package ik;
+package processing;
 
 import data.LoadManager;
 import data.SaveManager;
 import data.Saveable;
-import ewbik.ik.*;
-import ewbik.ik.IKExceptions.NullParentForBoneException;
-import ewbik.ik.ShadowNode3D;
+import processing.IKExceptions.NullParentForBoneException;
 import ewbik.math.*;
 import ewbik.processing.singlePrecision.Kusudama;
-import processing.Node3D;
-import processing.Skeleton3D;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
@@ -130,7 +126,7 @@ public class Bone implements Saveable, Comparable<Bone> {
             this.parent.addChild(this);
             this.updateAncestorCount();
         } else {
-            throw ewbik.ik.IKExceptions.NullParentForBoneException();
+            throw IKExceptions.NullParentForBoneException();
         }
 
     }
@@ -267,7 +263,7 @@ public class Bone implements Saveable, Comparable<Bone> {
             this.parent.addChild(this);
             this.updateAncestorCount();
         } else {
-            throw ewbik.ik.IKExceptions.NullParentForBoneException();
+            throw IKExceptions.NullParentForBoneException();
         }
 
     }
@@ -307,7 +303,7 @@ public class Bone implements Saveable, Comparable<Bone> {
             this.parent.addChild(this);
             this.updateAncestorCount();
         } else {
-            throw ewbik.ik.IKExceptions.NullParentForBoneException();
+            throw IKExceptions.NullParentForBoneException();
         }
     }
 
@@ -1092,7 +1088,7 @@ public class Bone implements Saveable, Comparable<Bone> {
     public void setStiffness(float stiffness) {
         stiffnessScalar = stiffness;
         if (parentArmature != null) {
-            ewbik.ik.ShadowNode3D s = parentArmature.boneSegmentMap.get(this);
+            ShadowNode3D s = parentArmature.boneSegmentMap.get(this);
             if (s != null) {
                 ShadowNode3D.ShadowBone wb = s.simulatedBones.get(this);
                 if (wb != null) {

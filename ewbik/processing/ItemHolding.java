@@ -1,8 +1,6 @@
 package processing;
 
 import data.SaveManager;
-import ik.Bone;
-import ik.IKPin;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;

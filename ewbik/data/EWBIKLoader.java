@@ -6,10 +6,9 @@ import data.TypeIdentifier;
 import ewbik.asj.data.JSONArray;
 import ewbik.asj.data.JSONObject;
 import ewbik.asj.data.StringFuncs;
-import ewbik.ik.*;
 import ewbik.math.Quaternion;
-import ik.Bone;
-import ik.IKPin;
+import processing.Bone;
+import processing.IKPin;
 import processing.Node3D;
 import processing.Skeleton3D;
 

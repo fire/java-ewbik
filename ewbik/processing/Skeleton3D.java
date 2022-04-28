@@ -24,8 +24,6 @@ import data.SaveManager;
 import data.Saveable;
 import ewbik.math.*;
 import ewbik.math.MathUtils;
-import ik.Bone;
-import ik.IKPin;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
@@ -38,8 +36,8 @@ import java.util.HashMap;
 public class Skeleton3D implements Saveable {
 
     public Node3D localNode3D;
-    public HashMap<Bone, ewbik.ik.ShadowNode3D> boneSegmentMap = new HashMap<Bone, ewbik.ik.ShadowNode3D>();
-    public ewbik.ik.ShadowNode3D shadowNode3D;
+    public HashMap<Bone, ShadowNode3D> boneSegmentMap = new HashMap<Bone, ShadowNode3D>();
+    public ShadowNode3D shadowNode3D;
     public float IKSolverStability = 0f;
     public int defaultStabilizingPassCount = 1;
     protected Node3D tempWorkingNode3D;
@@ -162,7 +160,7 @@ public class Skeleton3D implements Saveable {
      */
     public Bone createRootBone(Bone inputBone) {
         this.rootBone = inputBone;
-        this.shadowNode3D = new ewbik.ik.ShadowNode3D(rootBone);
+        this.shadowNode3D = new ShadowNode3D(rootBone);
         fauxParent = rootBone.localAxes().getGlobalCopy();
 
         return rootBone;
@@ -171,7 +169,7 @@ public class Skeleton3D implements Saveable {
     private Bone createRootBone(Vector3 tipHeading, Vector3 rollHeading, String boneName,
             float boneHeight, Bone.frameType coordinateType) {
         initializeRootBone(this, tipHeading, rollHeading, boneName, boneHeight, coordinateType);
-        this.shadowNode3D = new ewbik.ik.ShadowNode3D(rootBone);
+        this.shadowNode3D = new ShadowNode3D(rootBone);
         fauxParent = rootBone.localAxes().getGlobalCopy();
 
         return rootBone;
@@ -280,14 +278,14 @@ public class Skeleton3D implements Saveable {
         shadowNode3D.updateSegmentedArmature();
         boneSegmentMap.clear();
         recursivelyUpdateBonechainMapFrom(shadowNode3D);
-        ewbik.ik.ShadowNode3D.recursivelyCreateHeadingArraysFor(shadowNode3D);
+        ShadowNode3D.recursivelyCreateHeadingArraysFor(shadowNode3D);
     }
 
-    private void recursivelyUpdateBonechainMapFrom(ewbik.ik.ShadowNode3D startFrom) {
+    private void recursivelyUpdateBonechainMapFrom(ShadowNode3D startFrom) {
         for (Bone b : startFrom.bonechainList) {
             boneSegmentMap.put(b, startFrom);
         }
-        for (ewbik.ik.ShadowNode3D c : startFrom.bonechainChild) {
+        for (ShadowNode3D c : startFrom.bonechainChild) {
             recursivelyUpdateBonechainMapFrom(c);
         }
     }
@@ -386,11 +384,11 @@ public class Skeleton3D implements Saveable {
         defaultStabilizingPassCount = passCount;
     }
 
-    private void recursivelyNotifyBonesOfCompletedIKSolution(ewbik.ik.ShadowNode3D startFrom) {
+    private void recursivelyNotifyBonesOfCompletedIKSolution(ShadowNode3D startFrom) {
         for (Bone b : startFrom.bonechainList) {
             b.IKUpdateNotification();
         }
-        for (ewbik.ik.ShadowNode3D s : startFrom.bonechainChild) {
+        for (ShadowNode3D s : startFrom.bonechainChild) {
             recursivelyNotifyBonesOfCompletedIKSolution(s);
         }
     }
@@ -403,10 +401,10 @@ public class Skeleton3D implements Saveable {
 
     public void iteratedSolver(Bone startFrom, float dampening, int iterations,
             int stabilizationPasses) {
-        ewbik.ik.ShadowNode3D armature = boneSegmentMap.get(startFrom);
+        ShadowNode3D armature = boneSegmentMap.get(startFrom);
 
         if (armature != null) {
-            ewbik.ik.ShadowNode3D pinnedRootChain = armature.getPinnedRootChainFromHere();
+            ShadowNode3D pinnedRootChain = armature.getPinnedRootChainFromHere();
             armature = pinnedRootChain == null ? armature.getAncestorSegmentContaining(rootBone) : pinnedRootChain;
             if (armature != null && armature.pinnedDescendants.size() > 0) {
                 armature.alignSimulationAxesToBones();
@@ -419,7 +417,7 @@ public class Skeleton3D implements Saveable {
                         armature.updateOptimalRotationToPinnedDescendants(armature.bonechainRoot, MathUtils.PI, true,
                                 stabilizationPasses, i, totalIterations);
                         armature.setProcessed(false);
-                        for (ewbik.ik.ShadowNode3D s : armature.bonechainChild) {
+                        for (ShadowNode3D s : armature.bonechainChild) {
                             groupedRecursiveBonechainSolver(s, dampening, stabilizationPasses, i, totalIterations);
                         }
                     } else {
@@ -433,12 +431,12 @@ public class Skeleton3D implements Saveable {
 
     }
 
-    public void groupedRecursiveBonechainSolver(ewbik.ik.ShadowNode3D startFrom, float dampening,
-            int stabilizationPasses,
-            int iteration, float totalIterations) {
+    public void groupedRecursiveBonechainSolver(ShadowNode3D startFrom, float dampening,
+                                                int stabilizationPasses,
+                                                int iteration, float totalIterations) {
         recursiveBonechainSolver(startFrom, dampening, stabilizationPasses, iteration, totalIterations);
-        for (ewbik.ik.ShadowNode3D a : startFrom.pinnedDescendants) {
-            for (ewbik.ik.ShadowNode3D c : a.bonechainChild) {
+        for (ShadowNode3D a : startFrom.pinnedDescendants) {
+            for (ShadowNode3D c : a.bonechainChild) {
                 groupedRecursiveBonechainSolver(c, dampening, stabilizationPasses, iteration, totalIterations);
             }
         }
@@ -450,12 +448,12 @@ public class Skeleton3D implements Saveable {
      *
      * @param armature
      */
-    public void recursiveBonechainSolver(ewbik.ik.ShadowNode3D armature, float dampening, int stabilizationPasses,
-            int iteration, float totalIterations) {
+    public void recursiveBonechainSolver(ShadowNode3D armature, float dampening, int stabilizationPasses,
+                                         int iteration, float totalIterations) {
         if (armature.bonechainChild == null && !armature.isTipPinned()) {
             return;
         } else if (!armature.isTipPinned()) {
-            for (ewbik.ik.ShadowNode3D c : armature.bonechainChild) {
+            for (ShadowNode3D c : armature.bonechainChild) {
                 recursiveBonechainSolver(c, dampening, stabilizationPasses, iteration, totalIterations);
                 c.setProcessed(true);
             }
@@ -464,7 +462,7 @@ public class Skeleton3D implements Saveable {
     }
 
     private void QCPSolver(
-            ewbik.ik.ShadowNode3D chain,
+            ShadowNode3D chain,
             float dampening,
             boolean inverseWeighting,
             int stabilizationPasses,
@@ -498,7 +496,7 @@ public class Skeleton3D implements Saveable {
     }
 
     public void rootwardlyUpdateFalloffCacheFrom(Bone forBone) {
-        ewbik.ik.ShadowNode3D current = boneSegmentMap.get(forBone);
+        ShadowNode3D current = boneSegmentMap.get(forBone);
         while (current != null) {
             current.createHeadingArrays();
             current = current.getBonechainParent();

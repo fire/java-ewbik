@@ -1,8 +1,8 @@
 package data;
 
 import ewbik.asj.data.*;
-import ik.Bone;
-import ik.IKPin;
+import processing.Bone;
+import processing.IKPin;
 import processing.Node3D;
 import processing.Skeleton3D;
 

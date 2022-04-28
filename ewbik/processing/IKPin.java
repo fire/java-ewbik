@@ -1,9 +1,8 @@
-package ik;
+package processing;
 
 import data.LoadManager;
 import data.SaveManager;
 import data.Saveable;
-import processing.Node3D;
 import processing.core.PVector;
 
 import java.util.ArrayList;
