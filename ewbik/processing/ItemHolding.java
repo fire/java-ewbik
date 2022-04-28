@@ -16,7 +16,7 @@ class UI {
     PVector mouse = new PVector(0, 0, 0);
     PVector cameraPosition = new PVector(0, 0, 70);
     PVector lookAt = new PVector(0, 0, 0);
-    PVector up = new PVector(0, 1, 0);
+    static final PVector up = new PVector(0, 1, 0);
     float orthographicHeight, orthographicWidth;
     private PGraphics currentDrawSurface;
 
