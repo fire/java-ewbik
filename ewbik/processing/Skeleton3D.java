@@ -25,12 +25,14 @@ import ewbik.asj.Saveable;
 import ewbik.math.*;
 import ewbik.math.MathUtils;
 import ik.Bone;
+import ik.IKPin;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
 import processing.core.PVector;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class Skeleton3D implements Saveable {
@@ -70,6 +72,37 @@ public class Skeleton3D implements Saveable {
         Skeleton3D.this.createRootBone(Skeleton3D.this.localNode3D.calculateY().heading(),
                 Skeleton3D.this.localNode3D.calculateZ().heading(), Skeleton3D.this.name + " : rootBone", 1f,
                 Bone.frameType.GLOBAL);
+    }
+
+    /**
+     * save the given armature into the specified filepath
+     *
+     * @param path
+     * @param loadInto
+     */
+    public static void SaveArmature(String path, Skeleton3D toSave) {
+        ewbik.data.EWBIKSaver newSaver = new ewbik.data.EWBIKSaver();
+        newSaver.saveArmature(toSave, path);
+    }
+
+    /**
+     * Return a single precision (float) version of the armature in stored in the
+     * specified filepath
+     *
+     * @param path
+     * @return the Armature, or null if the file does not specify an armature
+     */
+    public static Skeleton3D LoadArmature(String path) {
+        ewbik.data.EWBIKLoader newLoader = new ewbik.data.EWBIKLoader();
+        @SuppressWarnings("unchecked")
+        Collection<Skeleton3D> ArmatureList = (Collection<Skeleton3D>) newLoader.importSinglePrecisionArmatures(path,
+                Node3D.class, Bone.class, Skeleton3D.class,
+                ewbik.processing.singlePrecision.Kusudama.class, ewbik.processing.singlePrecision.LimitCone.class,
+                IKPin.class);
+        for (Skeleton3D a : ArmatureList) {
+            return a;
+        }
+        return null;
     }
 
     protected void initializeRootBone(
