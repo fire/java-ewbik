@@ -1,4 +1,4 @@
-package InverseKinematics;/*
+package EWBIK;/*
                    
                    Copyright (c) 2015 Eron Gjoni
                    

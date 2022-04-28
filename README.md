@@ -17,7 +17,7 @@ See here for a demo: https://youtu.be/y_o34kOx_FA. It relies on a novel, highly 
 
 The code is fast and suitable for real-time use in most graphics applications. For example, a humanoid can be fully constrained and effector-ed at the hips, hands and head. This humanoid (simultaneously trying to reach all four corresponding targets in position and orientation) will solve in under a millisecond (roughly 0.2 milliseconds on an 8-year-old mid-level consumer-grade CPU).
 
-Further optimizations are likely still possible with InverseKinematics-structure tweaks.
+Further optimizations are likely still possible with EWBIK-structure tweaks.
 
 Any improvements are welcome as a Github pull request.
 

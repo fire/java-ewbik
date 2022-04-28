@@ -1,4 +1,4 @@
-package InverseKinematics;
+package EWBIK;
 
 public class QCP {
 

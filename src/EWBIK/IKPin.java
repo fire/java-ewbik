@@ -1,4 +1,4 @@
-package InverseKinematics;
+package EWBIK;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package InverseKinematics;
+package EWBIK;
 
 public class Basis {
     public static final Basis IDENTITY = new Basis(1.0f, 0.0f, 0.0f, 0.0f, false);

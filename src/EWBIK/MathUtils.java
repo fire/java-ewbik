@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package InverseKinematics;
+package EWBIK;
 
 /**
  * Utility and fast InverseKinematics.math functions.

@@ -16,7 +16,7 @@ DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
 
  */
-package InverseKinematics;
+package EWBIK;
 
 import java.util.ArrayList;
 import java.util.HashMap;
