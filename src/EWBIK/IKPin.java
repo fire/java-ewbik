@@ -7,7 +7,7 @@ public class IKPin {
     public static final short XDir = 1;
     public static final short YDir = 2;
     public static final short ZDir = 4;
-    public Bone forBone;
+    public Bone3D forBone;
     protected boolean isEnabled;
     protected Node3D node3D;
     protected IKPin parentPin;
@@ -23,14 +23,14 @@ public class IKPin {
     public IKPin() {
     }
 
-    public IKPin(Node3D inNode3D, boolean enabled, Bone bone) {
+    public IKPin(Node3D inNode3D, boolean enabled, Bone3D bone) {
         this.isEnabled = enabled;
         this.node3D = inNode3D;
         this.forBone = bone;
         setTargetPriorities(IKPin.this.xPriority, IKPin.this.yPriority, IKPin.this.zPriority);
     }
 
-    public IKPin(Node3D inNode3D, Bone bone) {
+    public IKPin(Node3D inNode3D, Bone3D bone) {
         this.node3D = inNode3D;
         this.forBone = bone;
         this.isEnabled = false;
@@ -74,7 +74,7 @@ public class IKPin {
         return node3D;
     }
 
-    public Bone forBone() {
+    public Bone3D forBone() {
 
         return this.forBone;
     }

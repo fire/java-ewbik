@@ -61,7 +61,7 @@ public class Kusudama {
     // per iteration. This should help stabilize solutions somewhat by allowing for
     // soft constraint violations.
     protected Float strength = 1f;
-    protected Bone attachedTo;
+    protected Bone3D attachedTo;
 
     float[] coneSequence;
     int coneCount;
@@ -94,7 +94,7 @@ public class Kusudama {
      *
      * @param forBone the bone this kusudama will be attached to.
      */
-    public Kusudama(Bone forBone) {
+    public Kusudama(Bone3D forBone) {
         this.attachedTo = forBone;
         this.limitingNode3D = forBone.getMajorRotationAxes();
         this.attachedTo.addConstraint(this);
@@ -626,7 +626,7 @@ public class Kusudama {
         return limitingNode3D.getGlobalOf(result);
     }
 
-    public Bone attachedTo() {
+    public Bone3D attachedTo() {
         return this.attachedTo;
     }
 
@@ -823,7 +823,7 @@ public class Kusudama {
      *
      * @param forBone the bone to which to attach this Kusudama.
      */
-    public void attachTo(Bone forBone) {
+    public void attachTo(Bone3D forBone) {
         this.attachedTo = forBone;
         if (this.limitingNode3D == null)
             this.limitingNode3D = forBone.getMajorRotationAxes();

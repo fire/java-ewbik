@@ -27,13 +27,13 @@ import java.util.HashMap;
  * @author Eron Gjoni
  */
 public class ShadowNode3D {
-    public Bone bonechainRoot;
-    public Bone bonechainTip;
+    public Bone3D bonechainRoot;
+    public Bone3D bonechainTip;
 
     public ArrayList<ShadowNode3D> bonechainChild = new ArrayList<ShadowNode3D>();
     public ArrayList<ShadowNode3D> pinnedDescendants = new ArrayList<ShadowNode3D>();
-    public HashMap<Bone, ShadowBone> simulatedBones = new HashMap<>();
-    public ArrayList<Bone> bonechainList = new ArrayList<Bone>();
+    public HashMap<Bone3D, ShadowBone> simulatedBones = new HashMap<>();
+    public ArrayList<Bone3D> bonechainList = new ArrayList<Bone3D>();
     public int distanceToRoot = 0;
     public int chainLength = 0;
     public Node3D debugTipNode3D;
@@ -50,13 +50,13 @@ public class ShadowNode3D {
     private boolean processed = false;
     private boolean simAligned = false;
 
-    public ShadowNode3D(Bone rootBone) {
+    public ShadowNode3D(Bone3D rootBone) {
         bonechainRoot = armatureRootBone(rootBone);
         generateArmatureBonechains();
         ensureAxesHeirarchy();
     }
 
-    public ShadowNode3D(ShadowNode3D inputParentSegment, Bone inputSegmentRoot) {
+    public ShadowNode3D(ShadowNode3D inputParentSegment, Bone3D inputSegmentRoot) {
         this.bonechainRoot = inputSegmentRoot;
         this.setBonechainParent(inputParentSegment);
         this.distanceToRoot = this.getBonechainParent().distanceToRoot + 1;
@@ -80,11 +80,11 @@ public class ShadowNode3D {
         setTipPinned(false);
         this.setBasePinned(bonechainRoot.getParent() != null && bonechainRoot.getParent().isPinned());
 
-        Bone temporaryBonechainTip = this.bonechainRoot;
+        Bone3D temporaryBonechainTip = this.bonechainRoot;
         this.chainLength = -1;
         while (true) {
             this.chainLength++;
-            ArrayList<Bone> childrenWithPinnedDescendants = temporaryBonechainTip
+            ArrayList<Bone3D> childrenWithPinnedDescendants = temporaryBonechainTip
                     .returnChildrenWithPinnedDescendants();
 
             if (childrenWithPinnedDescendants.size() > 1 || (temporaryBonechainTip.isPinned())) {
@@ -93,7 +93,7 @@ public class ShadowNode3D {
                 }
                 this.bonechainTip = temporaryBonechainTip;
 
-                for (Bone childBone : childrenWithPinnedDescendants) {
+                for (Bone3D childBone : childrenWithPinnedDescendants) {
                     this.bonechainChild.add(new ShadowNode3D(this, childBone));
                 }
 
@@ -199,13 +199,13 @@ public class ShadowNode3D {
                 rootStrand.bonechainRoot.parentArmature.localAxes());
     }
 
-    private void recursivelyEnsureAxesHeirarchyFor(Bone b, Node3D parentTo) {
+    private void recursivelyEnsureAxesHeirarchyFor(Bone3D b, Node3D parentTo) {
         ShadowNode3D chain = getChainFor(b);
         if (chain != null) {
             ShadowBone sb = chain.simulatedBones.get(b);
             sb.simLocalNode3D.setParent(parentTo);
             sb.simConstraintNode3D.setParent(parentTo);
-            for (Bone c : b.getChildren()) {
+            for (Bone3D c : b.getChildren()) {
                 chain.recursivelyEnsureAxesHeirarchyFor(c, sb.simLocalNode3D);
             }
         }
@@ -228,8 +228,8 @@ public class ShadowNode3D {
         simulatedBones.clear();
         bonechainList.clear();
 
-        Bone currentBone = bonechainTip;
-        Bone stopOn = bonechainRoot;
+        Bone3D currentBone = bonechainTip;
+        Bone3D stopOn = bonechainRoot;
         while (currentBone != null) {
             ShadowBone sb = simulatedBones.get(currentBone);
             if (sb == null) {
@@ -244,12 +244,12 @@ public class ShadowNode3D {
         }
     }
 
-    public ArrayList<Bone> getStrandFromTip(Bone pinnedBone) {
-        ArrayList<Bone> result = new ArrayList<Bone>();
+    public ArrayList<Bone3D> getStrandFromTip(Bone3D pinnedBone) {
+        ArrayList<Bone3D> result = new ArrayList<Bone3D>();
 
         if (pinnedBone.isPinned()) {
             result.add(pinnedBone);
-            Bone currBone = pinnedBone.getParent();
+            Bone3D currBone = pinnedBone.getParent();
             while (currBone != null && currBone.getParent() != null) {
                 result.add(currBone);
                 if (currBone.getParent().isPinned()) {
@@ -313,7 +313,7 @@ public class ShadowNode3D {
      *                            potentially significant computation cost).
      */
     public void updateOptimalRotationToPinnedDescendants(
-            Bone forBone,
+            Bone3D forBone,
             float dampening,
             boolean translate,
             int stabilizationPasses,
@@ -503,7 +503,7 @@ public class ShadowNode3D {
      * @return returns the segment chain (pinned or unpinned, doesn't matter) to
      *         which the inputBone belongs.
      */
-    public ShadowNode3D getChainFor(Bone chainMember) {
+    public ShadowNode3D getChainFor(Bone3D chainMember) {
         ShadowNode3D result = null;
         if (this.bonechainList.contains(chainMember))
             return this;
@@ -514,7 +514,7 @@ public class ShadowNode3D {
         return result;
     }
 
-    public ShadowNode3D getChildSegmentContaining(Bone b) {
+    public ShadowNode3D getChildSegmentContaining(Bone3D b) {
         if (bonechainList.contains(b)) {
             return this;
         } else {
@@ -527,7 +527,7 @@ public class ShadowNode3D {
         return null;
     }
 
-    public ShadowNode3D getAncestorSegmentContaining(Bone b) {
+    public ShadowNode3D getAncestorSegmentContaining(Bone3D b) {
         if (bonechainList.contains(b))
             return this;
         else if (this.bonechainParent != null)
@@ -557,8 +557,8 @@ public class ShadowNode3D {
 
     }
 
-    public Bone armatureRootBone(Bone rootBone2) {
-        Bone rootBone = rootBone2;
+    public Bone3D armatureRootBone(Bone3D rootBone2) {
+        Bone3D rootBone = rootBone2;
         while (rootBone.getParent() != null) {
             rootBone = rootBone.getParent();
         }
@@ -604,7 +604,7 @@ public class ShadowNode3D {
         }
     }
 
-    public void recursivelyAlignSimAxesOutwardFrom(Bone b, boolean forceGlobal) {
+    public void recursivelyAlignSimAxesOutwardFrom(Bone3D b, boolean forceGlobal) {
         ShadowNode3D bChain = getChildSegmentContaining(b);
         if (bChain != null) {
             ShadowBone sb = bChain.simulatedBones.get(b);
@@ -621,7 +621,7 @@ public class ShadowNode3D {
                 bNode3D.alignLocalsTo(b.localAxes());
                 cNode3D.alignLocalsTo(b.getMajorRotationAxes());
             }
-            for (Bone bc : b.getChildren()) {
+            for (Bone3D bc : b.getChildren()) {
                 bChain.recursivelyAlignSimAxesOutwardFrom(bc, false);
             }
         }
@@ -633,7 +633,7 @@ public class ShadowNode3D {
      *
      * @param b bone to start from
      */
-    public void recursivelyAlignBonesToSimAxesFrom(Bone b) {
+    public void recursivelyAlignBonesToSimAxesFrom(Bone3D b) {
         ShadowNode3D chain = b.parentArmature.boneSegmentMap.get(b); // getChainFor(b);
         if (chain != null) {
             ShadowBone sb = chain.simulatedBones.get(b);
@@ -643,7 +643,7 @@ public class ShadowNode3D {
             } else {
                 b.localAxes().alignLocalsTo(simulatedLocalNode3D);
             }
-            for (Bone bc : b.getChildren()) {
+            for (Bone3D bc : b.getChildren()) {
                 recursivelyAlignBonesToSimAxesFrom(bc);
             }
             chain.simAligned = false;
@@ -688,7 +688,7 @@ public class ShadowNode3D {
      * @author Eron Gjoni
      */
     public class ShadowBone {
-        Bone forBone;
+        Bone3D forBone;
         Node3D simLocalNode3D;
         Node3D simConstraintNode3D;
         float cosHalfDampen = 0f;
@@ -696,7 +696,7 @@ public class ShadowNode3D {
         float[] halfReturnfullnessDampened;
         boolean springy = false;
 
-        public ShadowBone(Bone toSimulate) {
+        public ShadowBone(Bone3D toSimulate) {
             forBone = toSimulate;
             simLocalNode3D = forBone.localAxes().getGlobalCopy();
             simConstraintNode3D = forBone.getMajorRotationAxes().getGlobalCopy();

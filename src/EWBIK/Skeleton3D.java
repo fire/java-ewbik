@@ -25,21 +25,21 @@ import java.util.HashMap;
 public class Skeleton3D {
 
     public Node3D localNode3D;
-    public HashMap<Bone, ShadowNode3D> boneSegmentMap = new HashMap<Bone, ShadowNode3D>();
+    public HashMap<Bone3D, ShadowNode3D> boneSegmentMap = new HashMap<Bone3D, ShadowNode3D>();
     public ShadowNode3D shadowNode3D;
     public float IKSolverStability = 0f;
     public int defaultStabilizingPassCount = 1;
     protected Node3D tempWorkingNode3D;
-    protected ArrayList<Bone> bones = new ArrayList<Bone>();
-    protected HashMap<String, Bone> boneNameMap = new HashMap<String, Bone>();
-    protected Bone rootBone;
+    protected ArrayList<Bone3D> bones = new ArrayList<Bone3D>();
+    protected HashMap<String, Bone3D> boneNameMap = new HashMap<String, Bone3D>();
+    protected Bone3D rootBone;
     protected String name;
     protected int IKIterations = 15;
     protected float dampening = MathUtils.toRadians(5f);
     PerformanceStats performance = new PerformanceStats();
     Node3D fauxParent;
     boolean debug = true;
-    Bone lastDebugBone = null;
+    Bone3D lastDebugBone = null;
     // debug code -- use to set a minimum distance an effector must move
     // in order to trigger a chain iteration
     float debugMag = 5f;
@@ -58,7 +58,7 @@ public class Skeleton3D {
         this.name = name;
         Skeleton3D.this.createRootBone(Skeleton3D.this.localNode3D.calculateY().heading(),
                 Skeleton3D.this.localNode3D.calculateZ().heading(), Skeleton3D.this.name + " : rootBone", 1f,
-                Bone.frameType.GLOBAL);
+                Bone3D.frameType.GLOBAL);
     }
 
     protected void initializeRootBone(
@@ -67,8 +67,8 @@ public class Skeleton3D {
             Vector3 rollHeading,
             String inputTag,
             float boneHeight,
-            Bone.frameType coordinateType) {
-        this.rootBone = new Bone(armature.getRootBone(),
+            Bone3D.frameType coordinateType) {
+        this.rootBone = new Bone3D(armature.getRootBone(),
                 new Vector3(tipHeading.x, tipHeading.y, tipHeading.z),
                 new Vector3(rollHeading.x, rollHeading.y, rollHeading.z),
                 inputTag,
@@ -79,7 +79,7 @@ public class Skeleton3D {
     /**
      * @return the rootBone of this armature.
      */
-    public Bone getRootBone() {
+    public Bone3D getRootBone() {
         return rootBone;
     }
 
@@ -87,7 +87,7 @@ public class Skeleton3D {
      * @param name the name of the bone object you wish to retrieve
      * @return the bone object corresponding to this name
      */
-    public Bone getBoneName(String name) {
+    public Bone3D getBoneName(String name) {
         return boneNameMap.get(name);
     }
 
@@ -104,7 +104,7 @@ public class Skeleton3D {
      * @param inputBone
      * @return
      */
-    public Bone createRootBone(Bone inputBone) {
+    public Bone3D createRootBone(Bone3D inputBone) {
         this.rootBone = inputBone;
         this.shadowNode3D = new ShadowNode3D(rootBone);
         fauxParent = rootBone.localAxes().getGlobalCopy();
@@ -112,8 +112,8 @@ public class Skeleton3D {
         return rootBone;
     }
 
-    private Bone createRootBone(Vector3 tipHeading, Vector3 rollHeading, String boneName,
-            float boneHeight, Bone.frameType coordinateType) {
+    private Bone3D createRootBone(Vector3 tipHeading, Vector3 rollHeading, String boneName,
+                                  float boneHeight, Bone3D.frameType coordinateType) {
         initializeRootBone(this, tipHeading, rollHeading, boneName, boneHeight, coordinateType);
         this.shadowNode3D = new ShadowNode3D(rootBone);
         fauxParent = rootBone.localAxes().getGlobalCopy();
@@ -148,7 +148,7 @@ public class Skeleton3D {
      *
      * @return all bones belonging to this armature.
      */
-    public ArrayList<Bone> getBoneList() {
+    public ArrayList<Bone3D> getBoneList() {
         this.bones.clear();
         rootBone.addDescendantsToArmature();
         return bones;
@@ -164,7 +164,7 @@ public class Skeleton3D {
      * @param previousBoneName
      * @param newBoneName
      */
-    public void setBoneName(Bone bone, String previousBoneName, String newBoneName) {
+    public void setBoneName(Bone3D bone, String previousBoneName, String newBoneName) {
         boneNameMap.remove(previousBoneName);
         boneNameMap.put(newBoneName, bone);
     }
@@ -176,7 +176,7 @@ public class Skeleton3D {
      *
      * @param bone
      */
-    public void addToBoneList(Bone Bone) {
+    public void addToBoneList(Bone3D Bone) {
         if (!bones.contains(Bone)) {
             bones.add(Bone);
             boneNameMap.put(Bone.getTag(), Bone);
@@ -188,7 +188,7 @@ public class Skeleton3D {
      * is
      * to know it no longer exists
      */
-    public void removeFromBoneList(Bone Bone) {
+    public void removeFromBoneList(Bone3D Bone) {
         if (bones.contains(Bone)) {
             bones.remove(Bone);
             boneNameMap.remove(Bone);
@@ -228,7 +228,7 @@ public class Skeleton3D {
     }
 
     private void recursivelyUpdateBonechainMapFrom(ShadowNode3D startFrom) {
-        for (Bone b : startFrom.bonechainList) {
+        for (Bone3D b : startFrom.bonechainList) {
             boneSegmentMap.put(b, startFrom);
         }
         for (ShadowNode3D c : startFrom.bonechainChild) {
@@ -244,11 +244,11 @@ public class Skeleton3D {
      * to index all of the pins on the armature.
      */
     public void refreshArmaturePins() {
-        Bone rootBone = this.getRootBone();
-        ArrayList<Bone> pinnedBones = new ArrayList<>();
+        Bone3D rootBone = this.getRootBone();
+        ArrayList<Bone3D> pinnedBones = new ArrayList<>();
         rootBone.addSelfIfPinned(pinnedBones);
 
-        for (Bone b : pinnedBones) {
+        for (Bone3D b : pinnedBones) {
             b.notifyAncestorsOfPin(false);
             updateBonechains();
         }
@@ -266,7 +266,7 @@ public class Skeleton3D {
      *
      * @param bone
      */
-    public void IKSolver(Bone bone) {
+    public void IKSolver(Bone3D bone) {
         IKSolver(bone, -1, -1, -1);
     }
 
@@ -282,7 +282,7 @@ public class Skeleton3D {
      * @param stabilizingPasses number of stabilization passes to run. Set this to
      *                          -1 if you want to use the armature's default.
      */
-    public void IKSolver(Bone bone, float dampening, int iterations, int stabilizingPasses) {
+    public void IKSolver(Bone3D bone, float dampening, int iterations, int stabilizingPasses) {
         performance.startPerformanceMonitor();
         iteratedSolver(bone, dampening, iterations, stabilizingPasses);
         performance.solveFinished(iterations == -1 ? this.IKIterations : iterations);
@@ -331,7 +331,7 @@ public class Skeleton3D {
     }
 
     private void recursivelyNotifyBonesOfCompletedIKSolution(ShadowNode3D startFrom) {
-        for (Bone b : startFrom.bonechainList) {
+        for (Bone3D b : startFrom.bonechainList) {
             b.IKUpdateNotification();
         }
         for (ShadowNode3D s : startFrom.bonechainChild) {
@@ -345,8 +345,8 @@ public class Skeleton3D {
      * @param iterations
      */
 
-    public void iteratedSolver(Bone startFrom, float dampening, int iterations,
-            int stabilizationPasses) {
+    public void iteratedSolver(Bone3D startFrom, float dampening, int iterations,
+                               int stabilizationPasses) {
         ShadowNode3D armature = boneSegmentMap.get(startFrom);
 
         if (armature != null) {
@@ -416,10 +416,10 @@ public class Skeleton3D {
             float totalIterations) {
 
         debug = false;
-        Bone startFrom = debug && lastDebugBone != null ? lastDebugBone : chain.bonechainTip;
-        Bone stopAfter = chain.bonechainRoot;
+        Bone3D startFrom = debug && lastDebugBone != null ? lastDebugBone : chain.bonechainTip;
+        Bone3D stopAfter = chain.bonechainRoot;
 
-        Bone currentBone = startFrom;
+        Bone3D currentBone = startFrom;
 
         if (debug && chain.simulatedBones.size() < 2) {
             return;
@@ -441,7 +441,7 @@ public class Skeleton3D {
         }
     }
 
-    public void rootwardlyUpdateFalloffCacheFrom(Bone forBone) {
+    public void rootwardlyUpdateFalloffCacheFrom(Bone3D forBone) {
         ShadowNode3D current = boneSegmentMap.get(forBone);
         while (current != null) {
             current.createHeadingArrays();

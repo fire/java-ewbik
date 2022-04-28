@@ -21,7 +21,7 @@ package EWBIK;
 
 import java.util.ArrayList;
 
-public class Bone implements Comparable<Bone> {
+public class Bone3D implements Comparable<Bone3D> {
     public static boolean drawKusudamas = false;
     public Skeleton3D parentArmature;
     public Kusudama constraints;
@@ -32,15 +32,15 @@ public class Bone implements Comparable<Bone> {
     protected Node3D localNode3D;
     protected Node3D majorRotationNode3D;
     protected float boneHeight;
-    protected Bone parent;
-    protected ArrayList<Bone> children = new ArrayList<>();
-    protected ArrayList<Bone> freeChildren = new ArrayList<>();
-    protected ArrayList<Bone> effectoredChildren = new ArrayList<>();
+    protected Bone3D parent;
+    protected ArrayList<Bone3D> children = new ArrayList<>();
+    protected ArrayList<Bone3D> freeChildren = new ArrayList<>();
+    protected ArrayList<Bone3D> effectoredChildren = new ArrayList<>();
     protected IKPin pin = null;
     protected boolean orientationLock = false;
     protected float stiffnessScalar = 0f;
 
-    public Bone() {
+    public Bone3D() {
         this.lastRotation = new Quaternion();
     }
 
@@ -54,13 +54,13 @@ public class Bone implements Comparable<Bone> {
      * @param coordinateType
      * @throws NullParentForBoneException
      */
-    public Bone(Bone par, // parent bone
-                Vector3 tipHeading, // the orienational heading of this bone (global vs relative coords specified in
-                // coordinateType)
-                Vector3 rollHeading, // axial rotation heading of the bone (it's z-axis)
-                String inputTag, // some user specified name for the bone, if desired
-                float inputBoneHeight, // bone length
-                frameType coordinateType) {
+    public Bone3D(Bone3D par, // parent bone
+                  Vector3 tipHeading, // the orienational heading of this bone (global vs relative coords specified in
+                  // coordinateType)
+                  Vector3 rollHeading, // axial rotation heading of the bone (it's z-axis)
+                  String inputTag, // some user specified name for the bone, if desired
+                  float inputBoneHeight, // bone length
+                  frameType coordinateType) {
         Vector3 tipHeading1 = tipHeading;
         Vector3 rollHeading1 = rollHeading;
 
@@ -81,10 +81,10 @@ public class Bone implements Comparable<Bone> {
             Vector3 tempX = tempRoll.copy();
             tempX.set(0, 0, 0);
 
-            if (coordinateType == Bone.frameType.GLOBAL) {
+            if (coordinateType == Bone3D.frameType.GLOBAL) {
                 tempTip = tipHeadingRay.heading();
                 tempRoll = rollHeadingRay.heading();
-            } else if (coordinateType == Bone.frameType.RELATIVE) {
+            } else if (coordinateType == Bone3D.frameType.RELATIVE) {
                 tempTip = par.localAxes().getGlobalOf(tipHeadingRay.heading());
                 tempRoll = par.localAxes().getGlobalOf(rollHeadingRay.heading());
             } else {
@@ -100,16 +100,16 @@ public class Bone implements Comparable<Bone> {
 
             this.parent = par;
             this.parentArmature = this.parent.parentArmature;
-            Bone.this.parentArmature.addToBoneList(this);
+            Bone3D.this.parentArmature.addToBoneList(this);
 
-            Bone.this.generateAxes(Bone.this.parent.getTip_(), tempX, tempTip, tempRoll);
-            Bone.this.localNode3D.setParent(Bone.this.parent.localNode3D);
+            Bone3D.this.generateAxes(Bone3D.this.parent.getTip_(), tempX, tempTip, tempRoll);
+            Bone3D.this.localNode3D.setParent(Bone3D.this.parent.localNode3D);
 
-            Bone.this.previousOrientation = Bone.this.localNode3D.attachedCopy();
+            Bone3D.this.previousOrientation = Bone3D.this.localNode3D.attachedCopy();
 
-            Bone.this.majorRotationNode3D = Bone.this.parent.localAxes().getGlobalCopy();
-            Bone.this.majorRotationNode3D.translateTo(Bone.this.parent.getTip_());
-            Bone.this.majorRotationNode3D.setParent(Bone.this.parent.localNode3D);
+            Bone3D.this.majorRotationNode3D = Bone3D.this.parent.localAxes().getGlobalCopy();
+            Bone3D.this.majorRotationNode3D.translateTo(Bone3D.this.parent.getTip_());
+            Bone3D.this.majorRotationNode3D.setParent(Bone3D.this.parent.localNode3D);
 
             this.parent.addFreeChild(this);
             this.parent.addChild(this);
@@ -130,7 +130,7 @@ public class Bone implements Comparable<Bone> {
      * @param coordinateType
      * @throws NullParentForBoneException
      */
-    public Bone(
+    public Bone3D(
             Skeleton3D parArma,
             Vector3 tipHeading,
             Vector3 rollHeading,
@@ -213,12 +213,12 @@ public class Bone implements Comparable<Bone> {
      * @param inputTag        some user specified name for the bone, if desired
      * @param inputBoneHeight bone length
      */
-    public Bone(Bone par, // parent bone
-            float xAngle, // how much the bone should be pitched relative to its parent bone
-            float yAngle, // how much the bone should be rolled relative to its parent bone
-            float zAngle, // how much the bone should be yawed relative to its parent bone
-            String inputTag, // some user specified name for the bone, if desired
-            float inputBoneHeight // bone length
+    public Bone3D(Bone3D par, // parent bone
+                  float xAngle, // how much the bone should be pitched relative to its parent bone
+                  float yAngle, // how much the bone should be rolled relative to its parent bone
+                  float zAngle, // how much the bone should be yawed relative to its parent bone
+                  String inputTag, // some user specified name for the bone, if desired
+                  float inputBoneHeight // bone length
     ) {
 
         this.lastRotation = new Quaternion();
@@ -236,17 +236,17 @@ public class Bone implements Comparable<Bone> {
 
             this.parent = par;
             this.parentArmature = this.parent.parentArmature;
-            Bone.this.parentArmature.addToBoneList(this);
+            Bone3D.this.parentArmature.addToBoneList(this);
 
-            Bone.this.generateAxes(Bone.this.parent.getTip_(), tempNode3D.calculateX().heading(),
+            Bone3D.this.generateAxes(Bone3D.this.parent.getTip_(), tempNode3D.calculateX().heading(),
                     tempNode3D.calculateY().heading(),
                     tempNode3D.calculateZ().heading());
-            Bone.this.localNode3D.setParent(Bone.this.parent.localNode3D);
-            Bone.this.previousOrientation = Bone.this.localNode3D.attachedCopy();
+            Bone3D.this.localNode3D.setParent(Bone3D.this.parent.localNode3D);
+            Bone3D.this.previousOrientation = Bone3D.this.localNode3D.attachedCopy();
 
-            Bone.this.majorRotationNode3D = Bone.this.parent.localAxes().getGlobalCopy();
-            Bone.this.majorRotationNode3D.translateTo(Bone.this.parent.getTip_());
-            Bone.this.majorRotationNode3D.setParent(Bone.this.parent.localNode3D);
+            Bone3D.this.majorRotationNode3D = Bone3D.this.parent.localAxes().getGlobalCopy();
+            Bone3D.this.majorRotationNode3D.translateTo(Bone3D.this.parent.getTip_());
+            Bone3D.this.majorRotationNode3D.setParent(Bone3D.this.parent.localNode3D);
 
             this.parent.addFreeChild(this);
             this.parent.addChild(this);
@@ -254,9 +254,9 @@ public class Bone implements Comparable<Bone> {
         }
     }
 
-    public Bone(Bone par, // parent bone
-            String inputTag, // some user specified name for the bone, if desired
-            float inputBoneHeight // bone length
+    public Bone3D(Bone3D par, // parent bone
+                  String inputTag, // some user specified name for the bone, if desired
+                  float inputBoneHeight // bone length
     ) {
         this.lastRotation = new Quaternion();
         if (par != null) {
@@ -273,17 +273,17 @@ public class Bone implements Comparable<Bone> {
 
             this.parent = par;
             this.parentArmature = this.parent.parentArmature;
-            Bone.this.parentArmature.addToBoneList(this);
+            Bone3D.this.parentArmature.addToBoneList(this);
 
-            Bone.this.generateAxes(Bone.this.parent.getTip_(), tempNode3D.calculateX().heading(),
+            Bone3D.this.generateAxes(Bone3D.this.parent.getTip_(), tempNode3D.calculateX().heading(),
                     tempNode3D.calculateY().heading(),
                     tempNode3D.calculateZ().heading());
-            Bone.this.localNode3D.setParent(Bone.this.parent.localNode3D);
-            Bone.this.previousOrientation = Bone.this.localNode3D.attachedCopy();
+            Bone3D.this.localNode3D.setParent(Bone3D.this.parent.localNode3D);
+            Bone3D.this.previousOrientation = Bone3D.this.localNode3D.attachedCopy();
 
-            Bone.this.majorRotationNode3D = Bone.this.parent.localAxes().getGlobalCopy();
-            Bone.this.majorRotationNode3D.translateTo(Bone.this.parent.getTip_());
-            Bone.this.majorRotationNode3D.setParent(Bone.this.parent.localNode3D);
+            Bone3D.this.majorRotationNode3D = Bone3D.this.parent.localAxes().getGlobalCopy();
+            Bone3D.this.majorRotationNode3D.translateTo(Bone3D.this.parent.getTip_());
+            Bone3D.this.majorRotationNode3D.setParent(Bone3D.this.parent.localNode3D);
 
             this.parent.addFreeChild(this);
             this.parent.addChild(this);
@@ -411,17 +411,17 @@ public class Bone implements Comparable<Bone> {
     }
 
     @SuppressWarnings("unchecked")
-    public ArrayList<Bone> getChildren() {
+    public ArrayList<Bone3D> getChildren() {
         return children;
     }
 
-    public void setChildren(ArrayList<Bone> children) {
-        this.children = (ArrayList<Bone>) children;
+    public void setChildren(ArrayList<Bone3D> children) {
+        this.children = (ArrayList<Bone3D>) children;
     }
 
     private void updateAncestorCount() {
         int countedAncestors = 0;
-        Bone currentBone = this.parent;
+        Bone3D currentBone = this.parent;
         while (currentBone != null) {
             countedAncestors++;
             currentBone = currentBone.parent;
@@ -438,16 +438,16 @@ public class Bone implements Comparable<Bone> {
      */
     private void setAncestorCount(int count) {
         this.ancestorCount = count;
-        for (Bone b : this.children) {
+        for (Bone3D b : this.children) {
             b.setAncestorCount(this.ancestorCount + 1);
         }
     }
 
-    public Bone getParent() {
+    public Bone3D getParent() {
         return this.parent;
     }
 
-    public void attachToParent(Bone inputParent) {
+    public void attachToParent(Bone3D inputParent) {
         inputParent.addChild(this);
         this.parent = inputParent;
         this.updateAncestorCount();
@@ -789,7 +789,7 @@ public class Bone implements Comparable<Bone> {
         }
         pin.enable();
         freeChildren.clear();
-        for (Bone child : getChildren()) {
+        for (Bone3D child : getChildren()) {
             if (child.pin != null && !child.pin.isEnabled()) {
                 addFreeChild(child);
             }
@@ -815,7 +815,7 @@ public class Bone implements Comparable<Bone> {
             pin.translateTo_(pinTo);
         pin.enable();
         freeChildren.clear();
-        for (Bone child : getChildren()) {
+        for (Bone3D child : getChildren()) {
             if (!child.pin.isEnabled()) {
                 addFreeChild(child);
             }
@@ -842,17 +842,17 @@ public class Bone implements Comparable<Bone> {
         updateSegmentedArmature();
     }
 
-    public ArrayList<Bone> returnChildrenWithPinnedDescendants() {
-        ArrayList<Bone> childrenWithPinned = new ArrayList<Bone>();
-        for (Bone c : getChildren()) {
+    public ArrayList<Bone3D> returnChildrenWithPinnedDescendants() {
+        ArrayList<Bone3D> childrenWithPinned = new ArrayList<Bone3D>();
+        for (Bone3D c : getChildren()) {
             if (c.hasPinnedDescendant())
                 childrenWithPinned.add(c);
         }
         return childrenWithPinned;
     }
 
-    public ArrayList<Bone> getMostImmediatelyPinnedDescendants() {
-        ArrayList<Bone> mostImmediatePinnedDescendants = new ArrayList<Bone>();
+    public ArrayList<Bone3D> getMostImmediatelyPinnedDescendants() {
+        ArrayList<Bone3D> mostImmediatePinnedDescendants = new ArrayList<Bone3D>();
         this.addSelfIfPinned(mostImmediatePinnedDescendants);
         return mostImmediatePinnedDescendants;
     }
@@ -863,11 +863,11 @@ public class Bone implements Comparable<Bone> {
         return this.pin.getAxes();
     }
 
-    public void addSelfIfPinned(ArrayList<Bone> pinnedBones2) {
+    public void addSelfIfPinned(ArrayList<Bone3D> pinnedBones2) {
         if (this.isPinned()) {
             pinnedBones2.add(this);
         } else {
-            for (Bone child : getChildren()) {
+            for (Bone3D child : getChildren()) {
                 child.addSelfIfPinned(pinnedBones2);
             }
         }
@@ -892,7 +892,7 @@ public class Bone implements Comparable<Bone> {
         parentArmature.updateBonechains();
     }
 
-    public void addToEffectored(Bone Bone) {
+    public void addToEffectored(Bone3D Bone) {
         int freeIndex = freeChildren.indexOf(Bone);
         if (freeIndex != -1)
             freeChildren.remove(freeIndex);
@@ -906,7 +906,7 @@ public class Bone implements Comparable<Bone> {
         }
     }
 
-    public void removeFromEffectored(Bone Bone) {
+    public void removeFromEffectored(Bone3D Bone) {
         int effectoredIndex = effectoredChildren.indexOf(Bone);
         if (effectoredIndex != -1)
             effectoredChildren.remove(effectoredIndex);
@@ -920,8 +920,8 @@ public class Bone implements Comparable<Bone> {
         }
     }
 
-    public Bone getPinnedRootBone() {
-        Bone rootBone = this;
+    public Bone3D getPinnedRootBone() {
+        Bone3D rootBone = this;
         while (rootBone.parent != null && !rootBone.parent.pin.isEnabled()) {
             rootBone = rootBone.parent;
         }
@@ -953,13 +953,13 @@ public class Bone implements Comparable<Bone> {
      * removes this BoneExample and any of its children from the armature.
      */
     public void deleteBone() {
-        ArrayList<Bone> bones = new ArrayList<>();
-        Bone root = parentArmature.getRootBone();
+        ArrayList<Bone3D> bones = new ArrayList<>();
+        Bone3D root = parentArmature.getRootBone();
         root.hasChild(bones, this);
-        for (Bone p : bones) {
+        for (Bone3D p : bones) {
             System.out.println("removing from" + p);
             p.removeFromEffectored(this);
-            for (Bone ab : this.effectoredChildren) {
+            for (Bone3D ab : this.effectoredChildren) {
                 p.removeFromEffectored(ab);
             }
             p.getChildren().remove(this);
@@ -969,10 +969,10 @@ public class Bone implements Comparable<Bone> {
     }
 
     /* adds this bone to the arrayList if inputBone is among its children */
-    private void hasChild(ArrayList<Bone> list, Bone query) {
+    private void hasChild(ArrayList<Bone3D> list, Bone3D query) {
         if (getChildren().contains(query))
             list.add(this);
-        for (Bone c : getChildren()) {
+        for (Bone3D c : getChildren()) {
             c.hasChild(list, query);
         }
     }
@@ -983,7 +983,7 @@ public class Bone implements Comparable<Bone> {
 
     public void setBoneHeight(float inBoneHeight) {
         this.boneHeight = inBoneHeight;
-        for (Bone child : this.getChildren()) {
+        for (Bone3D child : this.getChildren()) {
             child.localAxes().translateTo(this.getTip_());
             child.majorRotationNode3D.translateTo(this.getTip_());
         }
@@ -994,7 +994,7 @@ public class Bone implements Comparable<Bone> {
             return true;
         else {
             boolean result = false;
-            for (Bone c : getChildren()) {
+            for (Bone3D c : getChildren()) {
                 if (c.hasPinnedDescendant()) {
                     result = true;
                     break;
@@ -1019,20 +1019,20 @@ public class Bone implements Comparable<Bone> {
         this.orientationLock = val;
     }
 
-    public void addChild(Bone bone) {
+    public void addChild(Bone3D bone) {
         if (this.getChildren().indexOf(bone) == -1) {
             getChildren().add(bone);
         }
     }
 
-    public void addFreeChild(Bone bone) {
+    public void addFreeChild(Bone3D bone) {
         if (this.freeChildren.indexOf(bone) == -1) {
             freeChildren.add(bone);
         }
         parentArmature.updateBonechains();
     }
 
-    public void addEffectoredChild(Bone bone) {
+    public void addEffectoredChild(Bone3D bone) {
         if (this.effectoredChildren.indexOf(bone) == -1) {
             this.effectoredChildren.add(bone);
         }
@@ -1040,7 +1040,7 @@ public class Bone implements Comparable<Bone> {
     }
 
     public void addDescendantsToArmature() {
-        for (Bone b : getChildren()) {
+        for (Bone3D b : getChildren()) {
             parentArmature.addToBoneList(b);
             b.addDescendantsToArmature();
         }
@@ -1084,7 +1084,7 @@ public class Bone implements Comparable<Bone> {
     }
 
     @Override
-    public int compareTo(Bone i) {
+    public int compareTo(Bone3D i) {
         return this.ancestorCount - i.ancestorCount;
     }
 
