@@ -1,4 +1,4 @@
-package data;
+package InverseKinematics;
 
 public class TypeIdentifier {
     public Object key;

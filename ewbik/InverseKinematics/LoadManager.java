@@ -1,4 +1,4 @@
-package data;
+package InverseKinematics;
 
 import ewbik.asj.data.JSONArray;
 import ewbik.asj.data.JSONObject;

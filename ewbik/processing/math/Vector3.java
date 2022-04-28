@@ -1,6 +1,6 @@
 package ewbik.math;
 
-import data.CanLoad;
+import InverseKinematics.CanLoad;
 import ewbik.asj.data.JSONArray;
 import ewbik.asj.data.JSONObject;
 

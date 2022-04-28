@@ -1,8 +1,8 @@
 package ewbik.data;
 
-import data.LoadManager;
-import data.Saveable;
-import data.TypeIdentifier;
+import InverseKinematics.LoadManager;
+import InverseKinematics.Saveable;
+import InverseKinematics.TypeIdentifier;
 import ewbik.asj.data.JSONArray;
 import ewbik.asj.data.JSONObject;
 import ewbik.asj.data.StringFuncs;

@@ -3064,7 +3064,7 @@ public class StringFuncs implements Constants {
 
         // by default, data files are exported to the root path of the jar.
         // (not the data folder) so check there first.
-        stream = cl.getResourceAsStream("data/" + filename);
+        stream = cl.getResourceAsStream("InverseKinematics/" + filename);
         if (stream != null) {
             String cn = stream.getClass().getName();
             // this is an irritation of sun's java plug-in, which will return
@@ -3474,11 +3474,11 @@ public class StringFuncs implements Constants {
         }
         if (jarPath.contains("Contents/Java/")) {
             File containingFolder = new File(jarPath).getParentFile();
-            File dataFolder = new File(containingFolder, "data");
+            File dataFolder = new File(containingFolder, "InverseKinematics");
             return new File(dataFolder, where);
         }
         // Windows, Linux, or when not using a Mac OS X .app file
-        File workingDirItem = new File(File.separator + "data" + File.separator + where);
+        File workingDirItem = new File(File.separator + "InverseKinematics" + File.separator + where);
         return workingDirItem;
         // In some cases, the current working directory won't be set properly.
     }

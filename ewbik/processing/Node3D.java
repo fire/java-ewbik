@@ -17,9 +17,9 @@ package processing;/*
                    
                    */
 
-import data.LoadManager;
-import data.SaveManager;
-import data.Saveable;
+import InverseKinematics.LoadManager;
+import InverseKinematics.SaveManager;
+import InverseKinematics.Saveable;
 import ewbik.math.*;
 import processing.core.PGraphics;
 import processing.core.PMatrix;

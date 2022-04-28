@@ -1,8 +1,8 @@
 package processing;
 
-import data.LoadManager;
-import data.SaveManager;
-import data.Saveable;
+import InverseKinematics.LoadManager;
+import InverseKinematics.SaveManager;
+import InverseKinematics.Saveable;
 import processing.core.PVector;
 
 import java.util.ArrayList;

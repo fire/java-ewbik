@@ -19,9 +19,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package ewbik.processing.singlePrecision;
 
-import data.LoadManager;
-import data.SaveManager;
-import data.Saveable;
+import InverseKinematics.LoadManager;
+import InverseKinematics.SaveManager;
+import InverseKinematics.Saveable;
 import processing.ShadowNode3D;
 import ewbik.math.*;
 import processing.Bone;

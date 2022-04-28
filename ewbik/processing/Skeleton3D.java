@@ -19,9 +19,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package processing;
 
-import data.LoadManager;
-import data.SaveManager;
-import data.Saveable;
+import InverseKinematics.LoadManager;
+import InverseKinematics.SaveManager;
+import InverseKinematics.Saveable;
 import ewbik.math.*;
 import ewbik.math.MathUtils;
 import processing.core.PApplet;
