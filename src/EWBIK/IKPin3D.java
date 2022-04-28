@@ -2,7 +2,7 @@ package EWBIK;
 
 import java.util.ArrayList;
 
-public class IKPin {
+public class IKPin3D {
 
     public static final short XDir = 1;
     public static final short YDir = 2;
@@ -10,8 +10,8 @@ public class IKPin {
     public Bone3D forBone;
     protected boolean isEnabled;
     protected Node3D node3D;
-    protected IKPin parentPin;
-    protected ArrayList<IKPin> childPins = new ArrayList<>();
+    protected IKPin3D parentPin;
+    protected ArrayList<IKPin3D> childPins = new ArrayList<>();
     protected float xPriority = 1f;
     protected float yPriority = 1f;
     protected float zPriority = 1f;
@@ -20,21 +20,21 @@ public class IKPin {
     int subTargetCount = 4;
     float depthFalloff = 0f;
 
-    public IKPin() {
+    public IKPin3D() {
     }
 
-    public IKPin(Node3D inNode3D, boolean enabled, Bone3D bone) {
+    public IKPin3D(Node3D inNode3D, boolean enabled, Bone3D bone) {
         this.isEnabled = enabled;
         this.node3D = inNode3D;
         this.forBone = bone;
-        setTargetPriorities(IKPin.this.xPriority, IKPin.this.yPriority, IKPin.this.zPriority);
+        setTargetPriorities(IKPin3D.this.xPriority, IKPin3D.this.yPriority, IKPin3D.this.zPriority);
     }
 
-    public IKPin(Node3D inNode3D, Bone3D bone) {
+    public IKPin3D(Node3D inNode3D, Bone3D bone) {
         this.node3D = inNode3D;
         this.forBone = bone;
         this.isEnabled = false;
-        setTargetPriorities(IKPin.this.xPriority, IKPin.this.yPriority, IKPin.this.zPriority);
+        setTargetPriorities(IKPin3D.this.xPriority, IKPin3D.this.yPriority, IKPin3D.this.zPriority);
     }
 
     public Vector3 getLocation() {
@@ -279,7 +279,7 @@ public class IKPin {
      * to just being disabled)
      */
     public void removalNotification() {
-        for (IKPin cp : childPins) {
+        for (IKPin3D cp : childPins) {
             cp.setParentPin(getParentPin());
         }
     }
@@ -287,7 +287,7 @@ public class IKPin {
     public void solveIKForThisAndChildren() {
 
         try {
-            for (IKPin childPin : childPins) {
+            for (IKPin3D childPin : childPins) {
                 childPin.solveIKForThisAndChildren();
             }
             this.forBone.solveIKFromHere();
@@ -296,11 +296,11 @@ public class IKPin {
         }
     }
 
-    public void removeChildPin(IKPin child) {
+    public void removeChildPin(IKPin3D child) {
         childPins.remove(child);
     }
 
-    public void addChildPin(IKPin newChild) {
+    public void addChildPin(IKPin3D newChild) {
         if (newChild.isAncestorOf(this)) {
             this.setParentPin(newChild.getParentPin());
         }
@@ -308,11 +308,11 @@ public class IKPin {
             childPins.add(newChild);
     }
 
-    public IKPin getParentPin() {
+    public IKPin3D getParentPin() {
         return this.parentPin;
     }
 
-    public void setParentPin(IKPin parent) {
+    public void setParentPin(IKPin3D parent) {
         if (this.parentPin != null) {
             this.parentPin.removeChildPin(this);
         }
@@ -328,9 +328,9 @@ public class IKPin {
         }
     }
 
-    public boolean isAncestorOf(IKPin potentialDescendent) {
+    public boolean isAncestorOf(IKPin3D potentialDescendent) {
         boolean result = false;
-        IKPin cursor = potentialDescendent.getParentPin();
+        IKPin3D cursor = potentialDescendent.getParentPin();
         while (cursor != null) {
             if (cursor == this) {
                 result = true;

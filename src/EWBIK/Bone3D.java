@@ -36,7 +36,7 @@ public class Bone3D implements Comparable<Bone3D> {
     protected ArrayList<Bone3D> children = new ArrayList<>();
     protected ArrayList<Bone3D> freeChildren = new ArrayList<>();
     protected ArrayList<Bone3D> effectoredChildren = new ArrayList<>();
-    protected IKPin pin = null;
+    protected IKPin3D pin = null;
     protected boolean orientationLock = false;
     protected float stiffnessScalar = 0f;
 
@@ -307,8 +307,8 @@ public class Bone3D implements Comparable<Bone3D> {
         return  getTip_();
     }
 
-    protected IKPin createAndReturnPinOnAxes(Node3D on) {
-        return new IKPin(
+    protected IKPin3D createAndReturnPinOnAxes(Node3D on) {
+        return new IKPin3D(
                 on,
                 true,
                 this);
@@ -387,7 +387,7 @@ public class Bone3D implements Comparable<Bone3D> {
     }
     */
 
-    public IKPin getIKPin() {
+    public IKPin3D getIKPin() {
         return this.pin;
     }
 

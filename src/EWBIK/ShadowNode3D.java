@@ -140,18 +140,18 @@ public class ShadowNode3D {
         if (currentFalloff == 0) {
             return;
         } else {
-            IKPin pin = from.bonechainTip.getIKPin();
+            IKPin3D pin = from.bonechainTip.getIKPin();
             if (pin != null) {
                 ArrayList<Float> innerWeightArray = new ArrayList<Float>();
                 weightArray.add(innerWeightArray);
                 byte modeCode = pin.getModeCode();
                 innerWeightArray.add(pin.getPinWeight() * currentFalloff);
                 float maxPinWeight = 0f;
-                if ((modeCode & IKPin.XDir) != 0)
+                if ((modeCode & IKPin3D.XDir) != 0)
                     maxPinWeight = MathUtils.max(maxPinWeight, pin.getXPriority());
-                if ((modeCode & IKPin.YDir) != 0)
+                if ((modeCode & IKPin3D.YDir) != 0)
                     maxPinWeight = MathUtils.max(maxPinWeight, pin.getYPriority());
-                if ((modeCode & IKPin.ZDir) != 0)
+                if ((modeCode & IKPin3D.ZDir) != 0)
                     maxPinWeight = MathUtils.max(maxPinWeight, pin.getZPriority());
 
                 if (maxPinWeight == 0f)
@@ -159,17 +159,17 @@ public class ShadowNode3D {
 
                 maxPinWeight = 1f;
 
-                if ((modeCode & IKPin.XDir) != 0) {
+                if ((modeCode & IKPin3D.XDir) != 0) {
                     float subTargetWeight = pin.getPinWeight() * (pin.getXPriority() / maxPinWeight) * currentFalloff;
                     innerWeightArray.add(subTargetWeight);
                     innerWeightArray.add(subTargetWeight);
                 }
-                if ((modeCode & IKPin.YDir) != 0) {
+                if ((modeCode & IKPin3D.YDir) != 0) {
                     float subTargetWeight = pin.getPinWeight() * (pin.getYPriority() / maxPinWeight) * currentFalloff;
                     innerWeightArray.add(subTargetWeight);
                     innerWeightArray.add(subTargetWeight);
                 }
-                if ((modeCode & IKPin.ZDir) != 0) {
+                if ((modeCode & IKPin3D.ZDir) != 0) {
                     float subTargetWeight = pin.getPinWeight() * (pin.getZPriority() / maxPinWeight) * currentFalloff;
                     innerWeightArray.add(subTargetWeight);
                     innerWeightArray.add(subTargetWeight);
@@ -431,7 +431,7 @@ public class ShadowNode3D {
         int hdx = 0;
         for (int i = 0; i < pinnedBones.length; i++) {
             ShadowBone sb = pinnedBones[i];
-            IKPin pin = sb.forBone.getIKPin();
+            IKPin3D pin = sb.forBone.getIKPin();
             Node3D effectorNode3D = pin.forBone.getPinnedAxes();
             effectorNode3D.updateGlobal();
             Vector3 origin = thisBoneNode3D.calculatePosition();
@@ -439,19 +439,19 @@ public class ShadowNode3D {
             byte modeCode = pin.getModeCode();
             hdx++;
 
-            if ((modeCode & IKPin.XDir) != 0) {
+            if ((modeCode & IKPin3D.XDir) != 0) {
                 Ray3D xTarget = effectorNode3D.calculateX().getRayScaledBy(weights[hdx]);
                 localizedTargetHeadings[hdx].set(xTarget.p2()).sub(origin);
                 xTarget.setToInvertedTip(localizedTargetHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
-            if ((modeCode & IKPin.YDir) != 0) {
+            if ((modeCode & IKPin3D.YDir) != 0) {
                 Ray3D yTarget = effectorNode3D.calculateY().getRayScaledBy(weights[hdx]);
                 localizedTargetHeadings[hdx] = Vector3.sub(yTarget.p2(), origin);
                 yTarget.setToInvertedTip(localizedTargetHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
-            if ((modeCode & IKPin.ZDir) != 0) {
+            if ((modeCode & IKPin3D.ZDir) != 0) {
                 Ray3D zTarget = effectorNode3D.calculateZ().getRayScaledBy(weights[hdx]);
                 localizedTargetHeadings[hdx] = Vector3.sub(zTarget.p2(), origin);
                 zTarget.setToInvertedTip(localizedTargetHeadings[hdx + 1]).sub(origin);
@@ -466,7 +466,7 @@ public class ShadowNode3D {
 
         for (int i = 0; i < pinnedBones.length; i++) {
             ShadowBone sb = pinnedBones[i];
-            IKPin pin = sb.forBone.getIKPin();
+            IKPin3D pin = sb.forBone.getIKPin();
             Node3D tipNode3D = sb.simLocalNode3D;
             tipNode3D.updateGlobal();
             Vector3 origin = thisBoneNode3D.calculatePosition();
@@ -477,19 +477,19 @@ public class ShadowNode3D {
             float scaleBy = thisBoneNode3D.calculatePosition().dist(targetNode3D.calculatePosition());
             hdx++;
 
-            if ((modeCode & IKPin.XDir) != 0) {
+            if ((modeCode & IKPin3D.XDir) != 0) {
                 Ray3D xTip = tipNode3D.calculateX().getRayScaledBy(scaleBy);
                 localizedTipHeadings[hdx].set(xTip.p2()).sub(origin);
                 xTip.setToInvertedTip(localizedTipHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
-            if ((modeCode & IKPin.YDir) != 0) {
+            if ((modeCode & IKPin3D.YDir) != 0) {
                 Ray3D yTip = tipNode3D.calculateY().getRayScaledBy(scaleBy);
                 localizedTipHeadings[hdx].set(yTip.p2()).sub(origin);
                 yTip.setToInvertedTip(localizedTipHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
-            if ((modeCode & IKPin.ZDir) != 0) {
+            if ((modeCode & IKPin3D.ZDir) != 0) {
                 Ray3D zTip = tipNode3D.calculateZ().getRayScaledBy(scaleBy);
                 localizedTipHeadings[hdx].set(zTip.p2()).sub(origin);
                 zTip.setToInvertedTip(localizedTipHeadings[hdx + 1]).sub(origin);
