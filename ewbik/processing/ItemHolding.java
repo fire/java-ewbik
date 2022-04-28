@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import processing.core.PConstants;
 
 class UI {
-    PApplet pa;
+    PApplet processingApplet;
     PGraphics display;
     PVector mouse = new PVector(0, 0, 0);
     PVector cameraPosition = new PVector(0, 0, 70);
@@ -21,12 +21,12 @@ class UI {
     private PGraphics currentDrawSurface;
 
     public UI(PApplet p) {
-        pa = p;
-        currentDrawSurface = pa.g;
-        display = pa.createGraphics(p.width, p.height, PConstants.P3D);
+        processingApplet = p;
+        currentDrawSurface = processingApplet.g;
+        display = processingApplet.createGraphics(p.width, p.height, PConstants.P3D);
         display.smooth(8);
         System.out.println(p.sketchPath());
-        Kusudama.kusudamaShader = pa.loadShader("kusudama.glsl",
+        Kusudama.kusudamaShader = processingApplet.loadShader("kusudama.glsl",
                 "kusudama_vert.glsl");
 
     }
@@ -44,10 +44,10 @@ class UI {
         pg.fill(0, 0, 0, 90);
         float boxW = pg.textWidth(instructionText);
         float boxH = (pg.textAscent() + pg.textDescent()) * (instructionText.split("\n").length);
-        pg.rect((-pa.width / 2f) + 40, (-pa.height / 2f) + 15, boxW + 45, boxH + 40);
+        pg.rect((-processingApplet.width / 2f) + 40, (-processingApplet.height / 2f) + 15, boxW + 45, boxH + 40);
         pg.fill(255, 255, 255, 255);
         pg.emissive(255, 255, 255);
-        pg.text(instructionText, (-pa.width / 2f) + 40f, -pa.height / 2f + 30f);
+        pg.text(instructionText, (-processingApplet.width / 2f) + 40f, -processingApplet.height / 2f + 30f);
 
     }
 
@@ -157,20 +157,20 @@ class UI {
         drawPass(drawSize, additionalDraw, display, armature);
         display.endDraw();
 
-        currentDrawSurface = pa.g;
-        setCamera(pa.g, zoomScalar);
-        pa.background(169, 202, 239);
-        pa.imageMode(PConstants.CENTER);
-        pa.image(display, 0, 0, orthographicWidth, orthographicHeight);
-        pa.resetMatrix();
-        drawPins(pa.g, activePin, zoomScalar, drawSize, cubeEnabled, cubeNode3D);
-        pa.resetMatrix();
-        float cx = pa.width;
-        float cy = pa.height;
-        pa.ortho(-cx / 2f, cx / 2f, -cy / 2f, cy / 2f, -1000, 1000);
-        drawInstructions(pa.g, usageInstructions);
-        drawPins(pa.g, activePin, drawSize, zoomScalar, cubeEnabled, cubeNode3D);
-        drawInstructions(pa.g, usageInstructions);
+        currentDrawSurface = processingApplet.g;
+        setCamera(processingApplet.g, zoomScalar);
+        processingApplet.background(169, 202, 239);
+        processingApplet.imageMode(PConstants.CENTER);
+        processingApplet.image(display, 0, 0, orthographicWidth, orthographicHeight);
+        processingApplet.resetMatrix();
+        drawPins(processingApplet.g, activePin, zoomScalar, drawSize, cubeEnabled, cubeNode3D);
+        processingApplet.resetMatrix();
+        float cx = processingApplet.width;
+        float cy = processingApplet.height;
+        processingApplet.ortho(-cx / 2f, cx / 2f, -cy / 2f, cy / 2f, -1000, 1000);
+        drawInstructions(processingApplet.g, usageInstructions);
+        drawPins(processingApplet.g, activePin, drawSize, zoomScalar, cubeEnabled, cubeNode3D);
+        drawInstructions(processingApplet.g, usageInstructions);
 
     }
 
@@ -193,10 +193,10 @@ class UI {
 
     public void setCamera(PGraphics pg, float zoomScalar) {
         pg.clear();
-        orthographicHeight = pa.height * zoomScalar;
-        orthographicWidth = ((float) pa.width / (float) pa.height) * orthographicHeight;
-        mouse.x = (pa.mouseX - (pa.width / 2f)) * (orthographicWidth / pa.width);
-        mouse.y = (pa.mouseY - (pa.height / 2f)) * (orthographicHeight / pa.height);
+        orthographicHeight = processingApplet.height * zoomScalar;
+        orthographicWidth = ((float) processingApplet.width / (float) processingApplet.height) * orthographicHeight;
+        mouse.x = (processingApplet.mouseX - (processingApplet.width / 2f)) * (orthographicWidth / processingApplet.width);
+        mouse.y = (processingApplet.mouseY - (processingApplet.height / 2f)) * (orthographicHeight / processingApplet.height);
         camera(cameraPosition, lookAt, up, pg);
         pg.ortho(-orthographicWidth / 2f, orthographicWidth / 2f, -orthographicHeight / 2f, orthographicHeight / 2f, -1000, 1000);
     }
