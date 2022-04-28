@@ -23,10 +23,10 @@ import java.util.ArrayList;
 
 /**
  * Note, this class is a concrete implementation of the abstract class
- * Kusudama. Please refer to the {@link Kusudama
+ * Kusudama. Please refer to the {@link Kusudama3D
  * Kusudama docs.}
  */
-public class Kusudama {
+public class Kusudama3D {
 
     public static final float TAU = MathUtils.PI * 2;
     public static final float PI = MathUtils.PI;
@@ -41,7 +41,7 @@ public class Kusudama {
      * at the previous element in the array,
      * and the cone at the next element in the array.
      */
-    protected ArrayList<LimitCone> limitCones = new ArrayList<LimitCone>();
+    protected ArrayList<LimitCone3D> limitCones = new ArrayList<LimitCone3D>();
     /**
      * Defined as some Angle in radians about the limitingAxes Y axis, 0 being
      * equivalent to the
@@ -71,7 +71,7 @@ public class Kusudama {
     float unitArea = 4 * MathUtils.PI;
     float rotationalFreedom = 1f;
 
-    public Kusudama() {
+    public Kusudama3D() {
     }
 
     /**
@@ -94,7 +94,7 @@ public class Kusudama {
      *
      * @param forBone the bone this kusudama will be attached to.
      */
-    public Kusudama(Bone3D forBone) {
+    public Kusudama3D(Bone3D forBone) {
         this.attachedTo = forBone;
         this.limitingNode3D = forBone.getMajorRotationAxes();
         this.attachedTo.addConstraint(this);
@@ -104,9 +104,9 @@ public class Kusudama {
     /**
      * {@inheritDoc}
      **/
-    public LimitCone createLimitConeForIndex(int insertAt, Vector3 newPoint,
-                                             float radius) {
-        return new LimitCone(newPoint, radius, this);
+    public LimitCone3D createLimitConeForIndex(int insertAt, Vector3 newPoint,
+                                               float radius) {
+        return new LimitCone3D(newPoint, radius, this);
     }
 
     /*
@@ -172,7 +172,7 @@ public class Kusudama {
         }
 
         int idx = 0;
-        for (LimitCone lc : getLimitCones()) {
+        for (LimitCone3D lc : getLimitCones()) {
             Vector3 controlPoint = lc.getControlPoint();
             Vector3 leftTangent = lc.tangentCircleCenterNext1;
             Vector3 rightTangent = lc.tangentCircleCenterNext2;
@@ -213,7 +213,7 @@ public class Kusudama {
     public void updateTangentRadii() {
 
         for (int i = 0; i < limitCones.size(); i++) {
-            LimitCone next = i < limitCones.size() - 1
+            LimitCone3D next = i < limitCones.size() - 1
                     ? limitCones.get(i + 1)
                     : null;
             limitCones.get(i).updateTangentHandles(next);
@@ -222,8 +222,8 @@ public class Kusudama {
     }
 
     @SuppressWarnings("unchecked")
-    public ArrayList<LimitCone> getLimitCones() {
-        return (ArrayList<LimitCone>) this.limitCones;
+    public ArrayList<LimitCone3D> getLimitCones() {
+        return (ArrayList<LimitCone3D>) this.limitCones;
     }
 
     public void constraintUpdateNotification() {
@@ -283,7 +283,7 @@ public class Kusudama {
                 originalLimitingNode3D.getGlobalOf(newYRay).heading());
         limitingNode3D.rotateBy(oldYtoNewY);
 
-        for (LimitCone lc : getLimitCones()) {
+        for (LimitCone3D lc : getLimitCones()) {
             originalLimitingNode3D.setToGlobalOf(lc.getControlPoint(), lc.getControlPoint());
             limitingNode3D.setToLocalOf(lc.getControlPoint(), lc.getControlPoint());
             lc.getControlPoint().normalize();
@@ -567,7 +567,7 @@ public class Kusudama {
             for (int i = 0; i < limitCones.size() - 1; i++) {
                 Vector3 collisionPoint = inPoint.copy();
                 collisionPoint.set(0, 0, 0);
-                LimitCone nextCone = limitCones.get(i + 1);
+                LimitCone3D nextCone = limitCones.get(i + 1);
                 boolean inSegBounds = limitCones.get(i).inBoundsFromThisToNext(nextCone, point, collisionPoint);
                 if (inSegBounds == true) {
                     inBounds[0] = 1;
@@ -613,7 +613,7 @@ public class Kusudama {
             result.set(limitCones.get(0).getControlPoint());
         } else {
             for (int i = 0; i < limitCones.size() - 1; i++) {
-                LimitCone nextCone = limitCones.get(i + 1);
+                LimitCone3D nextCone = limitCones.get(i + 1);
                 Vector3 closestPathPoint = limitCones.get(i).getClosestPathPoint(nextCone, point);
                 float closeDot = closestPathPoint.dot(point);
                 if (closeDot > closestPointDot) {
@@ -645,8 +645,8 @@ public class Kusudama {
      *                 LimitCones)
      */
     public void addLimitCone(Vector3 newPoint, float radius,
-            LimitCone previous,
-            LimitCone next) {
+            LimitCone3D previous,
+            LimitCone3D next) {
         int insertAt = 0;
 
         if (next == null || limitCones.size() == 0) {
@@ -659,7 +659,7 @@ public class Kusudama {
         addLimitConeAtIndex(insertAt, newPoint, radius);
     }
 
-    public void removeLimitCone(LimitCone limitCone) {
+    public void removeLimitCone(LimitCone3D limitCone) {
         this.limitCones.remove(limitCone);
         this.updateTangentRadii();
         this.updateRotationalFreedom();
@@ -685,7 +685,7 @@ public class Kusudama {
      * @param radius   the radius of the LimitCone
      */
     public void addLimitConeAtIndex(int insertAt, Vector3 newPoint, float radius) {
-        LimitCone newCone = createLimitConeForIndex(insertAt, newPoint,
+        LimitCone3D newCone = createLimitConeForIndex(insertAt, newPoint,
                 radius);
         if (insertAt == -1) {
             limitCones.add(newCone);
@@ -805,7 +805,7 @@ public class Kusudama {
     protected void updateRotationalFreedom() {
         float axialConstrainedHyperArea = isAxiallyConstrained() ? (range / TAU) : 1f;
         float totalLimitConeSurfaceAreaRatio = 0f;
-        for (LimitCone l : limitCones) {
+        for (LimitCone3D l : limitCones) {
             totalLimitConeSurfaceAreaRatio += (l.getRadius() * 2f) / TAU;
         }
         rotationalFreedom = axialConstrainedHyperArea

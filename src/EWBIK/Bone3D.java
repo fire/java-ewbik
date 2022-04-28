@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class Bone3D implements Comparable<Bone3D> {
     public static boolean drawKusudamas = false;
     public Skeleton3D parentArmature;
-    public Kusudama constraints;
+    public Kusudama3D constraints;
     public int ancestorCount = 0;
     protected String tag;
     protected Quaternion lastRotation;
@@ -484,7 +484,7 @@ public class Bone3D implements Comparable<Bone3D> {
      */
     public void setAxesToSnapped(Node3D toSet,
             Node3D limitingNode3D, float cosHalfAngleDampen) {
-        if (constraints != null && Kusudama.class.isAssignableFrom(constraints.getClass())) {
+        if (constraints != null && Kusudama3D.class.isAssignableFrom(constraints.getClass())) {
             constraints.setAxesToSnapped(toSet, limitingNode3D, cosHalfAngleDampen);
         }
     }
@@ -492,7 +492,7 @@ public class Bone3D implements Comparable<Bone3D> {
     public void setAxesToReturnfulled(Node3D toSet,
             Node3D limitingNode3D, float cosHalfAngleDampen,
             float angleDampen) {
-        if (constraints != null && Kusudama.class.isAssignableFrom(constraints.getClass())) {
+        if (constraints != null && Kusudama3D.class.isAssignableFrom(constraints.getClass())) {
             constraints.setAxesToReturnfulled(toSet, limitingNode3D, cosHalfAngleDampen,
                     angleDampen);
         }
@@ -510,7 +510,7 @@ public class Bone3D implements Comparable<Bone3D> {
      * @param newConstraint a constraint Object to add to this bone
      * @return the constraintObject that was just added
      */
-    public Kusudama addConstraint(Kusudama newConstraint) {
+    public Kusudama3D addConstraint(Kusudama3D newConstraint) {
         constraints = newConstraint;
         return constraints;
     }
@@ -518,7 +518,7 @@ public class Bone3D implements Comparable<Bone3D> {
     /**
      * @return this bone's constraint object.
      */
-    public Kusudama getConstraint() {
+    public Kusudama3D getConstraint() {
         return constraints;
     }
 

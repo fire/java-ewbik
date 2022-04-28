@@ -19,9 +19,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package EWBIK;
 
-public class LimitCone {
+public class LimitCone3D {
 
-    public Kusudama parentKusudama;
+    public Kusudama3D parentKusudama;
     public Vector3 tangentCircleCenterNext1;
     public Vector3 tangentCircleCenterNext2;
     public float tangentCircleRadiusNext;
@@ -50,17 +50,17 @@ public class LimitCone {
     private float radius;
 
     // default constructor required for file loading to work
-    public LimitCone() {
+    public LimitCone3D() {
     }
 
-    public LimitCone(Vector3 location, float rad, Kusudama attachedTo) {
+    public LimitCone3D(Vector3 location, float rad, Kusudama3D attachedTo) {
         Vector3 location1 = location;
         setControlPoint(location1);
-        LimitCone.this.tangentCircleCenterNext1 = location1.getOrthogonal();
-        LimitCone.this.tangentCircleCenterNext2 = Vector3
-                .multiply(LimitCone.this.tangentCircleCenterNext1, -1);
+        LimitCone3D.this.tangentCircleCenterNext1 = location1.getOrthogonal();
+        LimitCone3D.this.tangentCircleCenterNext2 = Vector3
+                .multiply(LimitCone3D.this.tangentCircleCenterNext1, -1);
         this.setRadius(rad);
-        LimitCone.this.parentKusudama = attachedTo;
+        LimitCone3D.this.parentKusudama = attachedTo;
     }
 
     /**
@@ -70,7 +70,7 @@ public class LimitCone {
      *                       the input after accounting for collisions
      * @return
      */
-    public boolean inBoundsFromThisToNext(LimitCone next, Vector3 input,
+    public boolean inBoundsFromThisToNext(LimitCone3D next, Vector3 input,
                                           Vector3 collisionPoint) {
         boolean isInBounds = false;
         Vector3 closestCollision = getClosestCollision(next, input);
@@ -98,7 +98,7 @@ public class LimitCone {
      *         rectified position
      *         if the point was out of bounds.
      */
-    public Vector3 getClosestCollision(LimitCone next,
+    public Vector3 getClosestCollision(LimitCone3D next,
                                        Vector3 input) {
         Vector3 result = getOnGreatTangentTriangle(next, input);
         if (result == null) {
@@ -108,7 +108,7 @@ public class LimitCone {
         return result;
     }
 
-    public Vector3 getClosestPathPoint(LimitCone next,
+    public Vector3 getClosestPathPoint(LimitCone3D next,
                                        Vector3 input) {
         Vector3 result = getOnPathSequence(next, input);
         if (result == null) {
@@ -130,7 +130,7 @@ public class LimitCone {
      * @param input
      * @return
      */
-    public boolean determineIfInBounds(LimitCone next, Vector3 input) {
+    public boolean determineIfInBounds(LimitCone3D next, Vector3 input) {
 
         /**
          * Procedure : Check if input is contained in this cone, or the next cone
@@ -186,14 +186,14 @@ public class LimitCone {
         }
     }
 
-    public Vector3 closestCone(LimitCone next, Vector3 input) {
+    public Vector3 closestCone(LimitCone3D next, Vector3 input) {
         if (input.dot(controlPoint) > input.dot(next.controlPoint))
             return this.controlPoint.copy();
         else
             return next.controlPoint.copy();
     }
 
-    public Vector3 getOnPathSequence(LimitCone next, Vector3 input) {
+    public Vector3 getOnPathSequence(LimitCone3D next, Vector3 input) {
         Vector3 c1xc2 = controlPoint.crossCopy(next.controlPoint);
         float c1c2fir = input.dot(c1xc2);
         if (c1c2fir < 0.0) {
@@ -222,7 +222,7 @@ public class LimitCone {
 
     }
 
-    public Vector3 getOnGreatTangentTriangle(LimitCone next,
+    public Vector3 getOnGreatTangentTriangle(LimitCone3D next,
                                              Vector3 input) {
         Vector3 c1xc2 = controlPoint.crossCopy(next.controlPoint);
         float c1c2fir = input.dot(c1xc2);
@@ -266,7 +266,7 @@ public class LimitCone {
      * @param inBounds
      * @return
      */
-    public Vector3 closestPointOnClosestCone(LimitCone next,
+    public Vector3 closestPointOnClosestCone(LimitCone3D next,
                                              Vector3 input,
                                              boolean[] inBounds) {
         Vector3 closestToFirst = this.closestToCone(input, inBounds);
@@ -311,7 +311,7 @@ public class LimitCone {
         }
     }
 
-    public void updateTangentHandles(LimitCone next) {
+    public void updateTangentHandles(LimitCone3D next) {
         this.controlPoint.normalize();
         if (next != null) {
             float radA = this.getRadius();
@@ -405,7 +405,7 @@ public class LimitCone {
             computeTriangles(next);
     }
 
-    private void computeTriangles(LimitCone next) {
+    private void computeTriangles(LimitCone3D next) {
         firstTriangleNext[1] = this.tangentCircleCenterNext1.normalize();
         firstTriangleNext[0] = this.getControlPoint().normalize();
         firstTriangleNext[2] = next.getControlPoint().normalize();
@@ -441,7 +441,7 @@ public class LimitCone {
         return this.radiusCosine;
     }
 
-    public Kusudama getParentKusudama() {
+    public Kusudama3D getParentKusudama() {
         return parentKusudama;
     }
 

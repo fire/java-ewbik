@@ -704,7 +704,7 @@ public class ShadowNode3D {
             float defaultDampening = forBone.parentArmature.getDampening();
             float dampening = forBone.getParent() == null ? MathUtils.PI : predamp * defaultDampening;
             cosHalfDampen = MathUtils.cos(dampening / 2f);
-            Kusudama k = forBone.getConstraint();
+            Kusudama3D k = forBone.getConstraint();
             if (k != null && k.getPainfullness() != 0f) {
                 springy = true;
                 populateReturnDampeningIterationArray(k);
@@ -718,7 +718,7 @@ public class ShadowNode3D {
             float defaultDampening = forBone.parentArmature.getDampening();
             float dampening = forBone.getParent() == null ? MathUtils.PI : predamp * defaultDampening;
             cosHalfDampen = MathUtils.cos(dampening / 2f);
-            Kusudama k = forBone.getConstraint();
+            Kusudama3D k = forBone.getConstraint();
             if (k != null && k.getPainfullness() != 0f) {
                 springy = true;
                 populateReturnDampeningIterationArray(k);
@@ -727,7 +727,7 @@ public class ShadowNode3D {
             }
         }
 
-        public void populateReturnDampeningIterationArray(Kusudama k) {
+        public void populateReturnDampeningIterationArray(Kusudama3D k) {
             float predamp = 1f - forBone.getStiffness();
             float defaultDampening = forBone.parentArmature.getDampening();
             float dampening = forBone.getParent() == null ? MathUtils.PI : predamp * defaultDampening;
