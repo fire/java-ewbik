@@ -62,9 +62,9 @@ public class Skeleton3D implements Saveable {
 
         this.localNode3D = new Node3D(
                 new PVector(0, 0, 0), new PVector(1, 0, 0), new PVector(0, 1, 0), new PVector(0, 0, 1), null);
-        this.tempWorkingNode3D = Skeleton3D.this.localNode3D.getGlobalCopy();
+        this.tempWorkingNode3D = this.localNode3D.getGlobalCopy();
         this.name = name;
-        Skeleton3D.this.createRootBone(Skeleton3D.this.localNode3D.calculateY().heading(),
+        this.createRootBone(this.localNode3D.calculateY().heading(),
                 Skeleton3D.this.localNode3D.calculateZ().heading(), Skeleton3D.this.name + " : rootBone", 1f,
                 Bone.frameType.GLOBAL);
     }
@@ -107,9 +107,9 @@ public class Skeleton3D implements Saveable {
             String inputTag,
             float boneHeight,
             Bone.frameType coordinateType) {
-        this.rootBone = new Bone(armature.getRootBone(),
-                new PVector(tipHeading.x, tipHeading.y, tipHeading.z),
-                new PVector(rollHeading.x, rollHeading.y, rollHeading.z),
+        this.rootBone = new Bone(this,
+                tipHeading,
+                rollHeading,
                 inputTag,
                 boneHeight,
                 coordinateType);
