@@ -1,10 +1,9 @@
 package ewbik.math;
 
-import InverseKinematics.CanLoad;
 import ewbik.asj.data.JSONArray;
 import ewbik.asj.data.JSONObject;
 
-public class Vector3 implements CanLoad {
+public class Vector3 {
 
     public final static int X = 0, Y = 1, Z = 2;
     private static final long serialVersionUID = 3840054589595372522L;
@@ -1020,8 +1019,11 @@ public class Vector3 implements CanLoad {
         return this.z;
     }
 
-    @Override
-    public CanLoad populateSelfFromJSON(JSONObject j) {
+    /**
+         * @param j
+         * @return should return an instance of itself for chaining
+         */
+    public Vector3 populateSelfFromJSON(JSONObject j) {
         JSONArray components = j.getJSONArray("vec");
         this.x = components.getFloat(0);
         this.y = components.getFloat(1);
@@ -1029,7 +1031,6 @@ public class Vector3 implements CanLoad {
         return this;
     }
 
-    @Override
     public JSONObject toJSONObject() {
         JSONObject j = new JSONObject();
         JSONArray components = new JSONArray();
