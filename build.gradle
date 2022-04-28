@@ -1,22 +1,17 @@
 plugins {
-    id 'java-library'  
+    id 'java-library'
     id 'application'
     id 'distribution'
-    id 'org.jetbrains.kotlin.jvm' version '1.5.10'
 }
 
-repositories {
-    mavenCentral()
-    maven { url "https://jitpack.io" }
-}
 
-version = '0.0.1-' + new Date().format("yyyyMMdd'T'HHmmss'Z'", TimeZone.getTimeZone("UTC")) 
+version = '0.0.1-' + new Date().format("yyyyMMdd'T'HHmmss'Z'", TimeZone.getTimeZone("UTC"))
 
 sourceSets {
     main {
         java {
             srcDirs = [
-                'ewbik',
+                    'ewbik',
             ]
         }
         resources {
@@ -28,16 +23,13 @@ sourceSets {
 distributions {
     main {
         contents {
-            from ('Humanoid_Holding_Item.json') {                
-                rename 'Humanoid_Holding_Item.json', 'bin/Humanoid_Holding_Item.json'
-            }
-            from ('kusudama_vert.glsl') {                
+            from('kusudama_vert.glsl') {
                 rename 'kusudama_vert.glsl', 'bin/kusudama_vert.glsl'
             }
-            from ('kusudama.glsl') {                
+            from('kusudama.glsl') {
                 rename 'kusudama.glsl', 'bin/kusudama.glsl'
             }
-            from ('LICENSE') {                
+            from('LICENSE') {
                 rename 'LICENSE', 'bin/LICENSE'
             }
         }
@@ -47,15 +39,5 @@ distributions {
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(11)
-    }    
-}
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
-compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = "1.8"
     }
 }
