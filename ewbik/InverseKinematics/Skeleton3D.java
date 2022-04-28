@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class Skeleton3D {
+public class Skeleton3D implements Saveable {
 
     public Node3D localNode3D;
     public HashMap<Bone, ShadowNode3D> boneSegmentMap = new HashMap<Bone, ShadowNode3D>();
@@ -62,11 +62,42 @@ public class Skeleton3D {
 
         this.localNode3D = new Node3D(
                 new PVector(0, 0, 0), new PVector(1, 0, 0), new PVector(0, 1, 0), new PVector(0, 0, 1), null);
-        this.tempWorkingNode3D = this.localNode3D.getGlobalCopy();
+        this.tempWorkingNode3D = Skeleton3D.this.localNode3D.getGlobalCopy();
         this.name = name;
-        this.createRootBone(this.localNode3D.calculateY().heading(),
+        Skeleton3D.this.createRootBone(Skeleton3D.this.localNode3D.calculateY().heading(),
                 Skeleton3D.this.localNode3D.calculateZ().heading(), Skeleton3D.this.name + " : rootBone", 1f,
                 Bone.frameType.GLOBAL);
+    }
+
+    /**
+     * save the given armature into the specified filepath
+     *
+     * @param path
+     * @param loadInto
+     */
+    public static void SaveArmature(String path, Skeleton3D toSave) {
+        SaveManager.EWBIKSaver newSaver = new SaveManager.EWBIKSaver();
+        newSaver.saveArmature(toSave, path);
+    }
+
+    /**
+     * Return a single precision (float) version of the armature in stored in the
+     * specified filepath
+     *
+     * @param path
+     * @return the Armature, or null if the file does not specify an armature
+     */
+    public static Skeleton3D LoadArmature(String path) {
+        ewbik.data.EWBIKLoader newLoader = new ewbik.data.EWBIKLoader();
+        @SuppressWarnings("unchecked")
+        Collection<Skeleton3D> ArmatureList = (Collection<Skeleton3D>) newLoader.importSinglePrecisionArmatures(path,
+                Node3D.class, Bone.class, Skeleton3D.class,
+                Kusudama.class, LimitCone.class,
+                IKPin.class);
+        for (Skeleton3D a : ArmatureList) {
+            return a;
+        }
+        return null;
     }
 
     protected void initializeRootBone(
@@ -76,14 +107,12 @@ public class Skeleton3D {
             String inputTag,
             float boneHeight,
             Bone.frameType coordinateType) {
-        this.rootBone = new Bone(this,
-                tipHeading,
-                rollHeading,
+        this.rootBone = new Bone(armature.getRootBone(),
+                new PVector(tipHeading.x, tipHeading.y, tipHeading.z),
+                new PVector(rollHeading.x, rollHeading.y, rollHeading.z),
                 inputTag,
                 boneHeight,
                 coordinateType);
-        this.shadowNode3D = new ShadowNode3D(rootBone);
-        fauxParent = rootBone.localAxes().getGlobalCopy();
     }
 
     public void drawMe(PApplet p, int color, float pinSize) {
@@ -524,28 +553,63 @@ public class Skeleton3D {
         monitorPerformance = state;
     }
 
-    /**
-         * called on all loaded objects once the full load sequence has been completed
-         */
+    @Override
+    public void makeSaveable(SaveManager saveManager) {
+        saveManager.addToSaveState(this);
+        if (this.localAxes().getParentAxes() != null)
+            this.localAxes().getParentAxes().makeSaveable(saveManager);
+        else
+            this.localAxes().makeSaveable(saveManager);
+        this.rootBone.makeSaveable(saveManager);
+    }
+
+    @Override
+    public ewbik.asj.data.JSONObject getSaveJSON(SaveManager saveManager) {
+        ewbik.asj.data.JSONObject saveJSON = new ewbik.asj.data.JSONObject();
+        saveJSON.setString("identityHash", this.getIdentityHash());
+        saveJSON.setString("localAxes", localAxes().getIdentityHash());
+        saveJSON.setString("rootBone", getRootBone().getIdentityHash());
+        saveJSON.setInt("defaultIterations", getDefaultIterations());
+        saveJSON.setFloat("dampening", this.getDampening());
+        saveJSON.setString("tag", this.getName());
+        return saveJSON;
+    }
+
+    public void loadFromJSONObject(ewbik.asj.data.JSONObject j, LoadManager l) {
+        try {
+            this.localNode3D = l.getObjectFor(Node3D.class, j, "localAxes");
+            this.rootBone = l.getObjectFor(Bone.class, j, "rootBone");
+            this.IKIterations = j.getInt("defaultIterations");
+            this.dampening = j.getFloat("dampening");
+            this.name = j.getString("tag");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void notifyOfSaveIntent(SaveManager saveManager) {
+        this.makeSaveable(saveManager);
+    }
+
+    @Override
+    public void notifyOfSaveCompletion(SaveManager saveManager) {
+    }
+
+    @Override
     public void notifyOfLoadCompletion() {
         this.createRootBone(rootBone);
         refreshArmaturePins();
         updateBonechains();
     }
 
+    @Override
     public boolean isLoading() {
         return false;
     }
 
+    @Override
     public void setLoading(boolean loading) {
-    }
-
-    public String getIdentityHash() {
-        String result = "";
-        result += System.identityHashCode(this);
-        String className = this.getClass().getSimpleName();
-        result += "-" + className;
-        return result;
     }
 
     public class PerformanceStats {

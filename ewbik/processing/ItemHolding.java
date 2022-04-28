@@ -232,6 +232,7 @@ public class ItemHolding extends PApplet {
 
     public void setup() {
         ui = new UI(this);
+        loadedArmature = Skeleton3D.LoadArmature("Humanoid_Holding_Item.json");
         worldNode3D = loadedArmature.localAxes().getParentAxes();
         if (worldNode3D == null) {
             worldNode3D = new Node3D();
@@ -334,7 +335,10 @@ public class ItemHolding extends PApplet {
             cubeMode = !cubeMode;
         } else if (key == 's') {
             println("Saving");
+            SaveManager.EWBIKSaver newSaver = new SaveManager.EWBIKSaver();
+            newSaver.saveArmature(loadedArmature, "Humanoid_Holding_Item.json");
         } else if (key == 'l') {
+            loadedArmature = Skeleton3D.LoadArmature("Humanoid_Holding_Item.json");
             loadedArmature.updateBonechains();
             loadedArmature.IKSolver(loadedArmature.getRootBone(), 0.5f, 20, 1);
 
