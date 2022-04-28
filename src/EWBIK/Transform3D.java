@@ -191,7 +191,7 @@ public class Transform3D {
 
         Vector3[] from = { origin, x_identity, y_identity, z_identity };
         Vector3[] to = { origin.copy(), xHeading, yHeading, zHeading };
-        QCP alignHeads = new QCP(MathUtils.FLOAT_ROUNDING_ERROR,
+        QuaternionBasedCharacteristicPolynomial alignHeads = new QuaternionBasedCharacteristicPolynomial(MathUtils.FLOAT_ROUNDING_ERROR,
                 MathUtils.FLOAT_ROUNDING_ERROR);
         alignHeads.setMaxIterations(50);
         Quaternion rotation = alignHeads.weightedSuperpose(from, to, null, false);

@@ -1,6 +1,6 @@
 package EWBIK;
 
-public class QCP {
+public class QuaternionBasedCharacteristicPolynomial {
 
     public Vector3[] target;
     /**
@@ -114,7 +114,7 @@ public class QCP {
      * @param evec_prec required eigenvector precision
      * @param eval_prec required eigenvalue precision
      */
-    public QCP(float evec_prec, float eval_prec) {
+    public QuaternionBasedCharacteristicPolynomial(float evec_prec, float eval_prec) {
         this.evec_prec = evec_prec;
         this.eval_prec = eval_prec;
     }

@@ -336,7 +336,7 @@ public class ShadowNode3D {
         upateTipHeadings(localizedTipHeadings, thisBoneNode3D);
 
         float bestRMSD = 0f;
-        QCP qcpConvergenceCheck = new QCP(MathUtils.FLOAT_ROUNDING_ERROR, MathUtils.FLOAT_ROUNDING_ERROR);
+        QuaternionBasedCharacteristicPolynomial qcpConvergenceCheck = new QuaternionBasedCharacteristicPolynomial(MathUtils.FLOAT_ROUNDING_ERROR, MathUtils.FLOAT_ROUNDING_ERROR);
         float newRMSD = 999999f;
 
         if (stabilizationPasses > 0)
@@ -397,7 +397,7 @@ public class ShadowNode3D {
             Vector3[] localizedTipHeadings,
             Vector3[] localizedTargetHeadings,
             float[] weights,
-            QCP qcpOrientationAligner,
+            QuaternionBasedCharacteristicPolynomial qcpOrientationAligner,
             int iteration,
             float totalIterations) {
 
