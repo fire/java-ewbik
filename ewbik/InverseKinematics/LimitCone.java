@@ -20,7 +20,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 package InverseKinematics;
 
 import ewbik.math.*;
-import processing.core.PVector;
 
 public class LimitCone {
 
@@ -56,8 +55,8 @@ public class LimitCone {
     public LimitCone() {
     }
 
-    public LimitCone(PVector location, float rad, Kusudama attachedTo) {
-        Vector3 location1 = Node3D.toVec3f(location);
+    public LimitCone(ewbik.math.Vector3 location, float rad, Kusudama attachedTo) {
+        Vector3 location1 = location;
         setControlPoint(location1);
         LimitCone.this.tangentCircleCenterNext1 = location1.getOrthogonal();
         LimitCone.this.tangentCircleCenterNext2 = Vector3

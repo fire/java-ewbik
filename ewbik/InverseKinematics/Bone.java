@@ -20,11 +20,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 package InverseKinematics;
 
 import ewbik.math.*;
-import org.w3c.dom.Node;
-import processing.core.PConstants;
-import processing.core.PGraphics;
-import processing.core.PMatrix;
-import processing.core.PVector;
 
 import java.util.ArrayList;
 
@@ -62,16 +57,16 @@ public class Bone implements Comparable<Bone> {
      * @throws NullParentForBoneException
      */
     public Bone(Bone par, // parent bone
-            PVector tipHeading, // the orienational heading of this bone (global vs relative coords specified in
-            // coordinateType)
-            PVector rollHeading, // axial rotation heading of the bone (it's z-axis)
-            String inputTag, // some user specified name for the bone, if desired
-            float inputBoneHeight, // bone length
-            frameType coordinateType) {
-        Vector3 tipHeading1 = Node3D.toVec3f(tipHeading);
-        Vector3 rollHeading1 = Node3D.toVec3f(rollHeading);
+                ewbik.math.Vector3 tipHeading, // the orienational heading of this bone (global vs relative coords specified in
+                // coordinateType)
+                ewbik.math.Vector3 rollHeading, // axial rotation heading of the bone (it's z-axis)
+                String inputTag, // some user specified name for the bone, if desired
+                float inputBoneHeight, // bone length
+                frameType coordinateType) {
+        ewbik.math.Vector3 tipHeading1 = tipHeading;
+        ewbik.math.Vector3 rollHeading1 = rollHeading;
 
-        this.lastRotation = new Quaternion();
+        this.lastRotation = new ewbik.math.Quaternion();
         if (par != null) {
             if (inputTag == null || inputTag == "") {
                 this.tag = Integer.toString(System.identityHashCode(this));
@@ -306,14 +301,12 @@ public class Bone implements Comparable<Bone> {
         this.localNode3D = new Node3D(origin, x, y, z);
     }
 
-    public PVector getBase() {
-        ewbik.math.Vector3 base = (ewbik.math.Vector3) getBase_();
-        return new PVector(base.x, base.y, base.z);
+    public Vector3 getBase() {
+        return getBase_();
     }
 
-    public PVector getTip() {
-        ewbik.math.Vector3 tip = (ewbik.math.Vector3) getTip_();
-        return new PVector(tip.x, tip.y, tip.z);
+    public Vector3 getTip() {
+        return  getTip_();
     }
 
     protected IKPin createAndReturnPinOnAxes(Node3D on) {
@@ -323,12 +316,12 @@ public class Bone implements Comparable<Bone> {
                 this);
     }
 
-    public void enablePin(PVector pin) {
-        enablePin_(new ewbik.math.Vector3(pin.x, pin.y, pin.z));
+    public void enablePin(Vector3 pin) {
+        enablePin_(pin);
     }
 
-    public void setPin(PVector pin) {
-        setPin_(new ewbik.math.Vector3(pin.x, pin.y, pin.z));
+    public void setPin(Vector3 pin) {
+        setPin_(pin);
     }
 
     /**
@@ -336,15 +329,16 @@ public class Bone implements Comparable<Bone> {
      *         indicating
      *         the spatial target of the pin.
      */
-    public PVector getPinLocation() {
+    public ewbik.math.Vector3 getPinLocation() {
         if (pin == null)
             return null;
         else {
             ewbik.math.Vector3 loc = pin.getLocation_();
-            return new PVector(loc.x, loc.y, loc.z);
+            return loc;
         }
     }
 
+    /*
     public void drawMeAndChildren(PGraphics pg, int boneCol, float pinSize) {
 
         if (this.constraints != null && drawKusudamas) {
@@ -393,6 +387,7 @@ public class Bone implements Comparable<Bone> {
             localAxes().drawMe(pg, pinSize);
         }
     }
+    */
 
     public IKPin getIKPin() {
         return this.pin;

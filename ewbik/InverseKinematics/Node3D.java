@@ -18,10 +18,6 @@ package InverseKinematics;/*
                    */
 
 import ewbik.math.*;
-import processing.core.PGraphics;
-import processing.core.PMatrix;
-import processing.core.PMatrix3D;
-import processing.core.PVector;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -76,16 +72,16 @@ public class Node3D {
      *               coordinates, given as an offset from this base's
      *               origin in global coordinates.
      */
-    public Node3D(PVector origin,
-            PVector inX,
-            PVector inY,
-            PVector inZ,
-            Node3D parent) {
+    public Node3D(ewbik.math.Vector3 origin,
+                  Vector3 inX,
+                  Vector3 inY,
+                  Vector3 inZ,
+                  Node3D parent) {
 
-        Vector3 origin1 = toVec3f(origin);
-        Vector3 inX1 = toVec3f(inX);
-        Vector3 inY1 = toVec3f(inY);
-        Vector3 inZ1 = toVec3f(inZ);
+        Vector3 origin1 = origin;
+        Vector3 inX1 = inX;
+        Vector3 inY1 = inY;
+        Vector3 inZ1 = inZ;
         if (parent == null)
             this.areGlobal = true;
         createTempVars(origin1);
@@ -168,31 +164,8 @@ public class Node3D {
         this.markDirty();
         this.updateGlobal();
     }
-
-    public static PVector toPVector(Vector3 sv) {
-        return new PVector(sv.x, sv.y, sv.z);
-    }
-
-    public static void toDVector(Vector3 sv, PVector storeIn) {
-        storeIn.x = sv.x;
-        storeIn.y = sv.y;
-        storeIn.z = sv.z;
-    }
-
-    public static Vector3 toVec3f(PVector ev) {
-        return new Vector3(ev.x, ev.y, ev.z);
-    }
-
-    public static void drawRay(PGraphics p, Ray3D r) {
-        p.line(r.p1().x, r.p1().y, r.p1().z, r.p2().x, r.p2().y, r.p2().z);
-    }
-
-    public static void drawPoint(PGraphics p, Vector3 pt) {
-        p.point(pt.x, pt.y, pt.z);
-    }
-
-    public PVector origin() {
-        return toPVector(this.calculatePosition());
+    public Vector3 origin() {
+        return this.calculatePosition();
     }
 
     /**
@@ -203,47 +176,6 @@ public class Node3D {
     public Node3D getGlobalCopy() {
         this.updateGlobal();
         return new Node3D(getGlobalMBasis(), this.getParentAxes());
-    }
-
-    public PVector getGlobalOf(PVector local_input) {
-        return toPVector(
-                getGlobalOf(
-                        toVec3f(local_input)));
-    }
-
-    public PVector setToGlobalOf(PVector local_input) {
-        return toPVector(
-                setToGlobalOf(
-                        toVec3f(local_input)));
-    }
-
-    public void setToGlobalOf(PVector local_input, PVector global_output) {
-        toDVector(
-                setToGlobalOf(
-                        toVec3f(local_input)),
-                global_output);
-    }
-
-    public void translateByLocal(PVector translate) {
-        translateByLocal(
-                toVec3f(translate));
-    }
-
-    public void translateByGlobal(PVector translate) {
-        translateByGlobal(
-                toVec3f(translate));
-    }
-
-    public void translateTo(PVector translate, boolean slip) {
-        translateTo(
-                toVec3f(translate),
-                false);
-
-    }
-
-    public void translateTo(PVector translate) {
-        translateTo(
-                toVec3f(translate));
     }
 
     public void rotateAboutX(float radians) {
@@ -258,30 +190,8 @@ public class Node3D {
         rotateAboutZ(radians, true);
     }
 
-    public PVector calculatePositionPVector() {
-        return toPVector(calculatePosition());
-    }
-
-    public PVector getLocalOf(PVector global_input) {
-        return getLocalOf(global_input);
-    }
-
-    public PVector setToLocalOf(PVector global_input) {
-        toDVector(
-                setToLocalOf(
-                        toVec3f(global_input)),
-                global_input);
-        return global_input;
-    }
-
-    public void setToLocalOf(PVector global_input, PVector local_output) {
-        Vector3 tempVec = new Vector3();
-        setToLocalOf(
-                toVec3f(global_input),
-                tempVec);
-        toDVector(
-                tempVec,
-                local_output);
+    public Vector3 calculatePositionPVector() {
+        return calculatePosition();
     }
 
     private void updateMatrix(Transform3D b, float[][] outputMatrix) {
@@ -311,53 +221,6 @@ public class Node3D {
         outputMatrix[3][1] = origin.y;
         outputMatrix[3][2] = origin.z;
 
-    }
-
-    public PMatrix getLocalPMatrix() {
-        updateMatrix(getLocalMBasis(), outMatLocal);
-        float[][] m = outMatLocal;
-        PMatrix result = new PMatrix3D(
-                m[0][0], m[1][0], m[2][0], m[3][0],
-                m[0][1], m[1][1], m[2][1], m[3][1],
-                m[0][2], m[1][2], m[2][2], m[3][2],
-                m[0][3], m[1][3], m[2][3], m[3][3]);
-        return result;
-    }
-
-    public PMatrix getGlobalPMatrix() {
-        this.updateGlobal();
-        updateMatrix(getGlobalMBasis(), outMatGlobal);
-        float[][] m = outMatGlobal;
-        PMatrix result = new PMatrix3D(
-                m[0][0], m[1][0], m[2][0], m[3][0],
-                m[0][1], m[1][1], m[2][1], m[3][1],
-                m[0][2], m[1][2], m[2][2], m[3][2],
-                m[0][3], m[1][3], m[2][3], m[3][3]);
-        return result;
-    }
-
-    public void drawMe(PGraphics pg, float size) {
-        pg.noStroke();
-        updateGlobal();
-        pg.pushMatrix();
-        pg.setMatrix(getGlobalPMatrix());
-        pg.fill(2, 58, 0);
-        pg.pushMatrix();
-        pg.translate(size / 2f, 0, 0);
-        pg.box(size, size / 10f, size / 10f);
-        pg.popMatrix();
-        drawRay(pg, calculateX().getRayScaledTo(size));
-        pg.fill(94, 0, 0);
-        pg.pushMatrix();
-        pg.translate(0, size / 2f, 0);
-        pg.box(size / 10f, size, size / 10f);
-        pg.popMatrix();
-        pg.fill(0, 26, 150);
-        pg.pushMatrix();
-        pg.translate(0, 0, size / 2f);
-        pg.box(size / 10f, size / 10f, size);
-        pg.popMatrix();
-        pg.popMatrix();
     }
 
     /**

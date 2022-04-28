@@ -20,12 +20,6 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 package InverseKinematics;
 
 import ewbik.math.*;
-import processing.core.PConstants;
-import processing.core.PGraphics;
-import processing.core.PMatrix;
-import processing.core.PVector;
-import processing.opengl.PGraphicsOpenGL;
-import processing.opengl.PShader;
 
 import java.util.ArrayList;
 
@@ -38,8 +32,6 @@ public class Kusudama {
 
     public static final float TAU = MathUtils.PI * 2;
     public static final float PI = MathUtils.PI;
-    public static PShader kusudamaShader;
-    public static PShader currentShader;
     protected Node3D limitingNode3D;
     protected float painfullness;
     /**
@@ -116,37 +108,10 @@ public class Kusudama {
      **/
     public LimitCone createLimitConeForIndex(int insertAt, Vector3 newPoint,
                                              float radius) {
-        return new LimitCone(Node3D.toPVector(newPoint), radius, this);
+        return new LimitCone(newPoint, radius, this);
     }
 
-    /**
-     * Adds a LimitCone to the Kusudama. LimitCones are reach cones which
-     * can be
-     * arranged sequentially. The Kusudama will infer
-     * a smooth path leading from one LimitCone to the next.
-     * <p>
-     * Using a single LimitCone is functionally equivalent to a classic
-     * reachCone
-     * constraint.
-     *
-     * @param insertAt the intended index for this LimitCone in the sequence of
-     *                 LimitCones from which the Kusudama will infer a
-     *                 path. @see
-     *                 ewbik.ik.Kusudama.LimitCones LimitCones array.
-     * @param newPoint where on the Kusudama to add the LimitCone (in Kusudama's
-     *                 local coordinate frame defined by its bone's
-     *                 majorRotationAxes))
-     * @param radius   the radius of the LimitCone
-     */
-    public void addLimitConeAtIndex(int insertAt, PVector newPoint, float radius) {
-        addLimitConeAtIndex(insertAt, Node3D.toVec3f(newPoint), radius);
-    }
-
-    public boolean isInLimits(PVector inPoint) {
-        return isInLimits_(
-                Node3D.toVec3f(inPoint));
-    }
-
+    /*
     public void drawMe(PGraphics p, int boneCol, float pinSize) {
 
         updateShaderTexture();
@@ -198,7 +163,7 @@ public class Kusudama {
         p.strokeWeight(4);
         p.line(0f, 0f, 0f, yaw.x, yaw.y, yaw.z);
 
-    }
+    }*/
 
     protected void updateShaderTexture() {
 
@@ -210,9 +175,9 @@ public class Kusudama {
 
         int idx = 0;
         for (LimitCone lc : getLimitCones()) {
-            PVector controlPoint = Node3D.toPVector(lc.getControlPoint());
-            PVector leftTangent = Node3D.toPVector(lc.tangentCircleCenterNext1);
-            PVector rightTangent = Node3D.toPVector(lc.tangentCircleCenterNext2);
+            ewbik.math.Vector3 controlPoint = lc.getControlPoint();
+            ewbik.math.Vector3 leftTangent = lc.tangentCircleCenterNext1;
+            ewbik.math.Vector3 rightTangent = lc.tangentCircleCenterNext2;
             leftTangent = leftTangent.normalize();
             controlPoint = controlPoint.normalize();
             rightTangent = rightTangent.normalize();
@@ -235,7 +200,7 @@ public class Kusudama {
             idx += 4;
         }
 
-        currentShader = kusudamaShader;
+        // currentShader = kusudamaShader;
     }
 
     /**

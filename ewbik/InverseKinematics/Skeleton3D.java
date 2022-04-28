@@ -21,10 +21,7 @@ package InverseKinematics;
 
 import ewbik.math.*;
 import ewbik.math.MathUtils;
-import processing.core.PApplet;
-import processing.core.PGraphics;
-import processing.core.PMatrix;
-import processing.core.PVector;
+import ewbik.math.Vector3;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -61,7 +58,7 @@ public class Skeleton3D {
     public Skeleton3D(String name) {
 
         this.localNode3D = new Node3D(
-                new PVector(0, 0, 0), new PVector(1, 0, 0), new PVector(0, 1, 0), new PVector(0, 0, 1), null);
+                new Vector3(0, 0, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), null);
         this.tempWorkingNode3D = Skeleton3D.this.localNode3D.getGlobalCopy();
         this.name = name;
         Skeleton3D.this.createRootBone(Skeleton3D.this.localNode3D.calculateY().heading(),
@@ -77,23 +74,11 @@ public class Skeleton3D {
             float boneHeight,
             Bone.frameType coordinateType) {
         this.rootBone = new Bone(armature.getRootBone(),
-                new PVector(tipHeading.x, tipHeading.y, tipHeading.z),
-                new PVector(rollHeading.x, rollHeading.y, rollHeading.z),
+                new Vector3(tipHeading.x, tipHeading.y, tipHeading.z),
+                new Vector3(rollHeading.x, rollHeading.y, rollHeading.z),
                 inputTag,
                 boneHeight,
                 coordinateType);
-    }
-
-    public void drawMe(PApplet p, int color, float pinSize) {
-        drawMe(p.g, color, pinSize);
-    }
-
-    public void drawMe(PGraphics pg, int color, float pinSize) {
-        PMatrix localMat = localAxes().getGlobalPMatrix();
-        pg.applyMatrix(localMat);
-        pg.pushMatrix();
-        getRootBone().drawMeAndChildren(pg, color, pinSize);
-        pg.popMatrix();
     }
 
     /**

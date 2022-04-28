@@ -1,7 +1,5 @@
 package InverseKinematics;
 
-import processing.core.PVector;
-
 import java.util.ArrayList;
 
 public class IKPin {
@@ -39,16 +37,16 @@ public class IKPin {
         setTargetPriorities(IKPin.this.xPriority, IKPin.this.yPriority, IKPin.this.zPriority);
     }
 
-    public PVector getLocation() {
-        return Node3D.toPVector(getLocation_());
+    public ewbik.math.Vector3 getLocation() {
+        return getLocation_();
     }
 
-    public void translateTo(PVector v) {
-        translateTo_(Node3D.toVec3f(v));
+    public void translateTo(ewbik.math.Vector3 v) {
+        translateTo_(v);
     }
 
-    public void translateBy(PVector v) {
-        translateBy_(Node3D.toVec3f(v));
+    public void translateBy(ewbik.math.Vector3 v) {
+        translateBy_(v);
     }
 
     /**
