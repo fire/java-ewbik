@@ -1,6 +1,6 @@
 package EWBIK;
 
-public class Transform3D {
+public class IKTransform {
 
     public static final int LEFT = -1;
     public static final int RIGHT = 1;
@@ -9,18 +9,18 @@ public class Transform3D {
     public static final int Y = 1;
     public static final int Z = 2;
     // The chirality is always right.
-    public Quaternion rotation = new Quaternion();
-    public Quaternion inverseRotation = new Quaternion();
+    public IKQuaternion rotation = new IKQuaternion();
+    public IKQuaternion inverseRotation = new IKQuaternion();
     /**
      * a vector representing the translation of this basis relative to its parent.
      */
-    public Vector3 translate;
-    protected Vector3 xBase = new Vector3(1, 0, 0);
-    protected Vector3 yBase = new Vector3(0, 1, 0);
-    protected Vector3 zBase = new Vector3(0, 0, 1);
-    protected Ray3D xRay = new Ray3D(new Vector3(0, 0, 0), new Vector3(1, 0, 0));
-    protected Ray3D yRay = new Ray3D(new Vector3(0, 0, 0), new Vector3(0, 1, 0));
-    protected Ray3D zRay = new Ray3D(new Vector3(0, 0, 0), new Vector3(0, 0, 1));
+    public IKVector3 translate;
+    protected IKVector3 xBase = new IKVector3(1, 0, 0);
+    protected IKVector3 yBase = new IKVector3(0, 1, 0);
+    protected IKVector3 zBase = new IKVector3(0, 0, 1);
+    protected IKRay3D xRay = new IKRay3D(new IKVector3(0, 0, 0), new IKVector3(1, 0, 0));
+    protected IKRay3D yRay = new IKRay3D(new IKVector3(0, 0, 0), new IKVector3(0, 1, 0));
+    protected IKRay3D zRay = new IKRay3D(new IKVector3(0, 0, 0), new IKVector3(0, 0, 1));
 
     /**
      * Initialize this basis at the origin. The basis will be righthanded by
@@ -28,7 +28,7 @@ public class Transform3D {
      *
      * @param origin
      */
-    public Transform3D(Vector3 origin) {
+    public IKTransform(IKVector3 origin) {
         translate = origin.copy();
         xBase = origin.copy();
         yBase = origin.copy();
@@ -36,15 +36,15 @@ public class Transform3D {
         xBase.set(1, 0, 0);
         yBase.set(0, 1, 0);
         zBase.set(0, 0, 1);
-        Vector3 zero = origin.copy();
+        IKVector3 zero = origin.copy();
         zero.set(0, 0, 0);
-        xRay = new Ray3D(zero.copy(), xBase.copy());
-        yRay = new Ray3D(zero.copy(), yBase.copy());
-        zRay = new Ray3D(zero.copy(), zBase.copy());
+        xRay = new IKRay3D(zero.copy(), xBase.copy());
+        yRay = new IKRay3D(zero.copy(), yBase.copy());
+        zRay = new IKRay3D(zero.copy(), zBase.copy());
         refreshPrecomputed();
     }
 
-    public Transform3D(Transform3D input) {
+    public IKTransform(IKTransform input) {
         translate = input.translate.copy();
         xBase = translate.copy();
         yBase = translate.copy();
@@ -52,11 +52,11 @@ public class Transform3D {
         xBase.set(1, 0, 0);
         yBase.set(0, 1, 0);
         zBase.set(0, 0, 1);
-        Vector3 zero = translate.copy();
+        IKVector3 zero = translate.copy();
         zero.set(0, 0, 0);
-        xRay = new Ray3D(zero.copy(), xBase.copy());
-        yRay = new Ray3D(zero.copy(), yBase.copy());
-        zRay = new Ray3D(zero.copy(), zBase.copy());
+        xRay = new IKRay3D(zero.copy(), xBase.copy());
+        yRay = new IKRay3D(zero.copy(), yBase.copy());
+        zRay = new IKRay3D(zero.copy(), zBase.copy());
         this.adoptValues(input);
 
     }
@@ -81,11 +81,11 @@ public class Transform3D {
      * @param y      basis vector direction
      * @param z      basis vector direction
      */
-    public Transform3D(Vector3 origin, Vector3 x, Vector3 y, Vector3 z) {
+    public IKTransform(IKVector3 origin, IKVector3 x, IKVector3 y, IKVector3 z) {
         this.translate = origin.copy();
-        xRay = new Ray3D(origin.copy(), origin.copy());
-        yRay = new Ray3D(origin.copy(), origin.copy());
-        zRay = new Ray3D(origin.copy(), origin.copy());
+        xRay = new IKRay3D(origin.copy(), origin.copy());
+        yRay = new IKRay3D(origin.copy(), origin.copy());
+        zRay = new IKRay3D(origin.copy(), origin.copy());
         this.set(x.copy(), y.copy(), z.copy());
     }
 
@@ -110,14 +110,14 @@ public class Transform3D {
      * @param y basis Ray
      * @param z basis Ray
      */
-    public Transform3D(Ray3D x, Ray3D y, Ray3D z) {
+    public IKTransform(IKRay3D x, IKRay3D y, IKRay3D z) {
         this.translate = x.p1().copy();
         xRay = x.copy();
         yRay = y.copy();
         zRay = z.copy();
-        Vector3 xDirNew = x.heading().copy();
-        Vector3 yDirNew = y.heading().copy();
-        Vector3 zDirNew = z.heading().copy();
+        IKVector3 xDirNew = x.heading().copy();
+        IKVector3 yDirNew = y.heading().copy();
+        IKVector3 zDirNew = z.heading().copy();
         xDirNew.normalize();
         yDirNew.normalize();
         zDirNew.normalize();
@@ -125,18 +125,18 @@ public class Transform3D {
 
     }
 
-    public Transform3D copy() {
-        return new Transform3D(this);
+    public IKTransform copy() {
+        return new IKTransform(this);
     }
 
-    private void set(Vector3 x, Vector3 y, Vector3 z) {
+    private void set(IKVector3 x, IKVector3 y, IKVector3 z) {
         xBase = translate.copy();
         yBase = translate.copy();
         zBase = translate.copy();
         xBase.set(1, 0, 0);
         yBase.set(0, 1, 0);
         zBase.set(0, 0, 1);
-        Vector3 zero = translate.copy();
+        IKVector3 zero = translate.copy();
         zero.set(0, 0, 0);
         xRay.setP1(zero.copy());
         xRay.setP2(xBase.copy());
@@ -153,7 +153,7 @@ public class Transform3D {
      *
      * @param in
      */
-    public void adoptValues(Transform3D in) {
+    public void adoptValues(IKTransform in) {
         this.translate.set(in.translate);
         this.rotation.set(in.rotation);
         xBase = translate.copy();
@@ -179,31 +179,31 @@ public class Transform3D {
         this.yRay.p2.set(yBase);
         this.zRay.p1.set(this.translate);
         this.zRay.p2.set(zBase);
-        this.rotation = new Quaternion();
+        this.rotation = new IKQuaternion();
         refreshPrecomputed();
     }
 
-    private Quaternion createPrioritizedRotation(Vector3 xHeading, Vector3 yHeading, Vector3 zHeading) {
-        Vector3 x_identity = xBase.copy();
-        Vector3 y_identity = yBase.copy();
-        Vector3 z_identity = zBase.copy();
-        Vector3 origin = new Vector3(0, 0, 0);
+    private IKQuaternion createPrioritizedRotation(IKVector3 xHeading, IKVector3 yHeading, IKVector3 zHeading) {
+        IKVector3 x_identity = xBase.copy();
+        IKVector3 y_identity = yBase.copy();
+        IKVector3 z_identity = zBase.copy();
+        IKVector3 origin = new IKVector3(0, 0, 0);
 
-        Vector3[] from = { origin, x_identity, y_identity, z_identity };
-        Vector3[] to = { origin.copy(), xHeading, yHeading, zHeading };
-        QuaternionBasedCharacteristicPolynomial alignHeads = new QuaternionBasedCharacteristicPolynomial(MathUtils.FLOAT_ROUNDING_ERROR,
-                MathUtils.FLOAT_ROUNDING_ERROR);
+        IKVector3[] from = { origin, x_identity, y_identity, z_identity };
+        IKVector3[] to = { origin.copy(), xHeading, yHeading, zHeading };
+        IKQuaternionBasedCharacteristicPolynomial alignHeads = new IKQuaternionBasedCharacteristicPolynomial(IKMathUtils.FLOAT_ROUNDING_ERROR,
+                IKMathUtils.FLOAT_ROUNDING_ERROR);
         alignHeads.setMaxIterations(50);
-        Quaternion rotation = alignHeads.weightedSuperpose(from, to, null, false);
+        IKQuaternion rotation = alignHeads.weightedSuperpose(from, to, null, false);
         return rotation;
     }
 
-    public Quaternion getLocalOfRotation(Quaternion inRot) {
-        Quaternion resultNew = inverseRotation.applyTo(inRot).applyTo(rotation);
+    public IKQuaternion getLocalOfRotation(IKQuaternion inRot) {
+        IKQuaternion resultNew = inverseRotation.applyTo(inRot).applyTo(rotation);
         return resultNew;
     }
 
-    public void setToLocalOf(Transform3D global_input, Transform3D local_output) {
+    public void setToLocalOf(IKTransform global_input, IKTransform local_output) {
         local_output.translate = this.getLocalOf(global_input.translate);
         inverseRotation.applyTo(global_input.rotation, local_output.rotation);
 
@@ -215,24 +215,24 @@ public class Transform3D {
         this.updateRays();
     }
 
-    public Vector3 getLocalOf(Vector3 v) {
-        Vector3 result = (Vector3) v.copy();
+    public IKVector3 getLocalOf(IKVector3 v) {
+        IKVector3 result = (IKVector3) v.copy();
         setToLocalOf(v, result);
         return result;
     }
 
-    public void setToLocalOf(Vector3 input, Vector3 output) {
+    public void setToLocalOf(IKVector3 input, IKVector3 output) {
         output.set(input);
         output.sub(this.translate);
         inverseRotation.applyTo(output, output);
     }
 
-    public void rotateTo(Quaternion newRotation) {
+    public void rotateTo(IKQuaternion newRotation) {
         this.rotation.set(newRotation);
         this.refreshPrecomputed();
     }
 
-    public void rotateBy(Quaternion addRotation) {
+    public void rotateBy(IKQuaternion addRotation) {
         addRotation.applyTo(this.rotation, this.rotation);
         this.refreshPrecomputed();
     }
@@ -243,7 +243,7 @@ public class Transform3D {
      * but extending (affine) classes can override this to represent the direction
      * and magnitude of the x axis prior to rotation.
      */
-    public void setToShearXBase(Vector3 vec) {
+    public void setToShearXBase(IKVector3 vec) {
         vec.set(xBase);
     }
 
@@ -253,7 +253,7 @@ public class Transform3D {
      * but extending (affine) classes can override this to represent the direction
      * and magnitude of the y axis prior to rotation.
      */
-    public void setToShearYBase(Vector3 vec) {
+    public void setToShearYBase(IKVector3 vec) {
         vec.set(yBase);
     }
 
@@ -263,7 +263,7 @@ public class Transform3D {
      * but extending (affine) classes can override this to represent the direction
      * and magnitude of the z axis prior to rotation.
      */
-    public void setToShearZBase(Vector3 vec) {
+    public void setToShearZBase(IKVector3 vec) {
         vec.set(zBase);
     }
 
@@ -274,13 +274,13 @@ public class Transform3D {
      * @param localInput
      * @param globalOutput
      */
-    public void setToGlobalOf(Transform3D localInput, Transform3D globalOutput) {
+    public void setToGlobalOf(IKTransform localInput, IKTransform globalOutput) {
         this.rotation.applyTo(localInput.rotation, globalOutput.rotation);
         this.setToGlobalOf(localInput.translate, globalOutput.translate);
         globalOutput.refreshPrecomputed();
     }
 
-    public void setToGlobalOf(Vector3 input, Vector3 output) {
+    public void setToGlobalOf(IKVector3 input, IKVector3 output) {
         try {
             rotation.applyTo(input, output);
             output.add(this.translate);
@@ -289,45 +289,45 @@ public class Transform3D {
         }
     }
 
-    public void translateBy(Vector3 transBy) {
+    public void translateBy(IKVector3 transBy) {
         this.translate.x += transBy.x;
         this.translate.y += transBy.y;
         this.translate.z += transBy.z;
         updateRays();
     }
 
-    public void translateTo(Vector3 newOrigin) {
+    public void translateTo(IKVector3 newOrigin) {
         this.translate.x = newOrigin.x;
         this.translate.y = newOrigin.y;
         this.translate.z = newOrigin.z;
         updateRays();
     }
 
-    public Ray3D getXRay() {
+    public IKRay3D getXRay() {
         return xRay;
     }
 
-    public Ray3D getYRay() {
+    public IKRay3D getYRay() {
         return yRay;
     }
 
-    public Ray3D getZRay() {
+    public IKRay3D getZRay() {
         return zRay;
     }
 
-    public Vector3 getXHeading() {
+    public IKVector3 getXHeading() {
         return this.xRay.heading();
     }
 
-    public Vector3 getYHeading() {
+    public IKVector3 getYHeading() {
         return this.yRay.heading();
     }
 
-    public Vector3 getZHeading() {
+    public IKVector3 getZHeading() {
         return this.zRay.heading();
     }
 
-    public Vector3 getOrigin() {
+    public IKVector3 getOrigin() {
         return translate;
     }
 
@@ -335,7 +335,7 @@ public class Transform3D {
      * @return a precomputed inverse of the rotation represented by this basis
      *         object.
      */
-    public Quaternion getInverseRotation() {
+    public IKQuaternion getInverseRotation() {
         return this.inverseRotation;
     }
 
@@ -357,11 +357,11 @@ public class Transform3D {
     }
 
     public String toString() {
-        Vector3 xh = xRay.heading().toVec3f();
+        IKVector3 xh = xRay.heading().toVec3f();
 
-        Vector3 yh = yRay.heading().toVec3f();
+        IKVector3 yh = yRay.heading().toVec3f();
 
-        Vector3 zh = zRay.heading().toVec3f();
+        IKVector3 zh = zRay.heading().toVec3f();
 
         float xMag = xh.mag();
         float yMag = yh.mag();
@@ -371,7 +371,7 @@ public class Transform3D {
                 + chirality + " handed \n"
                 + "origin: " + this.translate.toVec3f() + "\n"
                 + "rot Axis: " + this.rotation.getAxis().toVec3f() + ", "
-                + "Angle: " + MathUtils.toDegrees(this.rotation.getAngle()) + "\n"
+                + "Angle: " + IKMathUtils.toDegrees(this.rotation.getAngle()) + "\n"
                 + "xHead: " + xh + ", mag: " + xMag + "\n"
                 + "yHead: " + yh + ", mag: " + yMag + "\n"
                 + "zHead: " + zh + ", mag: " + zMag + "\n";

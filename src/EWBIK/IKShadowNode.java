@@ -26,37 +26,37 @@ import java.util.HashMap;
  *
  * @author Eron Gjoni
  */
-public class ShadowNode3D {
-    public Bone3D bonechainRoot;
-    public Bone3D bonechainTip;
+public class IKShadowNode {
+    public IKBone3D bonechainRoot;
+    public IKBone3D bonechainTip;
 
-    public ArrayList<ShadowNode3D> bonechainChild = new ArrayList<ShadowNode3D>();
-    public ArrayList<ShadowNode3D> pinnedDescendants = new ArrayList<ShadowNode3D>();
-    public HashMap<Bone3D, ShadowBone> simulatedBones = new HashMap<>();
-    public ArrayList<Bone3D> bonechainList = new ArrayList<Bone3D>();
+    public ArrayList<IKShadowNode> bonechainChild = new ArrayList<IKShadowNode>();
+    public ArrayList<IKShadowNode> pinnedDescendants = new ArrayList<IKShadowNode>();
+    public HashMap<IKBone3D, ShadowBone> simulatedBones = new HashMap<>();
+    public ArrayList<IKBone3D> bonechainList = new ArrayList<IKBone3D>();
     public int distanceToRoot = 0;
     public int chainLength = 0;
-    public Node3D debugTipNode3D;
-    public Node3D debugTargetNode3D;
+    public IKNode3D debugTipNode3D;
+    public IKNode3D debugTargetNode3D;
     ShadowBone[] pinnedBones;
     boolean includeInIK = true;
     int pinDepth = 1;
-    Vector3[] localizedTargetHeadings;
-    Vector3[] localizedTipHeadings;
+    IKVector3[] localizedTargetHeadings;
+    IKVector3[] localizedTipHeadings;
     float[] weights;
-    private ShadowNode3D bonechainParent = null;
+    private IKShadowNode bonechainParent = null;
     private boolean basePinned = false;
     private boolean tipPinned = false;
     private boolean processed = false;
     private boolean simAligned = false;
 
-    public ShadowNode3D(Bone3D rootBone) {
+    public IKShadowNode(IKBone3D rootBone) {
         bonechainRoot = armatureRootBone(rootBone);
         generateArmatureBonechains();
         ensureAxesHeirarchy();
     }
 
-    public ShadowNode3D(ShadowNode3D inputParentSegment, Bone3D inputSegmentRoot) {
+    public IKShadowNode(IKShadowNode inputParentSegment, IKBone3D inputSegmentRoot) {
         this.bonechainRoot = inputSegmentRoot;
         this.setBonechainParent(inputParentSegment);
         this.distanceToRoot = this.getBonechainParent().distanceToRoot + 1;
@@ -68,9 +68,9 @@ public class ShadowNode3D {
      * this
      * segment reach for (based on modecode set in the IKPin)
      */
-    public static void recursivelyCreateHeadingArraysFor(ShadowNode3D s) {
+    public static void recursivelyCreateHeadingArraysFor(IKShadowNode s) {
         s.createHeadingArrays();
-        for (ShadowNode3D c : s.bonechainChild) {
+        for (IKShadowNode c : s.bonechainChild) {
             recursivelyCreateHeadingArraysFor(c);
         }
     }
@@ -80,11 +80,11 @@ public class ShadowNode3D {
         setTipPinned(false);
         this.setBasePinned(bonechainRoot.getParent() != null && bonechainRoot.getParent().isPinned());
 
-        Bone3D temporaryBonechainTip = this.bonechainRoot;
+        IKBone3D temporaryBonechainTip = this.bonechainRoot;
         this.chainLength = -1;
         while (true) {
             this.chainLength++;
-            ArrayList<Bone3D> childrenWithPinnedDescendants = temporaryBonechainTip
+            ArrayList<IKBone3D> childrenWithPinnedDescendants = temporaryBonechainTip
                     .returnChildrenWithPinnedDescendants();
 
             if (childrenWithPinnedDescendants.size() > 1 || (temporaryBonechainTip.isPinned())) {
@@ -93,8 +93,8 @@ public class ShadowNode3D {
                 }
                 this.bonechainTip = temporaryBonechainTip;
 
-                for (Bone3D childBone : childrenWithPinnedDescendants) {
-                    this.bonechainChild.add(new ShadowNode3D(this, childBone));
+                for (IKBone3D childBone : childrenWithPinnedDescendants) {
+                    this.bonechainChild.add(new IKShadowNode(this, childBone));
                 }
 
                 break;
@@ -121,21 +121,21 @@ public class ShadowNode3D {
         for (int i = 0; i < pinSequence.size(); i++) {
             pinnedBones[i] = pinSequence.get(i);
         }
-        localizedTargetHeadings = new Vector3[totalHeadings];
-        localizedTipHeadings = new Vector3[totalHeadings];
+        localizedTargetHeadings = new IKVector3[totalHeadings];
+        localizedTipHeadings = new IKVector3[totalHeadings];
         weights = new float[totalHeadings];
         int currentHeading = 0;
         for (ArrayList<Float> a : penaltyArray) {
             for (Float ad : a) {
                 weights[currentHeading] = ad;
-                localizedTargetHeadings[currentHeading] = new Vector3();
-                localizedTipHeadings[currentHeading] = new Vector3();
+                localizedTargetHeadings[currentHeading] = new IKVector3();
+                localizedTipHeadings[currentHeading] = new IKVector3();
                 currentHeading++;
             }
         }
     }
 
-    void recursivelyCreatePenaltyArray(ShadowNode3D from, ArrayList<ArrayList<Float>> weightArray,
+    void recursivelyCreatePenaltyArray(IKShadowNode from, ArrayList<ArrayList<Float>> weightArray,
                                        ArrayList<ShadowBone> pinSequence, float currentFalloff) {
         if (currentFalloff == 0) {
             return;
@@ -148,11 +148,11 @@ public class ShadowNode3D {
                 innerWeightArray.add(pin.getPinWeight() * currentFalloff);
                 float maxPinWeight = 0f;
                 if ((modeCode & IKPin3D.XDir) != 0)
-                    maxPinWeight = MathUtils.max(maxPinWeight, pin.getXPriority());
+                    maxPinWeight = IKMathUtils.max(maxPinWeight, pin.getXPriority());
                 if ((modeCode & IKPin3D.YDir) != 0)
-                    maxPinWeight = MathUtils.max(maxPinWeight, pin.getYPriority());
+                    maxPinWeight = IKMathUtils.max(maxPinWeight, pin.getYPriority());
                 if ((modeCode & IKPin3D.ZDir) != 0)
-                    maxPinWeight = MathUtils.max(maxPinWeight, pin.getZPriority());
+                    maxPinWeight = IKMathUtils.max(maxPinWeight, pin.getZPriority());
 
                 if (maxPinWeight == 0f)
                     maxPinWeight = 1f;
@@ -178,7 +178,7 @@ public class ShadowNode3D {
                         .get(pin.forBone()));
             }
             float thisFalloff = pin == null ? 1f : pin.getDepthFalloff();
-            for (ShadowNode3D s : from.bonechainChild) {
+            for (IKShadowNode s : from.bonechainChild) {
                 recursivelyCreatePenaltyArray(s, weightArray, pinSequence, currentFalloff * thisFalloff);
             }
 
@@ -191,7 +191,7 @@ public class ShadowNode3D {
      * for simulatedAxes throughout the SegmentedArmature .
      */
     private void ensureAxesHeirarchy() {
-        ShadowNode3D rootStrand = this;
+        IKShadowNode rootStrand = this;
         while (rootStrand.bonechainParent != null) {
             rootStrand = rootStrand.bonechainParent;
         }
@@ -199,13 +199,13 @@ public class ShadowNode3D {
                 rootStrand.bonechainRoot.parentArmature.localAxes());
     }
 
-    private void recursivelyEnsureAxesHeirarchyFor(Bone3D b, Node3D parentTo) {
-        ShadowNode3D chain = getChainFor(b);
+    private void recursivelyEnsureAxesHeirarchyFor(IKBone3D b, IKNode3D parentTo) {
+        IKShadowNode chain = getChainFor(b);
         if (chain != null) {
             ShadowBone sb = chain.simulatedBones.get(b);
             sb.simLocalNode3D.setParent(parentTo);
             sb.simConstraintNode3D.setParent(parentTo);
-            for (Bone3D c : b.getChildren()) {
+            for (IKBone3D c : b.getChildren()) {
                 chain.recursivelyEnsureAxesHeirarchyFor(c, sb.simLocalNode3D);
             }
         }
@@ -228,8 +228,8 @@ public class ShadowNode3D {
         simulatedBones.clear();
         bonechainList.clear();
 
-        Bone3D currentBone = bonechainTip;
-        Bone3D stopOn = bonechainRoot;
+        IKBone3D currentBone = bonechainTip;
+        IKBone3D stopOn = bonechainRoot;
         while (currentBone != null) {
             ShadowBone sb = simulatedBones.get(currentBone);
             if (sb == null) {
@@ -244,12 +244,12 @@ public class ShadowNode3D {
         }
     }
 
-    public ArrayList<Bone3D> getStrandFromTip(Bone3D pinnedBone) {
-        ArrayList<Bone3D> result = new ArrayList<Bone3D>();
+    public ArrayList<IKBone3D> getStrandFromTip(IKBone3D pinnedBone) {
+        ArrayList<IKBone3D> result = new ArrayList<IKBone3D>();
 
         if (pinnedBone.isPinned()) {
             result.add(pinnedBone);
-            Bone3D currBone = pinnedBone.getParent();
+            IKBone3D currBone = pinnedBone.getParent();
             while (currBone != null && currBone.getParent() != null) {
                 result.add(currBone);
                 if (currBone.getParent().isPinned()) {
@@ -267,19 +267,19 @@ public class ShadowNode3D {
         pinnedDescendants = this.returnSegmentPinnedNodes();
     }
 
-    public ArrayList<ShadowNode3D> returnSegmentPinnedNodes() {
-        ArrayList<ShadowNode3D> innerPinnedChains = new ArrayList<>();
+    public ArrayList<IKShadowNode> returnSegmentPinnedNodes() {
+        ArrayList<IKShadowNode> innerPinnedChains = new ArrayList<>();
         if (this.isTipPinned()) {
             innerPinnedChains.add(this);
         } else {
-            for (ShadowNode3D childSegment : bonechainChild) {
+            for (IKShadowNode childSegment : bonechainChild) {
                 innerPinnedChains.addAll(childSegment.returnSegmentPinnedNodes());
             }
         }
         return innerPinnedChains;
     }
 
-    public float getManualMSD(Vector3[] locTips, Vector3[] locTargets, float[] weights) {
+    public float getManualMSD(IKVector3[] locTips, IKVector3[] locTargets, float[] weights) {
         float manualRMSD = 0f;
         float wsum = 0f;
         for (int i = 0; i < locTargets.length; i++) {
@@ -313,7 +313,7 @@ public class ShadowNode3D {
      *                            potentially significant computation cost).
      */
     public void updateOptimalRotationToPinnedDescendants(
-            Bone3D forBone,
+            IKBone3D forBone,
             float dampening,
             boolean translate,
             int stabilizationPasses,
@@ -321,22 +321,22 @@ public class ShadowNode3D {
             float totalIterations) {
 
         ShadowBone sb = simulatedBones.get(forBone);
-        Node3D thisBoneNode3D = sb.simLocalNode3D;
+        IKNode3D thisBoneNode3D = sb.simLocalNode3D;
         thisBoneNode3D.updateGlobal();
 
-        Quaternion bestOrientation = new Quaternion(thisBoneNode3D.getGlobalMBasis().rotation.rotation);
+        IKQuaternion bestOrientation = new IKQuaternion(thisBoneNode3D.getGlobalMBasis().rotation.rotation);
         float newDampening = -1;
         if (forBone.getParent() == null || localizedTargetHeadings.length == 1)
             stabilizationPasses = 0;
         if (translate == true) {
-            newDampening = MathUtils.PI;
+            newDampening = IKMathUtils.PI;
         }
 
         updateTargetHeadings(localizedTargetHeadings, weights, thisBoneNode3D);
         upateTipHeadings(localizedTipHeadings, thisBoneNode3D);
 
         float bestRMSD = 0f;
-        QuaternionBasedCharacteristicPolynomial qcpConvergenceCheck = new QuaternionBasedCharacteristicPolynomial(MathUtils.FLOAT_ROUNDING_ERROR, MathUtils.FLOAT_ROUNDING_ERROR);
+        IKQuaternionBasedCharacteristicPolynomial qcpConvergenceCheck = new IKQuaternionBasedCharacteristicPolynomial(IKMathUtils.FLOAT_ROUNDING_ERROR, IKMathUtils.FLOAT_ROUNDING_ERROR);
         float newRMSD = 999999f;
 
         if (stabilizationPasses > 0)
@@ -365,7 +365,7 @@ public class ShadowNode3D {
                             float totaliterationssq = totalIterations * totalIterations;
                             float scaledDampenedAngle = dampenedAngle
                                     * ((totaliterationssq - (iteration * iteration)) / totaliterationssq);
-                            float cosHalfAngle = MathUtils.cos(0.5f * scaledDampenedAngle);
+                            float cosHalfAngle = IKMathUtils.cos(0.5f * scaledDampenedAngle);
                             sb.forBone.setAxesToReturnfulled(sb.simLocalNode3D, sb.simConstraintNode3D, cosHalfAngle,
                                     scaledDampenedAngle);
                         } else {
@@ -394,19 +394,19 @@ public class ShadowNode3D {
             ShadowBone sb,
             float dampening,
             boolean translate,
-            Vector3[] localizedTipHeadings,
-            Vector3[] localizedTargetHeadings,
+            IKVector3[] localizedTipHeadings,
+            IKVector3[] localizedTargetHeadings,
             float[] weights,
-            QuaternionBasedCharacteristicPolynomial qcpOrientationAligner,
+            IKQuaternionBasedCharacteristicPolynomial qcpOrientationAligner,
             int iteration,
             float totalIterations) {
 
         qcpOrientationAligner.setMaxIterations(0);
-        Quaternion qcpRot = qcpOrientationAligner.weightedSuperpose(localizedTipHeadings, localizedTargetHeadings,
+        IKQuaternion qcpRot = qcpOrientationAligner.weightedSuperpose(localizedTipHeadings, localizedTargetHeadings,
                 weights,
                 translate);
 
-        Vector3 translateBy = qcpOrientationAligner.getTranslation();
+        IKVector3 translateBy = qcpOrientationAligner.getTranslation();
         float boneDamp = sb.cosHalfDampen;
 
         if (dampening != -1) {
@@ -425,35 +425,35 @@ public class ShadowNode3D {
 
     }
 
-    public void updateTargetHeadings(Vector3[] localizedTargetHeadings, float[] weights,
-            Node3D thisBoneNode3D) {
+    public void updateTargetHeadings(IKVector3[] localizedTargetHeadings, float[] weights,
+                                     IKNode3D thisBoneNode3D) {
 
         int hdx = 0;
         for (int i = 0; i < pinnedBones.length; i++) {
             ShadowBone sb = pinnedBones[i];
             IKPin3D pin = sb.forBone.getIKPin();
-            Node3D effectorNode3D = pin.forBone.getPinnedAxes();
+            IKNode3D effectorNode3D = pin.forBone.getPinnedAxes();
             effectorNode3D.updateGlobal();
-            Vector3 origin = thisBoneNode3D.calculatePosition();
+            IKVector3 origin = thisBoneNode3D.calculatePosition();
             localizedTargetHeadings[hdx].set(effectorNode3D.calculatePosition()).sub(origin);
             byte modeCode = pin.getModeCode();
             hdx++;
 
             if ((modeCode & IKPin3D.XDir) != 0) {
-                Ray3D xTarget = effectorNode3D.calculateX().getRayScaledBy(weights[hdx]);
+                IKRay3D xTarget = effectorNode3D.calculateX().getRayScaledBy(weights[hdx]);
                 localizedTargetHeadings[hdx].set(xTarget.p2()).sub(origin);
                 xTarget.setToInvertedTip(localizedTargetHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
             if ((modeCode & IKPin3D.YDir) != 0) {
-                Ray3D yTarget = effectorNode3D.calculateY().getRayScaledBy(weights[hdx]);
-                localizedTargetHeadings[hdx] = Vector3.sub(yTarget.p2(), origin);
+                IKRay3D yTarget = effectorNode3D.calculateY().getRayScaledBy(weights[hdx]);
+                localizedTargetHeadings[hdx] = IKVector3.sub(yTarget.p2(), origin);
                 yTarget.setToInvertedTip(localizedTargetHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
             if ((modeCode & IKPin3D.ZDir) != 0) {
-                Ray3D zTarget = effectorNode3D.calculateZ().getRayScaledBy(weights[hdx]);
-                localizedTargetHeadings[hdx] = Vector3.sub(zTarget.p2(), origin);
+                IKRay3D zTarget = effectorNode3D.calculateZ().getRayScaledBy(weights[hdx]);
+                localizedTargetHeadings[hdx] = IKVector3.sub(zTarget.p2(), origin);
                 zTarget.setToInvertedTip(localizedTargetHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
@@ -461,36 +461,36 @@ public class ShadowNode3D {
 
     }
 
-    public void upateTipHeadings(Vector3[] localizedTipHeadings, Node3D thisBoneNode3D) {
+    public void upateTipHeadings(IKVector3[] localizedTipHeadings, IKNode3D thisBoneNode3D) {
         int hdx = 0;
 
         for (int i = 0; i < pinnedBones.length; i++) {
             ShadowBone sb = pinnedBones[i];
             IKPin3D pin = sb.forBone.getIKPin();
-            Node3D tipNode3D = sb.simLocalNode3D;
+            IKNode3D tipNode3D = sb.simLocalNode3D;
             tipNode3D.updateGlobal();
-            Vector3 origin = thisBoneNode3D.calculatePosition();
+            IKVector3 origin = thisBoneNode3D.calculatePosition();
             byte modeCode = pin.getModeCode();
 
-            Node3D targetNode3D = pin.forBone.getPinnedAxes();
+            IKNode3D targetNode3D = pin.forBone.getPinnedAxes();
             targetNode3D.updateGlobal();
             float scaleBy = thisBoneNode3D.calculatePosition().dist(targetNode3D.calculatePosition());
             hdx++;
 
             if ((modeCode & IKPin3D.XDir) != 0) {
-                Ray3D xTip = tipNode3D.calculateX().getRayScaledBy(scaleBy);
+                IKRay3D xTip = tipNode3D.calculateX().getRayScaledBy(scaleBy);
                 localizedTipHeadings[hdx].set(xTip.p2()).sub(origin);
                 xTip.setToInvertedTip(localizedTipHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
             if ((modeCode & IKPin3D.YDir) != 0) {
-                Ray3D yTip = tipNode3D.calculateY().getRayScaledBy(scaleBy);
+                IKRay3D yTip = tipNode3D.calculateY().getRayScaledBy(scaleBy);
                 localizedTipHeadings[hdx].set(yTip.p2()).sub(origin);
                 yTip.setToInvertedTip(localizedTipHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
             }
             if ((modeCode & IKPin3D.ZDir) != 0) {
-                Ray3D zTip = tipNode3D.calculateZ().getRayScaledBy(scaleBy);
+                IKRay3D zTip = tipNode3D.calculateZ().getRayScaledBy(scaleBy);
                 localizedTipHeadings[hdx].set(zTip.p2()).sub(origin);
                 zTip.setToInvertedTip(localizedTipHeadings[hdx + 1]).sub(origin);
                 hdx += 2;
@@ -503,8 +503,8 @@ public class ShadowNode3D {
      * @return returns the segment chain (pinned or unpinned, doesn't matter) to
      *         which the inputBone belongs.
      */
-    public ShadowNode3D getChainFor(Bone3D chainMember) {
-        ShadowNode3D result = null;
+    public IKShadowNode getChainFor(IKBone3D chainMember) {
+        IKShadowNode result = null;
         if (this.bonechainList.contains(chainMember))
             return this;
         if (this.bonechainParent != null)
@@ -514,12 +514,12 @@ public class ShadowNode3D {
         return result;
     }
 
-    public ShadowNode3D getChildSegmentContaining(Bone3D b) {
+    public IKShadowNode getChildSegmentContaining(IKBone3D b) {
         if (bonechainList.contains(b)) {
             return this;
         } else {
-            for (ShadowNode3D s : bonechainChild) {
-                ShadowNode3D childContaining = s.getChildSegmentContaining(b);
+            for (IKShadowNode s : bonechainChild) {
+                IKShadowNode childContaining = s.getChildSegmentContaining(b);
                 if (childContaining != null)
                     return childContaining;
             }
@@ -527,7 +527,7 @@ public class ShadowNode3D {
         return null;
     }
 
-    public ShadowNode3D getAncestorSegmentContaining(Bone3D b) {
+    public IKShadowNode getAncestorSegmentContaining(IKBone3D b) {
         if (bonechainList.contains(b))
             return this;
         else if (this.bonechainParent != null)
@@ -543,9 +543,9 @@ public class ShadowNode3D {
      * @return returns the first chain encountered with a pinned base. Or, null if
      *         it reaches an unpinned armature root.
      */
-    public ShadowNode3D getPinnedRootChainFromHere() {
+    public IKShadowNode getPinnedRootChainFromHere() {
 
-        ShadowNode3D currentChain = this;
+        IKShadowNode currentChain = this;
         while (currentChain != null) {
             if (currentChain.isBasePinned())
                 return currentChain;
@@ -557,8 +557,8 @@ public class ShadowNode3D {
 
     }
 
-    public Bone3D armatureRootBone(Bone3D rootBone2) {
-        Bone3D rootBone = rootBone2;
+    public IKBone3D armatureRootBone(IKBone3D rootBone2) {
+        IKBone3D rootBone = rootBone2;
         while (rootBone.getParent() != null) {
             rootBone = rootBone.getParent();
         }
@@ -581,11 +581,11 @@ public class ShadowNode3D {
         this.basePinned = basePinned;
     }
 
-    public ShadowNode3D getBonechainParent() {
+    public IKShadowNode getBonechainParent() {
         return bonechainParent;
     }
 
-    public void setBonechainParent(ShadowNode3D bonechainParent) {
+    public void setBonechainParent(IKShadowNode bonechainParent) {
         this.bonechainParent = bonechainParent;
     }
 
@@ -604,12 +604,12 @@ public class ShadowNode3D {
         }
     }
 
-    public void recursivelyAlignSimAxesOutwardFrom(Bone3D b, boolean forceGlobal) {
-        ShadowNode3D bChain = getChildSegmentContaining(b);
+    public void recursivelyAlignSimAxesOutwardFrom(IKBone3D b, boolean forceGlobal) {
+        IKShadowNode bChain = getChildSegmentContaining(b);
         if (bChain != null) {
             ShadowBone sb = bChain.simulatedBones.get(b);
-            Node3D bNode3D = sb.simLocalNode3D;
-            Node3D cNode3D = sb.simConstraintNode3D;
+            IKNode3D bNode3D = sb.simLocalNode3D;
+            IKNode3D cNode3D = sb.simConstraintNode3D;
             if (forceGlobal) {
                 bNode3D.alignGlobalsTo(b.localAxes());
                 bNode3D.markDirty();
@@ -621,7 +621,7 @@ public class ShadowNode3D {
                 bNode3D.alignLocalsTo(b.localAxes());
                 cNode3D.alignLocalsTo(b.getMajorRotationAxes());
             }
-            for (Bone3D bc : b.getChildren()) {
+            for (IKBone3D bc : b.getChildren()) {
                 bChain.recursivelyAlignSimAxesOutwardFrom(bc, false);
             }
         }
@@ -633,17 +633,17 @@ public class ShadowNode3D {
      *
      * @param b bone to start from
      */
-    public void recursivelyAlignBonesToSimAxesFrom(Bone3D b) {
-        ShadowNode3D chain = b.parentArmature.boneSegmentMap.get(b); // getChainFor(b);
+    public void recursivelyAlignBonesToSimAxesFrom(IKBone3D b) {
+        IKShadowNode chain = b.parentArmature.boneSegmentMap.get(b); // getChainFor(b);
         if (chain != null) {
             ShadowBone sb = chain.simulatedBones.get(b);
-            Node3D simulatedLocalNode3D = sb.simLocalNode3D;
+            IKNode3D simulatedLocalNode3D = sb.simLocalNode3D;
             if (b.getParent() != null) {
                 b.localAxes().alignOrientationTo(simulatedLocalNode3D);
             } else {
                 b.localAxes().alignLocalsTo(simulatedLocalNode3D);
             }
-            for (Bone3D bc : b.getChildren()) {
+            for (IKBone3D bc : b.getChildren()) {
                 recursivelyAlignBonesToSimAxesFrom(bc);
             }
             chain.simAligned = false;
@@ -661,13 +661,13 @@ public class ShadowNode3D {
      *
      * @param segments
      */
-    public void getRootMostUnprocessedChains(ArrayList<ShadowNode3D> segments) {
+    public void getRootMostUnprocessedChains(ArrayList<IKShadowNode> segments) {
         if (!this.processed) {
             segments.add(this);
         } else {
             if (this.tipPinned)
                 return;
-            for (ShadowNode3D c : bonechainChild) {
+            for (IKShadowNode c : bonechainChild) {
                 c.getRootMostUnprocessedChains(segments);
             }
         }
@@ -676,7 +676,7 @@ public class ShadowNode3D {
     public void setProcessed(boolean b) {
         this.processed = b;
         if (processed == false) {
-            for (ShadowNode3D c : bonechainChild) {
+            for (IKShadowNode c : bonechainChild) {
                 c.setProcessed(false);
             }
         }
@@ -688,23 +688,23 @@ public class ShadowNode3D {
      * @author Eron Gjoni
      */
     public class ShadowBone {
-        Bone3D forBone;
-        Node3D simLocalNode3D;
-        Node3D simConstraintNode3D;
+        IKBone3D forBone;
+        IKNode3D simLocalNode3D;
+        IKNode3D simConstraintNode3D;
         float cosHalfDampen = 0f;
         float[] cosHalfReturnfullnessDampened;
         float[] halfReturnfullnessDampened;
         boolean springy = false;
 
-        public ShadowBone(Bone3D toSimulate) {
+        public ShadowBone(IKBone3D toSimulate) {
             forBone = toSimulate;
             simLocalNode3D = forBone.localAxes().getGlobalCopy();
             simConstraintNode3D = forBone.getMajorRotationAxes().getGlobalCopy();
             float predamp = 1f - forBone.getStiffness();
             float defaultDampening = forBone.parentArmature.getDampening();
-            float dampening = forBone.getParent() == null ? MathUtils.PI : predamp * defaultDampening;
-            cosHalfDampen = MathUtils.cos(dampening / 2f);
-            Kusudama3D k = forBone.getConstraint();
+            float dampening = forBone.getParent() == null ? IKMathUtils.PI : predamp * defaultDampening;
+            cosHalfDampen = IKMathUtils.cos(dampening / 2f);
+            IKKusudama k = forBone.getConstraint();
             if (k != null && k.getPainfullness() != 0f) {
                 springy = true;
                 populateReturnDampeningIterationArray(k);
@@ -716,9 +716,9 @@ public class ShadowNode3D {
         public void updateCosDampening() {
             float predamp = 1f - forBone.getStiffness();
             float defaultDampening = forBone.parentArmature.getDampening();
-            float dampening = forBone.getParent() == null ? MathUtils.PI : predamp * defaultDampening;
-            cosHalfDampen = MathUtils.cos(dampening / 2f);
-            Kusudama3D k = forBone.getConstraint();
+            float dampening = forBone.getParent() == null ? IKMathUtils.PI : predamp * defaultDampening;
+            cosHalfDampen = IKMathUtils.cos(dampening / 2f);
+            IKKusudama k = forBone.getConstraint();
             if (k != null && k.getPainfullness() != 0f) {
                 springy = true;
                 populateReturnDampeningIterationArray(k);
@@ -727,21 +727,21 @@ public class ShadowNode3D {
             }
         }
 
-        public void populateReturnDampeningIterationArray(Kusudama3D k) {
+        public void populateReturnDampeningIterationArray(IKKusudama k) {
             float predamp = 1f - forBone.getStiffness();
             float defaultDampening = forBone.parentArmature.getDampening();
-            float dampening = forBone.getParent() == null ? MathUtils.PI : predamp * defaultDampening;
+            float dampening = forBone.getParent() == null ? IKMathUtils.PI : predamp * defaultDampening;
             float iterations = forBone.parentArmature.getDefaultIterations();
             float returnfullness = k.getPainfullness();
             float falloff = 0.2f;
             halfReturnfullnessDampened = new float[(int) iterations];
             cosHalfReturnfullnessDampened = new float[(int) iterations];
-            float iterationspow = MathUtils.pow(iterations, falloff * iterations * returnfullness);
+            float iterationspow = IKMathUtils.pow(iterations, falloff * iterations * returnfullness);
             for (float i = 0; i < iterations; i++) {
-                float iterationScalar = ((iterationspow) - MathUtils.pow(i, falloff * iterations * returnfullness))
+                float iterationScalar = ((iterationspow) - IKMathUtils.pow(i, falloff * iterations * returnfullness))
                         / (iterationspow);
                 float iterationReturnClamp = iterationScalar * returnfullness * dampening;
-                float cosIterationReturnClamp = MathUtils.cos(iterationReturnClamp / 2f);
+                float cosIterationReturnClamp = IKMathUtils.cos(iterationReturnClamp / 2f);
                 halfReturnfullnessDampened[(int) i] = iterationReturnClamp;
                 cosHalfReturnfullnessDampened[(int) i] = cosIterationReturnClamp;
             }

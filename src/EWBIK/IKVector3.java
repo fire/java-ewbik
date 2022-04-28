@@ -1,6 +1,6 @@
 package EWBIK;
 
-public class Vector3 {
+public class IKVector3 {
 
     public final static int X = 0, Y = 1, Z = 2;
     private static final long serialVersionUID = 3840054589595372522L;
@@ -20,7 +20,7 @@ public class Vector3 {
     /**
      * Constructs a vector at (0,0,0)
      */
-    public Vector3() {
+    public IKVector3() {
     }
 
     /**
@@ -30,7 +30,7 @@ public class Vector3 {
      * @param y The y-component
      * @param z The z-component
      */
-    public Vector3(float x, float y, float z) {
+    public IKVector3(float x, float y, float z) {
         this.set(x, y, z);
     }
 
@@ -39,7 +39,7 @@ public class Vector3 {
      *
      * @param vector The vector
      */
-    public Vector3(Vector3 vector) {
+    public IKVector3(IKVector3 vector) {
         this.set(vector);
     }
 
@@ -49,7 +49,7 @@ public class Vector3 {
      *
      * @param values The array
      */
-    public Vector3(final float[] values) {
+    public IKVector3(final float[] values) {
         this.set(values[0], values[1], values[2]);
     }
 
@@ -57,21 +57,21 @@ public class Vector3 {
      * @return The euclidean length
      */
     public static float mag(final float x, final float y, final float z) {
-        return (float) MathUtils.sqrt(x * x + y * y + z * z);
+        return (float) IKMathUtils.sqrt(x * x + y * y + z * z);
     }
 
     /**
      * @return a copy of this vector
      */
-    public Vector3 copy() {
-        return new Vector3(this);
+    public IKVector3 copy() {
+        return new IKVector3(this);
     }
 
     /**
      * @return a copy of this Vector cast to a single precision analog.
      */
-    public Vector3 toVec3f() {
-        return new Vector3(x, y, z);
+    public IKVector3 toVec3f() {
+        return new IKVector3(x, y, z);
     }
 
 
@@ -90,7 +90,7 @@ public class Vector3 {
         final float a = x2 - x1;
         final float b = y2 - y1;
         final float c = z2 - z1;
-        return (float) MathUtils.sqrt(a * a + b * b + c * c);
+        return (float) IKMathUtils.sqrt(a * a + b * b + c * c);
     }
 
     /**
@@ -111,15 +111,15 @@ public class Vector3 {
         return x1 * x2 + y1 * y2 + z1 * z2;
     }
 
-    public static float dot(Vector3 u, Vector3 v) {
+    public static float dot(IKVector3 u, IKVector3 v) {
         return u.dot(v);
     }
 
-    public static Vector3 add(Vector3 v1, Vector3 v2) {
+    public static IKVector3 add(IKVector3 v1, IKVector3 v2) {
         return add(v1, v2, null);
     }
 
-    public static Vector3 add(Vector3 v1, Vector3 v2, Vector3 target) {
+    public static IKVector3 add(IKVector3 v1, IKVector3 v2, IKVector3 target) {
         if (target == null) {
             target = v1.copy();
             v1.set(
@@ -139,15 +139,15 @@ public class Vector3 {
      *
      * @param target Vector3 in which to store the result
      */
-    static public Vector3 sub(Vector3 v1, Vector3 v2) {
+    static public IKVector3 sub(IKVector3 v1, IKVector3 v2) {
         return sub(v1, v2, null);
     }
 
-    static public Vector3 multiply(Vector3 v, float n) {
+    static public IKVector3 multiply(IKVector3 v, float n) {
         return multiply(v, n, null);
     }
 
-    static public Vector3 multiply(Vector3 v, float n, Vector3 target) {
+    static public IKVector3 multiply(IKVector3 v, float n, IKVector3 target) {
         if (target == null) {
             target = v.copy();
         }
@@ -155,11 +155,11 @@ public class Vector3 {
         return target;
     }
 
-    static public Vector3 divide(Vector3 v, float n) {
+    static public IKVector3 divide(IKVector3 v, float n) {
         return divide(v, n, null);
     }
 
-    static public Vector3 divide(Vector3 v, float n, Vector3 target) {
+    static public IKVector3 divide(IKVector3 v, float n, IKVector3 target) {
         if (target == null) {
             target = v.copy();
         }
@@ -174,7 +174,7 @@ public class Vector3 {
      * @param target Vector3 in which to store the result
      * @return
      */
-    static public Vector3 sub(Vector3 v1, Vector3 v2, Vector3 target) {
+    static public IKVector3 sub(IKVector3 v1, IKVector3 v2, IKVector3 target) {
         if (target == null) {
             target = v1.copy();
         }
@@ -190,7 +190,7 @@ public class Vector3 {
      * @param v2     any variable of type Vector3
      * @param target Vector3 to store the result
      */
-    public static Vector3 cross(Vector3 v1, Vector3 v2, Vector3 target) {
+    public static IKVector3 cross(IKVector3 v1, IKVector3 v2, IKVector3 target) {
         float crossX = v1.y * v2.z - v2.y * v1.z;
         float crossY = v1.z * v2.x - v2.z * v1.x;
         float crossZ = v1.x * v2.y - v2.x * v1.y;
@@ -209,8 +209,8 @@ public class Vector3 {
      * @param v1 the vector to start from
      * @param v2 the vector to lerp to
      */
-    public static Vector3 lerp(Vector3 v1, Vector3 v2, float amt) {
-        Vector3 v = v1.copy();
+    public static IKVector3 lerp(IKVector3 v1, IKVector3 v2, float amt) {
+        IKVector3 v = v1.copy();
         v.lerp(v2, amt);
         return v;
     }
@@ -228,7 +228,7 @@ public class Vector3 {
      * @usage web_application
      * @brief Calculate and return the angle between two vectors
      */
-    static public float angleBetween(Vector3 v1, Vector3 v2) {
+    static public float angleBetween(IKVector3 v1, IKVector3 v2) {
 
         // We get NaN if we pass in a zero vector which can cause problems
         // Zero seems like a reasonable angle between a (0,0,0) vector and something
@@ -239,8 +239,8 @@ public class Vector3 {
             return 0.0f;
 
         float dot = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
-        float v1mag = MathUtils.sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z);
-        float v2mag = MathUtils.sqrt(v2.x * v2.x + v2.y * v2.y + v2.z * v2.z);
+        float v1mag = IKMathUtils.sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z);
+        float v2mag = IKMathUtils.sqrt(v2.x * v2.x + v2.y * v2.y + v2.z * v2.z);
         // This should be a number between -1 and 1, since it's "normalized"
         float amt = dot / (v1mag * v2mag);
         // But if it's not due to rounding error, then we need to fix it
@@ -248,11 +248,11 @@ public class Vector3 {
         // Otherwise if outside the range, acos() will return NaN
         // http://www.cppreference.com/wiki/c/math/acos
         if (amt <= -1) {
-            return MathUtils.PI;
+            return IKMathUtils.PI;
         } else if (amt >= 1) {
             return 0;
         }
-        return (float) MathUtils.acos(amt);
+        return (float) IKMathUtils.acos(amt);
     }
 
     /**
@@ -263,14 +263,14 @@ public class Vector3 {
      * @param z
      * @return This vector for chaining
      */
-    public Vector3 set(float x, float y, float z) {
+    public IKVector3 set(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
         return this;
     }
 
-    public Vector3 set(final Vector3 vector) {
+    public IKVector3 set(final IKVector3 vector) {
         return this.set(vector.getX(), vector.getY(), vector.getZ());
     }
 
@@ -279,7 +279,7 @@ public class Vector3 {
      *
      * @param v The vector
      */
-    public Vector3 set(final float[] values) {
+    public IKVector3 set(final float[] values) {
         return this.set(values[0], values[1], values[2]);
     }
 
@@ -290,12 +290,12 @@ public class Vector3 {
      * @param polarAngle     The angle between z-axis in radians [0, pi]
      * @return This vector for chaining
      */
-    public Vector3 setFromSpherical(float azimuthalAngle, float polarAngle) {
-        float cosPolar = MathUtils.cos(polarAngle);
-        float sinPolar = MathUtils.sin(polarAngle);
+    public IKVector3 setFromSpherical(float azimuthalAngle, float polarAngle) {
+        float cosPolar = IKMathUtils.cos(polarAngle);
+        float sinPolar = IKMathUtils.sin(polarAngle);
 
-        float cosAzim = MathUtils.cos(azimuthalAngle);
-        float sinAzim = MathUtils.sin(azimuthalAngle);
+        float cosAzim = IKMathUtils.cos(azimuthalAngle);
+        float sinAzim = IKMathUtils.sin(azimuthalAngle);
 
         return this.set(cosAzim * sinPolar, sinAzim * sinPolar, cosPolar);
     }
@@ -306,11 +306,11 @@ public class Vector3 {
      * @param v The vector
      * @return This vector for chaining
      */
-    public Vector3 add(Vector3 vector) {
+    public IKVector3 add(IKVector3 vector) {
         return this.add(vector.getX(), vector.getY(), vector.getZ());
     }
 
-    public Vector3 add(float[] v) {
+    public IKVector3 add(float[] v) {
         return this.add(v[0], v[1], v[2]);
     }
 
@@ -322,7 +322,7 @@ public class Vector3 {
      * @param z The z-component of the other vector
      * @return This vector for chaining.
      */
-    public Vector3 add(float x, float y, float z) {
+    public IKVector3 add(float x, float y, float z) {
         this.x += x;
         this.y += y;
         this.z += z;
@@ -335,7 +335,7 @@ public class Vector3 {
      * @param values The value
      * @return This vector for chaining
      */
-    public Vector3 add(float values) {
+    public IKVector3 add(float values) {
         return set(this.x + values, this.y + values, this.z + values);
     }
 
@@ -345,7 +345,7 @@ public class Vector3 {
      * @param v The vector
      * @return This vector for chaining
      */
-    public Vector3 sub(Vector3 a_vec) {
+    public IKVector3 sub(IKVector3 a_vec) {
         return sub(a_vec.getX(), a_vec.getY(), a_vec.getZ());
     }
 
@@ -357,7 +357,7 @@ public class Vector3 {
      * @param z The z-component of the other vector
      * @return This vector for chaining
      */
-    public Vector3 sub(float x, float y, float z) {
+    public IKVector3 sub(float x, float y, float z) {
         return this.set(this.x - x, this.y - y, this.z - z);
     }
 
@@ -367,7 +367,7 @@ public class Vector3 {
      * @param value The value
      * @return This vector for chaining
      */
-    public Vector3 sub(float value) {
+    public IKVector3 sub(float value) {
         return this.set(this.x - value, this.y - value, this.z - value);
     }
 
@@ -376,7 +376,7 @@ public class Vector3 {
      *
      * @return This vector for chaining
      */
-    public Vector3 multiply(Vector3 other) {
+    public IKVector3 multiply(IKVector3 other) {
         return this.set(x * other.getX(), y * other.getY(), z * other.getZ());
     }
 
@@ -388,7 +388,7 @@ public class Vector3 {
      * @param vz Z value
      * @return This vector for chaining
      */
-    public Vector3 multiply(float vx, float vy, float vz) {
+    public IKVector3 multiply(float vx, float vy, float vz) {
         return this.set(this.x * vx, this.y * vy, this.z * vz);
     }
 
@@ -404,7 +404,7 @@ public class Vector3 {
      * @usage web_application
      * @brief Divide a vector by a scalar
      */
-    public Vector3 divide(float n) {
+    public IKVector3 divide(float n) {
         x /= n;
         y /= n;
         z /= n;
@@ -417,7 +417,7 @@ public class Vector3 {
      * @param v      addition vector
      * @param scalar for scaling the addition vector
      */
-    public Vector3 mulAdd(Vector3 vec, float scalar) {
+    public IKVector3 mulAdd(IKVector3 vec, float scalar) {
         this.x += vec.getX() * scalar;
         this.y += vec.getY() * scalar;
         this.z += vec.getZ() * scalar;
@@ -430,7 +430,7 @@ public class Vector3 {
      * @param v      addition vector
      * @param mulVec vector by whose values the addition vector will be scaled
      */
-    public Vector3 mulAdd(Vector3 vec, Vector3 mulVec) {
+    public IKVector3 mulAdd(IKVector3 vec, IKVector3 mulVec) {
         this.x += vec.getX() * mulVec.getX();
         this.y += vec.getY() * mulVec.getY();
         this.z += vec.getZ() * mulVec.getZ();
@@ -441,11 +441,11 @@ public class Vector3 {
      * @return The euclidean length
      */
     public float mag() {
-        return (float) MathUtils.sqrt(x * x + y * y + z * z);
+        return (float) IKMathUtils.sqrt(x * x + y * y + z * z);
     }
 
     /**
-     * This method is faster than {@link Vector3#mag()} because it avoids
+     * This method is faster than {@link IKVector3#mag()} because it avoids
      * calculating a square root. It is useful for comparisons,
      * but not for getting exact lengths, as the return value is the square of the
      * actual length.
@@ -460,7 +460,7 @@ public class Vector3 {
      * @param vector The other vector
      * @return Whether this and the other vector are equal
      */
-    public boolean idt(final Vector3 vector) {
+    public boolean idt(final IKVector3 vector) {
         return x == vector.x && y == vector.y && z == vector.z;
     }
 
@@ -468,11 +468,11 @@ public class Vector3 {
      * @param v The other vector
      * @return the distance between this and the other vector
      */
-    public float dist(final Vector3 vector) {
+    public float dist(final IKVector3 vector) {
         final float a = vector.x - x;
         final float b = vector.y - y;
         final float c = vector.z - z;
-        return (float) MathUtils.sqrt(a * a + b * b + c * c);
+        return (float) IKMathUtils.sqrt(a * a + b * b + c * c);
     }
 
     /**
@@ -482,11 +482,11 @@ public class Vector3 {
         final float a = x - this.x;
         final float b = y - this.y;
         final float c = z - this.z;
-        return (float) MathUtils.sqrt(a * a + b * b + c * c);
+        return (float) IKMathUtils.sqrt(a * a + b * b + c * c);
     }
 
     /**
-     * This method is faster than {@link Vector3#dist(Vector3)} because it avoids
+     * This method is faster than {@link IKVector3#dist(IKVector3)} because it avoids
      * calculating a square root. It is useful for
      * comparisons, but not for getting accurate distances, as the return value is
      * the square of the actual distance.
@@ -494,7 +494,7 @@ public class Vector3 {
      * @param v The other vector
      * @return the squared distance between this and the other vector
      */
-    public float distSq(Vector3 point) {
+    public float distSq(IKVector3 point) {
         final float a = point.x - x;
         final float b = point.y - y;
         final float c = point.z - z;
@@ -521,7 +521,7 @@ public class Vector3 {
      *
      * @return This vector for chaining
      */
-    public Vector3 normalize() {
+    public IKVector3 normalize() {
         final float len2 = this.mag();
         if (len2 == 0f || len2 == 1f)
             return this;
@@ -532,7 +532,7 @@ public class Vector3 {
      * @param v The other vector
      * @return The dot product between this and the other vector
      */
-    public float dot(Vector3 vector) {
+    public float dot(IKVector3 vector) {
         return x * vector.getX() + y * vector.getY() + z * vector.getZ();
     }
 
@@ -554,7 +554,7 @@ public class Vector3 {
      * @param vector Vec3fhe other vector
      * @return This vector for chaining
      */
-    public Vector3 crs(final Vector3 vector) {
+    public IKVector3 crs(final IKVector3 vector) {
         return this.set(y * vector.z - z * vector.y, z * vector.x - x * vector.z, x * vector.y - y * vector.x);
     }
 
@@ -566,7 +566,7 @@ public class Vector3 {
      * @param z The z-component of the other vector
      * @return This vector for chaining
      */
-    public Vector3 crs(float x, float y, float z) {
+    public IKVector3 crs(float x, float y, float z) {
         return this.set(this.y * z - this.z * y, this.z * x - this.x * z, this.x * y - this.y * x);
     }
 
@@ -578,7 +578,7 @@ public class Vector3 {
      * @param matrix The matrix
      * @return This vector for chaining
      */
-    public Vector3 mul4x3(float[] matrix) {
+    public IKVector3 mul4x3(float[] matrix) {
         return set(x * matrix[0] + y * matrix[3] + z * matrix[6] + matrix[9],
                 x * matrix[1] + y * matrix[4] + z * matrix[7]
                         + matrix[10],
@@ -594,7 +594,7 @@ public class Vector3 {
      * @param p2 vector representing second edge of plane
      * @return
      */
-    public Vector3 getPlaneProjectionOf(Vector3 p1, Vector3 p2) {
+    public IKVector3 getPlaneProjectionOf(IKVector3 p1, IKVector3 p2) {
         return this.getPlaneProjectionOf(p1.crossCopy(p2));
     }
 
@@ -605,9 +605,9 @@ public class Vector3 {
      * @param norm
      * @return
      */
-    public Vector3 getPlaneProjectionOf(Vector3 rawNorm) {
-        Vector3 norm = rawNorm.copy().normalize();
-        Vector3 normProj = norm.multCopy(this.dot(norm));
+    public IKVector3 getPlaneProjectionOf(IKVector3 rawNorm) {
+        IKVector3 norm = rawNorm.copy().normalize();
+        IKVector3 normProj = norm.multCopy(this.dot(norm));
         normProj.multiply(-1);
 
         return normProj.addCopy(this);
@@ -624,7 +624,7 @@ public class Vector3 {
      * @return Whether this vector is a unit length vector within the given margin.
      */
     public boolean isUnit(final float margin) {
-        return MathUtils.abs(magSq() - 1f) < margin;
+        return IKMathUtils.abs(magSq() - 1f) < margin;
     }
 
     /**
@@ -645,7 +645,7 @@ public class Vector3 {
      * @return true if this vector is in line with the other vector (either in the
      *         same or the opposite direction)
      */
-    public boolean isOnLine(Vector3 other, float epsilon) {
+    public boolean isOnLine(IKVector3 other, float epsilon) {
         return magSq(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x) <= epsilon;
     }
 
@@ -653,44 +653,44 @@ public class Vector3 {
      * @return true if this vector is in line with the other vector (either in the
      *         same or the opposite direction)
      */
-    public boolean isOnLine(Vector3 other) {
+    public boolean isOnLine(IKVector3 other) {
         return magSq(y * other.z - z * other.y, z * other.x - x * other.z,
-                x * other.y - y * other.x) <= MathUtils.DOUBLE_ROUNDING_ERROR;
+                x * other.y - y * other.x) <= IKMathUtils.DOUBLE_ROUNDING_ERROR;
     }
 
     /**
      * @return true if this vector is collinear with the other vector
-     *         ({@link #isOnLine(Vector3, float)} &&
-     *         {@link #hasSameDirection(Vector3)}).
+     *         ({@link #isOnLine(IKVector3, float)} &&
+     *         {@link #hasSameDirection(IKVector3)}).
      */
-    public boolean isCollinear(Vector3 other, float epsilon) {
+    public boolean isCollinear(IKVector3 other, float epsilon) {
         return isOnLine(other, epsilon) && hasSameDirection(other);
     }
 
     /**
      * @return true if this vector is collinear with the other vector
-     *         ({@link #isOnLine(Vector3)} &&
-     *         {@link #hasSameDirection(Vector3)}).
+     *         ({@link #isOnLine(IKVector3)} &&
+     *         {@link #hasSameDirection(IKVector3)}).
      */
-    public boolean isCollinear(Vector3 other) {
+    public boolean isCollinear(IKVector3 other) {
         return isOnLine(other) && hasSameDirection(other);
     }
 
     /**
      * @return true if this vector is opposite collinear with the other vector
-     *         ({@link #isOnLine(Vector3, float)} &&
-     *         {@link #hasOppositeDirection(Vector3)}).
+     *         ({@link #isOnLine(IKVector3, float)} &&
+     *         {@link #hasOppositeDirection(IKVector3)}).
      */
-    public boolean isCollinearOpposite(Vector3 other, float epsilon) {
+    public boolean isCollinearOpposite(IKVector3 other, float epsilon) {
         return isOnLine(other, epsilon) && hasOppositeDirection(other);
     }
 
     /**
      * @return true if this vector is opposite collinear with the other vector
-     *         ({@link #isOnLine(Vector3)} &&
-     *         {@link #hasOppositeDirection(Vector3)}).
+     *         ({@link #isOnLine(IKVector3)} &&
+     *         {@link #hasOppositeDirection(IKVector3)}).
      */
-    public boolean isCollinearOpposite(Vector3 other) {
+    public boolean isCollinearOpposite(IKVector3 other) {
         return isOnLine(other) && hasOppositeDirection(other);
     }
 
@@ -698,8 +698,8 @@ public class Vector3 {
      * @return Whether this vector is perpendicular with the other vector. True if
      *         the dot product is 0.
      */
-    public boolean isPerpendicular(Vector3 vector) {
-        return MathUtils.isZero(dot(vector));
+    public boolean isPerpendicular(IKVector3 vector) {
+        return IKMathUtils.isZero(dot(vector));
     }
 
     /**
@@ -707,15 +707,15 @@ public class Vector3 {
      * @return Whether this vector is perpendicular with the other vector. True if
      *         the dot product is 0.
      */
-    public boolean isPerpendicular(Vector3 vector, float epsilon) {
-        return MathUtils.isZero(dot(vector), epsilon);
+    public boolean isPerpendicular(IKVector3 vector, float epsilon) {
+        return IKMathUtils.isZero(dot(vector), epsilon);
     }
 
     /**
      * @return Whether this vector has similar direction compared to the other
      *         vector. True if the normalized dot product is > 0.
      */
-    public boolean hasSameDirection(Vector3 vector) {
+    public boolean hasSameDirection(IKVector3 vector) {
         return dot(vector) > 0;
     }
 
@@ -723,7 +723,7 @@ public class Vector3 {
      * @return Whether this vector has opposite direction compared to the other
      *         vector. True if the normalized dot product is < 0.
      */
-    public boolean hasOppositeDirection(Vector3 vector) {
+    public boolean hasOppositeDirection(IKVector3 vector) {
         return dot(vector) < 0;
     }
 
@@ -736,7 +736,7 @@ public class Vector3 {
      * @param alpha  The interpolation coefficient
      * @return This vector for chaining.
      */
-    public Vector3 lerp(final Vector3 target, float alpha) {
+    public IKVector3 lerp(final IKVector3 target, float alpha) {
         x += alpha * (target.x - x);
         y += alpha * (target.y - y);
         z += alpha * (target.z - z);
@@ -752,25 +752,25 @@ public class Vector3 {
      * @param alpha  The interpolation coefficient
      * @return This vector for chaining.
      */
-    public Vector3 slerp(final Vector3 target, float alpha) {
+    public IKVector3 slerp(final IKVector3 target, float alpha) {
         final float dot = dot(target);
         // If the inputs are too close for comfort, simply linearly interpolate.
         if (dot > 0.9995 || dot < -0.9995)
             return lerp(target, alpha);
 
         // The theta0 is angle between input vectors.
-        final float theta0 = (float) MathUtils.acos(dot);
+        final float theta0 = (float) IKMathUtils.acos(dot);
         // The theta is angle between this vector and result.
         final float theta = theta0 * alpha;
 
-        final float st = (float) MathUtils.sin(theta);
+        final float st = (float) IKMathUtils.sin(theta);
         final float tx = target.x - x * dot;
         final float ty = target.y - y * dot;
         final float tz = target.z - z * dot;
         final float l2 = tx * tx + ty * ty + tz * tz;
-        final float dl = st * ((l2 < 0.0001f) ? 1f : 1f / (float) MathUtils.sqrt(l2));
+        final float dl = st * ((l2 < 0.0001f) ? 1f : 1f / (float) IKMathUtils.sqrt(l2));
 
-        return multiply((float) MathUtils.cos(theta)).add(tx * dl, ty * dl, tz * dl).normalize();
+        return multiply((float) IKMathUtils.cos(theta)).add(tx * dl, ty * dl, tz * dl).normalize();
     }
 
     /**
@@ -789,7 +789,7 @@ public class Vector3 {
      * @param limit desired maximum length for this vector
      * @return this vector for chaining
      */
-    public Vector3 limit(float limit) {
+    public IKVector3 limit(float limit) {
         return limitSq(limit * limit);
     }
 
@@ -803,10 +803,10 @@ public class Vector3 {
      * @return this vector for chaining
      * @see #magSq()
      */
-    public Vector3 limitSq(float limit2) {
+    public IKVector3 limitSq(float limit2) {
         float len2 = magSq();
         if (len2 > limit2) {
-            multiply((float) MathUtils.sqrt(limit2 / len2));
+            multiply((float) IKMathUtils.sqrt(limit2 / len2));
         }
         return this;
     }
@@ -817,7 +817,7 @@ public class Vector3 {
      * @param len desired length for this vector
      * @return this vector for chaining
      */
-    public Vector3 setMag(float len) {
+    public IKVector3 setMag(float len) {
         return setMagSq(len * len);
     }
 
@@ -831,10 +831,10 @@ public class Vector3 {
      * @return this vector for chaining
      * @see #magSq()
      */
-    public Vector3 setMagSq(float len2) {
+    public IKVector3 setMagSq(float len2) {
         float oldLen2 = magSq();
         return (oldLen2 == 0 || oldLen2 == len2) ? this
-                : multiply((float) MathUtils.sqrt(len2 / oldLen2));
+                : multiply((float) IKMathUtils.sqrt(len2 / oldLen2));
     }
 
     /**
@@ -844,16 +844,16 @@ public class Vector3 {
      * @param max Max length
      * @return This vector for chaining
      */
-    public Vector3 clamp(float min, float max) {
+    public IKVector3 clamp(float min, float max) {
         final float len2 = magSq();
         if (len2 == 0f)
             return this;
         float max2 = max * max;
         if (len2 > max2)
-            return multiply((float) MathUtils.sqrt(max2 / len2));
+            return multiply((float) IKMathUtils.sqrt(max2 / len2));
         float min2 = min * min;
         if (len2 < min2)
-            return multiply((float) MathUtils.sqrt(min2 / len2));
+            return multiply((float) IKMathUtils.sqrt(min2 / len2));
         return this;
     }
 
@@ -865,14 +865,14 @@ public class Vector3 {
      * @param epsilon
      * @return whether the vectors have fuzzy equality.
      */
-    public boolean epsilonEquals(Vector3 other, float epsilon) {
+    public boolean epsilonEquals(IKVector3 other, float epsilon) {
         if (other == null)
             return false;
-        if (MathUtils.abs(other.getX() - x) > epsilon)
+        if (IKMathUtils.abs(other.getX() - x) > epsilon)
             return false;
-        if (MathUtils.abs(other.getY() - y) > epsilon)
+        if (IKMathUtils.abs(other.getY() - y) > epsilon)
             return false;
-        return !(MathUtils.abs(other.getZ() - z) > epsilon);
+        return !(IKMathUtils.abs(other.getZ() - z) > epsilon);
     }
 
     /**
@@ -882,11 +882,11 @@ public class Vector3 {
      * @return whether the vectors are the same.
      */
     public boolean epsilonEquals(float x, float y, float z, float epsilon) {
-        if (MathUtils.abs(x - this.x) > epsilon)
+        if (IKMathUtils.abs(x - this.x) > epsilon)
             return false;
-        if (MathUtils.abs(y - this.y) > epsilon)
+        if (IKMathUtils.abs(y - this.y) > epsilon)
             return false;
-        return !(MathUtils.abs(z - this.z) > epsilon);
+        return !(IKMathUtils.abs(z - this.z) > epsilon);
     }
 
     /**
@@ -894,7 +894,7 @@ public class Vector3 {
      *
      * @return This vector for chaining
      */
-    public Vector3 setZero() {
+    public IKVector3 setZero() {
         this.x = 0;
         this.y = 0;
         this.z = 0;
@@ -943,19 +943,19 @@ public class Vector3 {
         this.z = z;
     }
 
-    public Vector3 getOrthogonal() {
-        Vector3 result = this.copy();
+    public IKVector3 getOrthogonal() {
+        IKVector3 result = this.copy();
         result.set(0, 0, 0);
         float threshold = this.mag() * 0.6f;
         if (threshold > 0) {
-            if (MathUtils.abs(x) <= threshold) {
-                float inverse = 1 / MathUtils.sqrt(y * y + z * z);
+            if (IKMathUtils.abs(x) <= threshold) {
+                float inverse = 1 / IKMathUtils.sqrt(y * y + z * z);
                 return result.set(0, inverse * z, -inverse * y);
-            } else if (MathUtils.abs(y) <= threshold) {
-                float inverse = 1 / MathUtils.sqrt(x * x + z * z);
+            } else if (IKMathUtils.abs(y) <= threshold) {
+                float inverse = 1 / IKMathUtils.sqrt(x * x + z * z);
                 return result.set(-inverse * z, 0, inverse * x);
             }
-            float inverse = 1 / MathUtils.sqrt(x * x + y * y);
+            float inverse = 1 / IKMathUtils.sqrt(x * x + y * y);
             return result.set(inverse * y, -inverse * x, 0);
         }
 
@@ -968,7 +968,7 @@ public class Vector3 {
      * @param scalar The scalar
      * @return This vector for chaining
      */
-    public Vector3 multiply(float scalar) {
+    public IKVector3 multiply(float scalar) {
         this.x *= scalar;
         this.y *= scalar;
         this.z *= scalar;
@@ -983,7 +983,7 @@ public class Vector3 {
      *
      * @param v
      */
-    public void adoptValuesOf(Vector3 v) {
+    public void adoptValuesOf(IKVector3 v) {
         setX_(v.getX());
         setY_(v.getY());
         setZ_(v.getZ());
@@ -1003,8 +1003,8 @@ public class Vector3 {
      * @param v The vector
      * @return the resulting vector
      */
-    public Vector3 multCopy(float s) {
-        Vector3 cv = this.copy();
+    public IKVector3 multCopy(float s) {
+        IKVector3 cv = this.copy();
         return cv.multiply(s);
     }
 
@@ -1015,8 +1015,8 @@ public class Vector3 {
      * @param v The vector
      * @return The resulting vector
      */
-    public Vector3 addCopy(Vector3 v) {
-        Vector3 cv = this.copy();
+    public IKVector3 addCopy(IKVector3 v) {
+        IKVector3 cv = this.copy();
         return cv.add(v);
     }
 
@@ -1028,8 +1028,8 @@ public class Vector3 {
      * @param vector The other vector
      * @return The copied vector for chaining
      */
-    public Vector3 crossCopy(Vector3 vector) {
-        Vector3 c = this.copy();
+    public IKVector3 crossCopy(IKVector3 vector) {
+        IKVector3 c = this.copy();
         return c.crs(vector);
     }
 
@@ -1040,8 +1040,8 @@ public class Vector3 {
      * @param v The vector
      * @return the resulting vector
      */
-    public Vector3 subCopy(Vector3 v) {
-        Vector3 cv = this.copy();
+    public IKVector3 subCopy(IKVector3 v) {
+        IKVector3 cv = this.copy();
         return cv.sub(v);
     }
 
@@ -1052,8 +1052,8 @@ public class Vector3 {
      * @param v The vector
      * @return the resulting vector
      */
-    public Vector3 multCopy(Vector3 v) {
-        Vector3 cv = this.copy();
+    public IKVector3 multCopy(IKVector3 v) {
+        IKVector3 cv = this.copy();
         return cv.multiply(v);
     }
 }

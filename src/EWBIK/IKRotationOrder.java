@@ -1,94 +1,94 @@
 package EWBIK;
 
-public final class RotationOrder3D {
+public final class IKRotationOrder {
 
-        public static final Vector3 X = new Vector3(1, 0, 0);
-        public static final Vector3 Y = new Vector3(0, 1, 0);
-        public static final Vector3 Z = new Vector3(0, 0, 1);
+        public static final IKVector3 X = new IKVector3(1, 0, 0);
+        public static final IKVector3 Y = new IKVector3(0, 1, 0);
+        public static final IKVector3 Z = new IKVector3(0, 0, 1);
 
         /**
          * Set of Cartesian angles.
          * this ordered set of rotations is around X, then around Y, then
          * around Z
          */
-        public static final RotationOrder3D XYZ = new RotationOrder3D("XYZ", X, Y, Z);
+        public static final IKRotationOrder XYZ = new IKRotationOrder("XYZ", X, Y, Z);
 
         /**
          * Set of Cartesian angles.
          * this ordered set of rotations is around X, then around Z, then
          * around Y
          */
-        public static final RotationOrder3D XZY = new RotationOrder3D("XZY", X, Z, Y);
+        public static final IKRotationOrder XZY = new IKRotationOrder("XZY", X, Z, Y);
 
         /**
          * Set of Cartesian angles.
          * this ordered set of rotations is around Y, then around X, then
          * around Z
          */
-        public static final RotationOrder3D YXZ = new RotationOrder3D("YXZ", Y, X, Z);
+        public static final IKRotationOrder YXZ = new IKRotationOrder("YXZ", Y, X, Z);
 
         /**
          * Set of Cartesian angles.
          * this ordered set of rotations is around Y, then around Z, then
          * around X
          */
-        public static final RotationOrder3D YZX = new RotationOrder3D("YZX", Y, Z, X);
+        public static final IKRotationOrder YZX = new IKRotationOrder("YZX", Y, Z, X);
 
         /**
          * Set of Cartesian angles.
          * this ordered set of rotations is around Z, then around X, then
          * around Y
          */
-        public static final RotationOrder3D ZXY = new RotationOrder3D("ZXY", Z, X, Y);
+        public static final IKRotationOrder ZXY = new IKRotationOrder("ZXY", Z, X, Y);
 
         /**
          * Set of Cartesian angles.
          * this ordered set of rotations is around Z, then around Y, then
          * around X
          */
-        public static final RotationOrder3D ZYX = new RotationOrder3D("ZYX", Z, Y, X);
+        public static final IKRotationOrder ZYX = new IKRotationOrder("ZYX", Z, Y, X);
 
         /**
          * Set of Euler angles.
          * this ordered set of rotations is around X, then around Y, then
          * around X
          */
-        public static final RotationOrder3D XYX = new RotationOrder3D("XYX", X, Y, X);
+        public static final IKRotationOrder XYX = new IKRotationOrder("XYX", X, Y, X);
 
         /**
          * Set of Euler angles.
          * this ordered set of rotations is around X, then around Z, then
          * around X
          */
-        public static final RotationOrder3D XZX = new RotationOrder3D("XZX", X, Z, X);
+        public static final IKRotationOrder XZX = new IKRotationOrder("XZX", X, Z, X);
 
         /**
          * Set of Euler angles.
          * this ordered set of rotations is around Y, then around X, then
          * around Y
          */
-        public static final RotationOrder3D YXY = new RotationOrder3D("YXY", Y, X, Y);
+        public static final IKRotationOrder YXY = new IKRotationOrder("YXY", Y, X, Y);
 
         /**
          * Set of Euler angles.
          * this ordered set of rotations is around Y, then around Z, then
          * around Y
          */
-        public static final RotationOrder3D YZY = new RotationOrder3D("YZY", Y, Z, Y);
+        public static final IKRotationOrder YZY = new IKRotationOrder("YZY", Y, Z, Y);
 
         /**
          * Set of Euler angles.
          * this ordered set of rotations is around Z, then around X, then
          * around Z
          */
-        public static final RotationOrder3D ZXZ = new RotationOrder3D("ZXZ", Z, X, Z);
+        public static final IKRotationOrder ZXZ = new IKRotationOrder("ZXZ", Z, X, Z);
 
         /**
          * Set of Euler angles.
          * this ordered set of rotations is around Z, then around Y, then
          * around Z
          */
-        public static final RotationOrder3D ZYZ = new RotationOrder3D("ZYZ", Z, Y, Z);
+        public static final IKRotationOrder ZYZ = new IKRotationOrder("ZYZ", Z, Y, Z);
 
         /**
          * Name of the rotations order.
@@ -98,17 +98,17 @@ public final class RotationOrder3D {
         /**
          * Axis of the first rotation.
          */
-        private final Vector3 a1;
+        private final IKVector3 a1;
 
         /**
          * Axis of the second rotation.
          */
-        private final Vector3 a2;
+        private final IKVector3 a2;
 
         /**
          * Axis of the third rotation.
          */
-        private final Vector3 a3;
+        private final IKVector3 a3;
 
         /**
          * Private constructor.
@@ -120,8 +120,8 @@ public final class RotationOrder3D {
          * @param a2   axis of the second rotation
          * @param a3   axis of the third rotation
          */
-        private RotationOrder3D(final String name,
-                                final Vector3 a1, final Vector3 a2, final Vector3 a3) {
+        private IKRotationOrder(final String name,
+                                final IKVector3 a1, final IKVector3 a2, final IKVector3 a3) {
                 this.name = name;
                 this.a1 = a1;
                 this.a2 = a2;
@@ -143,7 +143,7 @@ public final class RotationOrder3D {
          *
          * @return axis of the first rotation
          */
-        public Vector3 getA1() {
+        public IKVector3 getA1() {
                 return a1;
         }
 
@@ -152,7 +152,7 @@ public final class RotationOrder3D {
          *
          * @return axis of the second rotation
          */
-        public Vector3 getA2() {
+        public IKVector3 getA2() {
                 return a2;
         }
 
@@ -161,7 +161,7 @@ public final class RotationOrder3D {
          *
          * @return axis of the second rotation
          */
-        public Vector3 getA3() {
+        public IKVector3 getA3() {
                 return a3;
         }
 

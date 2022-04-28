@@ -23,7 +23,7 @@ package EWBIK;
  *
  * @author Nathan Sweet
  */
-public final class MathUtils {
+public final class IKMathUtils {
     static public final float FLOAT_ROUNDING_ERROR = 0.000001f; // 32 bits, 23 of which may hold the significand for a
                                                                 // precision of 6 digits
     static public final double DOUBLE_ROUNDING_ERROR = 0.000000000000001d; // 64, 52 of which represent the significand

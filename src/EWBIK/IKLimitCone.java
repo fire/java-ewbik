@@ -19,15 +19,15 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package EWBIK;
 
-public class LimitCone3D {
+public class IKLimitCone {
 
-    public Kusudama3D parentKusudama;
-    public Vector3 tangentCircleCenterNext1;
-    public Vector3 tangentCircleCenterNext2;
+    public IKKusudama parentKusudama;
+    public IKVector3 tangentCircleCenterNext1;
+    public IKVector3 tangentCircleCenterNext2;
     public float tangentCircleRadiusNext;
     public float tangentCircleRadiusNextCos;
-    public Vector3 tangentCircleCenterPrevious1;
-    public Vector3 tangentCircleCenterPrevious2;
+    public IKVector3 tangentCircleCenterPrevious1;
+    public IKVector3 tangentCircleCenterPrevious2;
     public float tangentCircleRadiusPrevious;
     public float tangentCircleRadiusPreviousCos;
     // softness of 0 means completely hard.
@@ -41,26 +41,26 @@ public class LimitCone3D {
      * are the points at which the tangent circle intersects this limitCone and the
      * next limitCone
      */
-    public Vector3[] firstTriangleNext = new Vector3[3];
-    public Vector3[] secondTriangleNext = new Vector3[3];
-    Vector3 controlPoint;
-    Vector3 radialPoint;
+    public IKVector3[] firstTriangleNext = new IKVector3[3];
+    public IKVector3[] secondTriangleNext = new IKVector3[3];
+    IKVector3 controlPoint;
+    IKVector3 radialPoint;
     // radius stored as cosine to save on the acos call necessary for angleBetween.
     private float radiusCosine;
     private float radius;
 
     // default constructor required for file loading to work
-    public LimitCone3D() {
+    public IKLimitCone() {
     }
 
-    public LimitCone3D(Vector3 location, float rad, Kusudama3D attachedTo) {
-        Vector3 location1 = location;
+    public IKLimitCone(IKVector3 location, float rad, IKKusudama attachedTo) {
+        IKVector3 location1 = location;
         setControlPoint(location1);
-        LimitCone3D.this.tangentCircleCenterNext1 = location1.getOrthogonal();
-        LimitCone3D.this.tangentCircleCenterNext2 = Vector3
-                .multiply(LimitCone3D.this.tangentCircleCenterNext1, -1);
+        IKLimitCone.this.tangentCircleCenterNext1 = location1.getOrthogonal();
+        IKLimitCone.this.tangentCircleCenterNext2 = IKVector3
+                .multiply(IKLimitCone.this.tangentCircleCenterNext1, -1);
         this.setRadius(rad);
-        LimitCone3D.this.parentKusudama = attachedTo;
+        IKLimitCone.this.parentKusudama = attachedTo;
     }
 
     /**
@@ -70,10 +70,10 @@ public class LimitCone3D {
      *                       the input after accounting for collisions
      * @return
      */
-    public boolean inBoundsFromThisToNext(LimitCone3D next, Vector3 input,
-                                          Vector3 collisionPoint) {
+    public boolean inBoundsFromThisToNext(IKLimitCone next, IKVector3 input,
+                                          IKVector3 collisionPoint) {
         boolean isInBounds = false;
-        Vector3 closestCollision = getClosestCollision(next, input);
+        IKVector3 closestCollision = getClosestCollision(next, input);
         if (closestCollision == null) {
             /**
              * getClosestCollision returns null if the point is already in bounds,
@@ -98,9 +98,9 @@ public class LimitCone3D {
      *         rectified position
      *         if the point was out of bounds.
      */
-    public Vector3 getClosestCollision(LimitCone3D next,
-                                       Vector3 input) {
-        Vector3 result = getOnGreatTangentTriangle(next, input);
+    public IKVector3 getClosestCollision(IKLimitCone next,
+                                         IKVector3 input) {
+        IKVector3 result = getOnGreatTangentTriangle(next, input);
         if (result == null) {
             boolean[] inBounds = { false };
             result = closestPointOnClosestCone(next, input, inBounds);
@@ -108,9 +108,9 @@ public class LimitCone3D {
         return result;
     }
 
-    public Vector3 getClosestPathPoint(LimitCone3D next,
-                                       Vector3 input) {
-        Vector3 result = getOnPathSequence(next, input);
+    public IKVector3 getClosestPathPoint(IKLimitCone next,
+                                         IKVector3 input) {
+        IKVector3 result = getOnPathSequence(next, input);
         if (result == null) {
             result = closestCone(next, input);
         }
@@ -130,7 +130,7 @@ public class LimitCone3D {
      * @param input
      * @return
      */
-    public boolean determineIfInBounds(LimitCone3D next, Vector3 input) {
+    public boolean determineIfInBounds(IKLimitCone next, IKVector3 input) {
 
         /**
          * Procedure : Check if input is contained in this cone, or the next cone
@@ -171,49 +171,49 @@ public class LimitCone3D {
              */
 
             // Vector3 planeNormal = controlPoint.crossCopy(tangentCircleCenterNext1);
-            Vector3 c1xc2 = controlPoint.crossCopy(next.controlPoint);
+            IKVector3 c1xc2 = controlPoint.crossCopy(next.controlPoint);
             float c1c2fir = input.dot(c1xc2);
 
             if (c1c2fir < 0.0) {
-                Vector3 c1xt1 = controlPoint.crossCopy(tangentCircleCenterNext1);
-                Vector3 t1xc2 = tangentCircleCenterNext1.crossCopy(next.controlPoint);
+                IKVector3 c1xt1 = controlPoint.crossCopy(tangentCircleCenterNext1);
+                IKVector3 t1xc2 = tangentCircleCenterNext1.crossCopy(next.controlPoint);
                 return input.dot(c1xt1) > 0 && input.dot(t1xc2) > 0;
             } else {
-                Vector3 t2xc1 = tangentCircleCenterNext2.crossCopy(controlPoint);
-                Vector3 c2xt2 = next.controlPoint.crossCopy(tangentCircleCenterNext2);
+                IKVector3 t2xc1 = tangentCircleCenterNext2.crossCopy(controlPoint);
+                IKVector3 c2xt2 = next.controlPoint.crossCopy(tangentCircleCenterNext2);
                 return input.dot(t2xc1) > 0 && input.dot(c2xt2) > 0;
             }
         }
     }
 
-    public Vector3 closestCone(LimitCone3D next, Vector3 input) {
+    public IKVector3 closestCone(IKLimitCone next, IKVector3 input) {
         if (input.dot(controlPoint) > input.dot(next.controlPoint))
             return this.controlPoint.copy();
         else
             return next.controlPoint.copy();
     }
 
-    public Vector3 getOnPathSequence(LimitCone3D next, Vector3 input) {
-        Vector3 c1xc2 = controlPoint.crossCopy(next.controlPoint);
+    public IKVector3 getOnPathSequence(IKLimitCone next, IKVector3 input) {
+        IKVector3 c1xc2 = controlPoint.crossCopy(next.controlPoint);
         float c1c2fir = input.dot(c1xc2);
         if (c1c2fir < 0.0) {
-            Vector3 c1xt1 = controlPoint.crossCopy(tangentCircleCenterNext1);
-            Vector3 t1xc2 = tangentCircleCenterNext1.crossCopy(next.controlPoint);
+            IKVector3 c1xt1 = controlPoint.crossCopy(tangentCircleCenterNext1);
+            IKVector3 t1xc2 = tangentCircleCenterNext1.crossCopy(next.controlPoint);
             if (input.dot(c1xt1) > 0 && input.dot(t1xc2) > 0) {
-                Ray3D tan1ToInput = new Ray3D(tangentCircleCenterNext1, input);
-                Vector3 result = new Vector3();
-                tan1ToInput.intersectsPlane(new Vector3(0, 0, 0), controlPoint, next.controlPoint, result);
+                IKRay3D tan1ToInput = new IKRay3D(tangentCircleCenterNext1, input);
+                IKVector3 result = new IKVector3();
+                tan1ToInput.intersectsPlane(new IKVector3(0, 0, 0), controlPoint, next.controlPoint, result);
                 return result.normalize();
             } else {
                 return null;
             }
         } else {
-            Vector3 t2xc1 = tangentCircleCenterNext2.crossCopy(controlPoint);
-            Vector3 c2xt2 = next.controlPoint.crossCopy(tangentCircleCenterNext2);
+            IKVector3 t2xc1 = tangentCircleCenterNext2.crossCopy(controlPoint);
+            IKVector3 c2xt2 = next.controlPoint.crossCopy(tangentCircleCenterNext2);
             if (input.dot(t2xc1) > 0 && input.dot(c2xt2) > 0) {
-                Ray3D tan2ToInput = new Ray3D(tangentCircleCenterNext2, input);
-                Vector3 result = new Vector3();
-                tan2ToInput.intersectsPlane(new Vector3(0, 0, 0), controlPoint, next.controlPoint, result);
+                IKRay3D tan2ToInput = new IKRay3D(tangentCircleCenterNext2, input);
+                IKVector3 result = new IKVector3();
+                tan2ToInput.intersectsPlane(new IKVector3(0, 0, 0), controlPoint, next.controlPoint, result);
                 return result.normalize();
             } else {
                 return null;
@@ -222,17 +222,17 @@ public class LimitCone3D {
 
     }
 
-    public Vector3 getOnGreatTangentTriangle(LimitCone3D next,
-                                             Vector3 input) {
-        Vector3 c1xc2 = controlPoint.crossCopy(next.controlPoint);
+    public IKVector3 getOnGreatTangentTriangle(IKLimitCone next,
+                                               IKVector3 input) {
+        IKVector3 c1xc2 = controlPoint.crossCopy(next.controlPoint);
         float c1c2fir = input.dot(c1xc2);
         if (c1c2fir < 0.0) {
-            Vector3 c1xt1 = controlPoint.crossCopy(tangentCircleCenterNext1);
-            Vector3 t1xc2 = tangentCircleCenterNext1.crossCopy(next.controlPoint);
+            IKVector3 c1xt1 = controlPoint.crossCopy(tangentCircleCenterNext1);
+            IKVector3 t1xc2 = tangentCircleCenterNext1.crossCopy(next.controlPoint);
             if (input.dot(c1xt1) > 0 && input.dot(t1xc2) > 0) {
                 if (input.dot(tangentCircleCenterNext1) > tangentCircleRadiusNextCos) {
-                    Vector3 planeNormal = tangentCircleCenterNext1.crossCopy(input);
-                    Quaternion rotateAboutBy = new Quaternion(planeNormal, tangentCircleRadiusNext);
+                    IKVector3 planeNormal = tangentCircleCenterNext1.crossCopy(input);
+                    IKQuaternion rotateAboutBy = new IKQuaternion(planeNormal, tangentCircleRadiusNext);
                     return rotateAboutBy.applyToCopy(tangentCircleCenterNext1);
                 } else {
                     return input.copy();
@@ -241,12 +241,12 @@ public class LimitCone3D {
                 return null;
             }
         } else {
-            Vector3 t2xc1 = tangentCircleCenterNext2.crossCopy(controlPoint);
-            Vector3 c2xt2 = next.controlPoint.crossCopy(tangentCircleCenterNext2);
+            IKVector3 t2xc1 = tangentCircleCenterNext2.crossCopy(controlPoint);
+            IKVector3 c2xt2 = next.controlPoint.crossCopy(tangentCircleCenterNext2);
             if (input.dot(t2xc1) > 0 && input.dot(c2xt2) > 0) {
                 if (input.dot(tangentCircleCenterNext2) > tangentCircleRadiusNextCos) {
-                    Vector3 planeNormal = tangentCircleCenterNext2.crossCopy(input);
-                    Quaternion rotateAboutBy = new Quaternion(planeNormal, tangentCircleRadiusNext);
+                    IKVector3 planeNormal = tangentCircleCenterNext2.crossCopy(input);
+                    IKQuaternion rotateAboutBy = new IKQuaternion(planeNormal, tangentCircleRadiusNext);
                     return rotateAboutBy.applyToCopy(tangentCircleCenterNext2);
                 } else {
                     return input.copy();
@@ -266,14 +266,14 @@ public class LimitCone3D {
      * @param inBounds
      * @return
      */
-    public Vector3 closestPointOnClosestCone(LimitCone3D next,
-                                             Vector3 input,
-                                             boolean[] inBounds) {
-        Vector3 closestToFirst = this.closestToCone(input, inBounds);
+    public IKVector3 closestPointOnClosestCone(IKLimitCone next,
+                                               IKVector3 input,
+                                               boolean[] inBounds) {
+        IKVector3 closestToFirst = this.closestToCone(input, inBounds);
         if (inBounds[0]) {
             return closestToFirst;
         }
-        Vector3 closestToSecond = next.closestToCone(input, inBounds);
+        IKVector3 closestToSecond = next.closestToCone(input, inBounds);
         if (inBounds[0]) {
             return closestToSecond;
         }
@@ -296,31 +296,31 @@ public class LimitCone3D {
      * @param inBounds
      * @return
      */
-    public Vector3 closestToCone(Vector3 input, boolean[] inBounds) {
+    public IKVector3 closestToCone(IKVector3 input, boolean[] inBounds) {
         float controlPointDotProduct = input.dot(this.getControlPoint());
         float radiusCosine = this.getRadiusCosine();
         if (controlPointDotProduct > radiusCosine) {
             inBounds[0] = true;
             return null;
         } else {
-            Vector3 axis = this.getControlPoint().crossCopy(input);
-            Quaternion rotTo = new Quaternion(axis, this.getRadius());
-            Vector3 result = rotTo.applyToCopy(this.getControlPoint());
+            IKVector3 axis = this.getControlPoint().crossCopy(input);
+            IKQuaternion rotTo = new IKQuaternion(axis, this.getRadius());
+            IKVector3 result = rotTo.applyToCopy(this.getControlPoint());
             inBounds[0] = false;
             return result;
         }
     }
 
-    public void updateTangentHandles(LimitCone3D next) {
+    public void updateTangentHandles(IKLimitCone next) {
         this.controlPoint.normalize();
         if (next != null) {
             float radA = this.getRadius();
             float radB = next.getRadius();
 
-            Vector3 A = this.getControlPoint().copy();
-            Vector3 B = next.getControlPoint().copy();
+            IKVector3 A = this.getControlPoint().copy();
+            IKVector3 B = next.getControlPoint().copy();
 
-            Vector3 arcNormal = A.crossCopy(B);
+            IKVector3 arcNormal = A.crossCopy(B);
 
             /**
              * There are an infinite number of circles co-tangent with A and B, every other
@@ -342,7 +342,7 @@ public class LimitCone3D {
              * precisely that distance,
              * and so, our tangent circles radius should be precisely half of that distance.
              */
-            float tRadius = ((MathUtils.PI) - (radA + radB)) / 2f;
+            float tRadius = ((IKMathUtils.PI) - (radA + radB)) / 2f;
 
             /**
              * Once we have the desired radius for our tangent circle, we may find the
@@ -354,35 +354,35 @@ public class LimitCone3D {
 
             // the axis of this cone, scaled to minimize its distance to the tangent contact
             // points.
-            Vector3 scaledAxisA = Vector3.multiply(A, MathUtils.cos(boundaryPlusTangentRadiusA));
+            IKVector3 scaledAxisA = IKVector3.multiply(A, IKMathUtils.cos(boundaryPlusTangentRadiusA));
             // a point on the plane running through the tangent contact points
-            Vector3 planeDir1A = new Quaternion(arcNormal, boundaryPlusTangentRadiusA).applyToCopy(A);
+            IKVector3 planeDir1A = new IKQuaternion(arcNormal, boundaryPlusTangentRadiusA).applyToCopy(A);
             // another point on the same plane
-            Vector3 planeDir2A = new Quaternion(A, MathUtils.PI / 2f).applyToCopy(planeDir1A);
+            IKVector3 planeDir2A = new IKQuaternion(A, IKMathUtils.PI / 2f).applyToCopy(planeDir1A);
 
-            Vector3 scaledAxisB = Vector3.multiply(B, MathUtils.cos(boundaryPlusTangentRadiusB));
+            IKVector3 scaledAxisB = IKVector3.multiply(B, IKMathUtils.cos(boundaryPlusTangentRadiusB));
             // a point on the plane running through the tangent contact points
-            Vector3 planeDir1B = new Quaternion(arcNormal, boundaryPlusTangentRadiusB).applyToCopy(B);
+            IKVector3 planeDir1B = new IKQuaternion(arcNormal, boundaryPlusTangentRadiusB).applyToCopy(B);
             // another poiint on the same plane
-            Vector3 planeDir2B = new Quaternion(B, MathUtils.PI / 2f).applyToCopy(planeDir1B);
+            IKVector3 planeDir2B = new IKQuaternion(B, IKMathUtils.PI / 2f).applyToCopy(planeDir1B);
 
             // ray from scaled center of next cone to half way point between the
             // circumference of this cone and the next cone.
-            Ray3D r1B = new Ray3D(planeDir1B, scaledAxisB);
-            Ray3D r2B = new Ray3D(planeDir1B, planeDir2B);
+            IKRay3D r1B = new IKRay3D(planeDir1B, scaledAxisB);
+            IKRay3D r2B = new IKRay3D(planeDir1B, planeDir2B);
 
             r1B.elongate(99);
             r2B.elongate(99);
 
-            Vector3 intersection1 = r1B.intersectsPlane(scaledAxisA, planeDir1A, planeDir2A);
-            Vector3 intersection2 = r2B.intersectsPlane(scaledAxisA, planeDir1A, planeDir2A);
+            IKVector3 intersection1 = r1B.intersectsPlane(scaledAxisA, planeDir1A, planeDir2A);
+            IKVector3 intersection2 = r2B.intersectsPlane(scaledAxisA, planeDir1A, planeDir2A);
 
-            Ray3D intersectionRay = new Ray3D(intersection1, intersection2);
+            IKRay3D intersectionRay = new IKRay3D(intersection1, intersection2);
             intersectionRay.elongate(99);
 
-            Vector3 sphereIntersect1 = new Vector3();
-            Vector3 sphereIntersect2 = new Vector3();
-            Vector3 sphereCenter = new Vector3();
+            IKVector3 sphereIntersect1 = new IKVector3();
+            IKVector3 sphereIntersect2 = new IKVector3();
+            IKVector3 sphereCenter = new IKVector3();
             intersectionRay.intersectsSphere(sphereCenter, 1f, sphereIntersect1, sphereIntersect2);
 
             this.tangentCircleCenterNext1 = sphereIntersect1;
@@ -394,18 +394,18 @@ public class LimitCone3D {
             next.tangentCircleRadiusPrevious = tRadius;
         }
 
-        this.tangentCircleRadiusNextCos = MathUtils.cos(tangentCircleRadiusNext);
-        this.tangentCircleRadiusPreviousCos = MathUtils.cos(tangentCircleRadiusPrevious);
+        this.tangentCircleRadiusNextCos = IKMathUtils.cos(tangentCircleRadiusNext);
+        this.tangentCircleRadiusPreviousCos = IKMathUtils.cos(tangentCircleRadiusPrevious);
 
         if (tangentCircleCenterNext1 == null)
             tangentCircleCenterNext1 = controlPoint.getOrthogonal().normalize();
         if (tangentCircleCenterNext2 == null)
-            tangentCircleCenterNext2 = Vector3.multiply(tangentCircleCenterNext1, -1).normalize();
+            tangentCircleCenterNext2 = IKVector3.multiply(tangentCircleCenterNext1, -1).normalize();
         if (next != null)
             computeTriangles(next);
     }
 
-    private void computeTriangles(LimitCone3D next) {
+    private void computeTriangles(IKLimitCone next) {
         firstTriangleNext[1] = this.tangentCircleCenterNext1.normalize();
         firstTriangleNext[0] = this.getControlPoint().normalize();
         firstTriangleNext[2] = next.getControlPoint().normalize();
@@ -415,11 +415,11 @@ public class LimitCone3D {
         secondTriangleNext[2] = next.getControlPoint().normalize();
     }
 
-    public Vector3 getControlPoint() {
+    public IKVector3 getControlPoint() {
         return controlPoint;
     }
 
-    public void setControlPoint(Vector3 controlPoint) {
+    public void setControlPoint(IKVector3 controlPoint) {
         this.controlPoint = controlPoint.copy();
         this.controlPoint.normalize();
         if (this.parentKusudama != null)
@@ -431,8 +431,8 @@ public class LimitCone3D {
     }
 
     public void setRadius(float radius) {
-        this.radius = MathUtils.max(Float.MIN_VALUE, radius);
-        this.radiusCosine = MathUtils.cos(this.radius);
+        this.radius = IKMathUtils.max(Float.MIN_VALUE, radius);
+        this.radiusCosine = IKMathUtils.cos(this.radius);
         if (this.parentKusudama != null)
             this.parentKusudama.constraintUpdateNotification();
     }
@@ -441,7 +441,7 @@ public class LimitCone3D {
         return this.radiusCosine;
     }
 
-    public Kusudama3D getParentKusudama() {
+    public IKKusudama getParentKusudama() {
         return parentKusudama;
     }
 

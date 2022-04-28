@@ -22,27 +22,27 @@ package EWBIK;
 /**
  * @author Eron Gjoni
  */
-public class Ray3D {
+public class IKRay3D {
     public static final int X = 0, Y = 1, Z = 2;
-    protected Vector3 p1;
-    protected Vector3 p2;
-    protected Vector3 workingVector;
-    Vector3 tta, ttb, ttc;
-    Vector3 I, u, v, n, dir, w0;
+    protected IKVector3 p1;
+    protected IKVector3 p2;
+    protected IKVector3 workingVector;
+    IKVector3 tta, ttb, ttc;
+    IKVector3 I, u, v, n, dir, w0;
     boolean inUse = false;
-    Vector3 m, at, bt, ct, pt;
-    Vector3 bc, ca, ac;
+    IKVector3 m, at, bt, ct, pt;
+    IKVector3 bc, ca, ac;
 
-    public Ray3D() {
-        workingVector = new Vector3();
+    public IKRay3D() {
+        workingVector = new IKVector3();
     }
 
-    public Ray3D(Vector3 origin) {
+    public IKRay3D(IKVector3 origin) {
         this.workingVector = origin.copy();
         this.p1 = origin.copy();
     }
 
-    public Ray3D(Vector3 p1, Vector3 p2) {
+    public IKRay3D(IKVector3 p1, IKVector3 p2) {
         this.workingVector = p1.copy();
         this.p1 = p1.copy();
         if (p2 != null)
@@ -62,19 +62,19 @@ public class Ray3D {
      * @return a sgRay along the line of intersection of these two planes, or null
      *         if inputs are coplanar
      */
-    public static Ray3D planePlaneIntersect(Vector3 a1, Vector3 a2, Vector3 a3, Vector3 b1, Vector3 b2,
-                                            Vector3 b3) {
-        Ray3D a1a2 = new Ray3D(a1, a2);
-        Ray3D a1a3 = new Ray3D(a1, a3);
-        Ray3D a2a3 = new Ray3D(a2, a3);
+    public static IKRay3D planePlaneIntersect(IKVector3 a1, IKVector3 a2, IKVector3 a3, IKVector3 b1, IKVector3 b2,
+                                              IKVector3 b3) {
+        IKRay3D a1a2 = new IKRay3D(a1, a2);
+        IKRay3D a1a3 = new IKRay3D(a1, a3);
+        IKRay3D a2a3 = new IKRay3D(a2, a3);
 
-        Vector3 interceptsa1a2 = a1a2.intersectsPlane(b1, b2, b3);
-        Vector3 interceptsa1a3 = a1a3.intersectsPlane(b1, b2, b3);
-        Vector3 interceptsa2a3 = a2a3.intersectsPlane(b1, b2, b3);
+        IKVector3 interceptsa1a2 = a1a2.intersectsPlane(b1, b2, b3);
+        IKVector3 interceptsa1a3 = a1a3.intersectsPlane(b1, b2, b3);
+        IKVector3 interceptsa2a3 = a2a3.intersectsPlane(b1, b2, b3);
 
-        Vector3[] notNullCandidates = { interceptsa1a2, interceptsa1a3, interceptsa2a3 };
-        Vector3 notNull1 = null;
-        Vector3 notNull2 = null;
+        IKVector3[] notNullCandidates = { interceptsa1a2, interceptsa1a3, interceptsa2a3 };
+        IKVector3 notNull1 = null;
+        IKVector3 notNull2 = null;
 
         for (int i = 0; i < notNullCandidates.length; i++) {
             if (notNullCandidates[i] != null) {
@@ -87,7 +87,7 @@ public class Ray3D {
             }
         }
         if (notNull1 != null && notNull2 != null)
-            return new Ray3D(notNull1, notNull2);
+            return new IKRay3D(notNull1, notNull2);
         else
             return null;
     }
@@ -96,11 +96,11 @@ public class Ray3D {
         return (x1 - x2) * (y2 - y3) - (x2 - x3) * (y1 - y2);
     }
 
-    public float distTo(Vector3 point) {
+    public float distTo(IKVector3 point) {
 
-        Vector3 inPoint = point.copy();
+        IKVector3 inPoint = point.copy();
         inPoint.sub(this.p1);
-        Vector3 heading = this.heading();
+        IKVector3 heading = this.heading();
         float scale = (inPoint.dot(heading) / (heading.mag() * inPoint.mag())) * (inPoint.mag() / heading.mag());
 
         return point.dist(this.getRayScaledBy(scale).p2);
@@ -113,11 +113,11 @@ public class Ray3D {
      * @param point
      * @return
      */
-    public float distToStrict(Vector3 point) {
+    public float distToStrict(IKVector3 point) {
 
-        Vector3 inPoint = point.copy();
+        IKVector3 inPoint = point.copy();
         inPoint.sub(this.p1);
-        Vector3 heading = this.heading();
+        IKVector3 heading = this.heading();
         float scale = (inPoint.dot(heading) / (heading.mag() * inPoint.mag())) * (inPoint.mag() / heading.mag());
         if (scale < 0) {
             return point.dist(this.p1);
@@ -136,8 +136,8 @@ public class Ray3D {
      * @param r
      * @return
      */
-    public float distTo(Ray3D r) {
-        Vector3 closestOnThis = this.closestPointToRay3D(r);
+    public float distTo(IKRay3D r) {
+        IKVector3 closestOnThis = this.closestPointToRay3D(r);
         return r.distTo(closestOnThis);
     }
 
@@ -145,8 +145,8 @@ public class Ray3D {
      * returns the distance between this ray as a line segment, and the input ray
      * treated as a line segment
      */
-    public float distToStrict(Ray3D r) {
-        Vector3 closestOnThis = this.closestPointToSegment3D(r);
+    public float distToStrict(IKRay3D r) {
+        IKVector3 closestOnThis = this.closestPointToSegment3D(r);
         return closestOnThis.dist(r.closestPointToStrict(closestOnThis));
     }
 
@@ -156,24 +156,24 @@ public class Ray3D {
      * @param point
      * @return
      */
-    public Vector3 closestPointTo(Vector3 point) {
+    public IKVector3 closestPointTo(IKVector3 point) {
 
         workingVector.set(point);
         workingVector.sub(this.p1);
-        Vector3 heading = this.heading();
+        IKVector3 heading = this.heading();
         heading.mag();
         workingVector.mag();
         // workingVector.normalize();
         heading.normalize();
         float scale = workingVector.dot(heading);
 
-        return (Vector3) this.getScaledTo(scale);
+        return (IKVector3) this.getScaledTo(scale);
     }
 
-    public Vector3 closestPointToStrict(Vector3 point) {
-        Vector3 inPoint = (Vector3) point.copy();
+    public IKVector3 closestPointToStrict(IKVector3 point) {
+        IKVector3 inPoint = (IKVector3) point.copy();
         inPoint.sub(this.p1);
-        Vector3 heading = (Vector3) this.heading();
+        IKVector3 heading = (IKVector3) this.heading();
         float scale = (inPoint.dot(heading) / (heading.mag() * inPoint.mag())) * (inPoint.mag() / heading.mag());
 
         if (scale <= 0)
@@ -184,10 +184,10 @@ public class Ray3D {
             return this.getMultipledBy(scale);
     }
 
-    public Vector3 heading() {
+    public IKVector3 heading() {
         if (this.p2 == null) {
             if (p1 == null)
-                p1 = new Vector3();
+                p1 = new IKVector3();
             p2 = p1.copy();
             p2.set(0f, 0f, 0f);
             return p2;
@@ -205,7 +205,7 @@ public class Ray3D {
      *
      * @param target
      */
-    public void alignTo(Ray3D target) {
+    public void alignTo(IKRay3D target) {
         p1.set(target.p1);
         p2.set(target.p2);
     }
@@ -217,7 +217,7 @@ public class Ray3D {
         p2.set(p1);
     }
 
-    public void heading(Vector3 newHead) {
+    public void heading(IKVector3 newHead) {
         if (p2 == null)
             p2 = p1.copy();
         p2.set(p1);
@@ -229,7 +229,7 @@ public class Ray3D {
      *
      * @param setTo
      */
-    public void getHeading(Vector3 setTo) {
+    public void getHeading(IKVector3 setTo) {
         setTo.set(p2);
         setTo.sub(this.p1);
     }
@@ -237,8 +237,8 @@ public class Ray3D {
     /**
      * @return a copy of this ray with its z-component set to 0;
      */
-    public Ray3D get2DCopy() {
-        return this.get2DCopy(Ray3D.Z);
+    public IKRay3D get2DCopy() {
+        return this.get2DCopy(IKRay3D.Z);
     }
 
     /**
@@ -248,17 +248,17 @@ public class Ray3D {
      * @param collapseOnAxis the axis on which to collapse the ray.
      * @return
      */
-    public Ray3D get2DCopy(int collapseOnAxis) {
-        Ray3D result = this.copy();
-        if (collapseOnAxis == Ray3D.X) {
+    public IKRay3D get2DCopy(int collapseOnAxis) {
+        IKRay3D result = this.copy();
+        if (collapseOnAxis == IKRay3D.X) {
             result.p1.setX_(0);
             result.p2.setX_(0);
         }
-        if (collapseOnAxis == Ray3D.Y) {
+        if (collapseOnAxis == IKRay3D.Y) {
             result.p1.setY_(0);
             result.p2.setY_(0);
         }
-        if (collapseOnAxis == Ray3D.Z) {
+        if (collapseOnAxis == IKRay3D.Z) {
             result.p1.setZ_(0);
             result.p2.setZ_(0);
         }
@@ -266,7 +266,7 @@ public class Ray3D {
         return result;
     }
 
-    public Vector3 origin() {
+    public IKVector3 origin() {
         return p1.copy();
     }
 
@@ -277,7 +277,7 @@ public class Ray3D {
 
     public void mag(float newMag) {
         workingVector.set(p2);
-        Vector3 dir = workingVector.sub(p1);
+        IKVector3 dir = workingVector.sub(p1);
         dir.setMag(newMag);
         this.heading(dir);
     }
@@ -306,10 +306,10 @@ public class Ray3D {
      *
      * @param input a vector to project onto this ray
      */
-    public float scaledProjection(Vector3 input) {
+    public float scaledProjection(IKVector3 input) {
         workingVector.set(input);
         workingVector.sub(this.p1);
-        Vector3 heading = this.heading();
+        IKVector3 heading = this.heading();
         float headingMag = heading.mag();
         float workingVectorMag = workingVector.mag();
         if (workingVectorMag == 0 || headingMag == 0)
@@ -352,8 +352,8 @@ public class Ray3D {
      * @param scalar
      * @return
      */
-    public Vector3 getMultipledBy(float scalar) {
-        Vector3 result = this.heading();
+    public IKVector3 getMultipledBy(float scalar) {
+        IKVector3 result = this.heading();
         result.multiply(scalar);
         result.add(p1);
         return result;
@@ -367,8 +367,8 @@ public class Ray3D {
      * @param scalar
      * @return
      */
-    public Vector3 getDivideddBy(float divisor) {
-        Vector3 result = this.heading().copy();
+    public IKVector3 getDivideddBy(float divisor) {
+        IKVector3 result = this.heading().copy();
         result.multiply(divisor);
         result.add(p1);
         return result;
@@ -382,8 +382,8 @@ public class Ray3D {
      * @param scalar
      * @return
      */
-    public Vector3 getScaledTo(float scale) {
-        Vector3 result = this.heading().copy();
+    public IKVector3 getScaledTo(float scale) {
+        IKVector3 result = this.heading().copy();
         result.normalize();
         result.multiply(scale);
         result.add(p1);
@@ -394,32 +394,32 @@ public class Ray3D {
      * adds the specified length to the ray in both directions.
      */
     public void elongate(float amt) {
-        Vector3 midPoint = p1.addCopy(p2).multCopy(0.5f);
-        Vector3 p1Heading = p1.subCopy(midPoint);
-        Vector3 p2Heading = p2.subCopy(midPoint);
-        Vector3 p1Add = (Vector3) p1Heading.copy().normalize().multiply(amt);
-        Vector3 p2Add = (Vector3) p2Heading.copy().normalize().multiply(amt);
+        IKVector3 midPoint = p1.addCopy(p2).multCopy(0.5f);
+        IKVector3 p1Heading = p1.subCopy(midPoint);
+        IKVector3 p2Heading = p2.subCopy(midPoint);
+        IKVector3 p1Add = (IKVector3) p1Heading.copy().normalize().multiply(amt);
+        IKVector3 p2Add = (IKVector3) p2Heading.copy().normalize().multiply(amt);
 
-        this.p1.set((Vector3) p1Heading.addCopy(p1Add).addCopy(midPoint));
-        this.p2.set((Vector3) p2Heading.addCopy(p2Add).addCopy(midPoint));
+        this.p1.set((IKVector3) p1Heading.addCopy(p1Add).addCopy(midPoint));
+        this.p2.set((IKVector3) p2Heading.addCopy(p2Add).addCopy(midPoint));
     }
 
-    public Ray3D copy() {
-        return new Ray3D(this.p1, this.p2);
+    public IKRay3D copy() {
+        return new IKRay3D(this.p1, this.p2);
     }
 
     public void reverse() {
-        Vector3 temp = this.p1;
+        IKVector3 temp = this.p1;
         this.p1 = this.p2;
         this.p2 = temp;
     }
 
-    public Ray3D getReversed() {
-        return new Ray3D(this.p2, this.p1);
+    public IKRay3D getReversed() {
+        return new IKRay3D(this.p2, this.p1);
     }
 
-    public Ray3D getRayScaledTo(float scalar) {
-        return new Ray3D(p1, this.getScaledTo(scalar));
+    public IKRay3D getRayScaledTo(float scalar) {
+        return new IKRay3D(p1, this.getScaledTo(scalar));
     }
 
     /*
@@ -427,18 +427,18 @@ public class Ray3D {
      * has a positive dot product with the heading of r
      * if dot product is already positive, does nothing.
      */
-    public void pointWith(Ray3D r) {
+    public void pointWith(IKRay3D r) {
         if (this.heading().dot(r.heading()) < 0)
             this.reverse();
     }
 
-    public void pointWith(Vector3 heading) {
+    public void pointWith(IKVector3 heading) {
         if (this.heading().dot(heading) < 0)
             this.reverse();
     }
 
-    public Ray3D getRayScaledBy(float scalar) {
-        return new Ray3D(p1, this.getMultipledBy(scalar));
+    public IKRay3D getRayScaledBy(float scalar) {
+        return new IKRay3D(p1, this.getMultipledBy(scalar));
     }
 
     /*
@@ -473,7 +473,7 @@ public class Ray3D {
      * @param vec
      * @return the vector that was passed in after modification (for chaining)
      */
-    public Vector3 setToInvertedTip(Vector3 vec) {
+    public IKVector3 setToInvertedTip(IKVector3 vec) {
         vec.x = (p1.x - p2.x) + p1.x;
         vec.y = (p1.y - p2.y) + p1.y;
         vec.z = (p1.z - p2.z) + p1.z;
@@ -496,7 +496,7 @@ public class Ray3D {
         p2 = p2.lerp(p1, halfPercent);// new Vector3(p2Tempx, p2Tempy, p2Tempz);
     }
 
-    public void translateTo(Vector3 newLocation) {
+    public void translateTo(IKVector3 newLocation) {
 
         workingVector.set(p2);
         workingVector.sub(p1);
@@ -505,13 +505,13 @@ public class Ray3D {
         p1.set(newLocation);
     }
 
-    public void translateTipTo(Vector3 newLocation) {
+    public void translateTipTo(IKVector3 newLocation) {
         workingVector.set(newLocation);
-        Vector3 transBy = workingVector.sub(p2);
+        IKVector3 transBy = workingVector.sub(p2);
         this.translateBy(transBy);
     }
 
-    public void translateBy(Vector3 toAdd) {
+    public void translateBy(IKVector3 toAdd) {
         p1.add(toAdd);
         p2.add(toAdd);
     }
@@ -520,8 +520,8 @@ public class Ray3D {
         this.mag(1);
     }
 
-    public Vector3 intercepts2D(Ray3D r) {
-        Vector3 result = p1.copy();
+    public IKVector3 intercepts2D(IKRay3D r) {
+        IKVector3 result = p1.copy();
 
         float p0_x = this.p1.x;
         float p0_y = this.p1.y;
@@ -558,8 +558,8 @@ public class Ray3D {
      * @param r
      * @return
      */
-    public Vector3 closestPointToSegment3D(Ray3D r) {
-        Vector3 closestToThis = r.closestPointToRay3DStrict(this);
+    public IKVector3 closestPointToSegment3D(IKRay3D r) {
+        IKVector3 closestToThis = r.closestPointToRay3DStrict(this);
         return this.closestPointTo(closestToThis);
     }
 
@@ -570,15 +570,15 @@ public class Ray3D {
      * @return
      */
 
-    public Vector3 closestPointToRay3D(Ray3D r) {
-        Vector3 result = null;
+    public IKVector3 closestPointToRay3D(IKRay3D r) {
+        IKVector3 result = null;
 
         workingVector.set(p2);
-        Vector3 u = workingVector.sub(this.p1);
+        IKVector3 u = workingVector.sub(this.p1);
         workingVector.set(r.p2);
-        Vector3 v = workingVector.sub(r.p1);
+        IKVector3 v = workingVector.sub(r.p1);
         workingVector.set(this.p1);
-        Vector3 w = workingVector.sub(r.p1);
+        IKVector3 w = workingVector.sub(r.p1);
         float a = u.dot(u); // always >= 0
         float b = u.dot(v);
         float c = v.dot(v); // always >= 0
@@ -600,15 +600,15 @@ public class Ray3D {
         return result;
     }
 
-    public Vector3 closestPointToRay3DStrict(Ray3D r) {
-        Vector3 result = null;
+    public IKVector3 closestPointToRay3DStrict(IKRay3D r) {
+        IKVector3 result = null;
 
         workingVector.set(p2);
-        Vector3 u = workingVector.sub(this.p1);
+        IKVector3 u = workingVector.sub(this.p1);
         workingVector.set(r.p2);
-        Vector3 v = workingVector.sub(r.p1);
+        IKVector3 v = workingVector.sub(r.p1);
         workingVector.set(this.p1);
-        Vector3 w = workingVector.sub(r.p1);
+        IKVector3 w = workingVector.sub(r.p1);
         float a = u.dot(u); // always >= 0
         float b = u.dot(v);
         float c = v.dot(v); // always >= 0
@@ -644,15 +644,15 @@ public class Ray3D {
      * @param r
      * @return
      */
-    public Vector3 closestPointToRay3DBounded(Ray3D r) {
-        Vector3 result = null;
+    public IKVector3 closestPointToRay3DBounded(IKRay3D r) {
+        IKVector3 result = null;
 
         workingVector.set(p2);
-        Vector3 u = workingVector.sub(this.p1);
+        IKVector3 u = workingVector.sub(this.p1);
         workingVector.set(r.p2);
-        Vector3 v = workingVector.sub(r.p1);
+        IKVector3 v = workingVector.sub(r.p1);
         workingVector.set(this.p1);
-        Vector3 w = workingVector.sub(r.p1);
+        IKVector3 w = workingVector.sub(r.p1);
         float a = u.dot(u); // always >= 0
         float b = u.dot(v);
         float c = v.dot(v); // always >= 0
@@ -681,16 +681,16 @@ public class Ray3D {
     }
 
     // returns a ray perpendicular to this ray on the XY plane;
-    public Ray3D getPerpendicular2D() {
-        Vector3 heading = this.heading();
+    public IKRay3D getPerpendicular2D() {
+        IKVector3 heading = this.heading();
         workingVector.set(heading.x - 1f, heading.x, 0f);
-        return new Ray3D(this.p1, workingVector.add(this.p1));
+        return new IKRay3D(this.p1, workingVector.add(this.p1));
     }
 
-    public Vector3 intercepts2DStrict(Ray3D r) {
+    public IKVector3 intercepts2DStrict(IKRay3D r) {
         // will also return null if the intersection does not occur on the
         // line segment specified by the ray.
-        Vector3 result = p1.copy();
+        IKVector3 result = p1.copy();
 
         // boolean over = false;
         float a1 = p2.y - p1.y;
@@ -725,12 +725,12 @@ public class Ray3D {
      * @return the point where this ray intersects the plane specified by the
      *         triangle ta,tb,tc.
      */
-    public Vector3 intersectsPlane(Vector3 ta, Vector3 tb, Vector3 tc) {
+    public IKVector3 intersectsPlane(IKVector3 ta, IKVector3 tb, IKVector3 tc) {
         float[] uvw = new float[3];
         return intersectsPlane(ta, tb, tc, uvw);
     }
 
-    public Vector3 intersectsPlane(Vector3 ta, Vector3 tb, Vector3 tc, float[] uvw) {
+    public IKVector3 intersectsPlane(IKVector3 ta, IKVector3 tb, IKVector3 tc, float[] uvw) {
         if (tta == null) {
             tta = ta.copy();
             ttb = tb.copy();
@@ -744,7 +744,7 @@ public class Ray3D {
         ttb.sub(p1);
         ttc.sub(p1);
 
-        Vector3 result = (Vector3) planeIntersectTest(tta, ttb, ttc, uvw).copy();
+        IKVector3 result = (IKVector3) planeIntersectTest(tta, ttb, ttc, uvw).copy();
         return result.add(this.p1);
     }
 
@@ -754,7 +754,7 @@ public class Ray3D {
      * @param tc     the third vertex of a triangle on the plane
      * @param result the variable in which to hold the result
      */
-    public void intersectsPlane(Vector3 ta, Vector3 tb, Vector3 tc, Vector3 result) {
+    public void intersectsPlane(IKVector3 ta, IKVector3 tb, IKVector3 tc, IKVector3 result) {
         float[] uvw = new float[3];
         result.set(intersectsPlane(ta, tb, tc, uvw));
     }
@@ -768,14 +768,14 @@ public class Ray3D {
      * @param tc     the third vertex of a triangle on the plane
      * @param result the variable in which to hold the result
      */
-    public boolean intersectsTriangle(Vector3 ta, Vector3 tb, Vector3 tc, Vector3 result) {
+    public boolean intersectsTriangle(IKVector3 ta, IKVector3 tb, IKVector3 tc, IKVector3 result) {
         float[] uvw = new float[3];
         result.set(intersectsPlane(ta, tb, tc, uvw));
         return !Float.isNaN(uvw[0]) && !Float.isNaN(uvw[1]) && !Float.isNaN(uvw[2]) && !(uvw[0] < 0) && !(uvw[1] < 0)
                 && !(uvw[2] < 0);
     }
 
-    private Vector3 planeIntersectTest(Vector3 ta, Vector3 tb, Vector3 tc, float[] uvw) {
+    private IKVector3 planeIntersectTest(IKVector3 ta, IKVector3 tb, IKVector3 tc, float[] uvw) {
 
         if (u == null) {
             u = tb.copy();
@@ -808,7 +808,7 @@ public class Ray3D {
         // float[] barycentric = new float[3];
         barycentric(ta, tb, tc, I, uvw);
 
-        return (Vector3) I.copy();
+        return (IKVector3) I.copy();
     }
 
     /*
@@ -826,9 +826,9 @@ public class Ray3D {
      * 
      * @return number of intersections found;
      */
-    public int intersectsSphere(Vector3 sphereCenter, float radius, Vector3 S1, Vector3 S2) {
-        Vector3 tp1 = p1.subCopy(sphereCenter);
-        Vector3 tp2 = p2.subCopy(sphereCenter);
+    public int intersectsSphere(IKVector3 sphereCenter, float radius, IKVector3 S1, IKVector3 S2) {
+        IKVector3 tp1 = p1.subCopy(sphereCenter);
+        IKVector3 tp2 = p2.subCopy(sphereCenter);
         int result = intersectsSphere(tp1, tp2, radius, S1, S2);
         S1.add(sphereCenter);
         S2.add(sphereCenter);
@@ -848,13 +848,13 @@ public class Ray3D {
      * 
      * @return number of intersections found;
      */
-    public int intersectsSphere(Vector3 rp1, Vector3 rp2, float radius, Vector3 S1, Vector3 S2) {
-        Vector3 direction = (Vector3) rp2.subCopy(rp1);
-        Vector3 e = (Vector3) direction.copy(); // e=ray.dir
+    public int intersectsSphere(IKVector3 rp1, IKVector3 rp2, float radius, IKVector3 S1, IKVector3 S2) {
+        IKVector3 direction = (IKVector3) rp2.subCopy(rp1);
+        IKVector3 e = (IKVector3) direction.copy(); // e=ray.dir
         e.normalize(); // e=g/|g|
-        Vector3 h = (Vector3) p1.copy();
+        IKVector3 h = (IKVector3) p1.copy();
         h.set(0f, 0f, 0f);
-        h = (Vector3) h.sub(rp1); // h=r.o-c.M
+        h = (IKVector3) h.sub(rp1); // h=r.o-c.M
         float lf = e.dot(h); // lf=e.h
         float radpow = radius * radius;
         float hdh = h.magSq();
@@ -862,7 +862,7 @@ public class Ray3D {
         float s = radpow - hdh + lfpow; // s=r^2-h^2+lf^2
         if (s < 0.0f)
             return 0; // no intersection points ?
-        s = MathUtils.sqrt(s); // s=sqrt(r^2-h^2+lf^2)
+        s = IKMathUtils.sqrt(s); // s=sqrt(r^2-h^2+lf^2)
 
         int result = 0;
         if (lf < s) { // S1 behind A ?
@@ -880,7 +880,7 @@ public class Ray3D {
         return result;
     }
 
-    public void barycentric(Vector3 a, Vector3 b, Vector3 c, Vector3 p, float[] uvw) {
+    public void barycentric(IKVector3 a, IKVector3 b, IKVector3 c, IKVector3 p, float[] uvw) {
         if (m == null) {
             bc = b.copy();
             ca = c.copy();
@@ -897,15 +897,15 @@ public class Ray3D {
             pt.set(p);
         }
 
-        m = new Vector3(((Vector3) bc.subCopy(ct)).crossCopy((Vector3) ca.subCopy(at)));
+        m = new IKVector3(((IKVector3) bc.subCopy(ct)).crossCopy((IKVector3) ca.subCopy(at)));
 
         float nu;
         float nv;
         float ood;
 
-        float x = MathUtils.abs(m.x);
-        float y = MathUtils.abs(m.y);
-        float z = MathUtils.abs(m.z);
+        float x = IKMathUtils.abs(m.x);
+        float y = IKMathUtils.abs(m.y);
+        float z = IKMathUtils.abs(m.z);
 
         if (x >= y && x >= z) {
             nu = triArea2D(pt.y, pt.z, bt.y, bt.z, ct.y, ct.z);
@@ -934,11 +934,11 @@ public class Ray3D {
         return result;
     }
 
-    public void p1(Vector3 in) {
+    public void p1(IKVector3 in) {
         this.p1 = in.copy();
     }
 
-    public void p2(Vector3 in) {
+    public void p2(IKVector3 in) {
         this.p2 = in.copy();
     }
 
@@ -946,24 +946,24 @@ public class Ray3D {
         return (1 - t) * a + t * b;
     }
 
-    public Vector3 p2() {
+    public IKVector3 p2() {
         return p2;
     }
 
-    public void set(Ray3D r) {
+    public void set(IKRay3D r) {
         this.p1.set(r.p1);
         this.p2.set(r.p2);
     }
 
-    public void setP2(Vector3 p2) {
+    public void setP2(IKVector3 p2) {
         this.p2 = p2;
     }
 
-    public Vector3 p1() {
+    public IKVector3 p1() {
         return p1;
     }
 
-    public void setP1(Vector3 p1) {
+    public void setP1(IKVector3 p1) {
         this.p1 = p1;
     }
 }

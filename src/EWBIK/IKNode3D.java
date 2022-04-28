@@ -23,7 +23,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 
-public class Node3D {
+public class IKNode3D {
     public static final int NORMAL = 0;
     public static final int FORWARD = 2;
     public static final int RIGHT = 1;
@@ -32,25 +32,25 @@ public class Node3D {
     public static final int Y = 1;
     public static final int Z = 2;
     public boolean debug = false;
-    public Transform3D localMBasis;
-    public Transform3D globalMBasis;
+    public IKTransform localMBasis;
+    public IKTransform globalMBasis;
     public boolean dirty = true;
-    public LinkedList<DependencyReference<Node3D>> dependentsRegistry = new LinkedList<DependencyReference<Node3D>>();
-    protected Vector3 workingVector;
+    public LinkedList<DependencyReference<IKNode3D>> dependentsRegistry = new LinkedList<DependencyReference<IKNode3D>>();
+    protected IKVector3 workingVector;
     protected boolean areGlobal = true;
     float[][] outMatLocal = new float[4][4];
     float[][] outMatGlobal = new float[4][4];
-    Vector3 tempOrigin;
-    private DependencyReference<Node3D> parent = null;
+    IKVector3 tempOrigin;
+    private DependencyReference<IKNode3D> parent = null;
 
-    public Node3D(Transform3D b, Node3D parent) {
-        this.globalMBasis = ((Transform3D) b).copy();
-        createTempVars(((Transform3D) b).getOrigin());
+    public IKNode3D(IKTransform b, IKNode3D parent) {
+        this.globalMBasis = ((IKTransform) b).copy();
+        createTempVars(((IKTransform) b).getOrigin());
         if (this.getParentAxes() != null)
-            Node3D.this.setParent(parent);
+            IKNode3D.this.setParent(parent);
         else {
             this.areGlobal = true;
-            this.localMBasis = ((Transform3D) b).copy();
+            this.localMBasis = ((IKTransform) b).copy();
         }
 
         this.updateGlobal();
@@ -70,28 +70,28 @@ public class Node3D {
      *               coordinates, given as an offset from this base's
      *               origin in global coordinates.
      */
-    public Node3D(Vector3 origin,
-                  Vector3 inX,
-                  Vector3 inY,
-                  Vector3 inZ,
-                  Node3D parent) {
+    public IKNode3D(IKVector3 origin,
+                    IKVector3 inX,
+                    IKVector3 inY,
+                    IKVector3 inZ,
+                    IKNode3D parent) {
 
-        Vector3 origin1 = origin;
-        Vector3 inX1 = inX;
-        Vector3 inY1 = inY;
-        Vector3 inZ1 = inZ;
+        IKVector3 origin1 = origin;
+        IKVector3 inX1 = inX;
+        IKVector3 inY1 = inY;
+        IKVector3 inZ1 = inZ;
         if (parent == null)
             this.areGlobal = true;
         createTempVars(origin1);
 
-        Node3D.this.areGlobal = true;
+        IKNode3D.this.areGlobal = true;
 
-        Node3D.this.localMBasis = new Transform3D(origin1, inX1, inY1, inZ1);
-        Node3D.this.globalMBasis = new Transform3D(origin1, inX1, inY1, inZ1);
+        IKNode3D.this.localMBasis = new IKTransform(origin1, inX1, inY1, inZ1);
+        IKNode3D.this.globalMBasis = new IKTransform(origin1, inX1, inY1, inZ1);
 
-        Vector3 o = origin1.copy();
+        IKVector3 o = origin1.copy();
         o.set(0, 0, 0);
-        Vector3 i = o.copy();
+        IKVector3 i = o.copy();
         i.set(1, 1, 1);
 
         if (parent != null) {
@@ -103,30 +103,30 @@ public class Node3D {
         this.updateGlobal();
     }
 
-    public Node3D(Vector3 origin,
-            Vector3 x,
-            Vector3 y,
-            Vector3 z) {
+    public IKNode3D(IKVector3 origin,
+                    IKVector3 x,
+                    IKVector3 y,
+                    IKVector3 z) {
         this(origin, x, y, z, true, null);
     }
 
-    public Node3D() {
-        Vector3 origin = new Vector3(0, 0, 0);
-        Vector3 inX = new Vector3(1, 0, 0);
-        Vector3 inY = new Vector3(0, 1, 0);
-        Vector3 inZ = new Vector3(0, 0, 1);
+    public IKNode3D() {
+        IKVector3 origin = new IKVector3(0, 0, 0);
+        IKVector3 inX = new IKVector3(1, 0, 0);
+        IKVector3 inY = new IKVector3(0, 1, 0);
+        IKVector3 inZ = new IKVector3(0, 0, 1);
         if (null == null)
             this.areGlobal = true;
         createTempVars(origin);
 
-        Node3D.this.areGlobal = true;
+        IKNode3D.this.areGlobal = true;
 
-        Node3D.this.localMBasis = new Transform3D(origin, inX, inY, inZ);
-        Node3D.this.globalMBasis = new Transform3D(origin, inX, inY, inZ);
+        IKNode3D.this.localMBasis = new IKTransform(origin, inX, inY, inZ);
+        IKNode3D.this.globalMBasis = new IKTransform(origin, inX, inY, inZ);
 
-        Vector3 o = origin.copy();
+        IKVector3 o = origin.copy();
         o.set(0, 0, 0);
-        Vector3 i = o.copy();
+        IKVector3 i = o.copy();
         i.set(1, 1, 1);
 
         if (null != null) {
@@ -138,20 +138,20 @@ public class Node3D {
         this.updateGlobal();
     }
 
-    public Node3D(Vector3 origin, Vector3 x, Vector3 y, Vector3 z, boolean forceOrthoNormality,
-            Node3D parent) {
+    public IKNode3D(IKVector3 origin, IKVector3 x, IKVector3 y, IKVector3 z, boolean forceOrthoNormality,
+                    IKNode3D parent) {
         if (parent == null)
             this.areGlobal = true;
         createTempVars(origin);
 
-        Node3D.this.areGlobal = true;
+        IKNode3D.this.areGlobal = true;
 
-        Node3D.this.localMBasis = new Transform3D(origin, x, y, z);
-        Node3D.this.globalMBasis = new Transform3D(origin, x, y, z);
+        IKNode3D.this.localMBasis = new IKTransform(origin, x, y, z);
+        IKNode3D.this.globalMBasis = new IKTransform(origin, x, y, z);
 
-        Vector3 o = origin.copy();
+        IKVector3 o = origin.copy();
         o.set(0, 0, 0);
-        Vector3 i = o.copy();
+        IKVector3 i = o.copy();
         i.set(1, 1, 1);
 
         if (parent != null) {
@@ -162,7 +162,7 @@ public class Node3D {
         this.markDirty();
         this.updateGlobal();
     }
-    public Vector3 origin() {
+    public IKVector3 origin() {
         return this.calculatePosition();
     }
 
@@ -171,9 +171,9 @@ public class Node3D {
      *
      * @return
      */
-    public Node3D getGlobalCopy() {
+    public IKNode3D getGlobalCopy() {
         this.updateGlobal();
-        return new Node3D(getGlobalMBasis(), this.getParentAxes());
+        return new IKNode3D(getGlobalMBasis(), this.getParentAxes());
     }
 
     public void rotateAboutX(float radians) {
@@ -188,18 +188,18 @@ public class Node3D {
         rotateAboutZ(radians, true);
     }
 
-    public Vector3 calculatePositionPVector() {
+    public IKVector3 calculatePositionPVector() {
         return calculatePosition();
     }
 
-    private void updateMatrix(Transform3D b, float[][] outputMatrix) {
+    private void updateMatrix(IKTransform b, float[][] outputMatrix) {
         b.refreshPrecomputed();
 
-        Vector3 x = b.getXHeading();
-        Vector3 y = b.getYHeading();
-        Vector3 z = b.getZHeading();
+        IKVector3 x = b.getXHeading();
+        IKVector3 y = b.getYHeading();
+        IKVector3 z = b.getZHeading();
 
-        Vector3 origin = b.getOrigin();
+        IKVector3 origin = b.getOrigin();
 
         outputMatrix[0][0] = x.x;
         outputMatrix[0][1] = x.y;
@@ -228,7 +228,7 @@ public class Node3D {
      * @return a ray / segment representing this Axes global x basis position and
      *         direction and magnitude
      */
-    public Ray3D calculateX() {
+    public IKRay3D calculateX() {
         this.updateGlobal();
         return this.getGlobalMBasis().getXRay();
     }
@@ -240,7 +240,7 @@ public class Node3D {
      * @return a ray / segment representing this Axes global y basis position and
      *         direction and magnitude
      */
-    public Ray3D calculateY() {
+    public IKRay3D calculateY() {
         this.updateGlobal();
         return this.getGlobalMBasis().getYRay();
     }
@@ -252,12 +252,12 @@ public class Node3D {
      * @return a ray / segment representing this Axes global z basis position and
      *         direction and magnitude
      */
-    public Ray3D calculateZ() {
+    public IKRay3D calculateZ() {
         this.updateGlobal();
         return this.getGlobalMBasis().getZRay();
     }
 
-    public boolean equals(Node3D ax) {
+    public boolean equals(IKNode3D ax) {
         this.updateGlobal();
         ax.updateGlobal();
 
@@ -267,11 +267,11 @@ public class Node3D {
         return composedRotationsAreEquivalent && originsAreEquivalent;
     }
 
-    public Node3D relativeTo(Node3D in) {
+    public IKNode3D relativeTo(IKNode3D in) {
         return null;
     }
 
-    public Node3D getLocalOf(Node3D input) {
+    public IKNode3D getLocalOf(IKNode3D input) {
         return null;
     }
 
@@ -282,27 +282,27 @@ public class Node3D {
      * @param slipAware
      * @return
      */
-    public Node3D attachedCopy() {
+    public IKNode3D attachedCopy() {
         this.updateGlobal();
-        Node3D copy = new Node3D(getGlobalMBasis(),
+        IKNode3D copy = new IKNode3D(getGlobalMBasis(),
                 this.getParentAxes());
         copy.getLocalMBasis().adoptValues(this.localMBasis);
         copy.markDirty();
         return copy;
     }
 
-    public Transform3D getLocalOf(Transform3D input) {
-        Transform3D newBasis = new Transform3D((Transform3D) input);
+    public IKTransform getLocalOf(IKTransform input) {
+        IKTransform newBasis = new IKTransform((IKTransform) input);
         getGlobalMBasis().setToLocalOf(input, newBasis);
-        return (Transform3D) newBasis;
+        return (IKTransform) newBasis;
     }
 
-    public void createTempVars(Vector3 type) {
+    public void createTempVars(IKVector3 type) {
         workingVector = type.copy();
         tempOrigin = type.copy();
     }
 
-    public Node3D getParentAxes() {
+    public IKNode3D getParentAxes() {
         if (this.parent == null)
             return null;
         else
@@ -324,7 +324,7 @@ public class Node3D {
     public void debugCall() {
     }
 
-    public Vector3 calculatePosition() {
+    public IKVector3 calculatePosition() {
         this.updateGlobal();
         tempOrigin.set(this.getGlobalMBasis().getOrigin());
         return tempOrigin;
@@ -338,7 +338,7 @@ public class Node3D {
      *
      * @param par the new parent Axes
      **/
-    public void setParent(Node3D par) {
+    public void setParent(IKNode3D par) {
         setParent(par, null);
     }
 
@@ -354,9 +354,9 @@ public class Node3D {
      *                       for any AxisDependancy objects registered with this
      *                       Axes (can be null if not important)
      **/
-    public void setParent(Node3D intendedParent, Object requestedBy) {
+    public void setParent(IKNode3D intendedParent, Object requestedBy) {
         this.updateGlobal();
-        Node3D oldParent = this.getParentAxes();
+        IKNode3D oldParent = this.getParentAxes();
         /*
          * for(DependencyReference<AxisDependency> ad : this.dependentsRegistry) {
          * ad.get().parentChangeWarning(this, oldParent, intendedParent, requestedBy);
@@ -371,14 +371,14 @@ public class Node3D {
 
             if (oldParent != null)
                 oldParent.disown(this);
-            this.parent = new DependencyReference<Node3D>(intendedParent);
+            this.parent = new DependencyReference<IKNode3D>(intendedParent);
 
             this.getParentAxes().registerDependent(this);
             this.areGlobal = false;
         } else {
             if (oldParent != null)
                 oldParent.disown(this);
-            this.parent = new DependencyReference<Node3D>(null);
+            this.parent = new DependencyReference<IKNode3D>(null);
             this.areGlobal = true;
         }
         this.markDirty();
@@ -402,10 +402,10 @@ public class Node3D {
      *
      * @param r
      */
-    public void forEachDependent(Consumer<DependencyReference<Node3D>> action) {
-        Iterator<DependencyReference<Node3D>> i = dependentsRegistry.iterator();
+    public void forEachDependent(Consumer<DependencyReference<IKNode3D>> action) {
+        Iterator<DependencyReference<IKNode3D>> i = dependentsRegistry.iterator();
         while (i.hasNext()) {
-            DependencyReference<Node3D> dr = i.next();
+            DependencyReference<IKNode3D> dr = i.next();
             if (dr.get() != null) {
                 action.accept(dr);
             } else {
@@ -423,10 +423,10 @@ public class Node3D {
      * parent is set to this Axes' parent, prior to this axes setting the input axes
      * as its parent.
      **/
-    public void setRelativeToParent(Node3D par) {
+    public void setRelativeToParent(IKNode3D par) {
         if (this.getParentAxes() != null)
             this.getParentAxes().disown(this);
-        this.parent = new DependencyReference<Node3D>(par);
+        this.parent = new DependencyReference<IKNode3D>(par);
         this.areGlobal = false;
         this.getParentAxes().registerDependent(this);
         this.markDirty();
@@ -443,8 +443,8 @@ public class Node3D {
      * @param in
      * @return
      */
-    public Vector3 getGlobalOf(Vector3 in) {
-        Vector3 result = (Vector3) in.copy();
+    public IKVector3 getGlobalOf(IKVector3 in) {
+        IKVector3 result = (IKVector3) in.copy();
         setToGlobalOf(in, result);
         return result;
     }
@@ -456,7 +456,7 @@ public class Node3D {
      * @param in
      * @return a reference to this the @param in object.
      */
-    public Vector3 setToGlobalOf(Vector3 in) {
+    public IKVector3 setToGlobalOf(IKVector3 in) {
         this.updateGlobal();
         getGlobalMBasis().setToGlobalOf(in, in);
         return in;
@@ -468,7 +468,7 @@ public class Node3D {
      *
      * @param in
      */
-    public void setToGlobalOf(Vector3 input, Vector3 output) {
+    public void setToGlobalOf(IKVector3 input, IKVector3 output) {
         this.updateGlobal();
         getGlobalMBasis().setToGlobalOf(input, output);
     }
@@ -479,17 +479,17 @@ public class Node3D {
      *
      * @param in
      */
-    public void setToGlobalOf(Ray3D input, Ray3D output) {
+    public void setToGlobalOf(IKRay3D input, IKRay3D output) {
         this.updateGlobal();
         this.setToGlobalOf(input.p1(), output.p1());
         this.setToGlobalOf(input.p2(), output.p2());
     }
 
-    public Ray3D getGlobalOf(Ray3D in) {
-        return new Ray3D(this.getGlobalOf(in.p1()), this.getGlobalOf(in.p2()));
+    public IKRay3D getGlobalOf(IKRay3D in) {
+        return new IKRay3D(this.getGlobalOf(in.p1()), this.getGlobalOf(in.p2()));
     }
 
-    public Vector3 getLocalOf(Vector3 in) {
+    public IKVector3 getLocalOf(IKVector3 in) {
         this.updateGlobal();
         return getGlobalMBasis().getLocalOf(in);
     }
@@ -502,9 +502,9 @@ public class Node3D {
      * @return a reference to the @param in object.
      */
 
-    public Vector3 setToLocalOf(Vector3 in) {
+    public IKVector3 setToLocalOf(IKVector3 in) {
         this.updateGlobal();
-        Vector3 result = (Vector3) in.copy();
+        IKVector3 result = (IKVector3) in.copy();
         this.getGlobalMBasis().setToLocalOf(in, result);
         in.set(result);
         return result;
@@ -517,7 +517,7 @@ public class Node3D {
      * @param in
      */
 
-    public void setToLocalOf(Vector3 in, Vector3 out) {
+    public void setToLocalOf(IKVector3 in, IKVector3 out) {
         this.updateGlobal();
         this.getGlobalMBasis().setToLocalOf(in, out);
     }
@@ -529,28 +529,28 @@ public class Node3D {
      * @param in
      */
 
-    public void setToLocalOf(Ray3D in, Ray3D out) {
+    public void setToLocalOf(IKRay3D in, IKRay3D out) {
         this.setToLocalOf(in.p1(), out.p1());
         this.setToLocalOf(in.p2(), out.p2());
     }
 
-    public void setToLocalOf(Transform3D input, Transform3D output) {
+    public void setToLocalOf(IKTransform input, IKTransform output) {
         this.updateGlobal();
         this.getGlobalMBasis().setToLocalOf(input, output);
     }
 
-    public Ray3D getLocalOf(Ray3D in) {
-        return new Ray3D(this.getLocalOf(in.p1()), this.getLocalOf(in.p2()));
+    public IKRay3D getLocalOf(IKRay3D in) {
+        return new IKRay3D(this.getLocalOf(in.p1()), this.getLocalOf(in.p2()));
     }
 
-    public void translateByLocal(Vector3 translate) {
+    public void translateByLocal(IKVector3 translate) {
         this.updateGlobal();
         getLocalMBasis().translateBy(translate);
         this.markDirty();
 
     }
 
-    public void translateByGlobal(Vector3 translate) {
+    public void translateByGlobal(IKVector3 translate) {
         if (this.getParentAxes() != null) {
             this.updateGlobal();
             this.translateTo(translate.addCopy(this.calculatePosition()));
@@ -561,10 +561,10 @@ public class Node3D {
         this.markDirty();
     }
 
-    public void translateTo(Vector3 translate, boolean slip) {
+    public void translateTo(IKVector3 translate, boolean slip) {
         this.updateGlobal();
         if (slip) {
-            Node3D tempNode3D = this.getGlobalCopy();
+            IKNode3D tempNode3D = this.getGlobalCopy();
             tempNode3D.translateTo(translate);
             this.slipTo(tempNode3D);
         } else {
@@ -572,7 +572,7 @@ public class Node3D {
         }
     }
 
-    public void translateTo(Vector3 translate) {
+    public void translateTo(IKVector3 translate) {
         if (this.getParentAxes() != null) {
             this.updateGlobal();
             getLocalMBasis().translateTo(getParentAxes().getGlobalMBasis().getLocalOf(translate));
@@ -587,29 +587,29 @@ public class Node3D {
 
     public void rotateAboutX(float angle, boolean orthonormalized) {
         this.updateGlobal();
-        Quaternion xRot = new Quaternion(getGlobalMBasis().getXHeading(), angle);
+        IKQuaternion xRot = new IKQuaternion(getGlobalMBasis().getXHeading(), angle);
         this.rotateBy(xRot);
         this.markDirty();
     }
 
     public void rotateAboutY(float angle, boolean orthonormalized) {
         this.updateGlobal();
-        Quaternion yRot = new Quaternion(getGlobalMBasis().getYHeading(), angle);
+        IKQuaternion yRot = new IKQuaternion(getGlobalMBasis().getYHeading(), angle);
         this.rotateBy(yRot);
         this.markDirty();
     }
 
     public void rotateAboutZ(float angle, boolean orthonormalized) {
         this.updateGlobal();
-        Quaternion zRot = new Quaternion(getGlobalMBasis().getZHeading(), angle);
+        IKQuaternion zRot = new IKQuaternion(getGlobalMBasis().getZHeading(), angle);
         this.rotateBy(zRot);
         this.markDirty();
     }
 
-    public void rotateBy(Quaternion apply) {
+    public void rotateBy(IKQuaternion apply) {
         this.updateGlobal();
         if (parent != null) {
-            Quaternion newRot = this.getParentAxes().getGlobalMBasis().getLocalOfRotation(apply);
+            IKQuaternion newRot = this.getParentAxes().getGlobalMBasis().getLocalOfRotation(apply);
             this.getLocalMBasis().rotateBy(newRot);
         } else {
             this.getLocalMBasis().rotateBy(apply);
@@ -622,7 +622,7 @@ public class Node3D {
      *
      * @param rotation
      */
-    public void rotateByLocal(Quaternion apply) {
+    public void rotateByLocal(IKQuaternion apply) {
         this.updateGlobal();
         if (parent != null) {
             this.getLocalMBasis().rotateBy(apply);
@@ -641,7 +641,7 @@ public class Node3D {
      *
      * @param targetNode3D the Axes to make this Axis identical to
      */
-    public void alignLocalsTo(Node3D targetNode3D) {
+    public void alignLocalsTo(IKNode3D targetNode3D) {
         this.getLocalMBasis().adoptValues(targetNode3D.localMBasis);
         this.markDirty();
     }
@@ -663,7 +663,7 @@ public class Node3D {
      * its shear, translate and scale attributes.
      */
     public void rotateToParent() {
-        this.getLocalMBasis().rotateTo(new Quaternion());
+        this.getLocalMBasis().rotateTo(new IKQuaternion());
         this.markDirty();
     }
 
@@ -675,7 +675,7 @@ public class Node3D {
      *
      * @param targetNode3D
      */
-    public void alignGlobalsTo(Node3D targetNode3D) {
+    public void alignGlobalsTo(IKNode3D targetNode3D) {
         targetNode3D.updateGlobal();
         this.updateGlobal();
         if (this.getParentAxes() != null) {
@@ -687,7 +687,7 @@ public class Node3D {
         this.updateGlobal();
     }
 
-    public void alignOrientationTo(Node3D targetNode3D) {
+    public void alignOrientationTo(IKNode3D targetNode3D) {
         targetNode3D.updateGlobal();
         this.updateGlobal();
         if (this.getParentAxes() != null) {
@@ -705,7 +705,7 @@ public class Node3D {
      *
      * @param rotation
      */
-    public void setGlobalOrientationTo(Quaternion rotation) {
+    public void setGlobalOrientationTo(IKQuaternion rotation) {
         this.updateGlobal();
         if (this.getParentAxes() != null) {
             this.getGlobalMBasis().rotateTo(rotation);
@@ -716,21 +716,21 @@ public class Node3D {
         this.markDirty();
     }
 
-    public void registerDependent(Node3D newDependent) {
+    public void registerDependent(IKNode3D newDependent) {
         // Make sure we don't hit a dependency loop
-        if (Node3D.class.isAssignableFrom(newDependent.getClass())) {
+        if (IKNode3D.class.isAssignableFrom(newDependent.getClass())) {
             if (newDependent.isAncestorOf(this)) {
                 this.transferToParent(newDependent.getParentAxes());
             }
         }
         if (dependentsRegistry.indexOf(newDependent) == -1) {
-            dependentsRegistry.add(new DependencyReference<Node3D>(newDependent));
+            dependentsRegistry.add(new DependencyReference<IKNode3D>(newDependent));
         }
     }
 
-    public boolean isAncestorOf(Node3D potentialDescendent) {
+    public boolean isAncestorOf(IKNode3D potentialDescendent) {
         boolean result = false;
-        Node3D cursor = potentialDescendent.getParentAxes();
+        IKNode3D cursor = potentialDescendent.getParentAxes();
         while (cursor != null) {
             if (cursor == this) {
                 result = true;
@@ -751,7 +751,7 @@ public class Node3D {
      * @param newParent
      */
 
-    public void transferToParent(Node3D newParent) {
+    public void transferToParent(IKNode3D newParent) {
         this.emancipate();
         this.setParent(newParent);
     }
@@ -763,61 +763,61 @@ public class Node3D {
     public void emancipate() {
         if (this.getParentAxes() != null) {
             this.updateGlobal();
-            Node3D oldParent = this.getParentAxes();
-            for (DependencyReference<Node3D> ad : this.dependentsRegistry) {
+            IKNode3D oldParent = this.getParentAxes();
+            for (DependencyReference<IKNode3D> ad : this.dependentsRegistry) {
                 ad.get().parentChangeWarning(this, this.getParentAxes(), null, null);
             }
             this.getLocalMBasis().adoptValues(this.globalMBasis);
             this.getParentAxes().disown(this);
-            this.parent = new DependencyReference<Node3D>(null);
+            this.parent = new DependencyReference<IKNode3D>(null);
             this.areGlobal = true;
             this.markDirty();
             this.updateGlobal();
-            for (DependencyReference<Node3D> ad : this.dependentsRegistry) {
+            for (DependencyReference<IKNode3D> ad : this.dependentsRegistry) {
                 ad.get().parentChangeCompletionNotice(this, oldParent, null, null);
             }
         }
     }
 
-    public void disown(Node3D child) {
+    public void disown(IKNode3D child) {
         dependentsRegistry.remove(child);
     }
 
-    public Transform3D getGlobalMBasis() {
+    public IKTransform getGlobalMBasis() {
         this.updateGlobal();
         return globalMBasis;
     }
 
-    public Transform3D getLocalMBasis() {
+    public IKTransform getLocalMBasis() {
         return localMBasis;
     }
 
-    public void axisSlipWarning(Node3D globalPriorToSlipping,
-            Node3D globalAfterSlipping, Node3D actualAxis,
-            ArrayList<Object> dontWarn) {
+    public void axisSlipWarning(IKNode3D globalPriorToSlipping,
+                                IKNode3D globalAfterSlipping, IKNode3D actualAxis,
+                                ArrayList<Object> dontWarn) {
         this.updateGlobal();
         if (this.getParentAxes() != null) {
-            Node3D globalVals = globalPriorToSlipping;
+            IKNode3D globalVals = globalPriorToSlipping;
             this.getLocalMBasis().adoptValues(globalMBasis);
             this.markDirty();
         }
     }
 
-    public void axisSlipWarning(Node3D globalPriorToSlipping,
-            Node3D globalAfterSlipping, Node3D actualAxis) {
+    public void axisSlipWarning(IKNode3D globalPriorToSlipping,
+                                IKNode3D globalAfterSlipping, IKNode3D actualAxis) {
 
     }
 
-    public void axisSlipCompletionNotice(Node3D globalPriorToSlipping,
-            Node3D globalAfterSlipping, Node3D thisAxis) {
+    public void axisSlipCompletionNotice(IKNode3D globalPriorToSlipping,
+                                         IKNode3D globalAfterSlipping, IKNode3D thisAxis) {
 
     }
 
-    public void slipTo(Node3D newAxisGlobal) {
+    public void slipTo(IKNode3D newAxisGlobal) {
         this.updateGlobal();
-        Node3D originalGlobal = this.getGlobalCopy();
+        IKNode3D originalGlobal = this.getGlobalCopy();
         notifyDependentsOfSlip(newAxisGlobal);
-        Node3D newVals = newAxisGlobal.freeCopy();
+        IKNode3D newVals = newAxisGlobal.freeCopy();
 
         if (this.getParentAxes() != null) {
             newVals = getParentAxes().getLocalOf(newVals);
@@ -829,8 +829,8 @@ public class Node3D {
         notifyDependentsOfSlipCompletion(originalGlobal);
     }
 
-    public Node3D freeCopy() {
-        Node3D freeCopy = new Node3D(this.getLocalMBasis(),
+    public IKNode3D freeCopy() {
+        IKNode3D freeCopy = new IKNode3D(this.getLocalMBasis(),
                 null);
         freeCopy.getLocalMBasis().adoptValues(this.localMBasis);
         freeCopy.markDirty();
@@ -844,7 +844,7 @@ public class Node3D {
      *
      * @return
      */
-    protected DependencyReference<Node3D> getWeakRefToParent() {
+    protected DependencyReference<IKNode3D> getWeakRefToParent() {
         return this.parent;
     }
 
@@ -854,15 +854,15 @@ public class Node3D {
      *
      * @return
      */
-    protected void setWeakRefToParent(DependencyReference<Node3D> parentRef) {
+    protected void setWeakRefToParent(DependencyReference<IKNode3D> parentRef) {
         this.parent = parentRef;
     }
 
-    public void slipTo(Node3D newAxisGlobal, ArrayList<Object> dontWarn) {
+    public void slipTo(IKNode3D newAxisGlobal, ArrayList<Object> dontWarn) {
         this.updateGlobal();
-        Node3D originalGlobal = this.getGlobalCopy();
+        IKNode3D originalGlobal = this.getGlobalCopy();
         notifyDependentsOfSlip(newAxisGlobal, dontWarn);
-        Node3D newVals = newAxisGlobal.getGlobalCopy();
+        IKNode3D newVals = newAxisGlobal.getGlobalCopy();
 
         if (this.getParentAxes() != null) {
             newVals = getParentAxes().getLocalOf(newAxisGlobal);
@@ -874,10 +874,10 @@ public class Node3D {
         notifyDependentsOfSlipCompletion(originalGlobal, dontWarn);
     }
 
-    public void notifyDependentsOfSlip(Node3D newAxisGlobal, ArrayList<Object> dontWarn) {
+    public void notifyDependentsOfSlip(IKNode3D newAxisGlobal, ArrayList<Object> dontWarn) {
         for (int i = 0; i < dependentsRegistry.size(); i++) {
             if (!dontWarn.contains(dependentsRegistry.get(i))) {
-                Node3D dependant = dependentsRegistry.get(i).get();
+                IKNode3D dependant = dependentsRegistry.get(i).get();
 
                 // First we check if the dependent extends Axes
                 // so we know whether or not to pass the dontWarn list
@@ -893,8 +893,8 @@ public class Node3D {
         }
     }
 
-    public void notifyDependentsOfSlipCompletion(Node3D globalAxisPriorToSlipping,
-            ArrayList<Object> dontWarn) {
+    public void notifyDependentsOfSlipCompletion(IKNode3D globalAxisPriorToSlipping,
+                                                 ArrayList<Object> dontWarn) {
         for (int i = 0; i < dependentsRegistry.size(); i++) {
             if (!dontWarn.contains(dependentsRegistry.get(i)))
                 dependentsRegistry.get(i).get().axisSlipCompletionNotice(globalAxisPriorToSlipping,
@@ -904,13 +904,13 @@ public class Node3D {
         }
     }
 
-    public void notifyDependentsOfSlip(Node3D newAxisGlobal) {
+    public void notifyDependentsOfSlip(IKNode3D newAxisGlobal) {
         for (int i = 0; i < dependentsRegistry.size(); i++) {
             dependentsRegistry.get(i).get().axisSlipWarning(this.getGlobalCopy(), newAxisGlobal, this);
         }
     }
 
-    public void notifyDependentsOfSlipCompletion(Node3D globalAxisPriorToSlipping) {
+    public void notifyDependentsOfSlipCompletion(IKNode3D globalAxisPriorToSlipping) {
         for (int i = 0; i < dependentsRegistry.size(); i++) {
             dependentsRegistry.get(i).get().axisSlipCompletionNotice(globalAxisPriorToSlipping, this.getGlobalCopy(),
                     this);
@@ -936,14 +936,14 @@ public class Node3D {
         return global + "\n" + local;
     }
 
-    public void parentChangeWarning(Node3D warningBy,
-            Node3D oldParent, Node3D intendedParent,
-            Object requestedBy) {
+    public void parentChangeWarning(IKNode3D warningBy,
+                                    IKNode3D oldParent, IKNode3D intendedParent,
+                                    Object requestedBy) {
     }
 
-    public void parentChangeCompletionNotice(Node3D warningBy,
-            Node3D oldParent, Node3D intendedParent,
-            Object requestedBy) {
+    public void parentChangeCompletionNotice(IKNode3D warningBy,
+                                             IKNode3D oldParent, IKNode3D intendedParent,
+                                             Object requestedBy) {
     }
 
     /**

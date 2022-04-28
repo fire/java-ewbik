@@ -1,7 +1,7 @@
 package EWBIK;
 
-public class Basis3D {
-    public static final Basis3D IDENTITY = new Basis3D(1.0f, 0.0f, 0.0f, 0.0f, false);
+public class IKBasis {
+    public static final IKBasis IDENTITY = new IKBasis(1.0f, 0.0f, 0.0f, 0.0f, false);
 
     /**
      * Scalar coordinate of the quaternion.
@@ -52,7 +52,7 @@ public class Basis3D {
      *                           step is performed
      *                           before using them
      */
-    public Basis3D(float q0, float q1, float q2, float q3,
+    public IKBasis(float q0, float q1, float q2, float q3,
                    boolean needsNormalization) {
 
         this.q0 = q0;
@@ -68,14 +68,14 @@ public class Basis3D {
     /**
      * creates an identity rotation
      */
-    public Basis3D() {
+    public IKBasis() {
         this(1.0f, 0.0f, 0.0f, 0.0f, false);
     }
 
     /**
      * assumes no noralization required
      **/
-    public Basis3D(float q0, float q1, float q2, float q3) {
+    public IKBasis(float q0, float q1, float q2, float q3) {
         this(q0, q1, q2, q3, false);
     }
 
@@ -106,9 +106,9 @@ public class Basis3D {
      *
      * @param axis  axis around which to rotate
      * @param angle rotation angle.
-     * @throws MathUtils.MathIllegalArgumentException if the axis norm is zero
+     * @throws IKMathUtils.MathIllegalArgumentException if the axis norm is zero
      */
-    public Basis3D(Vector3 axis, float angle) {
+    public IKBasis(IKVector3 axis, float angle) {
 
         float norm = axis.mag();
         if (norm == 0) {
@@ -120,9 +120,9 @@ public class Basis3D {
         }
 
         float halfAngle = -0.5f * angle;
-        float coeff = MathUtils.sin(halfAngle) / norm;
+        float coeff = IKMathUtils.sin(halfAngle) / norm;
 
-        q0 = MathUtils.cos(halfAngle);
+        q0 = IKMathUtils.cos(halfAngle);
         q1 = coeff * axis.x;
         q2 = coeff * axis.y;
         q3 = coeff * axis.z;
@@ -172,7 +172,7 @@ public class Basis3D {
      *                  orthogonality correction (convergence is reached when the
      *                  difference between two steps of the Frobenius norm of the
      *                  correction is below this threshold)
-     * @throws MathUtils.NotARotationMatrixException if the matrix is not a 3X3
+     * @throws IKMathUtils.NotARotationMatrixException if the matrix is not a 3X3
      *                                               matrix, or if it cannot be
      *                                               transformed
      *                                               into an orthogonal matrix
@@ -181,7 +181,7 @@ public class Basis3D {
      *                                               determinant of the resulting
      *                                               orthogonal matrix is negative
      */
-    public Basis3D(float[] m, float threshold) {
+    public IKBasis(float[] m, float threshold) {
         // dimension check
         if ((m.length != 9 || m.length != 16)) {
             this.q0 = 1.0f;
@@ -252,7 +252,7 @@ public class Basis3D {
      *                  orthogonality correction (convergence is reached when the
      *                  difference between two steps of the Frobenius norm of the
      *                  correction is below this threshold)
-     * @throws MathUtils.NotARotationMatrixException if the matrix is not a 3X3
+     * @throws IKMathUtils.NotARotationMatrixException if the matrix is not a 3X3
      *                                               matrix, or if it cannot be
      *                                               transformed
      *                                               into an orthogonal matrix
@@ -261,7 +261,7 @@ public class Basis3D {
      *                                               determinant of the resulting
      *                                               orthogonal matrix is negative
      */
-    public Basis3D(float[][] m, float threshold) {
+    public IKBasis(float[][] m, float threshold) {
 
         // dimension check
         if ((m.length != 3) || (m[0].length != 3) ||
@@ -318,14 +318,14 @@ public class Basis3D {
      * @param u2 second vector of the origin pair
      * @param v1 desired image of u1 by the rotation
      * @param v2 desired image of u2 by the rotation
-     * @throws MathUtils.MathArithmeticException if the norm of one of the vectors
+     * @throws IKMathUtils.MathArithmeticException if the norm of one of the vectors
      *                                           is zero,
      *                                           or if one of the pair is
      *                                           degenerated (i.e.
      *                                           the vectors of the pair are
      *                                           colinear)
      */
-    public Basis3D(Vector3 u1, Vector3 u2, Vector3 v1, Vector3 v2) {
+    public IKBasis(IKVector3 u1, IKVector3 u2, IKVector3 v1, IKVector3 v2) {
 
         // norms computation
         float u1u1 = u1.dot(u1);
@@ -345,48 +345,48 @@ public class Basis3D {
         float u2z = u2.z;
 
         // normalize v1 in order to have (v1'|v1') = (u1|u1)
-        float coeff = (float) MathUtils.sqrt(u1u1 / v1v1);
+        float coeff = (float) IKMathUtils.sqrt(u1u1 / v1v1);
         float v1x = coeff * v1.x;
         float v1y = coeff * v1.y;
         float v1z = coeff * v1.z;
-        Vector3 va1 = new Vector3(v1x, v1y, v1z);
+        IKVector3 va1 = new IKVector3(v1x, v1y, v1z);
 
         // adjust v2 in order to have (u1|u2) = (v1|v2) and (v2'|v2') = (u2|u2)
         float u1u2 = u1.dot(u2);
         float va1v2 = va1.dot(v2);
         float coeffU = u1u2 / u1u1;
         float coeffV = va1v2 / u1u1;
-        float beta = (float) MathUtils.sqrt((u2u2 - u1u2 * coeffU) / (v2v2 - va1v2 * coeffV));
+        float beta = (float) IKMathUtils.sqrt((u2u2 - u1u2 * coeffU) / (v2v2 - va1v2 * coeffV));
         float alpha = coeffU - beta * coeffV;
         float v2x = alpha * v1x + beta * v2.x;
         float v2y = alpha * v1y + beta * v2.y;
         float v2z = alpha * v1z + beta * v2.z;
-        Vector3 va2 = (Vector3) v2.copy();
+        IKVector3 va2 = (IKVector3) v2.copy();
         va2.set(v2x, v2y, v2z);
 
         // preliminary computation (we use explicit formulation instead
         // of relying on the Vector3 class in order to avoid building lots
         // of temporary objects)
-        Vector3 uRef = u1;
-        Vector3 vRef = (Vector3) va1;
+        IKVector3 uRef = u1;
+        IKVector3 vRef = (IKVector3) va1;
         float dx1 = v1x - u1.x;
         float dy1 = v1y - u1.y;
         float dz1 = v1z - u1.z;
         float dx2 = v2x - u2.x;
         float dy2 = v2y - u2.y;
         float dz2 = v2z - u2.z;
-        Vector3 k = new Vector3(dy1 * dz2 - dz1 * dy2,
+        IKVector3 k = new IKVector3(dy1 * dz2 - dz1 * dy2,
                 dz1 * dx2 - dx1 * dz2,
                 dx1 * dy2 - dy1 * dx2);
         float c = k.x * (u1y * u2z - u1z * u2y) +
                 k.y * (u1z * u2x - u1x * u2z) +
                 k.z * (u1x * u2y - u1y * u2x);
 
-        if (MathUtils.abs(c) <= MathUtils.DOUBLE_ROUNDING_ERROR) {
+        if (IKMathUtils.abs(c) <= IKMathUtils.DOUBLE_ROUNDING_ERROR) {
             // the (q1, q2, q3) vector is in the (u1, u2) plane
             // we try other vectors
-            Vector3 u3 = (Vector3) u1.crossCopy(u2);
-            Vector3 v3 = va1.crossCopy(va2);
+            IKVector3 u3 = (IKVector3) u1.crossCopy(u2);
+            IKVector3 v3 = va1.crossCopy(va2);
             float u3x = u3.x;
             float u3y = u3.y;
             float u3z = u3.z;
@@ -397,24 +397,24 @@ public class Basis3D {
             float dx3 = v3x - u3x;
             float dy3 = v3y - u3y;
             float dz3 = v3z - u3z;
-            k = new Vector3(dy1 * dz3 - dz1 * dy3,
+            k = new IKVector3(dy1 * dz3 - dz1 * dy3,
                     dz1 * dx3 - dx1 * dz3,
                     dx1 * dy3 - dy1 * dx3);
             c = k.x * (u1y * u3z - u1z * u3y) +
                     k.y * (u1z * u3x - u1x * u3z) +
                     k.z * (u1x * u3y - u1y * u3x);
 
-            if (MathUtils.abs(c) <= MathUtils.DOUBLE_ROUNDING_ERROR) {
+            if (IKMathUtils.abs(c) <= IKMathUtils.DOUBLE_ROUNDING_ERROR) {
                 // the (q1, q2, q3) vector is aligned with u1:
                 // we try (u2, u3) and (v2, v3)
-                k = new Vector3(dy2 * dz3 - dz2 * dy3,
+                k = new IKVector3(dy2 * dz3 - dz2 * dy3,
                         dz2 * dx3 - dx2 * dz3,
                         dx2 * dy3 - dy2 * dx3);
                 c = k.x * (u2y * u3z - u2z * u3y) +
                         k.y * (u2z * u3x - u2x * u3z) +
                         k.z * (u2x * u3y - u2y * u3x);
 
-                if (MathUtils.abs(c) <= MathUtils.DOUBLE_ROUNDING_ERROR) {
+                if (IKMathUtils.abs(c) <= IKMathUtils.DOUBLE_ROUNDING_ERROR) {
                     // the (q1, q2, q3) vector is aligned with everything
                     // this is really the identity rotation
                     q0 = 1.0f;
@@ -433,14 +433,14 @@ public class Basis3D {
         }
 
         // compute the vectorial part
-        c = (float) MathUtils.sqrt(c);
+        c = (float) IKMathUtils.sqrt(c);
         float inv = 1.0f / (c + c);
         q1 = inv * k.x;
         q2 = inv * k.y;
         q3 = inv * k.z;
 
         // compute the scalar part
-        k = new Vector3(uRef.y * q3 - uRef.z * q2,
+        k = new IKVector3(uRef.y * q3 - uRef.z * q2,
                 uRef.z * q1 - uRef.x * q3,
                 uRef.x * q2 - uRef.y * q1);
         c = k.dot(k);
@@ -507,10 +507,10 @@ public class Basis3D {
      *
      * @param u origin vector
      * @param v desired image of u by the rotation
-     * @throws MathUtils.MathArithmeticException if the norm of one of the vectors
+     * @throws IKMathUtils.MathArithmeticException if the norm of one of the vectors
      *                                           is zero
      */
-    public Basis3D(Vector3 u, Vector3 v) {
+    public IKBasis(IKVector3 u, IKVector3 v) {
 
         float normProduct = u.mag() * v.mag();
         if (normProduct == 0) {
@@ -528,7 +528,7 @@ public class Basis3D {
         if (dot < ((2.0e-15 - 1.0f) * normProduct)) {
             // special case u = -v: we select a PI angle rotation around
             // an arbitrary vector orthogonal to u
-            Vector3 w = (Vector3) u.getOrthogonal();
+            IKVector3 w = (IKVector3) u.getOrthogonal();
             q0 = 0.0f;
             q1 = -w.x;
             q2 = -w.y;
@@ -536,9 +536,9 @@ public class Basis3D {
         } else {
             // general case: (u, v) defines a plane, we select
             // the shortest possible rotation: axis orthogonal to this plane
-            q0 = MathUtils.sqrt(0.5f * (1.0f + dot / normProduct));
+            q0 = IKMathUtils.sqrt(0.5f * (1.0f + dot / normProduct));
             float coeff = 1.0f / (2.0f * q0 * normProduct);
-            Vector3 q = (Vector3) v.crossCopy(u);
+            IKVector3 q = (IKVector3) v.crossCopy(u);
             q1 = coeff * q.x;
             q2 = coeff * q.y;
             q3 = coeff * q.z;
@@ -573,12 +573,12 @@ public class Basis3D {
      * @param alpha2 angle of the second elementary rotation
      * @param alpha3 angle of the third elementary rotation
      */
-    public Basis3D(RotationOrder3D order,
+    public IKBasis(IKRotationOrder order,
                    float alpha1, float alpha2, float alpha3) {
-        Basis3D r1 = new Basis3D(order.getA1(), alpha1);
-        Basis3D r2 = new Basis3D(order.getA2(), alpha2);
-        Basis3D r3 = new Basis3D(order.getA3(), alpha3);
-        Basis3D composed = r1.applyTo(r2.applyTo(r3));
+        IKBasis r1 = new IKBasis(order.getA1(), alpha1);
+        IKBasis r2 = new IKBasis(order.getA2(), alpha2);
+        IKBasis r3 = new IKBasis(order.getA3(), alpha3);
+        IKBasis composed = r1.applyTo(r2.applyTo(r3));
         q0 = composed.q0;
         q1 = composed.q1;
         q2 = composed.q2;
@@ -614,7 +614,7 @@ public class Basis3D {
         float s = ort[0][0] + ort[1][1] + ort[2][2];
         if (s > -0.19) {
             // compute q0 and deduce q1, q2 and q3
-            quat[0] = 0.5f * MathUtils.sqrt(s + 1.0f);
+            quat[0] = 0.5f * IKMathUtils.sqrt(s + 1.0f);
             float inv = 0.25f / quat[0];
             quat[1] = inv * (ort[1][2] - ort[2][1]);
             quat[2] = inv * (ort[2][0] - ort[0][2]);
@@ -623,7 +623,7 @@ public class Basis3D {
             s = ort[0][0] - ort[1][1] - ort[2][2];
             if (s > -0.19) {
                 // compute q1 and deduce q0, q2 and q3
-                quat[1] = 0.5f * MathUtils.sqrt(s + 1.0f);
+                quat[1] = 0.5f * IKMathUtils.sqrt(s + 1.0f);
                 float inv = 0.25f / quat[1];
                 quat[0] = inv * (ort[1][2] - ort[2][1]);
                 quat[2] = inv * (ort[0][1] + ort[1][0]);
@@ -632,7 +632,7 @@ public class Basis3D {
                 s = ort[1][1] - ort[0][0] - ort[2][2];
                 if (s > -0.19) {
                     // compute q2 and deduce q0, q1 and q3
-                    quat[2] = 0.5f * MathUtils.sqrt(s + 1.0f);
+                    quat[2] = 0.5f * IKMathUtils.sqrt(s + 1.0f);
                     float inv = 0.25f / quat[2];
                     quat[0] = inv * (ort[2][0] - ort[0][2]);
                     quat[1] = inv * (ort[0][1] + ort[1][0]);
@@ -640,7 +640,7 @@ public class Basis3D {
                 } else {
                     // compute q3 and deduce q0, q1 and q2
                     s = ort[2][2] - ort[0][0] - ort[1][1];
-                    quat[3] = 0.5f * MathUtils.sqrt(s + 1.0f);
+                    quat[3] = 0.5f * IKMathUtils.sqrt(s + 1.0f);
                     float inv = 0.25f / quat[3];
                     quat[0] = inv * (ort[0][1] - ort[1][0]);
                     quat[1] = inv * (ort[0][2] + ort[2][0]);
@@ -653,7 +653,7 @@ public class Basis3D {
 
     }
 
-    public static Basis3D multiply(final Basis3D q1, final Basis3D q2) {
+    public static IKBasis multiply(final IKBasis q1, final IKBasis q2) {
         // Components of the first quaternion.
         final float q1a = q1.getQ0();
         final float q1b = q1.getQ1();
@@ -672,7 +672,7 @@ public class Basis3D {
         final float y = q1a * q2c - q1b * q2f + q1c * q2a + q1f * q2b;
         final float z = q1a * q2f + q1b * q2c - q1c * q2b + q1f * q2a;
 
-        return new Basis3D(w, x, y, z);
+        return new IKBasis(w, x, y, z);
     }
 
     /**
@@ -682,8 +682,8 @@ public class Basis3D {
      * @param q2 Quaternionf.
      * @return the dot product of {@code q1} and {@code q2}.
      */
-    public static float dotProduct(final Basis3D q1,
-            final Basis3D q2) {
+    public static float dotProduct(final IKBasis q1,
+            final IKBasis q2) {
         return q1.getQ0() * q2.getQ0() +
                 q1.getQ1() * q2.getQ1() +
                 q1.getQ2() * q2.getQ2() +
@@ -724,7 +724,7 @@ public class Basis3D {
      * @param r2 second rotation
      * @return <i>distance</i> between r1 and r2
      */
-    public static float distance(Basis3D r1, Basis3D r2) {
+    public static float distance(IKBasis r1, IKBasis r2) {
         return r1.applyInverseTo(r2).getAngle();
     }
 
@@ -737,7 +737,7 @@ public class Basis3D {
     public void setQuadranceAngle(float cosHalfAngle) {
         float squaredSine = q1 * q1 + q2 * q2 + q3 * q3;
         if (squaredSine != 0) {
-            float inverseCoeff = MathUtils.sqrt(((1 - (cosHalfAngle * cosHalfAngle)) / squaredSine));
+            float inverseCoeff = IKMathUtils.sqrt(((1 - (cosHalfAngle * cosHalfAngle)) / squaredSine));
             // inverseCoeff = cosHalfAngle < 0 ? -inverseCoeff : inverseCoeff;
             q0 = q0 < 0 ? -cosHalfAngle : cosHalfAngle;
             q1 = inverseCoeff * q1;
@@ -747,7 +747,7 @@ public class Basis3D {
     }
 
     public void clampToAngle(float angle) {
-        float cosHalfAngle = MathUtils.cos(0.5f * angle);
+        float cosHalfAngle = IKMathUtils.cos(0.5f * angle);
         clampToQuadranceAngle(cosHalfAngle);
     }
 
@@ -758,7 +758,7 @@ public class Basis3D {
             return;
         else {
             q0 = q0 < 0 ? -cosHalfAngle : cosHalfAngle;
-            float compositeCoeff = MathUtils.sqrt(newCoeff / currentCoeff);
+            float compositeCoeff = IKMathUtils.sqrt(newCoeff / currentCoeff);
             q1 *= compositeCoeff;
             q2 *= compositeCoeff;
             q3 *= compositeCoeff;
@@ -768,8 +768,8 @@ public class Basis3D {
     /**
      * @return a copy of this MRotation
      */
-    public Basis3D copy() {
-        return new Basis3D(getQ0(), getQ1(), getQ2(), getQ3());
+    public IKBasis copy() {
+        return new IKBasis(getQ0(), getQ1(), getQ2(), getQ3());
     }
 
     /**
@@ -781,8 +781,8 @@ public class Basis3D {
      * @return a new rotation whose effect is the reverse of the effect
      *         of the instance
      */
-    public Basis3D revert() {
-        return new Basis3D(-q0, q1, q2, q3, false);
+    public IKBasis revert() {
+        return new IKBasis(-q0, q1, q2, q3, false);
     }
 
     /**
@@ -790,7 +790,7 @@ public class Basis3D {
      *
      * @param storeIN
      */
-    public void revert(Basis3D storeIn) {
+    public void revert(IKBasis storeIn) {
         storeIn.set(-q0, q1, q2, q3, true);
     }
 
@@ -836,16 +836,16 @@ public class Basis3D {
      * @return normalized axis of the rotation
      * @see #Rotation(T, float)
      */
-    public Vector3 getAxis() {
+    public IKVector3 getAxis() {
         float squaredSine = q1 * q1 + q2 * q2 + q3 * q3;
         if (squaredSine == 0) {
-            return new Vector3(1, 0, 0);
+            return new IKVector3(1, 0, 0);
         } else if (q0 < 0) {
-            float inverse = 1 / MathUtils.sqrt(squaredSine);
-            return new Vector3(q1 * inverse, q2 * inverse, q3 * inverse);
+            float inverse = 1 / IKMathUtils.sqrt(squaredSine);
+            return new IKVector3(q1 * inverse, q2 * inverse, q3 * inverse);
         }
-        float inverse = -1 / MathUtils.sqrt(squaredSine);
-        return new Vector3(q1 * inverse, q2 * inverse, q3 * inverse);
+        float inverse = -1 / IKMathUtils.sqrt(squaredSine);
+        return new IKVector3(q1 * inverse, q2 * inverse, q3 * inverse);
     }
 
     /**
@@ -855,23 +855,23 @@ public class Basis3D {
      * @param angle
      * @throws Exception
      */
-    public void setAxis(Vector3 newAxis) throws Exception {
+    public void setAxis(IKVector3 newAxis) throws Exception {
 
         float angle = this.getAngle();
         float norm = newAxis.mag();
         if (norm == 0) {
             try {
                 throw new Exception("Zero Norm for Rotation Axis");
-            } catch (MathUtils.MathIllegalArgumentException e) {
+            } catch (IKMathUtils.MathIllegalArgumentException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace(System.out);
             }
         }
 
         float halfAngle = -0.5f * angle;
-        float coeff = MathUtils.sin(halfAngle) / norm;
+        float coeff = IKMathUtils.sin(halfAngle) / norm;
 
-        q0 = MathUtils.cos(halfAngle);
+        q0 = IKMathUtils.cos(halfAngle);
         q1 = coeff * newAxis.x;
         q2 = coeff * newAxis.y;
         q3 = coeff * newAxis.z;
@@ -888,23 +888,23 @@ public class Basis3D {
      * @return normalized axis of the rotation
      * @see #Rotation(T, float)
      */
-    public void setToAxis(Vector3 v) {
+    public void setToAxis(IKVector3 v) {
         float squaredSine = q1 * q1 + q2 * q2 + q3 * q3;
         if (squaredSine == 0) {
             v.set(1, 0, 0);
             return;
         } else if (q0 < 0) {
-            float inverse = 1 / MathUtils.sqrt(squaredSine);
+            float inverse = 1 / IKMathUtils.sqrt(squaredSine);
             v.set(q1 * inverse, q2 * inverse, q3 * inverse);
             return;
         }
-        float inverse = -1 / MathUtils.sqrt(squaredSine);
+        float inverse = -1 / IKMathUtils.sqrt(squaredSine);
         v.set(q1 * inverse, q2 * inverse, q3 * inverse);
     }
 
-    public Basis3D getInverse() {
+    public IKBasis getInverse() {
         final float squareNorm = q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3;
-        if (squareNorm < MathUtils.SAFE_MIN_DOUBLE) {
+        if (squareNorm < IKMathUtils.SAFE_MIN_DOUBLE) {
             try {
                 throw new Exception("Zero Norm");
             } catch (Exception e) {
@@ -912,7 +912,7 @@ public class Basis3D {
             }
         }
 
-        return new Basis3D(q0 / squareNorm,
+        return new IKBasis(q0 / squareNorm,
                 -q1 / squareNorm,
                 -q2 / squareNorm,
                 -q3 / squareNorm);
@@ -926,11 +926,11 @@ public class Basis3D {
      */
     public float getAngle() {
         if ((q0 < -0.1) || (q0 > 0.1)) {
-            return 2 * MathUtils.asin(MathUtils.sqrt(q1 * q1 + q2 * q2 + q3 * q3));
+            return 2 * IKMathUtils.asin(IKMathUtils.sqrt(q1 * q1 + q2 * q2 + q3 * q3));
         } else if (q0 < 0) {
-            return 2 * MathUtils.acos(-q0);
+            return 2 * IKMathUtils.acos(-q0);
         }
-        return 2 * MathUtils.acos(q0);
+        return 2 * IKMathUtils.acos(q0);
     }
 
     /**
@@ -943,9 +943,9 @@ public class Basis3D {
         float squaredSine = q1 * q1 + q2 * q2 + q3 * q3;
         if (squaredSine != 0) {
             float halfAngle = -0.5f * newAngle;
-            float cosHalfAngle = MathUtils.cos(halfAngle);
+            float cosHalfAngle = IKMathUtils.cos(halfAngle);
 
-            float inverseCoeff = MathUtils.sqrt(((1f - (cosHalfAngle * cosHalfAngle)) / squaredSine));
+            float inverseCoeff = IKMathUtils.sqrt(((1f - (cosHalfAngle * cosHalfAngle)) / squaredSine));
             inverseCoeff = newAngle < 0 ? -inverseCoeff : inverseCoeff;
 
             q0 = q0 < 0 ? -cosHalfAngle : cosHalfAngle;
@@ -990,254 +990,254 @@ public class Basis3D {
      *
      * @param order rotation order to use
      * @return an array of three angles, in the order specified by the set
-     * @throws MathUtils.CardanEulerSingularityException if the rotation is
+     * @throws IKMathUtils.CardanEulerSingularityException if the rotation is
      *                                                   singular with respect to
      *                                                   the angles
      *                                                   set specified
      */
-    public float[] getAngles(RotationOrder3D order) {
+    public float[] getAngles(IKRotationOrder order) {
 
-        if (order == RotationOrder3D.XYZ) {
+        if (order == IKRotationOrder.XYZ) {
 
             // r (T .plusK) coordinates are :
             // sin (theta), -cos (theta) sin (phi), cos (theta) cos (phi)
             // (-r) (T .plusI) coordinates are :
             // cos (psi) cos (theta), -sin (psi) cos (theta), sin (theta)
             // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
-            Vector3 v1 = applyTo(RotationOrder3D.Z);
-            Vector3 v2 = applyInverseTo(RotationOrder3D.X);
+            IKVector3 v1 = applyTo(IKRotationOrder.Z);
+            IKVector3 v2 = applyInverseTo(IKRotationOrder.X);
             if ((v2.z < -0.9999999999) || (v2.z > 0.9999999999)) {
                 try {
-                    throw new MathUtils.CardanEulerSingularityException(true);
-                } catch (MathUtils.CardanEulerSingularityException e) {
+                    throw new IKMathUtils.CardanEulerSingularityException(true);
+                } catch (IKMathUtils.CardanEulerSingularityException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace(System.out);
                 }
             }
             return new float[] {
-                    MathUtils.atan2(-(v1.y), v1.z),
-                    MathUtils.asin(v2.z),
-                    MathUtils.atan2(-(v2.y), v2.x)
+                    IKMathUtils.atan2(-(v1.y), v1.z),
+                    IKMathUtils.asin(v2.z),
+                    IKMathUtils.atan2(-(v2.y), v2.x)
             };
 
-        } else if (order == RotationOrder3D.XZY) {
+        } else if (order == IKRotationOrder.XZY) {
 
             // r (T .plusJ) coordinates are :
             // -sin (psi), cos (psi) cos (phi), cos (psi) sin (phi)
             // (-r) (T .plusI) coordinates are :
             // cos (theta) cos (psi), -sin (psi), sin (theta) cos (psi)
             // and we can choose to have psi in the interval [-PI/2 ; +PI/2]
-            Vector3 v1 = applyTo(RotationOrder3D.X);
-            Vector3 v2 = applyInverseTo(RotationOrder3D.Y);
+            IKVector3 v1 = applyTo(IKRotationOrder.X);
+            IKVector3 v2 = applyInverseTo(IKRotationOrder.Y);
             if ((v2.y < -0.9999999999) || (v2.y > 0.9999999999)) {
                 try {
-                    throw new MathUtils.CardanEulerSingularityException(true);
-                } catch (MathUtils.CardanEulerSingularityException e) {
+                    throw new IKMathUtils.CardanEulerSingularityException(true);
+                } catch (IKMathUtils.CardanEulerSingularityException e) {
                     e.printStackTrace(System.out);
                 }
             }
             return new float[] {
-                    MathUtils.atan2(v1.z, v1.y),
-                    -MathUtils.asin(v2.y),
-                    MathUtils.atan2(v2.z, v2.x)
+                    IKMathUtils.atan2(v1.z, v1.y),
+                    -IKMathUtils.asin(v2.y),
+                    IKMathUtils.atan2(v2.z, v2.x)
             };
 
-        } else if (order == RotationOrder3D.YXZ) {
+        } else if (order == IKRotationOrder.YXZ) {
 
             // r (T .plusK) coordinates are :
             // cos (phi) sin (theta), -sin (phi), cos (phi) cos (theta)
             // (-r) (T .plusJ) coordinates are :
             // sin (psi) cos (phi), cos (psi) cos (phi), -sin (phi)
             // and we can choose to have phi in the interval [-PI/2 ; +PI/2]
-            Vector3 v1 = applyTo(RotationOrder3D.Z);
-            Vector3 v2 = applyInverseTo(RotationOrder3D.Y);
+            IKVector3 v1 = applyTo(IKRotationOrder.Z);
+            IKVector3 v2 = applyInverseTo(IKRotationOrder.Y);
             if ((v2.z < -0.9999999999) || (v2.z > 0.9999999999)) {
                 try {
-                    throw new MathUtils.CardanEulerSingularityException(true);
-                } catch (MathUtils.CardanEulerSingularityException e) {
+                    throw new IKMathUtils.CardanEulerSingularityException(true);
+                } catch (IKMathUtils.CardanEulerSingularityException e) {
                     e.printStackTrace(System.out);
                 }
             }
             return new float[] {
-                    MathUtils.atan2(v1.x, v1.z),
-                    -MathUtils.asin(v2.z),
-                    MathUtils.atan2(v2.x, v2.y)
+                    IKMathUtils.atan2(v1.x, v1.z),
+                    -IKMathUtils.asin(v2.z),
+                    IKMathUtils.atan2(v2.x, v2.y)
             };
 
-        } else if (order == RotationOrder3D.YZX) {
+        } else if (order == IKRotationOrder.YZX) {
 
             // r (T .plusI) coordinates are :
             // cos (psi) cos (theta), sin (psi), -cos (psi) sin (theta)
             // (-r) (T .plusJ) coordinates are :
             // sin (psi), cos (phi) cos (psi), -sin (phi) cos (psi)
             // and we can choose to have psi in the interval [-PI/2 ; +PI/2]
-            Vector3 v1 = applyTo(RotationOrder3D.X);
-            Vector3 v2 = applyInverseTo(RotationOrder3D.Y);
+            IKVector3 v1 = applyTo(IKRotationOrder.X);
+            IKVector3 v2 = applyInverseTo(IKRotationOrder.Y);
             if ((v2.x < -0.9999999999) || (v2.x > 0.9999999999)) {
                 try {
-                    throw new MathUtils.CardanEulerSingularityException(true);
-                } catch (MathUtils.CardanEulerSingularityException e) {
+                    throw new IKMathUtils.CardanEulerSingularityException(true);
+                } catch (IKMathUtils.CardanEulerSingularityException e) {
                     e.printStackTrace(System.out);
                 }
             }
             return new float[] {
-                    MathUtils.atan2(-(v1.z), v1.x),
-                    MathUtils.asin(v2.x),
-                    MathUtils.atan2(-(v2.z), v2.y)
+                    IKMathUtils.atan2(-(v1.z), v1.x),
+                    IKMathUtils.asin(v2.x),
+                    IKMathUtils.atan2(-(v2.z), v2.y)
             };
 
-        } else if (order == RotationOrder3D.ZXY) {
+        } else if (order == IKRotationOrder.ZXY) {
 
             // r (T .plusJ) coordinates are :
             // -cos (phi) sin (psi), cos (phi) cos (psi), sin (phi)
             // (-r) (T .plusK) coordinates are :
             // -sin (theta) cos (phi), sin (phi), cos (theta) cos (phi)
             // and we can choose to have phi in the interval [-PI/2 ; +PI/2]
-            Vector3 v1 = applyTo(RotationOrder3D.Y);
-            Vector3 v2 = applyInverseTo(RotationOrder3D.Z);
+            IKVector3 v1 = applyTo(IKRotationOrder.Y);
+            IKVector3 v2 = applyInverseTo(IKRotationOrder.Z);
             if ((v2.y < -0.9999999999) || (v2.y > 0.9999999999)) {
                 try {
-                    throw new MathUtils.CardanEulerSingularityException(true);
-                } catch (MathUtils.CardanEulerSingularityException e) {
+                    throw new IKMathUtils.CardanEulerSingularityException(true);
+                } catch (IKMathUtils.CardanEulerSingularityException e) {
                     e.printStackTrace(System.out);
                 }
             }
             return new float[] {
-                    MathUtils.atan2(-(v1.x), v1.y),
-                    MathUtils.asin(v2.y),
-                    MathUtils.atan2(-(v2.x), v2.z)
+                    IKMathUtils.atan2(-(v1.x), v1.y),
+                    IKMathUtils.asin(v2.y),
+                    IKMathUtils.atan2(-(v2.x), v2.z)
             };
 
-        } else if (order == RotationOrder3D.ZYX) {
+        } else if (order == IKRotationOrder.ZYX) {
 
             // r (T .plusI) coordinates are :
             // cos (theta) cos (psi), cos (theta) sin (psi), -sin (theta)
             // (-r) (T .plusK) coordinates are :
             // -sin (theta), sin (phi) cos (theta), cos (phi) cos (theta)
             // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
-            Vector3 v1 = applyTo(RotationOrder3D.X);
-            Vector3 v2 = applyInverseTo(RotationOrder3D.Z);
+            IKVector3 v1 = applyTo(IKRotationOrder.X);
+            IKVector3 v2 = applyInverseTo(IKRotationOrder.Z);
             if ((v2.x < -0.9999999999) || (v2.x > 0.9999999999)) {
                 try {
-                    throw new MathUtils.CardanEulerSingularityException(true);
-                } catch (MathUtils.CardanEulerSingularityException e) {
+                    throw new IKMathUtils.CardanEulerSingularityException(true);
+                } catch (IKMathUtils.CardanEulerSingularityException e) {
                     e.printStackTrace(System.out);
                 }
             }
             return new float[] {
-                    MathUtils.atan2(v1.y, v1.x),
-                    -MathUtils.asin(v2.x),
-                    MathUtils.atan2(v2.y, v2.z)
+                    IKMathUtils.atan2(v1.y, v1.x),
+                    -IKMathUtils.asin(v2.x),
+                    IKMathUtils.atan2(v2.y, v2.z)
             };
 
-        } else if (order == RotationOrder3D.XYX) {
+        } else if (order == IKRotationOrder.XYX) {
 
             // r (T .plusI) coordinates are :
             // cos (theta), sin (phi1) sin (theta), -cos (phi1) sin (theta)
             // (-r) (T .plusI) coordinates are :
             // cos (theta), sin (theta) sin (phi2), sin (theta) cos (phi2)
             // and we can choose to have theta in the interval [0 ; PI]
-            Vector3 v1 = applyTo(RotationOrder3D.X);
-            Vector3 v2 = applyInverseTo(RotationOrder3D.X);
+            IKVector3 v1 = applyTo(IKRotationOrder.X);
+            IKVector3 v2 = applyInverseTo(IKRotationOrder.X);
             if ((v2.x < -0.9999999999) || (v2.x > 0.9999999999)) {
                 try {
-                    throw new MathUtils.CardanEulerSingularityException(true);
-                } catch (MathUtils.CardanEulerSingularityException e) {
+                    throw new IKMathUtils.CardanEulerSingularityException(true);
+                } catch (IKMathUtils.CardanEulerSingularityException e) {
                     e.printStackTrace(System.out);
                 }
             }
             return new float[] {
-                    MathUtils.atan2(v1.y, -v1.z),
-                    MathUtils.acos(v2.x),
-                    MathUtils.atan2(v2.y, v2.z)
+                    IKMathUtils.atan2(v1.y, -v1.z),
+                    IKMathUtils.acos(v2.x),
+                    IKMathUtils.atan2(v2.y, v2.z)
             };
 
-        } else if (order == RotationOrder3D.XZX) {
+        } else if (order == IKRotationOrder.XZX) {
 
             // r (T .plusI) coordinates are :
             // cos (psi), cos (phi1) sin (psi), sin (phi1) sin (psi)
             // (-r) (T .plusI) coordinates are :
             // cos (psi), -sin (psi) cos (phi2), sin (psi) sin (phi2)
             // and we can choose to have psi in the interval [0 ; PI]
-            Vector3 v1 = applyTo(RotationOrder3D.X);
-            Vector3 v2 = applyInverseTo(RotationOrder3D.X);
+            IKVector3 v1 = applyTo(IKRotationOrder.X);
+            IKVector3 v2 = applyInverseTo(IKRotationOrder.X);
             if ((v2.x < -0.9999999999) || (v2.x > 0.9999999999)) {
                 try {
-                    throw new MathUtils.CardanEulerSingularityException(true);
-                } catch (MathUtils.CardanEulerSingularityException e) {
+                    throw new IKMathUtils.CardanEulerSingularityException(true);
+                } catch (IKMathUtils.CardanEulerSingularityException e) {
                     e.printStackTrace(System.out);
                 }
             }
             return new float[] {
-                    MathUtils.atan2(v1.z, v1.y),
-                    MathUtils.acos(v2.x),
-                    MathUtils.atan2(v2.z, -v2.y)
+                    IKMathUtils.atan2(v1.z, v1.y),
+                    IKMathUtils.acos(v2.x),
+                    IKMathUtils.atan2(v2.z, -v2.y)
             };
 
-        } else if (order == RotationOrder3D.YXY) {
+        } else if (order == IKRotationOrder.YXY) {
 
             // r (T .plusJ) coordinates are :
             // sin (theta1) sin (phi), cos (phi), cos (theta1) sin (phi)
             // (-r) (T .plusJ) coordinates are :
             // sin (phi) sin (theta2), cos (phi), -sin (phi) cos (theta2)
             // and we can choose to have phi in the interval [0 ; PI]
-            Vector3 v1 = applyTo(RotationOrder3D.Y);
-            Vector3 v2 = applyInverseTo(RotationOrder3D.Y);
+            IKVector3 v1 = applyTo(IKRotationOrder.Y);
+            IKVector3 v2 = applyInverseTo(IKRotationOrder.Y);
             if ((v2.y < -0.9999999999) || (v2.y > 0.9999999999)) {
                 try {
-                    throw new MathUtils.CardanEulerSingularityException(true);
-                } catch (MathUtils.CardanEulerSingularityException e) {
+                    throw new IKMathUtils.CardanEulerSingularityException(true);
+                } catch (IKMathUtils.CardanEulerSingularityException e) {
                     e.printStackTrace(System.out);
                 }
             }
             return new float[] {
-                    MathUtils.atan2(v1.x, v1.z),
-                    MathUtils.acos(v2.y),
-                    MathUtils.atan2(v2.x, -v2.z)
+                    IKMathUtils.atan2(v1.x, v1.z),
+                    IKMathUtils.acos(v2.y),
+                    IKMathUtils.atan2(v2.x, -v2.z)
             };
 
-        } else if (order == RotationOrder3D.YZY) {
+        } else if (order == IKRotationOrder.YZY) {
 
             // r (T .plusJ) coordinates are :
             // -cos (theta1) sin (psi), cos (psi), sin (theta1) sin (psi)
             // (-r) (T .plusJ) coordinates are :
             // sin (psi) cos (theta2), cos (psi), sin (psi) sin (theta2)
             // and we can choose to have psi in the interval [0 ; PI]
-            Vector3 v1 = applyTo(RotationOrder3D.Y);
-            Vector3 v2 = applyInverseTo(RotationOrder3D.Y);
+            IKVector3 v1 = applyTo(IKRotationOrder.Y);
+            IKVector3 v2 = applyInverseTo(IKRotationOrder.Y);
             if ((v2.y < -0.9999999999) || (v2.y > 0.9999999999)) {
                 try {
-                    throw new MathUtils.CardanEulerSingularityException(true);
-                } catch (MathUtils.CardanEulerSingularityException e) {
+                    throw new IKMathUtils.CardanEulerSingularityException(true);
+                } catch (IKMathUtils.CardanEulerSingularityException e) {
                     e.printStackTrace(System.out);
                 }
             }
             return new float[] {
-                    MathUtils.atan2(v1.z, -v1.x),
-                    MathUtils.acos(v2.y),
-                    MathUtils.atan2(v2.z, v2.x)
+                    IKMathUtils.atan2(v1.z, -v1.x),
+                    IKMathUtils.acos(v2.y),
+                    IKMathUtils.atan2(v2.z, v2.x)
             };
 
-        } else if (order == RotationOrder3D.ZXZ) {
+        } else if (order == IKRotationOrder.ZXZ) {
 
             // r (T .plusK) coordinates are :
             // sin (psi1) sin (phi), -cos (psi1) sin (phi), cos (phi)
             // (-r) (T .plusK) coordinates are :
             // sin (phi) sin (psi2), sin (phi) cos (psi2), cos (phi)
             // and we can choose to have phi in the interval [0 ; PI]
-            Vector3 v1 = applyTo(RotationOrder3D.Z);
-            Vector3 v2 = applyInverseTo(RotationOrder3D.Z);
+            IKVector3 v1 = applyTo(IKRotationOrder.Z);
+            IKVector3 v2 = applyInverseTo(IKRotationOrder.Z);
             if ((v2.z < -0.9999999999) || (v2.z > 0.9999999999)) {
                 try {
-                    throw new MathUtils.CardanEulerSingularityException(true);
-                } catch (MathUtils.CardanEulerSingularityException e) {
+                    throw new IKMathUtils.CardanEulerSingularityException(true);
+                } catch (IKMathUtils.CardanEulerSingularityException e) {
                     e.printStackTrace(System.out);
                 }
             }
             return new float[] {
-                    MathUtils.atan2(v1.x, -v1.y),
-                    MathUtils.acos(v2.z),
-                    MathUtils.atan2(v2.x, v2.y)
+                    IKMathUtils.atan2(v1.x, -v1.y),
+                    IKMathUtils.acos(v2.z),
+                    IKMathUtils.atan2(v2.x, v2.y)
             };
 
         } else { // last possibility is ZYZ
@@ -1247,19 +1247,19 @@ public class Basis3D {
             // (-r) (T .plusK) coordinates are :
             // -sin (theta) cos (psi2), sin (theta) sin (psi2), cos (theta)
             // and we can choose to have theta in the interval [0 ; PI]
-            Vector3 v1 = applyTo(RotationOrder3D.Z);
-            Vector3 v2 = applyInverseTo(RotationOrder3D.Z);
+            IKVector3 v1 = applyTo(IKRotationOrder.Z);
+            IKVector3 v2 = applyInverseTo(IKRotationOrder.Z);
             if ((v2.z < -0.9999999999) || (v2.z > 0.9999999999)) {
                 try {
-                    throw new MathUtils.CardanEulerSingularityException(true);
-                } catch (MathUtils.CardanEulerSingularityException e) {
+                    throw new IKMathUtils.CardanEulerSingularityException(true);
+                } catch (IKMathUtils.CardanEulerSingularityException e) {
                     e.printStackTrace(System.out);
                 }
             }
             return new float[] {
-                    MathUtils.atan2(v1.y, v1.x),
-                    MathUtils.acos(v2.z),
-                    MathUtils.atan2(v2.y, -v2.x)
+                    IKMathUtils.atan2(v1.y, v1.x),
+                    IKMathUtils.acos(v2.z),
+                    IKMathUtils.atan2(v2.y, -v2.x)
             };
 
         }
@@ -1398,14 +1398,14 @@ public class Basis3D {
      * @param u vector to apply the rotation to
      * @return a new vector which is the image of u by the rotation
      */
-    public Vector3 applyTo(Vector3 u) {
+    public IKVector3 applyTo(IKVector3 u) {
 
         float x = u.x;
         float y = u.y;
         float z = u.z;
 
         float s = q1 * x + q2 * y + q3 * z;
-        Vector3 result = (Vector3) u.copy();
+        IKVector3 result = (IKVector3) u.copy();
         result.set(2 * (q0 * (x * q0 - (q2 * z - q3 * y)) + s * q1) - x,
                 2 * (q0 * (y * q0 - (q3 * x - q1 * z)) + s * q2) - y,
                 2 * (q0 * (z * q0 - (q1 * y - q2 * x)) + s * q3) - z);
@@ -1418,8 +1418,8 @@ public class Basis3D {
      * @param alpha Scalar factor.
      * @return a scaled quaternion.
      */
-    public Basis3D multiply(final float alpha) {
-        return new Basis3D(alpha * q0,
+    public IKBasis multiply(final float alpha) {
+        return new IKBasis(alpha * q0,
                 alpha * q1,
                 alpha * q2,
                 alpha * q3);
@@ -1431,7 +1431,7 @@ public class Basis3D {
      * @param q Quaternionf.
      * @return the product of this instance with {@code q}, in that order.
      */
-    public Basis3D multiply(final Basis3D q) {
+    public IKBasis multiply(final IKBasis q) {
         return multiply(this, q);
     }
 
@@ -1441,7 +1441,7 @@ public class Basis3D {
      * @param q Quaternionf.
      * @return the dot product of this instance and {@code q}.
      */
-    public float dotProduct(final Basis3D q) {
+    public float dotProduct(final IKBasis q) {
         return dotProduct(this, q);
     }
 
@@ -1472,7 +1472,7 @@ public class Basis3D {
      * @param u vector to apply the inverse of the rotation to
      * @return a new vector which such that u is its image by the rotation
      */
-    public Vector3 applyInverseTo(Vector3 u) {
+    public IKVector3 applyInverseTo(IKVector3 u) {
 
         float x = u.x;
         float y = u.y;
@@ -1481,7 +1481,7 @@ public class Basis3D {
         float s = q1 * x + q2 * y + q3 * z;
         float m0 = -q0;
 
-        Vector3 result = (Vector3) u.copy();
+        IKVector3 result = (IKVector3) u.copy();
         result.set(2 * (m0 * (x * m0 - (q2 * z - q3 * y)) + s * q1) - x,
                 2 * (m0 * (y * m0 - (q3 * x - q1 * z)) + s * q2) - y,
                 2 * (m0 * (z * m0 - (q1 * y - q2 * x)) + s * q3) - z);
@@ -1522,8 +1522,8 @@ public class Basis3D {
      * @param r rotation to apply the rotation to
      * @return a new rotation which is the composition of r by the instance
      */
-    public Basis3D applyTo(Basis3D r) {
-        return new Basis3D(r.q0 * q0 - (r.q1 * q1 + r.q2 * q2 + r.q3 * q3),
+    public IKBasis applyTo(IKBasis r) {
+        return new IKBasis(r.q0 * q0 - (r.q1 * q1 + r.q2 * q2 + r.q3 * q3),
                 r.q1 * q0 + r.q0 * q1 + (r.q2 * q3 - r.q3 * q2),
                 r.q2 * q0 + r.q0 * q2 + (r.q3 * q1 - r.q1 * q3),
                 r.q3 * q0 + r.q0 * q3 + (r.q1 * q2 - r.q2 * q1),
@@ -1543,8 +1543,8 @@ public class Basis3D {
      * @return a new rotation which is the composition of r by the inverse
      *         of the instance
      */
-    public Basis3D applyInverseTo(Basis3D r) {
-        return new Basis3D(-r.q0 * q0 - (r.q1 * q1 + r.q2 * q2 + r.q3 * q3),
+    public IKBasis applyInverseTo(IKBasis r) {
+        return new IKBasis(-r.q0 * q0 - (r.q1 * q1 + r.q2 * q2 + r.q3 * q3),
                 -r.q1 * q0 + r.q0 * q1 + (r.q2 * q3 - r.q3 * q2),
                 -r.q2 * q0 + r.q0 * q2 + (r.q3 * q1 - r.q1 * q3),
                 -r.q3 * q0 + r.q0 * q3 + (r.q1 * q2 - r.q2 * q1),
@@ -1564,7 +1564,7 @@ public class Basis3D {
      * @param output the rotation to store the result in
      * @return a new rotation which is the composition of r by the instance
      */
-    public void applyTo(Basis3D r, Basis3D output) {
+    public void applyTo(IKBasis r, IKBasis output) {
         output.set(r.q0 * q0 - (r.q1 * q1 + r.q2 * q2 + r.q3 * q3),
                 r.q1 * q0 + r.q0 * q1 + (r.q2 * q3 - r.q3 * q2),
                 r.q2 * q0 + r.q0 * q2 + (r.q3 * q1 - r.q1 * q3),
@@ -1587,7 +1587,7 @@ public class Basis3D {
      * @return a new rotation which is the composition of r by the inverse
      *         of the instance
      */
-    public void applyInverseTo(Basis3D r, Basis3D output) {
+    public void applyInverseTo(IKBasis r, IKBasis output) {
         output.set(-r.q0 * q0 - (r.q1 * q1 + r.q2 * q2 + r.q3 * q3),
                 -r.q1 * q0 + r.q0 * q1 + (r.q2 * q3 - r.q3 * q2),
                 -r.q2 * q0 + r.q0 * q2 + (r.q3 * q1 - r.q1 * q3),
@@ -1595,7 +1595,7 @@ public class Basis3D {
                 false);
     }
 
-    public Basis3D setToConjugate() {
+    public IKBasis setToConjugate() {
         q1 = -q1;
         q2 = -q2;
         q3 = -q3;
@@ -1616,7 +1616,7 @@ public class Basis3D {
 
     public void setToNormalized() {
         // normalization preprocessing
-        float inv = 1.0f / MathUtils.sqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
+        float inv = 1.0f / IKMathUtils.sqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
         q0 *= inv;
         q1 *= inv;
         q2 *= inv;
@@ -1629,7 +1629,7 @@ public class Basis3D {
      * @return the norm.
      */
     public float len() {
-        return MathUtils.sqrt(q0 * q0 +
+        return IKMathUtils.sqrt(q0 * q0 +
                 q1 * q1 +
                 q2 * q2 +
                 q3 * q3);
@@ -1640,12 +1640,12 @@ public class Basis3D {
      * The norm of the quaternion must not be zero.
      *
      * @return a normalized quaternion.
-     * @throws MathUtils.ZeroException if the norm of the quaternion is zero.
+     * @throws IKMathUtils.ZeroException if the norm of the quaternion is zero.
      */
-    public Basis3D normalize() {
+    public IKBasis normalize() {
         final float norm = len();
 
-        if (norm < MathUtils.SAFE_MIN_DOUBLE) {
+        if (norm < IKMathUtils.SAFE_MIN_DOUBLE) {
             try {
                 throw new Exception("Zero Norm");
             } catch (Exception e) {
@@ -1653,13 +1653,13 @@ public class Basis3D {
             }
         }
 
-        return new Basis3D(q0 / norm,
+        return new IKBasis(q0 / norm,
                 q1 / norm,
                 q2 / norm,
                 q3 / norm);
     }
 
-    public void set(Vector3 u, Vector3 v) {
+    public void set(IKVector3 u, IKVector3 v) {
 
         float normProduct = u.mag() * v.mag();
         if (normProduct == 0) {
@@ -1675,7 +1675,7 @@ public class Basis3D {
         if (dot < ((2.0e-15 - 1.0f) * normProduct)) {
             // special case u = -v: we select a PI angle rotation around
             // an arbitrary vector orthogonal to u
-            Vector3 w = (Vector3) u.getOrthogonal();
+            IKVector3 w = (IKVector3) u.getOrthogonal();
             q0 = 0.0f;
             q1 = -w.x;
             q2 = -w.y;
@@ -1683,9 +1683,9 @@ public class Basis3D {
         } else {
             // general case: (u, v) defines a plane, we select
             // the shortest possible rotation: axis orthogonal to this plane
-            q0 = MathUtils.sqrt(0.5f * (1.0f + dot / normProduct));
+            q0 = IKMathUtils.sqrt(0.5f * (1.0f + dot / normProduct));
             float coeff = 1.0f / (2.0f * q0 * normProduct);
-            Vector3 q = (Vector3) v.crossCopy(u);
+            IKVector3 q = (IKVector3) v.crossCopy(u);
             q1 = coeff * q.x;
             q2 = coeff * q.y;
             q3 = coeff * q.z;
@@ -1693,7 +1693,7 @@ public class Basis3D {
 
     }
 
-    public void set(Vector3 axis, float angle) {
+    public void set(IKVector3 axis, float angle) {
 
         float norm = axis.mag();
         if (norm == 0) {
@@ -1705,9 +1705,9 @@ public class Basis3D {
         }
 
         float halfAngle = -0.5f * angle;
-        float coeff = MathUtils.sin(halfAngle) / norm;
+        float coeff = IKMathUtils.sin(halfAngle) / norm;
 
-        q0 = MathUtils.cos(halfAngle);
+        q0 = IKMathUtils.cos(halfAngle);
         q1 = coeff * axis.x;
         q2 = coeff * axis.y;
         q3 = coeff * axis.z;
@@ -1787,7 +1787,7 @@ public class Basis3D {
                     corr20 * corr20 + corr21 * corr21 + corr22 * corr22;
 
             // convergence test
-            if (MathUtils.abs(fn1 - fn) <= threshold) {
+            if (IKMathUtils.abs(fn1 - fn) <= threshold) {
                 return o;
             }
 
@@ -1803,17 +1803,17 @@ public class Basis3D {
             x22 = o2[2];
             fn = fn1;
         }
-        Basis3D returnMatrix = new Basis3D(1.0f, 0.0f ,0.0f, 0.0f, false);
+        IKBasis returnMatrix = new IKBasis(1.0f, 0.0f ,0.0f, 0.0f, false);
         return new float[][]{returnMatrix.getMatrix3Val()};
     }
 
-    public boolean equalTo(Basis3D m) {
-        return distance(this, m) < MathUtils.DOUBLE_ROUNDING_ERROR;
+    public boolean equalTo(IKBasis m) {
+        return distance(this, m) < IKMathUtils.DOUBLE_ROUNDING_ERROR;
     }
 
     public String toString() {
         String result = "axis: " + getAxis().toVec3f().toString();
-        result += "\n angle : " + MathUtils.toDegrees(getAngle()) + " degrees ";
+        result += "\n angle : " + IKMathUtils.toDegrees(getAngle()) + " degrees ";
         result += "\n angle : " + getAngle() + " radians ";
         return result;
     }

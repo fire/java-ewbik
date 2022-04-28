@@ -1,8 +1,8 @@
 package EWBIK;
 
-public class QuaternionBasedCharacteristicPolynomial {
+public class IKQuaternionBasedCharacteristicPolynomial {
 
-    public Vector3[] target;
+    public IKVector3[] target;
     /**
      * Implementation of the Quaternionff-Based Characteristic Polynomial algorithm
      * for RMSD and Superposition calculations.
@@ -86,13 +86,13 @@ public class QuaternionBasedCharacteristicPolynomial {
     private float evec_prec = (float) 1E-6;
     private float eval_prec = (float) 1E-11;
     private int max_iterations = 5;
-    private Vector3[] moved;
+    private IKVector3[] moved;
 
     private float[] weight;
     private float wsum;
 
-    private final Vector3 targetCenter = new Vector3();
-    private final Vector3 movedCenter = new Vector3();
+    private final IKVector3 targetCenter = new IKVector3();
+    private final IKVector3 movedCenter = new IKVector3();
 
     private float e0;
     private float rmsd = 0;
@@ -114,13 +114,13 @@ public class QuaternionBasedCharacteristicPolynomial {
      * @param evec_prec required eigenvector precision
      * @param eval_prec required eigenvalue precision
      */
-    public QuaternionBasedCharacteristicPolynomial(float evec_prec, float eval_prec) {
+    public IKQuaternionBasedCharacteristicPolynomial(float evec_prec, float eval_prec) {
         this.evec_prec = evec_prec;
         this.eval_prec = eval_prec;
     }
 
-    public static void translate(Vector3 trans, Vector3[] x) {
-        for (Vector3 p : x) {
+    public static void translate(IKVector3 trans, IKVector3[] x) {
+        for (IKVector3 p : x) {
             p.add(trans);
         }
     }
@@ -146,7 +146,7 @@ public class QuaternionBasedCharacteristicPolynomial {
      * @param x 3f points of reference coordinate set
      * @param y 3f points of coordinate set for superposition
      */
-    private void set(Vector3[] target, Vector3[] moved) {
+    private void set(IKVector3[] target, IKVector3[] moved) {
         this.moved = target;
         this.target = moved;
         rmsdCalculated = false;
@@ -162,7 +162,7 @@ public class QuaternionBasedCharacteristicPolynomial {
      * @param moved  3f points of coordinate set for superposition
      * @param weight a weight in the inclusive range [0,1] for each point
      */
-    public void set(Vector3[] moved, Vector3[] target, float[] weight, boolean translate) {
+    public void set(IKVector3[] moved, IKVector3[] target, float[] weight, boolean translate) {
         this.target = target;
         this.moved = moved;
         this.weight = weight;
@@ -212,14 +212,14 @@ public class QuaternionBasedCharacteristicPolynomial {
      * @param weight array of weigths for each equivalent point position
      * @return
      */
-    public Quaternion weightedSuperpose(Vector3[] moved, Vector3[] target, float[] weight, boolean translate) {
+    public IKQuaternion weightedSuperpose(IKVector3[] moved, IKVector3[] target, float[] weight, boolean translate) {
         set(moved, target, weight, translate);
-        Quaternion result = getRotation();
+        IKQuaternion result = getRotation();
         return result;
     }
 
-    private Quaternion getRotation() {
-        Quaternion result = null;
+    private IKQuaternion getRotation() {
+        IKQuaternion result = null;
         if (!transformationCalculated) {
             if (!innerProductCalculated)
                 innerProduct(target, moved);
@@ -236,7 +236,7 @@ public class QuaternionBasedCharacteristicPolynomial {
      * @param x 3f points of reference coordinate set
      * @param y 3f points of coordinate set for superposition
      */
-    private void calcRmsd(Vector3[] x, Vector3[] y) {
+    private void calcRmsd(IKVector3[] x, IKVector3[] y) {
         // QCP doesn't handle alignment of single values, so if we only have one point
         // we just compute regular distance.
         if (x.length == 1) {
@@ -252,7 +252,7 @@ public class QuaternionBasedCharacteristicPolynomial {
     /**
      * Calculates the inner product between two coordinate sets x and y
      * (optionally weighted, if weights set through
-     * {@link #set(Vector3[], Vector3[], float[])}). It also calculates an
+     * {@link #set(IKVector3[], IKVector3[], float[])}). It also calculates an
      * upper bound of the most positive root of the key matrix.
      * http://theobald.brandeis.edu/qcp/qcprot.c
      *
@@ -260,7 +260,7 @@ public class QuaternionBasedCharacteristicPolynomial {
      * @param coords2
      * @return
      */
-    private void innerProduct(Vector3[] coords1, Vector3[] coords2) {
+    private void innerProduct(IKVector3[] coords1, IKVector3[] coords2) {
         float x1, x2, y1, y2, z1, z2;
         float g1 = 0f, g2 = 0f;
 
@@ -376,20 +376,20 @@ public class QuaternionBasedCharacteristicPolynomial {
                 float delta = ((((Y * c0 + c1) * Y + c2) * Y2 + 1) / ((Y * c1 + 2 * c2) * Y2 * Y + 4));
                 mxEigenV -= delta;
 
-                if (MathUtils.abs(mxEigenV - oldg) < MathUtils.abs(eval_prec * mxEigenV))
+                if (IKMathUtils.abs(mxEigenV - oldg) < IKMathUtils.abs(eval_prec * mxEigenV))
                     break;
             }
         }
 
-        rmsd = MathUtils.sqrt(MathUtils.abs(2.0f * (e0 - mxEigenV) / len));
+        rmsd = IKMathUtils.sqrt(IKMathUtils.abs(2.0f * (e0 - mxEigenV) / len));
     }
 
-    private Quaternion calcRotation() {
+    private IKQuaternion calcRotation() {
 
         // QCP doesn't handle single targets, so if we only have one point and one
         // target, we just rotate by the angular distance between them
         if (moved.length == 1) {
-            return new Quaternion(moved[0], target[0]);
+            return new IKQuaternion(moved[0], target[0]);
         } else {
 
             float a11 = SxxpSyy + Szz - mxEigenV;
@@ -456,7 +456,7 @@ public class QuaternionBasedCharacteristicPolynomial {
                             /*
                              * if qsqr is still too small, return the identity rotation
                              */
-                            return new Quaternion();
+                            return new IKQuaternion();
                         }
                     }
                 }
@@ -467,16 +467,16 @@ public class QuaternionBasedCharacteristicPolynomial {
             min = q3 < min ? q3 : min;
             min = q4 < min ? q4 : min;
 
-            return new Quaternion(q1 / min, q2 / min, q3 / min, q4 / min, true);
+            return new IKQuaternion(q1 / min, q2 / min, q3 / min, q4 / min, true);
         }
     }
 
-    public float getRmsd(Vector3[] fixed, Vector3[] moved) {
+    public float getRmsd(IKVector3[] fixed, IKVector3[] moved) {
         set(moved, fixed);
         return getRmsd();
     }
 
-    public Vector3 moveToWeightedCenter(Vector3[] toCenter, float[] weight, Vector3 center) {
+    public IKVector3 moveToWeightedCenter(IKVector3[] toCenter, float[] weight, IKVector3 center) {
 
         if (weight != null) {
             for (int i = 0; i < toCenter.length; i++) {
@@ -496,7 +496,7 @@ public class QuaternionBasedCharacteristicPolynomial {
         return center;
     }
 
-    public Vector3 getTranslation() {
+    public IKVector3 getTranslation() {
         return targetCenter.subCopy(movedCenter);
     }
 

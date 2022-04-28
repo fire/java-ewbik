@@ -7,9 +7,9 @@ public class IKPin3D {
     public static final short XDir = 1;
     public static final short YDir = 2;
     public static final short ZDir = 4;
-    public Bone3D forBone;
+    public IKBone3D forBone;
     protected boolean isEnabled;
-    protected Node3D node3D;
+    protected IKNode3D node3D;
     protected IKPin3D parentPin;
     protected ArrayList<IKPin3D> childPins = new ArrayList<>();
     protected float xPriority = 1f;
@@ -23,29 +23,29 @@ public class IKPin3D {
     public IKPin3D() {
     }
 
-    public IKPin3D(Node3D inNode3D, boolean enabled, Bone3D bone) {
+    public IKPin3D(IKNode3D inNode3D, boolean enabled, IKBone3D bone) {
         this.isEnabled = enabled;
         this.node3D = inNode3D;
         this.forBone = bone;
         setTargetPriorities(IKPin3D.this.xPriority, IKPin3D.this.yPriority, IKPin3D.this.zPriority);
     }
 
-    public IKPin3D(Node3D inNode3D, Bone3D bone) {
+    public IKPin3D(IKNode3D inNode3D, IKBone3D bone) {
         this.node3D = inNode3D;
         this.forBone = bone;
         this.isEnabled = false;
         setTargetPriorities(IKPin3D.this.xPriority, IKPin3D.this.yPriority, IKPin3D.this.zPriority);
     }
 
-    public Vector3 getLocation() {
+    public IKVector3 getLocation() {
         return getLocation_();
     }
 
-    public void translateTo(Vector3 v) {
+    public void translateTo(IKVector3 v) {
         translateTo_(v);
     }
 
-    public void translateBy(Vector3 v) {
+    public void translateBy(IKVector3 v) {
         translateBy_(v);
     }
 
@@ -70,11 +70,11 @@ public class IKPin3D {
         node3D.rotateAboutZ(radians, true);
     }
 
-    public Node3D getAxes() {
+    public IKNode3D getAxes() {
         return node3D;
     }
 
-    public Bone3D forBone() {
+    public IKBone3D forBone() {
 
         return this.forBone;
     }
@@ -228,7 +228,7 @@ public class IKPin3D {
      *
      * @param inNode3D
      */
-    public void alignToAxes(Node3D inNode3D) {
+    public void alignToAxes(IKNode3D inNode3D) {
         this.node3D.alignGlobalsTo(inNode3D);
     }
 
@@ -237,7 +237,7 @@ public class IKPin3D {
      *
      * @param location
      */
-    public void translateTo_(Vector3 location) {
+    public void translateTo_(IKVector3 location) {
         this.node3D.translateTo(location);
     }
 
@@ -248,8 +248,8 @@ public class IKPin3D {
      *
      * @param location
      */
-    public void translateToArmatureLocal_(Vector3 location) {
-        Node3D armNode3D = this.forBone().parentArmature.localAxes().getParentAxes();
+    public void translateToArmatureLocal_(IKVector3 location) {
+        IKNode3D armNode3D = this.forBone().parentArmature.localAxes().getParentAxes();
         if (armNode3D == null) {
             this.node3D.translateTo(location);
         } else {
@@ -263,14 +263,14 @@ public class IKPin3D {
      *
      * @param location
      */
-    public void translateBy_(Vector3 location) {
+    public void translateBy_(IKVector3 location) {
         this.node3D.translateByLocal(location);
     }
 
     /**
      * @return the pin locationin global coordinates
      */
-    public Vector3 getLocation_() {
+    public IKVector3 getLocation_() {
         return node3D.calculatePosition();
     }
 

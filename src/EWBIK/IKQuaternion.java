@@ -24,56 +24,56 @@ SOFTWARE.
 
 package EWBIK;
 
-public class Quaternion {
-    public Basis3D rotation = Basis3D.IDENTITY;
+public class IKQuaternion {
+    public IKBasis rotation = IKBasis.IDENTITY;
     private final float[] workingInput = new float[3];
     private final float[] workingOutput = new float[3];
 
-    public Quaternion() {
-        this.rotation = new Basis3D(
-                Basis3D.IDENTITY.getQ0(),
-                Basis3D.IDENTITY.getQ1(),
-                Basis3D.IDENTITY.getQ2(),
-                Basis3D.IDENTITY.getQ3(), false);
+    public IKQuaternion() {
+        this.rotation = new IKBasis(
+                IKBasis.IDENTITY.getQ0(),
+                IKBasis.IDENTITY.getQ1(),
+                IKBasis.IDENTITY.getQ2(),
+                IKBasis.IDENTITY.getQ3(), false);
     }
 
-    public Quaternion(Basis3D r) {
-        this.rotation = new Basis3D(r.getQ0(), r.getQ1(), r.getQ2(), r.getQ3());
+    public IKQuaternion(IKBasis r) {
+        this.rotation = new IKBasis(r.getQ0(), r.getQ1(), r.getQ2(), r.getQ3());
     }
 
-    public Quaternion(RotationOrder3D order,
-                      float alpha1, float alpha2, float alpha3) {
-        rotation = new Basis3D(order, alpha1, alpha2, alpha3);
+    public IKQuaternion(IKRotationOrder order,
+                        float alpha1, float alpha2, float alpha3) {
+        rotation = new IKBasis(order, alpha1, alpha2, alpha3);
     }
 
-    public Quaternion(Vector3 v1, Vector3 v2, Vector3 u1, Vector3 u2) {
-        rotation = new Basis3D(v1, v2, u1, u2);
+    public IKQuaternion(IKVector3 v1, IKVector3 v2, IKVector3 u1, IKVector3 u2) {
+        rotation = new IKBasis(v1, v2, u1, u2);
     }
 
-    public Quaternion(Vector3 axis, float angle) {
-        rotation = new Basis3D(axis, angle);
+    public IKQuaternion(IKVector3 axis, float angle) {
+        rotation = new IKBasis(axis, angle);
     }
 
-    public Quaternion(float w, float x, float y, float z, boolean needsNormalization) {
-        this.rotation = new Basis3D(w, x, y, z, needsNormalization);
+    public IKQuaternion(float w, float x, float y, float z, boolean needsNormalization) {
+        this.rotation = new IKBasis(w, x, y, z, needsNormalization);
     }
 
-    public Quaternion(Vector3 begin, Vector3 end) {
-        rotation = new Basis3D(begin, end);
+    public IKQuaternion(IKVector3 begin, IKVector3 end) {
+        rotation = new IKBasis(begin, end);
     }
 
     /*
      * interpolate between two rotations (SLERP)
      *
      */
-    public Quaternion(float amount, Quaternion v1, Quaternion v2) {
+    public IKQuaternion(float amount, IKQuaternion v1, IKQuaternion v2) {
         rotation = slerp(amount, v1.rotation, v2.rotation);
     }
 
-    public static Basis3D slerp(float amount, Basis3D value1, Basis3D value2) {
+    public static IKBasis slerp(float amount, IKBasis value1, IKBasis value2) {
 
         if (Float.isNaN(amount)) {
-            return new Basis3D(value1.getQ0(), value1.getQ1(), value1.getQ2(), value1.getQ3());
+            return new IKBasis(value1.getQ0(), value1.getQ1(), value1.getQ2(), value1.getQ3());
         }
         if (amount < 0.0f)
             return value1;
@@ -92,24 +92,24 @@ public class Quaternion {
         final float EPSILON = 0.0001f;
         if ((1.0f - dot) > EPSILON) // The standard case (slerp).
         {
-            float angle = MathUtils.acos(dot);
-            float sinAngle = MathUtils.sin(angle);
-            t1 = MathUtils.sin((1.0f - amount) * angle) / sinAngle;
-            t2 = MathUtils.sin(amount * angle) / sinAngle;
+            float angle = IKMathUtils.acos(dot);
+            float sinAngle = IKMathUtils.sin(angle);
+            t1 = IKMathUtils.sin((1.0f - amount) * angle) / sinAngle;
+            t2 = IKMathUtils.sin(amount * angle) / sinAngle;
         } else // lerp
         {
             t1 = 1.0f - amount;
             t2 = amount;
         }
 
-        return new Basis3D(
+        return new IKBasis(
                 (value1.getQ0() * t1) + (w2 * t2),
                 (value1.getQ1() * t1) + (x2 * t2),
                 (value1.getQ2() * t1) + (y2 * t2),
                 (value1.getQ3() * t1) + (z2 * t2));
     }
 
-    public static Quaternion nlerp(Quaternion[] rotations, float[] weights) {
+    public static IKQuaternion nlerp(IKQuaternion[] rotations, float[] weights) {
 
         if (weights == null) {
             return nlerp(rotations);
@@ -121,7 +121,7 @@ public class Quaternion {
             float total = 0f;
 
             for (int i = 0; i < rotations.length; i++) {
-                Basis3D r = rotations[i].rotation;
+                IKBasis r = rotations[i].rotation;
                 float weight = weights[i];
                 q0 += r.getQ0() * weight;
                 q1 += r.getQ1() * weight;
@@ -135,11 +135,11 @@ public class Quaternion {
             q2 /= total;
             q3 /= total;
 
-            return new Quaternion(q0, q1, q2, q3, true);
+            return new IKQuaternion(q0, q1, q2, q3, true);
         }
     }
 
-    public static Quaternion nlerp(Quaternion[] rotations) {
+    public static IKQuaternion nlerp(IKQuaternion[] rotations) {
         float q0 = 0f;
         float q1 = 0f;
         float q2 = 0f;
@@ -147,7 +147,7 @@ public class Quaternion {
         float total = rotations.length;
 
         for (int i = 0; i < rotations.length; i++) {
-            Basis3D r = rotations[i].rotation;
+            IKBasis r = rotations[i].rotation;
             q0 += r.getQ0();
             q1 += r.getQ1();
             q2 += r.getQ2();
@@ -158,7 +158,7 @@ public class Quaternion {
         q2 /= total;
         q3 /= total;
 
-        return new Quaternion(q0, q1, q2, q3, true);
+        return new IKQuaternion(q0, q1, q2, q3, true);
     }
 
     /**
@@ -177,8 +177,8 @@ public class Quaternion {
      * @return the weighted average Rotation. If the total weights are 0, then
      *         returns null.
      */
-    public static Quaternion instantaneousAvg(Quaternion[] rots, float[] weights) {
-        Vector3 accumulatedAxisAngle = new Vector3();
+    public static IKQuaternion instantaneousAvg(IKQuaternion[] rots, float[] weights) {
+        IKVector3 accumulatedAxisAngle = new IKVector3();
         float totalWeight = rots.length;
         if (weights != null) {
             totalWeight = 0f;
@@ -192,7 +192,7 @@ public class Quaternion {
         }
 
         for (int i = 0; i < rots.length; i++) {
-            Vector3 axis = rots[i].getAxis();
+            IKVector3 axis = rots[i].getAxis();
             float angle = rots[i].getAngle();
             angle /= totalWeight;
             if (weights != null) {
@@ -203,12 +203,12 @@ public class Quaternion {
         }
         float extractAngle = accumulatedAxisAngle.mag();
         accumulatedAxisAngle.divide(extractAngle);
-        return new Quaternion(accumulatedAxisAngle, extractAngle);
+        return new IKQuaternion(accumulatedAxisAngle, extractAngle);
     }
 
-    public Quaternion copy() {
-        return new Quaternion(
-                new Basis3D(rotation.getQ0(), rotation.getQ1(), rotation.getQ2(), rotation.getQ3(), false));
+    public IKQuaternion copy() {
+        return new IKQuaternion(
+                new IKBasis(rotation.getQ0(), rotation.getQ1(), rotation.getQ2(), rotation.getQ3(), false));
     }
 
     /**
@@ -216,11 +216,11 @@ public class Quaternion {
      *
      * @param r a rotation to make this rotation equivalent to
      */
-    public void set(Basis3D r) {
+    public void set(IKBasis r) {
         if (r != null)
             this.rotation.set(r.getQ0(), r.getQ1(), r.getQ2(), r.getQ3(), false);
         else
-            this.set(Basis3D.IDENTITY);
+            this.set(IKBasis.IDENTITY);
     }
 
     /**
@@ -228,11 +228,11 @@ public class Quaternion {
      *
      * @param r a rotation to make this rotation equivalent to
      */
-    public void set(Quaternion r) {
+    public void set(IKQuaternion r) {
         if (r != null)
             this.set(r.rotation);
         else
-            this.set(Basis3D.IDENTITY);
+            this.set(IKBasis.IDENTITY);
     }
 
     /**
@@ -242,7 +242,7 @@ public class Quaternion {
      * @param axis
      * @param angle
      */
-    public void set(Vector3 axis, float angle) {
+    public void set(IKVector3 axis, float angle) {
         this.rotation.set(axis, angle);
     }
 
@@ -253,11 +253,11 @@ public class Quaternion {
      * @param axis
      * @param angle
      */
-    public void set(Vector3 startVec, Vector3 targetVec) {
+    public void set(IKVector3 startVec, IKVector3 targetVec) {
         this.rotation.set(startVec, targetVec);
     }
 
-    public void applyTo(Vector3 v, Vector3 output) {
+    public void applyTo(IKVector3 v, IKVector3 output) {
         workingInput[0] = v.x;
         workingInput[1] = v.y;
         workingInput[2] = v.z;
@@ -265,7 +265,7 @@ public class Quaternion {
         output.set(workingOutput);
     }
 
-    public void applyInverseTo(Vector3 v, Vector3 output) {
+    public void applyInverseTo(IKVector3 v, IKVector3 output) {
         workingInput[0] = v.x;
         workingInput[1] = v.y;
         workingInput[2] = v.z;
@@ -280,22 +280,22 @@ public class Quaternion {
      * @return
      */
 
-    public Vector3 applyToCopy(Vector3 v) {
+    public IKVector3 applyToCopy(IKVector3 v) {
         workingInput[0] = v.x;
         workingInput[1] = v.y;
         workingInput[2] = v.z;
         rotation.applyTo(workingInput, workingOutput);
-        Vector3 copy = (Vector3) v.copy();
-        return (Vector3) copy.set(workingOutput[0], workingOutput[1], workingOutput[2]);
+        IKVector3 copy = (IKVector3) v.copy();
+        return (IKVector3) copy.set(workingOutput[0], workingOutput[1], workingOutput[2]);
     }
 
-    public Vector3 applyInverseToCopy(Vector3 v) {
+    public IKVector3 applyInverseToCopy(IKVector3 v) {
         workingInput[0] = v.x;
         workingInput[1] = v.y;
         workingInput[2] = v.z;
         rotation.applyInverseTo(workingInput, workingOutput);
-        Vector3 copy = (Vector3) v.copy();
-        return (Vector3) copy.set(workingOutput[0], workingOutput[1], workingOutput[2]);
+        IKVector3 copy = (IKVector3) v.copy();
+        return (IKVector3) copy.set(workingOutput[0], workingOutput[1], workingOutput[2]);
     }
 
     /**
@@ -312,35 +312,35 @@ public class Quaternion {
      *         }
      */
 
-    private Quaternion getNormalized(Basis3D r) {
-        return new Quaternion(new Basis3D(r.getQ0(), r.getQ1(), r.getQ2(), r.getQ3(), true));
+    private IKQuaternion getNormalized(IKBasis r) {
+        return new IKQuaternion(new IKBasis(r.getQ0(), r.getQ1(), r.getQ2(), r.getQ3(), true));
     }
 
-    public Ray3D applyToCopy(Ray3D rIn) {
+    public IKRay3D applyToCopy(IKRay3D rIn) {
         workingInput[0] = rIn.p2().x - rIn.p1().x;
         workingInput[1] = rIn.p2().y - rIn.p1().y;
         workingInput[2] = rIn.p2().z - rIn.p1().z;
 
         this.rotation.applyTo(workingInput, workingOutput);
-        Ray3D result = rIn.copy();
+        IKRay3D result = rIn.copy();
         result.heading(workingOutput);
         return result;
     }
 
-    public Ray3D applyInverseTo(Ray3D rIn) {
+    public IKRay3D applyInverseTo(IKRay3D rIn) {
         workingInput[0] = rIn.p2().x - rIn.p1().x;
         workingInput[1] = rIn.p2().y - rIn.p1().y;
         workingInput[2] = rIn.p2().z - rIn.p1().z;
 
         this.rotation.applyInverseTo(workingInput, workingOutput);
-        Ray3D result = rIn.copy();
+        IKRay3D result = rIn.copy();
         result.p2().add(workingOutput);
         return result;
     }
 
-    public void applyTo(Quaternion rot, Quaternion storeIn) {
-        Basis3D r = rot.rotation;
-        Basis3D tr = this.rotation;
+    public void applyTo(IKQuaternion rot, IKQuaternion storeIn) {
+        IKBasis r = rot.rotation;
+        IKBasis tr = this.rotation;
         storeIn.rotation.set(
                 r.getQ0() * tr.getQ0() - (r.getQ1() * tr.getQ1() + r.getQ2() * tr.getQ2() + r.getQ3() * tr.getQ3()),
                 r.getQ1() * tr.getQ0() + r.getQ0() * tr.getQ1() + (r.getQ2() * tr.getQ3() - r.getQ3() * tr.getQ2()),
@@ -349,9 +349,9 @@ public class Quaternion {
                 true);
     }
 
-    public void applyInverseTo(Quaternion rot, Quaternion storeIn) {
-        Basis3D r = rot.rotation;
-        Basis3D tr = this.rotation;
+    public void applyInverseTo(IKQuaternion rot, IKQuaternion storeIn) {
+        IKBasis r = rot.rotation;
+        IKBasis tr = this.rotation;
         storeIn.rotation.set(
                 -r.getQ0() * tr.getQ0() - (r.getQ1() * tr.getQ1() + r.getQ2() * tr.getQ2() + r.getQ3() * tr.getQ3()),
                 -r.getQ1() * tr.getQ0() + r.getQ0() * tr.getQ1() + (r.getQ2() * tr.getQ3() - r.getQ3() * tr.getQ2()),
@@ -360,46 +360,46 @@ public class Quaternion {
                 true);
     }
 
-    public Quaternion applyTo(Quaternion rot) {
-        Basis3D r = rot.rotation;
-        Basis3D tr = this.rotation;
-        Basis3D result = new Basis3D(
+    public IKQuaternion applyTo(IKQuaternion rot) {
+        IKBasis r = rot.rotation;
+        IKBasis tr = this.rotation;
+        IKBasis result = new IKBasis(
                 r.getQ0() * tr.getQ0() - (r.getQ1() * tr.getQ1() + r.getQ2() * tr.getQ2() + r.getQ3() * tr.getQ3()),
                 r.getQ1() * tr.getQ0() + r.getQ0() * tr.getQ1() + (r.getQ2() * tr.getQ3() - r.getQ3() * tr.getQ2()),
                 r.getQ2() * tr.getQ0() + r.getQ0() * tr.getQ2() + (r.getQ3() * tr.getQ1() - r.getQ1() * tr.getQ3()),
                 r.getQ3() * tr.getQ0() + r.getQ0() * tr.getQ3() + (r.getQ1() * tr.getQ2() - r.getQ2() * tr.getQ1()),
                 true);
-        return new Quaternion(result);
+        return new IKQuaternion(result);
     }
 
-    public Quaternion applyInverseTo(Quaternion rot) {
-        Basis3D r = rot.rotation;
-        Basis3D tr = this.rotation;
-        Basis3D result = new Basis3D(
+    public IKQuaternion applyInverseTo(IKQuaternion rot) {
+        IKBasis r = rot.rotation;
+        IKBasis tr = this.rotation;
+        IKBasis result = new IKBasis(
                 -r.getQ0() * tr.getQ0() - (r.getQ1() * tr.getQ1() + r.getQ2() * tr.getQ2() + r.getQ3() * tr.getQ3()),
                 -r.getQ1() * tr.getQ0() + r.getQ0() * tr.getQ1() + (r.getQ2() * tr.getQ3() - r.getQ3() * tr.getQ2()),
                 -r.getQ2() * tr.getQ0() + r.getQ0() * tr.getQ2() + (r.getQ3() * tr.getQ1() - r.getQ1() * tr.getQ3()),
                 -r.getQ3() * tr.getQ0() + r.getQ0() * tr.getQ3() + (r.getQ1() * tr.getQ2() - r.getQ2() * tr.getQ1()),
                 true);
-        return new Quaternion(result);
+        return new IKQuaternion(result);
     }
 
     public float getAngle() {
         return rotation.getAngle();
     }
 
-    public Vector3 getAxis() {
-        Vector3 result = new Vector3();
+    public IKVector3 getAxis() {
+        IKVector3 result = new IKVector3();
         getAxis(result);
         return result;
     }
 
-    public void getAxis(Vector3 output) {
+    public void getAxis(IKVector3 output) {
         rotation.setToAxis(output);
     }
 
-    public Quaternion revert() {
-        return new Quaternion(this.rotation.revert());
+    public IKQuaternion revert() {
+        return new IKQuaternion(this.rotation.revert());
     }
 
     /**
@@ -407,7 +407,7 @@ public class Quaternion {
      *
      * @param storeIN
      */
-    public void setToReversion(Quaternion r) {
+    public void setToReversion(IKQuaternion r) {
         rotation.revert(r.rotation);
     }
 
@@ -432,20 +432,20 @@ public class Quaternion {
      * @see <a href=
      *      "http://www.euclideanspace.com/maths/geometry/rotations/for/decomposition">calculation</a>
      */
-    public Quaternion[] getSwingTwist(Vector3 axis) {
-        Quaternion twistRot = new Quaternion(
-                new Basis3D(rotation.getQ0(), rotation.getQ1(), rotation.getQ2(), rotation.getQ3()));
-        final float d = Vector3.dot(twistRot.rotation.getQ1(), twistRot.rotation.getQ2(), twistRot.rotation.getQ3(),
+    public IKQuaternion[] getSwingTwist(IKVector3 axis) {
+        IKQuaternion twistRot = new IKQuaternion(
+                new IKBasis(rotation.getQ0(), rotation.getQ1(), rotation.getQ2(), rotation.getQ3()));
+        final float d = IKVector3.dot(twistRot.rotation.getQ1(), twistRot.rotation.getQ2(), twistRot.rotation.getQ3(),
                 axis.x, axis.y, axis.z);
         twistRot.rotation.set(rotation.getQ0(), axis.x * d, axis.y * d, axis.z * d, true);
         if (d < 0)
             twistRot.rotation.multiply(-1f);
 
-        Quaternion swing = new Quaternion(twistRot.rotation);
+        IKQuaternion swing = new IKQuaternion(twistRot.rotation);
         swing.rotation.setToConjugate();
-        swing.rotation = Basis3D.multiply(twistRot.rotation, swing.rotation);
+        swing.rotation = IKBasis.multiply(twistRot.rotation, swing.rotation);
 
-        Quaternion[] result = new Quaternion[2];
+        IKQuaternion[] result = new IKQuaternion[2];
         result[0] = swing;
         result[1] = twistRot;
         return result;
@@ -455,15 +455,15 @@ public class Quaternion {
         return rotation.toString();
     }
 
-    public boolean equalTo(Quaternion m) {
-        return Basis3D.distance(this.rotation, m.rotation) < MathUtils.DOUBLE_ROUNDING_ERROR;
+    public boolean equalTo(IKQuaternion m) {
+        return IKBasis.distance(this.rotation, m.rotation) < IKMathUtils.DOUBLE_ROUNDING_ERROR;
     }
 
-    public float[] getAngles(RotationOrder3D order) {
+    public float[] getAngles(IKRotationOrder order) {
         return rotation.getAngles(order);
     }
 
-    public Vector3 applyTo(Vector3 u) {
+    public IKVector3 applyTo(IKVector3 u) {
         return rotation.applyTo(u);
     }
 
