@@ -1,7 +1,8 @@
 package ewbik.data;
 
-import ewbik.asj.Saveable;
-import ewbik.asj.TypeIdentifier;
+import data.LoadManager;
+import data.Saveable;
+import data.TypeIdentifier;
 import ewbik.asj.data.JSONArray;
 import ewbik.asj.data.JSONObject;
 import ewbik.asj.data.StringFuncs;
@@ -18,7 +19,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public class EWBIKLoader {
-    ewbik.asj.LoadManager floatBackedLoader = new ewbik.asj.LoadManager();
+    LoadManager floatBackedLoader = new LoadManager();
 
     public static Object parsePrimitive(Class keyClass, String toParse) {
         if (keyClass == String.class)

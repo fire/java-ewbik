@@ -1,4 +1,4 @@
-package ewbik.asj;
+package data;
 
 public class TypeIdentifier {
     public Object key;

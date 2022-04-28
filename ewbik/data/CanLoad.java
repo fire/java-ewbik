@@ -1,4 +1,4 @@
-package data.agnosticsavior;
+package data;
 
 /**
  * This interface defines objects which can self populate from JSONObjects but

@@ -19,6 +19,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package ik;
 
+import data.LoadManager;
+import data.SaveManager;
+import data.Saveable;
 import ewbik.ik.*;
 import ewbik.ik.IKExceptions.NullParentForBoneException;
 import ewbik.ik.ShadowNode3D;
@@ -33,7 +36,7 @@ import processing.core.PVector;
 
 import java.util.ArrayList;
 
-public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
+public class Bone implements Saveable, Comparable<Bone> {
     public static boolean drawKusudamas = false;
     public Skeleton3D parentArmature;
     public Kusudama constraints;
@@ -1100,7 +1103,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     }
 
     @Override
-    public void loadFromJSONObject(ewbik.asj.data.JSONObject j, ewbik.asj.LoadManager l) {
+    public void loadFromJSONObject(ewbik.asj.data.JSONObject j, LoadManager l) {
         this.localNode3D = (Node3D) l
                 .getObjectFromClassMaps(Node3D.class, j.getString("localAxes"));
         this.majorRotationNode3D = (Node3D) l.getObjectFromClassMaps(
@@ -1121,7 +1124,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     }
 
     @Override
-    public ewbik.asj.data.JSONObject getSaveJSON(ewbik.asj.SaveManager saveManager) {
+    public ewbik.asj.data.JSONObject getSaveJSON(SaveManager saveManager) {
         ewbik.asj.data.JSONObject thisBone = new ewbik.asj.data.JSONObject();
         thisBone.setString("identityHash", this.getIdentityHash());
         thisBone.setString("localAxes", this.localNode3D.getIdentityHash());
@@ -1143,7 +1146,7 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     }
 
     @Override
-    public void makeSaveable(ewbik.asj.SaveManager saveManager) {
+    public void makeSaveable(SaveManager saveManager) {
         saveManager.addToSaveState(this);
         if (this.getIKPin() != null) {
             this.getIKPin().makeSaveable(saveManager);
@@ -1157,11 +1160,11 @@ public class Bone implements ewbik.asj.Saveable, Comparable<Bone> {
     }
 
     @Override
-    public void notifyOfSaveIntent(ewbik.asj.SaveManager saveManager) {
+    public void notifyOfSaveIntent(SaveManager saveManager) {
     }
 
     @Override
-    public void notifyOfSaveCompletion(ewbik.asj.SaveManager saveManager) {
+    public void notifyOfSaveCompletion(SaveManager saveManager) {
     }
 
     @Override

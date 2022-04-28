@@ -19,9 +19,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package ewbik.processing.singlePrecision;
 
-import ewbik.asj.LoadManager;
-import ewbik.asj.SaveManager;
-import ewbik.asj.Saveable;
+import data.LoadManager;
+import data.SaveManager;
+import data.Saveable;
 import ewbik.math.*;
 import processing.Node3D;
 import processing.core.PVector;

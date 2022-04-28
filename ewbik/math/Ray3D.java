@@ -19,7 +19,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package ewbik.math;
 
-import data.agnosticsavior.CanLoad;
+import data.CanLoad;
 import ewbik.asj.data.JSONObject;
 
 /**

@@ -1,4 +1,4 @@
-package ewbik.asj;
+package data;
 
 import ewbik.asj.data.JSONObject;
 

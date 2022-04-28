@@ -1,11 +1,14 @@
 package ik;
 
+import data.LoadManager;
+import data.SaveManager;
+import data.Saveable;
 import processing.Node3D;
 import processing.core.PVector;
 
 import java.util.ArrayList;
 
-public class IKPin implements ewbik.asj.Saveable {
+public class IKPin implements Saveable {
 
     public static final short XDir = 1;
     public static final short YDir = 2;
@@ -367,13 +370,13 @@ public class IKPin implements ewbik.asj.Saveable {
     }
 
     @Override
-    public void makeSaveable(ewbik.asj.SaveManager saveManager) {
+    public void makeSaveable(SaveManager saveManager) {
         saveManager.addToSaveState(this);
         getAxes().makeSaveable(saveManager);
     }
 
     @Override
-    public ewbik.asj.data.JSONObject getSaveJSON(ewbik.asj.SaveManager saveManager) {
+    public ewbik.asj.data.JSONObject getSaveJSON(SaveManager saveManager) {
         ewbik.asj.data.JSONObject saveJSON = new ewbik.asj.data.JSONObject();
         saveJSON.setString("identityHash", this.getIdentityHash());
         saveJSON.setString("axes", getAxes().getIdentityHash());
@@ -389,7 +392,7 @@ public class IKPin implements ewbik.asj.Saveable {
         return saveJSON;
     }
 
-    public void loadFromJSONObject(ewbik.asj.data.JSONObject j, ewbik.asj.LoadManager l) {
+    public void loadFromJSONObject(ewbik.asj.data.JSONObject j, LoadManager l) {
         this.node3D = (Node3D) l
                 .getObjectFromClassMaps(Node3D.class, j.getString("axes"));
         this.isEnabled = j.getBoolean("isEnabled");
@@ -413,11 +416,11 @@ public class IKPin implements ewbik.asj.Saveable {
     }
 
     @Override
-    public void notifyOfSaveIntent(ewbik.asj.SaveManager saveManager) {
+    public void notifyOfSaveIntent(SaveManager saveManager) {
     }
 
     @Override
-    public void notifyOfSaveCompletion(ewbik.asj.SaveManager saveManager) {
+    public void notifyOfSaveCompletion(SaveManager saveManager) {
     }
 
     @Override

@@ -1,6 +1,5 @@
-package ewbik.asj;
+package data;
 
-import data.agnosticsavior.CanLoad;
 import ewbik.asj.data.*;
 import ik.Bone;
 import ik.IKPin;
@@ -13,7 +12,7 @@ import java.util.*;
 public abstract class SaveManager {
 
     protected HashMap<Class, JSONArray> classes = new HashMap<>();
-    WeakHashMap<Saveable, Boolean> saveables = new WeakHashMap<ewbik.asj.Saveable, Boolean>();
+    WeakHashMap<Saveable, Boolean> saveables = new WeakHashMap<Saveable, Boolean>();
 
     public void registerSaveableClass(Class c) throws ClassNotSaveableException {
         if (!Saveable.class.isAssignableFrom(c)) {
@@ -181,8 +180,8 @@ public abstract class SaveManager {
     }
 
     public void notifyCurrentSaveablesOfSaveCompletion() {
-        ArrayList<ewbik.asj.Saveable> sarr = new ArrayList<>(saveables.keySet());
-        for (ewbik.asj.Saveable s : sarr) {
+        ArrayList<Saveable> sarr = new ArrayList<>(saveables.keySet());
+        for (Saveable s : sarr) {
             s.notifyOfSaveCompletion(this);
         }
         clearSaveState();
@@ -197,11 +196,11 @@ public abstract class SaveManager {
         ewbik.asj.data.JSONArray limitConeJSON = new ewbik.asj.data.JSONArray();
         ewbik.asj.data.JSONArray IKPinsJSON = new ewbik.asj.data.JSONArray();
 
-        Collection<ewbik.asj.Saveable> sk = saveables.keySet();
+        Collection<Saveable> sk = saveables.keySet();
 
         ewbik.asj.data.JSONObject saveObject = new ewbik.asj.data.JSONObject();
 
-        for (ewbik.asj.Saveable s : sk) {
+        for (Saveable s : sk) {
             ewbik.asj.data.JSONObject jsonObj = s.getSaveJSON(this);
             if (jsonObj != null) {
                 if (Node3D.class.isAssignableFrom(s.getClass()))

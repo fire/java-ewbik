@@ -19,9 +19,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package processing;
 
-import ewbik.asj.LoadManager;
-import ewbik.asj.SaveManager;
-import ewbik.asj.Saveable;
+import data.LoadManager;
+import data.SaveManager;
+import data.Saveable;
 import ewbik.math.*;
 import ewbik.math.MathUtils;
 import ik.Bone;

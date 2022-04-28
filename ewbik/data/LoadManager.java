@@ -1,4 +1,4 @@
-package ewbik.asj;
+package data;
 
 import ewbik.asj.data.JSONArray;
 import ewbik.asj.data.JSONObject;
@@ -13,13 +13,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import ewbik.data.EWBIKLoader;
-import ewbik.asj.Saveable;
 
 public class LoadManager {
 
     private final boolean Load = false;
     public HashMap<Class, HashMap<String, JSONObject>> jsonObjects = new HashMap<>();
-    public HashMap<Class, HashMap<String, ewbik.asj.Saveable>> classObjects = new HashMap<>();
+    public HashMap<Class, HashMap<String, Saveable>> classObjects = new HashMap<>();
     public ArrayList<Saveable> allLoadedObjects = new ArrayList<>();
     public File currentFilePath;
     public HashMap<String, JSONObject> axesJSONObjects = new HashMap<>();
@@ -149,7 +148,7 @@ public class LoadManager {
         loadGenerally(boneJSONObjects, boneLoadObjects);
         loadGenerally(armatureJSONObjects, armatureLoadObjects);
 
-        for (ewbik.asj.Saveable s : allLoadedObjects)
+        for (Saveable s : allLoadedObjects)
             s.notifyOfLoadCompletion();
 
         updateArmatureSegments();
@@ -204,20 +203,20 @@ public class LoadManager {
      * @param result
      */
     public <T extends Object, V extends Object> HashMap<T, V> hashMapFromJSON(JSONObject json, HashMap<T, V> result,
-            ewbik.asj.TypeIdentifier ti) {
+            TypeIdentifier ti) {
         Class keyClass = null;
         if (ti.key.getClass() == Class.class) {
             keyClass = (Class) ti.key;
         }
         Class valueClass = ti.value.getClass();
-        if (valueClass == ewbik.asj.TypeIdentifier.class && keyClass != null) {
+        if (valueClass == TypeIdentifier.class && keyClass != null) {
             Collection<String> jKeys = json.keys();
             for (String jk : jKeys) {
                 JSONObject jValue = json.getJSONObject(jk);
                 T keyObject = (T) getObjectFromClassMaps(keyClass, jk);
 
                 HashMap<?, ?> innerHash = new HashMap<>();
-                hashMapFromJSON(jValue, innerHash, (ewbik.asj.TypeIdentifier) ti.value);
+                hashMapFromJSON(jValue, innerHash, (TypeIdentifier) ti.value);
 
                 result.put(keyObject, (V) innerHash);
                 return result;
@@ -249,20 +248,20 @@ public class LoadManager {
      * @param json
      * @param result
      */
-    public <T extends Object, V extends Object> HashMap<T, V> hashMapFromJSON(JSONObject json, ewbik.asj.TypeIdentifier ti) {
+    public <T extends Object, V extends Object> HashMap<T, V> hashMapFromJSON(JSONObject json, TypeIdentifier ti) {
         Class keyClass = null;
         if (ti.key.getClass() == Class.class) {
             keyClass = (Class) ti.key;
         }
         Class valueClass = ti.value.getClass();
         HashMap<T, V> result = new HashMap<>();
-        if (valueClass == ewbik.asj.TypeIdentifier.class && keyClass != null) {
+        if (valueClass == TypeIdentifier.class && keyClass != null) {
             Collection<String> jKeys = json.keys();
             for (String jk : jKeys) {
                 JSONObject jValue = json.getJSONObject(jk);
                 T keyObject = (T) getObjectFromClassMaps(keyClass, jk);
                 HashMap<?, ?> innerHash = new HashMap<>();
-                hashMapFromJSON(jValue, innerHash, (ewbik.asj.TypeIdentifier) ti.value);
+                hashMapFromJSON(jValue, innerHash, (TypeIdentifier) ti.value);
                 result.put(keyObject, (V) innerHash);
                 return result;
             }
@@ -315,8 +314,8 @@ public class LoadManager {
      * @param identityHash
      * @return
      */
-    public ewbik.asj.Saveable getObjectFromClassMaps(Class keyClass, String identityHash) {
-        ewbik.asj.Saveable result = null;
+    public Saveable getObjectFromClassMaps(Class keyClass, String identityHash) {
+        Saveable result = null;
 
         if (Node3D.class.isAssignableFrom(keyClass))
             result = axesLoadObjects.get(identityHash);

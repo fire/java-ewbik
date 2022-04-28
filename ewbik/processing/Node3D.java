@@ -17,6 +17,9 @@ package processing;/*
                    
                    */
 
+import data.LoadManager;
+import data.SaveManager;
+import data.Saveable;
 import ewbik.math.*;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
@@ -29,7 +32,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 
-public class Node3D implements ewbik.asj.Saveable {
+public class Node3D implements Saveable {
     public static final int NORMAL = 0;
     public static final int FORWARD = 2;
     public static final int RIGHT = 1;
@@ -932,7 +935,7 @@ public class Node3D implements ewbik.asj.Saveable {
     }
 
     @Override
-    public ewbik.asj.data.JSONObject getSaveJSON(ewbik.asj.SaveManager saveManager) {
+    public ewbik.asj.data.JSONObject getSaveJSON(SaveManager saveManager) {
         this.updateGlobal();
         ewbik.asj.data.JSONObject thisAxes = new ewbik.asj.data.JSONObject();
         ewbik.asj.data.JSONObject shearScale = new ewbik.asj.data.JSONObject();
@@ -1105,11 +1108,11 @@ public class Node3D implements ewbik.asj.Saveable {
     }
 
     @Override
-    public void notifyOfSaveIntent(ewbik.asj.SaveManager saveManager) {
+    public void notifyOfSaveIntent(SaveManager saveManager) {
     }
 
     @Override
-    public void notifyOfSaveCompletion(ewbik.asj.SaveManager saveManager) {
+    public void notifyOfSaveCompletion(SaveManager saveManager) {
     }
 
     @Override
@@ -1122,12 +1125,12 @@ public class Node3D implements ewbik.asj.Saveable {
     }
 
     @Override
-    public void makeSaveable(ewbik.asj.SaveManager saveManager) {
+    public void makeSaveable(SaveManager saveManager) {
         saveManager.addToSaveState(this);
         forEachDependent(
                 (ad) -> {
-                    if (ewbik.asj.Saveable.class.isAssignableFrom(ad.get().getClass()))
-                        ((ewbik.asj.Saveable) ad.get()).makeSaveable(saveManager);
+                    if (Saveable.class.isAssignableFrom(ad.get().getClass()))
+                        ((Saveable) ad.get()).makeSaveable(saveManager);
                 });
     }
 
@@ -1141,7 +1144,7 @@ public class Node3D implements ewbik.asj.Saveable {
             Object requestedBy) {
     }
 
-    public void loadFromJSONObject(ewbik.asj.data.JSONObject j, ewbik.asj.LoadManager l) {
+    public void loadFromJSONObject(ewbik.asj.data.JSONObject j, LoadManager l) {
         Vector3 origin = new Vector3(j.getJSONArray("translation"));
         Quaternion rotation = new Quaternion(j.getJSONArray("rotation"));
         this.getLocalMBasis().translate = origin;
