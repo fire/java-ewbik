@@ -25,41 +25,41 @@ SOFTWARE.
 package EWBIK;
 
 public class Quaternion {
-    public Basis rotation = Basis.IDENTITY;
+    public Basis3D rotation = Basis3D.IDENTITY;
     private final float[] workingInput = new float[3];
     private final float[] workingOutput = new float[3];
 
     public Quaternion() {
-        this.rotation = new Basis(
-                Basis.IDENTITY.getQ0(),
-                Basis.IDENTITY.getQ1(),
-                Basis.IDENTITY.getQ2(),
-                Basis.IDENTITY.getQ3(), false);
+        this.rotation = new Basis3D(
+                Basis3D.IDENTITY.getQ0(),
+                Basis3D.IDENTITY.getQ1(),
+                Basis3D.IDENTITY.getQ2(),
+                Basis3D.IDENTITY.getQ3(), false);
     }
 
-    public Quaternion(Basis r) {
-        this.rotation = new Basis(r.getQ0(), r.getQ1(), r.getQ2(), r.getQ3());
+    public Quaternion(Basis3D r) {
+        this.rotation = new Basis3D(r.getQ0(), r.getQ1(), r.getQ2(), r.getQ3());
     }
 
-    public Quaternion(RotationOrder order,
-            float alpha1, float alpha2, float alpha3) {
-        rotation = new Basis(order, alpha1, alpha2, alpha3);
+    public Quaternion(RotationOrder3D order,
+                      float alpha1, float alpha2, float alpha3) {
+        rotation = new Basis3D(order, alpha1, alpha2, alpha3);
     }
 
     public Quaternion(Vector3 v1, Vector3 v2, Vector3 u1, Vector3 u2) {
-        rotation = new Basis(v1, v2, u1, u2);
+        rotation = new Basis3D(v1, v2, u1, u2);
     }
 
     public Quaternion(Vector3 axis, float angle) {
-        rotation = new Basis(axis, angle);
+        rotation = new Basis3D(axis, angle);
     }
 
     public Quaternion(float w, float x, float y, float z, boolean needsNormalization) {
-        this.rotation = new Basis(w, x, y, z, needsNormalization);
+        this.rotation = new Basis3D(w, x, y, z, needsNormalization);
     }
 
     public Quaternion(Vector3 begin, Vector3 end) {
-        rotation = new Basis(begin, end);
+        rotation = new Basis3D(begin, end);
     }
 
     /*
@@ -70,10 +70,10 @@ public class Quaternion {
         rotation = slerp(amount, v1.rotation, v2.rotation);
     }
 
-    public static Basis slerp(float amount, Basis value1, Basis value2) {
+    public static Basis3D slerp(float amount, Basis3D value1, Basis3D value2) {
 
         if (Float.isNaN(amount)) {
-            return new Basis(value1.getQ0(), value1.getQ1(), value1.getQ2(), value1.getQ3());
+            return new Basis3D(value1.getQ0(), value1.getQ1(), value1.getQ2(), value1.getQ3());
         }
         if (amount < 0.0f)
             return value1;
@@ -102,7 +102,7 @@ public class Quaternion {
             t2 = amount;
         }
 
-        return new Basis(
+        return new Basis3D(
                 (value1.getQ0() * t1) + (w2 * t2),
                 (value1.getQ1() * t1) + (x2 * t2),
                 (value1.getQ2() * t1) + (y2 * t2),
@@ -121,7 +121,7 @@ public class Quaternion {
             float total = 0f;
 
             for (int i = 0; i < rotations.length; i++) {
-                Basis r = rotations[i].rotation;
+                Basis3D r = rotations[i].rotation;
                 float weight = weights[i];
                 q0 += r.getQ0() * weight;
                 q1 += r.getQ1() * weight;
@@ -147,7 +147,7 @@ public class Quaternion {
         float total = rotations.length;
 
         for (int i = 0; i < rotations.length; i++) {
-            Basis r = rotations[i].rotation;
+            Basis3D r = rotations[i].rotation;
             q0 += r.getQ0();
             q1 += r.getQ1();
             q2 += r.getQ2();
@@ -208,7 +208,7 @@ public class Quaternion {
 
     public Quaternion copy() {
         return new Quaternion(
-                new Basis(rotation.getQ0(), rotation.getQ1(), rotation.getQ2(), rotation.getQ3(), false));
+                new Basis3D(rotation.getQ0(), rotation.getQ1(), rotation.getQ2(), rotation.getQ3(), false));
     }
 
     /**
@@ -216,11 +216,11 @@ public class Quaternion {
      *
      * @param r a rotation to make this rotation equivalent to
      */
-    public void set(Basis r) {
+    public void set(Basis3D r) {
         if (r != null)
             this.rotation.set(r.getQ0(), r.getQ1(), r.getQ2(), r.getQ3(), false);
         else
-            this.set(Basis.IDENTITY);
+            this.set(Basis3D.IDENTITY);
     }
 
     /**
@@ -232,7 +232,7 @@ public class Quaternion {
         if (r != null)
             this.set(r.rotation);
         else
-            this.set(Basis.IDENTITY);
+            this.set(Basis3D.IDENTITY);
     }
 
     /**
@@ -312,8 +312,8 @@ public class Quaternion {
      *         }
      */
 
-    private Quaternion getNormalized(Basis r) {
-        return new Quaternion(new Basis(r.getQ0(), r.getQ1(), r.getQ2(), r.getQ3(), true));
+    private Quaternion getNormalized(Basis3D r) {
+        return new Quaternion(new Basis3D(r.getQ0(), r.getQ1(), r.getQ2(), r.getQ3(), true));
     }
 
     public Ray3D applyToCopy(Ray3D rIn) {
@@ -339,8 +339,8 @@ public class Quaternion {
     }
 
     public void applyTo(Quaternion rot, Quaternion storeIn) {
-        Basis r = rot.rotation;
-        Basis tr = this.rotation;
+        Basis3D r = rot.rotation;
+        Basis3D tr = this.rotation;
         storeIn.rotation.set(
                 r.getQ0() * tr.getQ0() - (r.getQ1() * tr.getQ1() + r.getQ2() * tr.getQ2() + r.getQ3() * tr.getQ3()),
                 r.getQ1() * tr.getQ0() + r.getQ0() * tr.getQ1() + (r.getQ2() * tr.getQ3() - r.getQ3() * tr.getQ2()),
@@ -350,8 +350,8 @@ public class Quaternion {
     }
 
     public void applyInverseTo(Quaternion rot, Quaternion storeIn) {
-        Basis r = rot.rotation;
-        Basis tr = this.rotation;
+        Basis3D r = rot.rotation;
+        Basis3D tr = this.rotation;
         storeIn.rotation.set(
                 -r.getQ0() * tr.getQ0() - (r.getQ1() * tr.getQ1() + r.getQ2() * tr.getQ2() + r.getQ3() * tr.getQ3()),
                 -r.getQ1() * tr.getQ0() + r.getQ0() * tr.getQ1() + (r.getQ2() * tr.getQ3() - r.getQ3() * tr.getQ2()),
@@ -361,9 +361,9 @@ public class Quaternion {
     }
 
     public Quaternion applyTo(Quaternion rot) {
-        Basis r = rot.rotation;
-        Basis tr = this.rotation;
-        Basis result = new Basis(
+        Basis3D r = rot.rotation;
+        Basis3D tr = this.rotation;
+        Basis3D result = new Basis3D(
                 r.getQ0() * tr.getQ0() - (r.getQ1() * tr.getQ1() + r.getQ2() * tr.getQ2() + r.getQ3() * tr.getQ3()),
                 r.getQ1() * tr.getQ0() + r.getQ0() * tr.getQ1() + (r.getQ2() * tr.getQ3() - r.getQ3() * tr.getQ2()),
                 r.getQ2() * tr.getQ0() + r.getQ0() * tr.getQ2() + (r.getQ3() * tr.getQ1() - r.getQ1() * tr.getQ3()),
@@ -373,9 +373,9 @@ public class Quaternion {
     }
 
     public Quaternion applyInverseTo(Quaternion rot) {
-        Basis r = rot.rotation;
-        Basis tr = this.rotation;
-        Basis result = new Basis(
+        Basis3D r = rot.rotation;
+        Basis3D tr = this.rotation;
+        Basis3D result = new Basis3D(
                 -r.getQ0() * tr.getQ0() - (r.getQ1() * tr.getQ1() + r.getQ2() * tr.getQ2() + r.getQ3() * tr.getQ3()),
                 -r.getQ1() * tr.getQ0() + r.getQ0() * tr.getQ1() + (r.getQ2() * tr.getQ3() - r.getQ3() * tr.getQ2()),
                 -r.getQ2() * tr.getQ0() + r.getQ0() * tr.getQ2() + (r.getQ3() * tr.getQ1() - r.getQ1() * tr.getQ3()),
@@ -434,7 +434,7 @@ public class Quaternion {
      */
     public Quaternion[] getSwingTwist(Vector3 axis) {
         Quaternion twistRot = new Quaternion(
-                new Basis(rotation.getQ0(), rotation.getQ1(), rotation.getQ2(), rotation.getQ3()));
+                new Basis3D(rotation.getQ0(), rotation.getQ1(), rotation.getQ2(), rotation.getQ3()));
         final float d = Vector3.dot(twistRot.rotation.getQ1(), twistRot.rotation.getQ2(), twistRot.rotation.getQ3(),
                 axis.x, axis.y, axis.z);
         twistRot.rotation.set(rotation.getQ0(), axis.x * d, axis.y * d, axis.z * d, true);
@@ -443,7 +443,7 @@ public class Quaternion {
 
         Quaternion swing = new Quaternion(twistRot.rotation);
         swing.rotation.setToConjugate();
-        swing.rotation = Basis.multiply(twistRot.rotation, swing.rotation);
+        swing.rotation = Basis3D.multiply(twistRot.rotation, swing.rotation);
 
         Quaternion[] result = new Quaternion[2];
         result[0] = swing;
@@ -456,10 +456,10 @@ public class Quaternion {
     }
 
     public boolean equalTo(Quaternion m) {
-        return Basis.distance(this.rotation, m.rotation) < MathUtils.DOUBLE_ROUNDING_ERROR;
+        return Basis3D.distance(this.rotation, m.rotation) < MathUtils.DOUBLE_ROUNDING_ERROR;
     }
 
-    public float[] getAngles(RotationOrder order) {
+    public float[] getAngles(RotationOrder3D order) {
         return rotation.getAngles(order);
     }
 

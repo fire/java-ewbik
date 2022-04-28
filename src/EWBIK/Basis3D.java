@@ -1,7 +1,7 @@
 package EWBIK;
 
-public class Basis {
-    public static final Basis IDENTITY = new Basis(1.0f, 0.0f, 0.0f, 0.0f, false);
+public class Basis3D {
+    public static final Basis3D IDENTITY = new Basis3D(1.0f, 0.0f, 0.0f, 0.0f, false);
 
     /**
      * Scalar coordinate of the quaternion.
@@ -52,8 +52,8 @@ public class Basis {
      *                           step is performed
      *                           before using them
      */
-    public Basis(float q0, float q1, float q2, float q3,
-            boolean needsNormalization) {
+    public Basis3D(float q0, float q1, float q2, float q3,
+                   boolean needsNormalization) {
 
         this.q0 = q0;
         this.q1 = q1;
@@ -68,14 +68,14 @@ public class Basis {
     /**
      * creates an identity rotation
      */
-    public Basis() {
+    public Basis3D() {
         this(1.0f, 0.0f, 0.0f, 0.0f, false);
     }
 
     /**
      * assumes no noralization required
      **/
-    public Basis(float q0, float q1, float q2, float q3) {
+    public Basis3D(float q0, float q1, float q2, float q3) {
         this(q0, q1, q2, q3, false);
     }
 
@@ -108,7 +108,7 @@ public class Basis {
      * @param angle rotation angle.
      * @throws MathUtils.MathIllegalArgumentException if the axis norm is zero
      */
-    public Basis(Vector3 axis, float angle) {
+    public Basis3D(Vector3 axis, float angle) {
 
         float norm = axis.mag();
         if (norm == 0) {
@@ -181,7 +181,7 @@ public class Basis {
      *                                               determinant of the resulting
      *                                               orthogonal matrix is negative
      */
-    public Basis(float[] m, float threshold) {
+    public Basis3D(float[] m, float threshold) {
         // dimension check
         if ((m.length != 9 || m.length != 16)) {
             this.q0 = 1.0f;
@@ -261,7 +261,7 @@ public class Basis {
      *                                               determinant of the resulting
      *                                               orthogonal matrix is negative
      */
-    public Basis(float[][] m, float threshold) {
+    public Basis3D(float[][] m, float threshold) {
 
         // dimension check
         if ((m.length != 3) || (m[0].length != 3) ||
@@ -325,7 +325,7 @@ public class Basis {
      *                                           the vectors of the pair are
      *                                           colinear)
      */
-    public Basis(Vector3 u1, Vector3 u2, Vector3 v1, Vector3 v2) {
+    public Basis3D(Vector3 u1, Vector3 u2, Vector3 v1, Vector3 v2) {
 
         // norms computation
         float u1u1 = u1.dot(u1);
@@ -510,7 +510,7 @@ public class Basis {
      * @throws MathUtils.MathArithmeticException if the norm of one of the vectors
      *                                           is zero
      */
-    public Basis(Vector3 u, Vector3 v) {
+    public Basis3D(Vector3 u, Vector3 v) {
 
         float normProduct = u.mag() * v.mag();
         if (normProduct == 0) {
@@ -573,12 +573,12 @@ public class Basis {
      * @param alpha2 angle of the second elementary rotation
      * @param alpha3 angle of the third elementary rotation
      */
-    public Basis(RotationOrder order,
-            float alpha1, float alpha2, float alpha3) {
-        Basis r1 = new Basis(order.getA1(), alpha1);
-        Basis r2 = new Basis(order.getA2(), alpha2);
-        Basis r3 = new Basis(order.getA3(), alpha3);
-        Basis composed = r1.applyTo(r2.applyTo(r3));
+    public Basis3D(RotationOrder3D order,
+                   float alpha1, float alpha2, float alpha3) {
+        Basis3D r1 = new Basis3D(order.getA1(), alpha1);
+        Basis3D r2 = new Basis3D(order.getA2(), alpha2);
+        Basis3D r3 = new Basis3D(order.getA3(), alpha3);
+        Basis3D composed = r1.applyTo(r2.applyTo(r3));
         q0 = composed.q0;
         q1 = composed.q1;
         q2 = composed.q2;
@@ -653,7 +653,7 @@ public class Basis {
 
     }
 
-    public static Basis multiply(final Basis q1, final Basis q2) {
+    public static Basis3D multiply(final Basis3D q1, final Basis3D q2) {
         // Components of the first quaternion.
         final float q1a = q1.getQ0();
         final float q1b = q1.getQ1();
@@ -672,7 +672,7 @@ public class Basis {
         final float y = q1a * q2c - q1b * q2f + q1c * q2a + q1f * q2b;
         final float z = q1a * q2f + q1b * q2c - q1c * q2b + q1f * q2a;
 
-        return new Basis(w, x, y, z);
+        return new Basis3D(w, x, y, z);
     }
 
     /**
@@ -682,8 +682,8 @@ public class Basis {
      * @param q2 Quaternionf.
      * @return the dot product of {@code q1} and {@code q2}.
      */
-    public static float dotProduct(final Basis q1,
-            final Basis q2) {
+    public static float dotProduct(final Basis3D q1,
+            final Basis3D q2) {
         return q1.getQ0() * q2.getQ0() +
                 q1.getQ1() * q2.getQ1() +
                 q1.getQ2() * q2.getQ2() +
@@ -724,7 +724,7 @@ public class Basis {
      * @param r2 second rotation
      * @return <i>distance</i> between r1 and r2
      */
-    public static float distance(Basis r1, Basis r2) {
+    public static float distance(Basis3D r1, Basis3D r2) {
         return r1.applyInverseTo(r2).getAngle();
     }
 
@@ -768,8 +768,8 @@ public class Basis {
     /**
      * @return a copy of this MRotation
      */
-    public Basis copy() {
-        return new Basis(getQ0(), getQ1(), getQ2(), getQ3());
+    public Basis3D copy() {
+        return new Basis3D(getQ0(), getQ1(), getQ2(), getQ3());
     }
 
     /**
@@ -781,8 +781,8 @@ public class Basis {
      * @return a new rotation whose effect is the reverse of the effect
      *         of the instance
      */
-    public Basis revert() {
-        return new Basis(-q0, q1, q2, q3, false);
+    public Basis3D revert() {
+        return new Basis3D(-q0, q1, q2, q3, false);
     }
 
     /**
@@ -790,7 +790,7 @@ public class Basis {
      *
      * @param storeIN
      */
-    public void revert(Basis storeIn) {
+    public void revert(Basis3D storeIn) {
         storeIn.set(-q0, q1, q2, q3, true);
     }
 
@@ -902,7 +902,7 @@ public class Basis {
         v.set(q1 * inverse, q2 * inverse, q3 * inverse);
     }
 
-    public Basis getInverse() {
+    public Basis3D getInverse() {
         final float squareNorm = q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3;
         if (squareNorm < MathUtils.SAFE_MIN_DOUBLE) {
             try {
@@ -912,7 +912,7 @@ public class Basis {
             }
         }
 
-        return new Basis(q0 / squareNorm,
+        return new Basis3D(q0 / squareNorm,
                 -q1 / squareNorm,
                 -q2 / squareNorm,
                 -q3 / squareNorm);
@@ -995,17 +995,17 @@ public class Basis {
      *                                                   the angles
      *                                                   set specified
      */
-    public float[] getAngles(RotationOrder order) {
+    public float[] getAngles(RotationOrder3D order) {
 
-        if (order == RotationOrder.XYZ) {
+        if (order == RotationOrder3D.XYZ) {
 
             // r (T .plusK) coordinates are :
             // sin (theta), -cos (theta) sin (phi), cos (theta) cos (phi)
             // (-r) (T .plusI) coordinates are :
             // cos (psi) cos (theta), -sin (psi) cos (theta), sin (theta)
             // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
-            Vector3 v1 = applyTo(RotationOrder.Z);
-            Vector3 v2 = applyInverseTo(RotationOrder.X);
+            Vector3 v1 = applyTo(RotationOrder3D.Z);
+            Vector3 v2 = applyInverseTo(RotationOrder3D.X);
             if ((v2.z < -0.9999999999) || (v2.z > 0.9999999999)) {
                 try {
                     throw new MathUtils.CardanEulerSingularityException(true);
@@ -1020,15 +1020,15 @@ public class Basis {
                     MathUtils.atan2(-(v2.y), v2.x)
             };
 
-        } else if (order == RotationOrder.XZY) {
+        } else if (order == RotationOrder3D.XZY) {
 
             // r (T .plusJ) coordinates are :
             // -sin (psi), cos (psi) cos (phi), cos (psi) sin (phi)
             // (-r) (T .plusI) coordinates are :
             // cos (theta) cos (psi), -sin (psi), sin (theta) cos (psi)
             // and we can choose to have psi in the interval [-PI/2 ; +PI/2]
-            Vector3 v1 = applyTo(RotationOrder.X);
-            Vector3 v2 = applyInverseTo(RotationOrder.Y);
+            Vector3 v1 = applyTo(RotationOrder3D.X);
+            Vector3 v2 = applyInverseTo(RotationOrder3D.Y);
             if ((v2.y < -0.9999999999) || (v2.y > 0.9999999999)) {
                 try {
                     throw new MathUtils.CardanEulerSingularityException(true);
@@ -1042,15 +1042,15 @@ public class Basis {
                     MathUtils.atan2(v2.z, v2.x)
             };
 
-        } else if (order == RotationOrder.YXZ) {
+        } else if (order == RotationOrder3D.YXZ) {
 
             // r (T .plusK) coordinates are :
             // cos (phi) sin (theta), -sin (phi), cos (phi) cos (theta)
             // (-r) (T .plusJ) coordinates are :
             // sin (psi) cos (phi), cos (psi) cos (phi), -sin (phi)
             // and we can choose to have phi in the interval [-PI/2 ; +PI/2]
-            Vector3 v1 = applyTo(RotationOrder.Z);
-            Vector3 v2 = applyInverseTo(RotationOrder.Y);
+            Vector3 v1 = applyTo(RotationOrder3D.Z);
+            Vector3 v2 = applyInverseTo(RotationOrder3D.Y);
             if ((v2.z < -0.9999999999) || (v2.z > 0.9999999999)) {
                 try {
                     throw new MathUtils.CardanEulerSingularityException(true);
@@ -1064,15 +1064,15 @@ public class Basis {
                     MathUtils.atan2(v2.x, v2.y)
             };
 
-        } else if (order == RotationOrder.YZX) {
+        } else if (order == RotationOrder3D.YZX) {
 
             // r (T .plusI) coordinates are :
             // cos (psi) cos (theta), sin (psi), -cos (psi) sin (theta)
             // (-r) (T .plusJ) coordinates are :
             // sin (psi), cos (phi) cos (psi), -sin (phi) cos (psi)
             // and we can choose to have psi in the interval [-PI/2 ; +PI/2]
-            Vector3 v1 = applyTo(RotationOrder.X);
-            Vector3 v2 = applyInverseTo(RotationOrder.Y);
+            Vector3 v1 = applyTo(RotationOrder3D.X);
+            Vector3 v2 = applyInverseTo(RotationOrder3D.Y);
             if ((v2.x < -0.9999999999) || (v2.x > 0.9999999999)) {
                 try {
                     throw new MathUtils.CardanEulerSingularityException(true);
@@ -1086,15 +1086,15 @@ public class Basis {
                     MathUtils.atan2(-(v2.z), v2.y)
             };
 
-        } else if (order == RotationOrder.ZXY) {
+        } else if (order == RotationOrder3D.ZXY) {
 
             // r (T .plusJ) coordinates are :
             // -cos (phi) sin (psi), cos (phi) cos (psi), sin (phi)
             // (-r) (T .plusK) coordinates are :
             // -sin (theta) cos (phi), sin (phi), cos (theta) cos (phi)
             // and we can choose to have phi in the interval [-PI/2 ; +PI/2]
-            Vector3 v1 = applyTo(RotationOrder.Y);
-            Vector3 v2 = applyInverseTo(RotationOrder.Z);
+            Vector3 v1 = applyTo(RotationOrder3D.Y);
+            Vector3 v2 = applyInverseTo(RotationOrder3D.Z);
             if ((v2.y < -0.9999999999) || (v2.y > 0.9999999999)) {
                 try {
                     throw new MathUtils.CardanEulerSingularityException(true);
@@ -1108,15 +1108,15 @@ public class Basis {
                     MathUtils.atan2(-(v2.x), v2.z)
             };
 
-        } else if (order == RotationOrder.ZYX) {
+        } else if (order == RotationOrder3D.ZYX) {
 
             // r (T .plusI) coordinates are :
             // cos (theta) cos (psi), cos (theta) sin (psi), -sin (theta)
             // (-r) (T .plusK) coordinates are :
             // -sin (theta), sin (phi) cos (theta), cos (phi) cos (theta)
             // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
-            Vector3 v1 = applyTo(RotationOrder.X);
-            Vector3 v2 = applyInverseTo(RotationOrder.Z);
+            Vector3 v1 = applyTo(RotationOrder3D.X);
+            Vector3 v2 = applyInverseTo(RotationOrder3D.Z);
             if ((v2.x < -0.9999999999) || (v2.x > 0.9999999999)) {
                 try {
                     throw new MathUtils.CardanEulerSingularityException(true);
@@ -1130,15 +1130,15 @@ public class Basis {
                     MathUtils.atan2(v2.y, v2.z)
             };
 
-        } else if (order == RotationOrder.XYX) {
+        } else if (order == RotationOrder3D.XYX) {
 
             // r (T .plusI) coordinates are :
             // cos (theta), sin (phi1) sin (theta), -cos (phi1) sin (theta)
             // (-r) (T .plusI) coordinates are :
             // cos (theta), sin (theta) sin (phi2), sin (theta) cos (phi2)
             // and we can choose to have theta in the interval [0 ; PI]
-            Vector3 v1 = applyTo(RotationOrder.X);
-            Vector3 v2 = applyInverseTo(RotationOrder.X);
+            Vector3 v1 = applyTo(RotationOrder3D.X);
+            Vector3 v2 = applyInverseTo(RotationOrder3D.X);
             if ((v2.x < -0.9999999999) || (v2.x > 0.9999999999)) {
                 try {
                     throw new MathUtils.CardanEulerSingularityException(true);
@@ -1152,15 +1152,15 @@ public class Basis {
                     MathUtils.atan2(v2.y, v2.z)
             };
 
-        } else if (order == RotationOrder.XZX) {
+        } else if (order == RotationOrder3D.XZX) {
 
             // r (T .plusI) coordinates are :
             // cos (psi), cos (phi1) sin (psi), sin (phi1) sin (psi)
             // (-r) (T .plusI) coordinates are :
             // cos (psi), -sin (psi) cos (phi2), sin (psi) sin (phi2)
             // and we can choose to have psi in the interval [0 ; PI]
-            Vector3 v1 = applyTo(RotationOrder.X);
-            Vector3 v2 = applyInverseTo(RotationOrder.X);
+            Vector3 v1 = applyTo(RotationOrder3D.X);
+            Vector3 v2 = applyInverseTo(RotationOrder3D.X);
             if ((v2.x < -0.9999999999) || (v2.x > 0.9999999999)) {
                 try {
                     throw new MathUtils.CardanEulerSingularityException(true);
@@ -1174,15 +1174,15 @@ public class Basis {
                     MathUtils.atan2(v2.z, -v2.y)
             };
 
-        } else if (order == RotationOrder.YXY) {
+        } else if (order == RotationOrder3D.YXY) {
 
             // r (T .plusJ) coordinates are :
             // sin (theta1) sin (phi), cos (phi), cos (theta1) sin (phi)
             // (-r) (T .plusJ) coordinates are :
             // sin (phi) sin (theta2), cos (phi), -sin (phi) cos (theta2)
             // and we can choose to have phi in the interval [0 ; PI]
-            Vector3 v1 = applyTo(RotationOrder.Y);
-            Vector3 v2 = applyInverseTo(RotationOrder.Y);
+            Vector3 v1 = applyTo(RotationOrder3D.Y);
+            Vector3 v2 = applyInverseTo(RotationOrder3D.Y);
             if ((v2.y < -0.9999999999) || (v2.y > 0.9999999999)) {
                 try {
                     throw new MathUtils.CardanEulerSingularityException(true);
@@ -1196,15 +1196,15 @@ public class Basis {
                     MathUtils.atan2(v2.x, -v2.z)
             };
 
-        } else if (order == RotationOrder.YZY) {
+        } else if (order == RotationOrder3D.YZY) {
 
             // r (T .plusJ) coordinates are :
             // -cos (theta1) sin (psi), cos (psi), sin (theta1) sin (psi)
             // (-r) (T .plusJ) coordinates are :
             // sin (psi) cos (theta2), cos (psi), sin (psi) sin (theta2)
             // and we can choose to have psi in the interval [0 ; PI]
-            Vector3 v1 = applyTo(RotationOrder.Y);
-            Vector3 v2 = applyInverseTo(RotationOrder.Y);
+            Vector3 v1 = applyTo(RotationOrder3D.Y);
+            Vector3 v2 = applyInverseTo(RotationOrder3D.Y);
             if ((v2.y < -0.9999999999) || (v2.y > 0.9999999999)) {
                 try {
                     throw new MathUtils.CardanEulerSingularityException(true);
@@ -1218,15 +1218,15 @@ public class Basis {
                     MathUtils.atan2(v2.z, v2.x)
             };
 
-        } else if (order == RotationOrder.ZXZ) {
+        } else if (order == RotationOrder3D.ZXZ) {
 
             // r (T .plusK) coordinates are :
             // sin (psi1) sin (phi), -cos (psi1) sin (phi), cos (phi)
             // (-r) (T .plusK) coordinates are :
             // sin (phi) sin (psi2), sin (phi) cos (psi2), cos (phi)
             // and we can choose to have phi in the interval [0 ; PI]
-            Vector3 v1 = applyTo(RotationOrder.Z);
-            Vector3 v2 = applyInverseTo(RotationOrder.Z);
+            Vector3 v1 = applyTo(RotationOrder3D.Z);
+            Vector3 v2 = applyInverseTo(RotationOrder3D.Z);
             if ((v2.z < -0.9999999999) || (v2.z > 0.9999999999)) {
                 try {
                     throw new MathUtils.CardanEulerSingularityException(true);
@@ -1247,8 +1247,8 @@ public class Basis {
             // (-r) (T .plusK) coordinates are :
             // -sin (theta) cos (psi2), sin (theta) sin (psi2), cos (theta)
             // and we can choose to have theta in the interval [0 ; PI]
-            Vector3 v1 = applyTo(RotationOrder.Z);
-            Vector3 v2 = applyInverseTo(RotationOrder.Z);
+            Vector3 v1 = applyTo(RotationOrder3D.Z);
+            Vector3 v2 = applyInverseTo(RotationOrder3D.Z);
             if ((v2.z < -0.9999999999) || (v2.z > 0.9999999999)) {
                 try {
                     throw new MathUtils.CardanEulerSingularityException(true);
@@ -1418,8 +1418,8 @@ public class Basis {
      * @param alpha Scalar factor.
      * @return a scaled quaternion.
      */
-    public Basis multiply(final float alpha) {
-        return new Basis(alpha * q0,
+    public Basis3D multiply(final float alpha) {
+        return new Basis3D(alpha * q0,
                 alpha * q1,
                 alpha * q2,
                 alpha * q3);
@@ -1431,7 +1431,7 @@ public class Basis {
      * @param q Quaternionf.
      * @return the product of this instance with {@code q}, in that order.
      */
-    public Basis multiply(final Basis q) {
+    public Basis3D multiply(final Basis3D q) {
         return multiply(this, q);
     }
 
@@ -1441,7 +1441,7 @@ public class Basis {
      * @param q Quaternionf.
      * @return the dot product of this instance and {@code q}.
      */
-    public float dotProduct(final Basis q) {
+    public float dotProduct(final Basis3D q) {
         return dotProduct(this, q);
     }
 
@@ -1522,8 +1522,8 @@ public class Basis {
      * @param r rotation to apply the rotation to
      * @return a new rotation which is the composition of r by the instance
      */
-    public Basis applyTo(Basis r) {
-        return new Basis(r.q0 * q0 - (r.q1 * q1 + r.q2 * q2 + r.q3 * q3),
+    public Basis3D applyTo(Basis3D r) {
+        return new Basis3D(r.q0 * q0 - (r.q1 * q1 + r.q2 * q2 + r.q3 * q3),
                 r.q1 * q0 + r.q0 * q1 + (r.q2 * q3 - r.q3 * q2),
                 r.q2 * q0 + r.q0 * q2 + (r.q3 * q1 - r.q1 * q3),
                 r.q3 * q0 + r.q0 * q3 + (r.q1 * q2 - r.q2 * q1),
@@ -1543,8 +1543,8 @@ public class Basis {
      * @return a new rotation which is the composition of r by the inverse
      *         of the instance
      */
-    public Basis applyInverseTo(Basis r) {
-        return new Basis(-r.q0 * q0 - (r.q1 * q1 + r.q2 * q2 + r.q3 * q3),
+    public Basis3D applyInverseTo(Basis3D r) {
+        return new Basis3D(-r.q0 * q0 - (r.q1 * q1 + r.q2 * q2 + r.q3 * q3),
                 -r.q1 * q0 + r.q0 * q1 + (r.q2 * q3 - r.q3 * q2),
                 -r.q2 * q0 + r.q0 * q2 + (r.q3 * q1 - r.q1 * q3),
                 -r.q3 * q0 + r.q0 * q3 + (r.q1 * q2 - r.q2 * q1),
@@ -1564,7 +1564,7 @@ public class Basis {
      * @param output the rotation to store the result in
      * @return a new rotation which is the composition of r by the instance
      */
-    public void applyTo(Basis r, Basis output) {
+    public void applyTo(Basis3D r, Basis3D output) {
         output.set(r.q0 * q0 - (r.q1 * q1 + r.q2 * q2 + r.q3 * q3),
                 r.q1 * q0 + r.q0 * q1 + (r.q2 * q3 - r.q3 * q2),
                 r.q2 * q0 + r.q0 * q2 + (r.q3 * q1 - r.q1 * q3),
@@ -1587,7 +1587,7 @@ public class Basis {
      * @return a new rotation which is the composition of r by the inverse
      *         of the instance
      */
-    public void applyInverseTo(Basis r, Basis output) {
+    public void applyInverseTo(Basis3D r, Basis3D output) {
         output.set(-r.q0 * q0 - (r.q1 * q1 + r.q2 * q2 + r.q3 * q3),
                 -r.q1 * q0 + r.q0 * q1 + (r.q2 * q3 - r.q3 * q2),
                 -r.q2 * q0 + r.q0 * q2 + (r.q3 * q1 - r.q1 * q3),
@@ -1595,7 +1595,7 @@ public class Basis {
                 false);
     }
 
-    public Basis setToConjugate() {
+    public Basis3D setToConjugate() {
         q1 = -q1;
         q2 = -q2;
         q3 = -q3;
@@ -1642,7 +1642,7 @@ public class Basis {
      * @return a normalized quaternion.
      * @throws MathUtils.ZeroException if the norm of the quaternion is zero.
      */
-    public Basis normalize() {
+    public Basis3D normalize() {
         final float norm = len();
 
         if (norm < MathUtils.SAFE_MIN_DOUBLE) {
@@ -1653,7 +1653,7 @@ public class Basis {
             }
         }
 
-        return new Basis(q0 / norm,
+        return new Basis3D(q0 / norm,
                 q1 / norm,
                 q2 / norm,
                 q3 / norm);
@@ -1803,11 +1803,11 @@ public class Basis {
             x22 = o2[2];
             fn = fn1;
         }
-        Basis returnMatrix = new Basis(1.0f, 0.0f ,0.0f, 0.0f, false);
+        Basis3D returnMatrix = new Basis3D(1.0f, 0.0f ,0.0f, 0.0f, false);
         return new float[][]{returnMatrix.getMatrix3Val()};
     }
 
-    public boolean equalTo(Basis m) {
+    public boolean equalTo(Basis3D m) {
         return distance(this, m) < MathUtils.DOUBLE_ROUNDING_ERROR;
     }
 

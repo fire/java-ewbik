@@ -231,7 +231,7 @@ public class Bone3D implements Comparable<Bone3D> {
             this.boneHeight = inputBoneHeight;
 
             Node3D tempNode3D = par.localAxes().getGlobalCopy();
-            Quaternion newRot = new Quaternion(RotationOrder.XZY, xAngle, yAngle, zAngle);
+            Quaternion newRot = new Quaternion(RotationOrder3D.XZY, xAngle, yAngle, zAngle);
             tempNode3D.rotateBy(newRot);
 
             this.parent = par;
@@ -538,10 +538,10 @@ public class Bone3D implements Comparable<Bone3D> {
             Node3D result = this.localAxes().getGlobalCopy();
             this.getMajorRotationAxes().updateGlobal();
             this.getMajorRotationAxes().globalMBasis.setToLocalOf(result.globalMBasis, result.globalMBasis);
-            return result.globalMBasis.rotation.getAngles(RotationOrder.XYZ);
+            return result.globalMBasis.rotation.getAngles(RotationOrder3D.XYZ);
         } else {
             Node3D empty = new Node3D();
-            return empty.globalMBasis.rotation.getAngles(RotationOrder.XYZ);
+            return empty.globalMBasis.rotation.getAngles(RotationOrder3D.XYZ);
         }
     }
 
