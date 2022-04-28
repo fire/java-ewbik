@@ -19,8 +19,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package InverseKinematics;
 
-import InverseKinematics.IKExceptions.NullParentForBoneException;
 import ewbik.math.*;
+import org.w3c.dom.Node;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
@@ -67,7 +67,7 @@ public class Bone implements Comparable<Bone> {
             PVector rollHeading, // axial rotation heading of the bone (it's z-axis)
             String inputTag, // some user specified name for the bone, if desired
             float inputBoneHeight, // bone length
-            frameType coordinateType) throws NullParentForBoneException {
+            frameType coordinateType) {
         Vector3 tipHeading1 = Node3D.toVec3f(tipHeading);
         Vector3 rollHeading1 = Node3D.toVec3f(rollHeading);
 
@@ -122,9 +122,9 @@ public class Bone implements Comparable<Bone> {
             this.parent.addChild(this);
             this.updateAncestorCount();
         } else {
-            throw IKExceptions.NullParentForBoneException();
+           this.parentArmature = null;
+           this.parent = null;
         }
-
     }
 
     /**
@@ -143,8 +143,7 @@ public class Bone implements Comparable<Bone> {
             Vector3 rollHeading,
             String inputTag,
             float inputBoneHeight,
-            frameType coordinateType)
-            throws NullParentForBoneException {
+            frameType coordinateType) {
 
         this.lastRotation = new Quaternion();
         if (parArma != null) {
@@ -191,7 +190,8 @@ public class Bone implements Comparable<Bone> {
             this.boneHeight = inputBoneHeight;
             this.updateAncestorCount();
         } else {
-            throw new NullParentForBoneException();
+            parentArmature = null;
+            parent = null;
         }
 
     }
@@ -258,10 +258,7 @@ public class Bone implements Comparable<Bone> {
             this.parent.addFreeChild(this);
             this.parent.addChild(this);
             this.updateAncestorCount();
-        } else {
-            throw IKExceptions.NullParentForBoneException();
         }
-
     }
 
     public Bone(Bone par, // parent bone
@@ -298,8 +295,6 @@ public class Bone implements Comparable<Bone> {
             this.parent.addFreeChild(this);
             this.parent.addChild(this);
             this.updateAncestorCount();
-        } else {
-            throw IKExceptions.NullParentForBoneException();
         }
     }
 
@@ -543,7 +538,7 @@ public class Bone implements Comparable<Bone> {
      *         If the bone has no parent, this method throws an exception.
      * @throws NullParentForBoneException
      */
-    public float[] getXYZAngle() throws NullParentForBoneException {
+    public float[] getXYZAngle() {
         if (this.parent != null) {
             this.localAxes().markDirty();
             this.localAxes().updateGlobal();
@@ -552,7 +547,8 @@ public class Bone implements Comparable<Bone> {
             this.getMajorRotationAxes().globalMBasis.setToLocalOf(result.globalMBasis, result.globalMBasis);
             return result.globalMBasis.rotation.getAngles(RotationOrder.XYZ);
         } else {
-            return null;
+            Node3D empty = new Node3D();
+            return empty.globalMBasis.rotation.getAngles(RotationOrder.XYZ);
         }
     }
 
