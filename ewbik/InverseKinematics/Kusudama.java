@@ -17,15 +17,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
 
-package ewbik.processing.singlePrecision;
+package InverseKinematics;
 
-import InverseKinematics.LoadManager;
-import InverseKinematics.SaveManager;
-import InverseKinematics.Saveable;
-import processing.ShadowNode3D;
 import ewbik.math.*;
-import processing.Bone;
-import processing.Node3D;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
@@ -57,7 +51,7 @@ public class Kusudama implements Saveable {
      * at the previous element in the array,
      * and the cone at the next element in the array.
      */
-    protected ArrayList<ewbik.processing.singlePrecision.LimitCone> limitCones = new ArrayList<ewbik.processing.singlePrecision.LimitCone>();
+    protected ArrayList<LimitCone> limitCones = new ArrayList<LimitCone>();
     /**
      * Defined as some Angle in radians about the limitingAxes Y axis, 0 being
      * equivalent to the
@@ -120,8 +114,8 @@ public class Kusudama implements Saveable {
     /**
      * {@inheritDoc}
      **/
-    public ewbik.processing.singlePrecision.LimitCone createLimitConeForIndex(int insertAt, Vector3 newPoint,
-            float radius) {
+    public LimitCone createLimitConeForIndex(int insertAt, Vector3 newPoint,
+                                             float radius) {
         return new LimitCone(Node3D.toPVector(newPoint), radius, this);
     }
 
@@ -256,7 +250,7 @@ public class Kusudama implements Saveable {
     public void updateTangentRadii() {
 
         for (int i = 0; i < limitCones.size(); i++) {
-            ewbik.processing.singlePrecision.LimitCone next = i < limitCones.size() - 1
+            LimitCone next = i < limitCones.size() - 1
                     ? limitCones.get(i + 1)
                     : null;
             limitCones.get(i).updateTangentHandles(next);
@@ -326,7 +320,7 @@ public class Kusudama implements Saveable {
                 originalLimitingNode3D.getGlobalOf(newYRay).heading());
         limitingNode3D.rotateBy(oldYtoNewY);
 
-        for (ewbik.processing.singlePrecision.LimitCone lc : getLimitCones()) {
+        for (LimitCone lc : getLimitCones()) {
             originalLimitingNode3D.setToGlobalOf(lc.getControlPoint(), lc.getControlPoint());
             limitingNode3D.setToLocalOf(lc.getControlPoint(), lc.getControlPoint());
             lc.getControlPoint().normalize();
@@ -610,7 +604,7 @@ public class Kusudama implements Saveable {
             for (int i = 0; i < limitCones.size() - 1; i++) {
                 Vector3 collisionPoint = inPoint.copy();
                 collisionPoint.set(0, 0, 0);
-                ewbik.processing.singlePrecision.LimitCone nextCone = limitCones.get(i + 1);
+                LimitCone nextCone = limitCones.get(i + 1);
                 boolean inSegBounds = limitCones.get(i).inBoundsFromThisToNext(nextCone, point, collisionPoint);
                 if (inSegBounds == true) {
                     inBounds[0] = 1;
@@ -656,7 +650,7 @@ public class Kusudama implements Saveable {
             result.set(limitCones.get(0).getControlPoint());
         } else {
             for (int i = 0; i < limitCones.size() - 1; i++) {
-                ewbik.processing.singlePrecision.LimitCone nextCone = limitCones.get(i + 1);
+                LimitCone nextCone = limitCones.get(i + 1);
                 Vector3 closestPathPoint = limitCones.get(i).getClosestPathPoint(nextCone, point);
                 float closeDot = closestPathPoint.dot(point);
                 if (closeDot > closestPointDot) {
@@ -688,8 +682,8 @@ public class Kusudama implements Saveable {
      *                 LimitCones)
      */
     public void addLimitCone(Vector3 newPoint, float radius,
-            ewbik.processing.singlePrecision.LimitCone previous,
-            ewbik.processing.singlePrecision.LimitCone next) {
+            LimitCone previous,
+            LimitCone next) {
         int insertAt = 0;
 
         if (next == null || limitCones.size() == 0) {
@@ -702,7 +696,7 @@ public class Kusudama implements Saveable {
         addLimitConeAtIndex(insertAt, newPoint, radius);
     }
 
-    public void removeLimitCone(ewbik.processing.singlePrecision.LimitCone limitCone) {
+    public void removeLimitCone(LimitCone limitCone) {
         this.limitCones.remove(limitCone);
         this.updateTangentRadii();
         this.updateRotationalFreedom();
@@ -728,7 +722,7 @@ public class Kusudama implements Saveable {
      * @param radius   the radius of the LimitCone
      */
     public void addLimitConeAtIndex(int insertAt, Vector3 newPoint, float radius) {
-        ewbik.processing.singlePrecision.LimitCone newCone = createLimitConeForIndex(insertAt, newPoint,
+        LimitCone newCone = createLimitConeForIndex(insertAt, newPoint,
                 radius);
         if (insertAt == -1) {
             limitCones.add(newCone);
@@ -848,7 +842,7 @@ public class Kusudama implements Saveable {
     protected void updateRotationalFreedom() {
         float axialConstrainedHyperArea = isAxiallyConstrained() ? (range / TAU) : 1f;
         float totalLimitConeSurfaceAreaRatio = 0f;
-        for (ewbik.processing.singlePrecision.LimitCone l : limitCones) {
+        for (LimitCone l : limitCones) {
             totalLimitConeSurfaceAreaRatio += (l.getRadius() * 2f) / TAU;
         }
         rotationalFreedom = axialConstrainedHyperArea
@@ -902,7 +896,7 @@ public class Kusudama implements Saveable {
     @Override
     public void makeSaveable(SaveManager saveManager) {
         saveManager.addToSaveState(this);
-        for (ewbik.processing.singlePrecision.LimitCone lc : limitCones) {
+        for (LimitCone lc : limitCones) {
             lc.makeSaveable(saveManager);
         }
     }
@@ -927,7 +921,7 @@ public class Kusudama implements Saveable {
         this.limitingNode3D = l.getObjectFor(Node3D.class, j, "limitAxes");
         limitCones = new ArrayList<>();
         l.arrayListFromJSONArray(j.getJSONArray("limitCones"), limitCones,
-                ewbik.processing.singlePrecision.LimitCone.class);
+                LimitCone.class);
         this.minAxialAngle = j.getFloat("minAxialAngle");
         this.range = j.getFloat("axialRange");
         this.axiallyConstrained = j.getBoolean("axiallyConstrained");

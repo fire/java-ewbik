@@ -17,11 +17,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
 
-package processing;
+package InverseKinematics;
 
-import InverseKinematics.LoadManager;
-import InverseKinematics.SaveManager;
-import InverseKinematics.Saveable;
 import ewbik.math.*;
 import ewbik.math.MathUtils;
 import processing.core.PApplet;
@@ -95,7 +92,7 @@ public class Skeleton3D implements Saveable {
         @SuppressWarnings("unchecked")
         Collection<Skeleton3D> ArmatureList = (Collection<Skeleton3D>) newLoader.importSinglePrecisionArmatures(path,
                 Node3D.class, Bone.class, Skeleton3D.class,
-                ewbik.processing.singlePrecision.Kusudama.class, ewbik.processing.singlePrecision.LimitCone.class,
+                Kusudama.class, LimitCone.class,
                 IKPin.class);
         for (Skeleton3D a : ArmatureList) {
             return a;

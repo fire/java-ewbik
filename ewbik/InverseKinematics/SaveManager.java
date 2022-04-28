@@ -1,10 +1,6 @@
 package InverseKinematics;
 
 import ewbik.asj.data.*;
-import processing.Bone;
-import processing.IKPin;
-import processing.Node3D;
-import processing.Skeleton3D;
 
 import java.io.File;
 import java.util.*;
@@ -209,9 +205,9 @@ public abstract class SaveManager {
                     armaturesJSON.append(jsonObj);
                 if (Bone.class.isAssignableFrom(s.getClass()))
                     bonesJSON.append(jsonObj);
-                if (ewbik.processing.singlePrecision.Kusudama.class.isAssignableFrom(s.getClass()))
+                if (Kusudama.class.isAssignableFrom(s.getClass()))
                     kusudamaJSON.append(jsonObj);
-                if (ewbik.processing.singlePrecision.LimitCone.class.isAssignableFrom(s.getClass()))
+                if (LimitCone.class.isAssignableFrom(s.getClass()))
                     limitConeJSON.append(jsonObj);
                 if (IKPin.class.isAssignableFrom(s.getClass()))
                     IKPinsJSON.append(jsonObj);

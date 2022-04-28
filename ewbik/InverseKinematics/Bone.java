@@ -17,14 +17,10 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
  */
 
-package processing;
+package InverseKinematics;
 
-import InverseKinematics.LoadManager;
-import InverseKinematics.SaveManager;
-import InverseKinematics.Saveable;
-import processing.IKExceptions.NullParentForBoneException;
+import InverseKinematics.IKExceptions.NullParentForBoneException;
 import ewbik.math.*;
-import ewbik.processing.singlePrecision.Kusudama;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PMatrix;
@@ -1112,8 +1108,8 @@ public class Bone implements Saveable, Comparable<Bone> {
         if (j.hasKey("stiffness"))
             this.setStiffness(j.getFloat("stiffness"));
         if (j.hasKey("constraints"))
-            this.constraints = (ewbik.processing.singlePrecision.Kusudama) l.getObjectFromClassMaps(
-                    ewbik.processing.singlePrecision.Kusudama.class, j.getString("constraints"));
+            this.constraints = (Kusudama) l.getObjectFromClassMaps(
+                    Kusudama.class, j.getString("constraints"));
         if (j.hasKey("IKPin"))
             this.pin = (IKPin) l.getObjectFromClassMaps(IKPin.class, j.getString("IKPin"));
         this.tag = j.getString("tag");

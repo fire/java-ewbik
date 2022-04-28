@@ -1,4 +1,4 @@
-package processing.math;
+package InverseKinematics.math;
 
 import ewbik.math.*;
 

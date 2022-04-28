@@ -1,4 +1,4 @@
-package processing;
+package InverseKinematics;
 
 public final class IKExceptions extends Exception {
 

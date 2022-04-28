@@ -1,4 +1,4 @@
-package processing;/*
+package InverseKinematics;/*
                    
                    Copyright (c) 2015 Eron Gjoni
                    
@@ -17,9 +17,6 @@ package processing;/*
                    
                    */
 
-import InverseKinematics.LoadManager;
-import InverseKinematics.SaveManager;
-import InverseKinematics.Saveable;
 import ewbik.math.*;
 import processing.core.PGraphics;
 import processing.core.PMatrix;

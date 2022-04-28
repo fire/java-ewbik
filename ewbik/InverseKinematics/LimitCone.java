@@ -17,18 +17,14 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
 
-package ewbik.processing.singlePrecision;
+package InverseKinematics;
 
-import InverseKinematics.LoadManager;
-import InverseKinematics.SaveManager;
-import InverseKinematics.Saveable;
 import ewbik.math.*;
-import processing.Node3D;
 import processing.core.PVector;
 
 public class LimitCone implements Saveable {
 
-    public ewbik.processing.singlePrecision.Kusudama parentKusudama;
+    public Kusudama parentKusudama;
     public Vector3 tangentCircleCenterNext1;
     public Vector3 tangentCircleCenterNext2;
     public float tangentCircleRadiusNext;
@@ -60,14 +56,14 @@ public class LimitCone implements Saveable {
     public LimitCone() {
     }
 
-    public LimitCone(PVector location, float rad, ewbik.processing.singlePrecision.Kusudama attachedTo) {
+    public LimitCone(PVector location, float rad, Kusudama attachedTo) {
         Vector3 location1 = Node3D.toVec3f(location);
         setControlPoint(location1);
-        ewbik.processing.singlePrecision.LimitCone.this.tangentCircleCenterNext1 = location1.getOrthogonal();
-        ewbik.processing.singlePrecision.LimitCone.this.tangentCircleCenterNext2 = Vector3
-                .multiply(ewbik.processing.singlePrecision.LimitCone.this.tangentCircleCenterNext1, -1);
+        LimitCone.this.tangentCircleCenterNext1 = location1.getOrthogonal();
+        LimitCone.this.tangentCircleCenterNext2 = Vector3
+                .multiply(LimitCone.this.tangentCircleCenterNext1, -1);
         this.setRadius(rad);
-        ewbik.processing.singlePrecision.LimitCone.this.parentKusudama = attachedTo;
+        LimitCone.this.parentKusudama = attachedTo;
     }
 
     /**
@@ -77,8 +73,8 @@ public class LimitCone implements Saveable {
      *                       the input after accounting for collisions
      * @return
      */
-    public boolean inBoundsFromThisToNext(ewbik.processing.singlePrecision.LimitCone next, Vector3 input,
-            Vector3 collisionPoint) {
+    public boolean inBoundsFromThisToNext(LimitCone next, Vector3 input,
+                                          Vector3 collisionPoint) {
         boolean isInBounds = false;
         Vector3 closestCollision = getClosestCollision(next, input);
         if (closestCollision == null) {
@@ -105,8 +101,8 @@ public class LimitCone implements Saveable {
      *         rectified position
      *         if the point was out of bounds.
      */
-    public Vector3 getClosestCollision(ewbik.processing.singlePrecision.LimitCone next,
-            Vector3 input) {
+    public Vector3 getClosestCollision(LimitCone next,
+                                       Vector3 input) {
         Vector3 result = getOnGreatTangentTriangle(next, input);
         if (result == null) {
             boolean[] inBounds = { false };
@@ -115,8 +111,8 @@ public class LimitCone implements Saveable {
         return result;
     }
 
-    public Vector3 getClosestPathPoint(ewbik.processing.singlePrecision.LimitCone next,
-            Vector3 input) {
+    public Vector3 getClosestPathPoint(LimitCone next,
+                                       Vector3 input) {
         Vector3 result = getOnPathSequence(next, input);
         if (result == null) {
             result = closestCone(next, input);
@@ -137,7 +133,7 @@ public class LimitCone implements Saveable {
      * @param input
      * @return
      */
-    public boolean determineIfInBounds(ewbik.processing.singlePrecision.LimitCone next, Vector3 input) {
+    public boolean determineIfInBounds(LimitCone next, Vector3 input) {
 
         /**
          * Procedure : Check if input is contained in this cone, or the next cone
@@ -193,14 +189,14 @@ public class LimitCone implements Saveable {
         }
     }
 
-    public Vector3 closestCone(ewbik.processing.singlePrecision.LimitCone next, Vector3 input) {
+    public Vector3 closestCone(LimitCone next, Vector3 input) {
         if (input.dot(controlPoint) > input.dot(next.controlPoint))
             return this.controlPoint.copy();
         else
             return next.controlPoint.copy();
     }
 
-    public Vector3 getOnPathSequence(ewbik.processing.singlePrecision.LimitCone next, Vector3 input) {
+    public Vector3 getOnPathSequence(LimitCone next, Vector3 input) {
         Vector3 c1xc2 = controlPoint.crossCopy(next.controlPoint);
         float c1c2fir = input.dot(c1xc2);
         if (c1c2fir < 0.0) {
@@ -229,8 +225,8 @@ public class LimitCone implements Saveable {
 
     }
 
-    public Vector3 getOnGreatTangentTriangle(ewbik.processing.singlePrecision.LimitCone next,
-            Vector3 input) {
+    public Vector3 getOnGreatTangentTriangle(LimitCone next,
+                                             Vector3 input) {
         Vector3 c1xc2 = controlPoint.crossCopy(next.controlPoint);
         float c1c2fir = input.dot(c1xc2);
         if (c1c2fir < 0.0) {
@@ -273,9 +269,9 @@ public class LimitCone implements Saveable {
      * @param inBounds
      * @return
      */
-    public Vector3 closestPointOnClosestCone(ewbik.processing.singlePrecision.LimitCone next,
-            Vector3 input,
-            boolean[] inBounds) {
+    public Vector3 closestPointOnClosestCone(LimitCone next,
+                                             Vector3 input,
+                                             boolean[] inBounds) {
         Vector3 closestToFirst = this.closestToCone(input, inBounds);
         if (inBounds[0]) {
             return closestToFirst;
@@ -318,7 +314,7 @@ public class LimitCone implements Saveable {
         }
     }
 
-    public void updateTangentHandles(ewbik.processing.singlePrecision.LimitCone next) {
+    public void updateTangentHandles(LimitCone next) {
         this.controlPoint.normalize();
         if (next != null) {
             float radA = this.getRadius();
@@ -412,7 +408,7 @@ public class LimitCone implements Saveable {
             computeTriangles(next);
     }
 
-    private void computeTriangles(ewbik.processing.singlePrecision.LimitCone next) {
+    private void computeTriangles(LimitCone next) {
         firstTriangleNext[1] = this.tangentCircleCenterNext1.normalize();
         firstTriangleNext[0] = this.getControlPoint().normalize();
         firstTriangleNext[2] = next.getControlPoint().normalize();
@@ -448,7 +444,7 @@ public class LimitCone implements Saveable {
         return this.radiusCosine;
     }
 
-    public ewbik.processing.singlePrecision.Kusudama getParentKusudama() {
+    public Kusudama getParentKusudama() {
         return parentKusudama;
     }
 
@@ -468,8 +464,8 @@ public class LimitCone implements Saveable {
     }
 
     public void loadFromJSONObject(ewbik.asj.data.JSONObject j, LoadManager l) {
-        this.parentKusudama = (ewbik.processing.singlePrecision.Kusudama) l.getObjectFromClassMaps(
-                ewbik.processing.singlePrecision.Kusudama.class,
+        this.parentKusudama = (Kusudama) l.getObjectFromClassMaps(
+                Kusudama.class,
                 j.getString("parentKusudama"));
         Vector3 controlPointJ = null;
         try {

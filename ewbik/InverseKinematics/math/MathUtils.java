@@ -17,7 +17,7 @@
 package ewbik.math;
 
 /**
- * Utility and fast processing.math functions.
+ * Utility and fast InverseKinematics.math functions.
  * <p>
  * Thanks to Riven on JavaGaming.org for the basis of sin/cos/floor/ceil.
  *

@@ -1,6 +1,6 @@
 package processing;
 
-import InverseKinematics.SaveManager;
+import InverseKinematics.*;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
@@ -8,7 +8,6 @@ import processing.event.MouseEvent;
 
 import java.util.ArrayList;
 
-import ewbik.processing.singlePrecision.Kusudama;
 import processing.core.PConstants;
 
 class UI {

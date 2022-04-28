@@ -2,10 +2,6 @@ package InverseKinematics;
 
 import ewbik.asj.data.JSONArray;
 import ewbik.asj.data.JSONObject;
-import processing.Bone;
-import processing.IKPin;
-import processing.Node3D;
-import processing.Skeleton3D;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,9 +23,9 @@ public class LoadManager {
     public HashMap<String, Skeleton3D> armatureLoadObjects = new HashMap<>();
     public HashMap<String, JSONObject> boneJSONObjects = new HashMap<>();
     public HashMap<String, Bone> boneLoadObjects = new HashMap<>();
-    public HashMap<String, ewbik.processing.singlePrecision.Kusudama> kusudamaLoadObjects = new HashMap<>();
+    public HashMap<String, Kusudama> kusudamaLoadObjects = new HashMap<>();
     public HashMap<String, JSONObject> kusudamaJSONObjects = new HashMap<>();
-    public HashMap<String, ewbik.processing.singlePrecision.LimitCone> LimitConeLoadObjects = new HashMap<>();
+    public HashMap<String, LimitCone> LimitConeLoadObjects = new HashMap<>();
     public HashMap<String, JSONObject> LimitConeJSONObjects = new HashMap<>();
     public HashMap<String, IKPin> IKPinLoadObjects = new HashMap<>();
     public HashMap<String, JSONObject> IKPinJSONObjects = new HashMap<>();
@@ -100,8 +96,8 @@ public class LoadManager {
                                                        Class<? extends Node3D> AxesClass,
                                                        Class<? extends Bone> BoneClass,
                                                        Class<? extends Skeleton3D> ArmatureClass,
-                                                       Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
-                                                       Class<? extends ewbik.processing.singlePrecision.LimitCone> LimitConeClass,
+                                                       Class<? extends Kusudama> KusudamaClass,
+                                                       Class<? extends LimitCone> LimitConeClass,
                                                        Class<? extends IKPin> IKPinClass,
                                                        EWBIKLoader loader) {
         JSONObject loadFile = ewbik.asj.data.StringFuncs.loadJSONObject(selection);
@@ -119,16 +115,16 @@ public class LoadManager {
                                                      Class<? extends Node3D> AxesClass,
                                                      Class<? extends Bone> BoneClass,
                                                      Class<? extends Skeleton3D> ArmatureClass,
-                                                     Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
-                                                     Class<? extends ewbik.processing.singlePrecision.LimitCone> LimitConeClass,
+                                                     Class<? extends Kusudama> KusudamaClass,
+                                                     Class<? extends LimitCone> LimitConeClass,
                                                      Class<? extends IKPin> IKPinClass) {
         clearCurrentLoadObjects();
 
         AxesClass = AxesClass == null ? Node3D.class : AxesClass;
         BoneClass = BoneClass == null ? Bone.class : BoneClass;
         ArmatureClass = ArmatureClass == null ? Skeleton3D.class : ArmatureClass;
-        KusudamaClass = KusudamaClass == null ? ewbik.processing.singlePrecision.Kusudama.class : KusudamaClass;
-        LimitConeClass = LimitConeClass == null ? ewbik.processing.singlePrecision.LimitCone.class : LimitConeClass;
+        KusudamaClass = KusudamaClass == null ? Kusudama.class : KusudamaClass;
+        LimitConeClass = LimitConeClass == null ? LimitCone.class : LimitConeClass;
         IKPinClass = IKPinClass == null ? IKPin.class : IKPinClass;
 
         createEmptyLoadMaps(axesJSONObjects, axesLoadObjects, loadFile.getJSONArray("node_3d"), AxesClass);
@@ -323,9 +319,9 @@ public class LoadManager {
             result = armatureLoadObjects.get(identityHash);
         else if (Bone.class.isAssignableFrom(keyClass))
             result = boneLoadObjects.get(identityHash);
-        else if (ewbik.processing.singlePrecision.Kusudama.class.isAssignableFrom(keyClass))
+        else if (Kusudama.class.isAssignableFrom(keyClass))
             result = kusudamaLoadObjects.get(identityHash);
-        else if (ewbik.processing.singlePrecision.LimitCone.class.isAssignableFrom(keyClass))
+        else if (LimitCone.class.isAssignableFrom(keyClass))
             result = LimitConeLoadObjects.get(identityHash);
         else if (IKPin.class.isAssignableFrom(keyClass))
             result = IKPinLoadObjects.get(identityHash);

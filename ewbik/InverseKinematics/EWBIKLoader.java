@@ -1,16 +1,14 @@
 package ewbik.data;
 
-import InverseKinematics.LoadManager;
-import InverseKinematics.Saveable;
-import InverseKinematics.TypeIdentifier;
+import InverseKinematics.*;
 import ewbik.asj.data.JSONArray;
 import ewbik.asj.data.JSONObject;
 import ewbik.asj.data.StringFuncs;
 import ewbik.math.Quaternion;
-import processing.Bone;
-import processing.IKPin;
-import processing.Node3D;
-import processing.Skeleton3D;
+import InverseKinematics.Bone;
+import InverseKinematics.IKPin;
+import InverseKinematics.Node3D;
+import InverseKinematics.Skeleton3D;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -71,8 +69,8 @@ public class EWBIKLoader {
             Class<? extends Node3D> AxesClass,
             Class<? extends Bone> BoneClass,
             Class<? extends Skeleton3D> ArmatureClass,
-            Class<? extends ewbik.processing.singlePrecision.Kusudama> KusudamaClass,
-            Class<? extends ewbik.processing.singlePrecision.LimitCone> LimitConeClass,
+            Class<? extends Kusudama> KusudamaClass,
+            Class<? extends LimitCone> LimitConeClass,
             Class<? extends IKPin> IKPinClass) {
         File selection = new File(filepath);
         JSONObject loadFile = StringFuncs.loadJSONObject(selection);
