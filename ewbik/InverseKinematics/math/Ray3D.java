@@ -19,13 +19,12 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package ewbik.math;
 
-import InverseKinematics.CanLoad;
 import ewbik.asj.data.JSONObject;
 
 /**
  * @author Eron Gjoni
  */
-public class Ray3D implements CanLoad {
+public class Ray3D {
     public static final int X = 0, Y = 1, Z = 2;
     protected Vector3 p1;
     protected Vector3 p2;
@@ -970,8 +969,11 @@ public class Ray3D implements CanLoad {
         this.p1 = p1;
     }
 
-    @Override
-    public CanLoad populateSelfFromJSON(JSONObject j) {
+    /**
+         * @param j
+         * @return should return an instance of itself for chaining
+         */
+    public Ray3D populateSelfFromJSON(JSONObject j) {
         if (this.p1 != null)
             this.p2 = this.p1.copy();
         if (this.p2 != null)
@@ -991,7 +993,6 @@ public class Ray3D implements CanLoad {
         return this;
     }
 
-    @Override
     public JSONObject toJSONObject() {
         JSONObject result = new JSONObject();
         result.setJSONObject("p1", p1.toJSONObject());
