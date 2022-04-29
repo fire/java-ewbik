@@ -1,7 +1,7 @@
 package EWBIK;
 
 public class IKBasis {
-    public static final IKBasis IDENTITY = new IKBasis(1.0f, 0.0f, 0.0f, 0.0f, false);
+    public static final IKBasis IDENTITY = new IKBasis(0.0f, 0.0f, 0.0f, 1.0f, false);
 
     /**
      * Scalar coordinate of the quaternion.
@@ -39,26 +39,24 @@ public class IKBasis {
      * components. This is <em>not</em> our convention. We put the scalar part
      * as the first component.
      * </p>
-     *
-     * @param q0                 scalar part of the quaternion
-     * @param q1                 first coordinate of the vectorial part of the
+     *  @param x                 first coordinate of the vectorial part of the
      *                           quaternion
-     * @param q2                 second coordinate of the vectorial part of the
+     * @param y                 second coordinate of the vectorial part of the
      *                           quaternion
-     * @param q3                 third coordinate of the vectorial part of the
-     *                           quaternion
+     * @param z                 third coordinate of the vectorial part of the
+ *                           quaternion
+     * @param w                 scalar part of the quaternion
      * @param needsNormalization if true, the coordinates are considered
-     *                           not to be normalized, a normalization preprocessing
-     *                           step is performed
-     *                           before using them
+*                           not to be normalized, a normalization preprocessing
+*                           step is performed
      */
-    public IKBasis(float q0, float q1, float q2, float q3,
+    public IKBasis(float x, float y, float z, float w,
                    boolean needsNormalization) {
 
-        this.w = q0;
-        this.x = q1;
-        this.y = q2;
-        this.z = q3;
+        this.w = w;
+        this.x = x;
+        this.y = y;
+        this.z = z;
 
         if (needsNormalization)
             setToNormalized();
@@ -69,14 +67,14 @@ public class IKBasis {
      * creates an identity rotation
      */
     public IKBasis() {
-        this(1.0f, 0.0f, 0.0f, 0.0f, false);
+        this(0.0f, 0.0f, 0.0f, 1.0f, false);
     }
 
     /**
      * assumes no noralization required
      **/
-    public IKBasis(float q0, float q1, float q2, float q3) {
-        this(q0, q1, q2, q3, false);
+    public IKBasis(float x, float y, float z, float w) {
+        this(x, y, z, w, false);
     }
 
     /**
@@ -672,7 +670,7 @@ public class IKBasis {
         final float y = q1a * q2c - q1b * q2f + q1c * q2a + q1f * q2b;
         final float z = q1a * q2f + q1b * q2c - q1c * q2b + q1f * q2a;
 
-        return new IKBasis(w, x, y, z);
+        return new IKBasis(x, y, z, w);
     }
 
     /**
@@ -769,7 +767,7 @@ public class IKBasis {
      * @return a copy of this MRotation
      */
     public IKBasis copy() {
-        return new IKBasis(getW(), getX(), getY(), getZ());
+        return new IKBasis(getX(), getY(), getZ(), getW());
     }
 
     /**
@@ -782,7 +780,7 @@ public class IKBasis {
      *         of the instance
      */
     public IKBasis revert() {
-        return new IKBasis(-w, x, y, z, false);
+        return new IKBasis(x, y, z, -w, false);
     }
 
     /**
@@ -912,10 +910,8 @@ public class IKBasis {
             }
         }
 
-        return new IKBasis(w / squareNorm,
-                -x / squareNorm,
-                -y / squareNorm,
-                -z / squareNorm);
+        return new IKBasis(-x / squareNorm, -y / squareNorm, -z / squareNorm, w / squareNorm
+        );
     }
 
     /**
@@ -1419,10 +1415,8 @@ public class IKBasis {
      * @return a scaled quaternion.
      */
     public IKBasis multiply(final float alpha) {
-        return new IKBasis(alpha * w,
-                alpha * x,
-                alpha * y,
-                alpha * z);
+        return new IKBasis(alpha * x, alpha * y, alpha * z, alpha * w
+        );
     }
 
     /**
@@ -1523,10 +1517,7 @@ public class IKBasis {
      * @return a new rotation which is the composition of r by the instance
      */
     public IKBasis applyTo(IKBasis r) {
-        return new IKBasis(r.w * w - (r.x * x + r.y * y + r.z * z),
-                r.x * w + r.w * x + (r.y * z - r.z * y),
-                r.y * w + r.w * y + (r.z * x - r.x * z),
-                r.z * w + r.w * z + (r.x * y - r.y * x),
+        return new IKBasis(r.x * w + r.w * x + (r.y * z - r.z * y), r.y * w + r.w * y + (r.z * x - r.x * z), r.z * w + r.w * z + (r.x * y - r.y * x), r.w * w - (r.x * x + r.y * y + r.z * z),
                 false);
     }
 
@@ -1544,10 +1535,7 @@ public class IKBasis {
      *         of the instance
      */
     public IKBasis applyInverseTo(IKBasis r) {
-        return new IKBasis(-r.w * w - (r.x * x + r.y * y + r.z * z),
-                -r.x * w + r.w * x + (r.y * z - r.z * y),
-                -r.y * w + r.w * y + (r.z * x - r.x * z),
-                -r.z * w + r.w * z + (r.x * y - r.y * x),
+        return new IKBasis(-r.x * w + r.w * x + (r.y * z - r.z * y), -r.y * w + r.w * y + (r.z * x - r.x * z), -r.z * w + r.w * z + (r.x * y - r.y * x), -r.w * w - (r.x * x + r.y * y + r.z * z),
                 false);
     }
 
@@ -1653,10 +1641,8 @@ public class IKBasis {
             }
         }
 
-        return new IKBasis(w / norm,
-                x / norm,
-                y / norm,
-                z / norm);
+        return new IKBasis(x / norm, y / norm, z / norm, w / norm
+        );
     }
 
     public void set(IKVector3 u, IKVector3 v) {
@@ -1803,7 +1789,7 @@ public class IKBasis {
             x22 = o2[2];
             fn = fn1;
         }
-        IKBasis returnMatrix = new IKBasis(1.0f, 0.0f ,0.0f, 0.0f, false);
+        IKBasis returnMatrix = new IKBasis(0.0f, 0.0f, 0.0f, 1.0f, false);
         return new float[][]{returnMatrix.getMatrix3Val()};
     }
 
