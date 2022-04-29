@@ -189,22 +189,6 @@ public class IKQuaternionBasedCharacteristicPolynomial {
     }
 
     /**
-     * Return the RMSD of the superposition of input coordinate set y onto x.
-     * Note, this is the fasted way to calculate an RMSD without actually
-     * superposing the two sets. The calculation is performed "lazy", meaning
-     * calculations are only performed if necessary.
-     *
-     * @return root mean square deviation for superposition of y onto x
-     */
-    public float getRmsd() {
-        if (!rmsdCalculated) {
-            calcRmsd(moved, target);
-            rmsdCalculated = true;
-        }
-        return rmsd;
-    }
-
-    /**
      * Weighted superposition.
      *
      * @param fixed
@@ -227,26 +211,6 @@ public class IKQuaternionBasedCharacteristicPolynomial {
             transformationCalculated = true;
         }
         return result;
-    }
-
-    /**
-     * Calculates the RMSD value for superposition of y onto x. This requires
-     * the coordinates to be precentered.
-     *
-     * @param x 3f points of reference coordinate set
-     * @param y 3f points of coordinate set for superposition
-     */
-    private void calcRmsd(IKVector3[] x, IKVector3[] y) {
-        // QCP doesn't handle alignment of single values, so if we only have one point
-        // we just compute regular distance.
-        if (x.length == 1) {
-            rmsd = x[0].dist(y[0]);
-            rmsdCalculated = true;
-        } else {
-            if (!innerProductCalculated)
-                innerProduct(y, x);
-            calcRmsd(wsum);
-        }
     }
 
     /**
@@ -334,56 +298,6 @@ public class IKQuaternionBasedCharacteristicPolynomial {
         innerProductCalculated = true;
     }
 
-    private void calcRmsd(float len) {
-        if (max_iterations > 0) {
-            float Sxx2 = Sxx * Sxx;
-            float Syy2 = Syy * Syy;
-            float Szz2 = Szz * Szz;
-
-            float Sxy2 = Sxy * Sxy;
-            float Syz2 = Syz * Syz;
-            float Sxz2 = Sxz * Sxz;
-
-            float Syx2 = Syx * Syx;
-            float Szy2 = Szy * Szy;
-            float Szx2 = Szx * Szx;
-
-            float SyzSzymSyySzz2 = 2.0f * (Syz * Szy - Syy * Szz);
-            float Sxx2Syy2Szz2Syz2Szy2 = Syy2 + Szz2 - Sxx2 + Syz2 + Szy2;
-
-            float c2 = -2.0f * (Sxx2 + Syy2 + Szz2 + Sxy2 + Syx2 + Sxz2 + Szx2 + Syz2 + Szy2);
-            float c1 = 8.0f * (Sxx * Syz * Szy + Syy * Szx * Sxz + Szz * Sxy * Syx - Sxx * Syy * Szz - Syz * Szx * Sxy
-                    - Szy * Syx * Sxz);
-
-            float Sxy2Sxz2Syx2Szx2 = Sxy2 + Sxz2 - Syx2 - Szx2;
-
-            float c0 = Sxy2Sxz2Syx2Szx2 * Sxy2Sxz2Syx2Szx2
-                    + (Sxx2Syy2Szz2Syz2Szy2 + SyzSzymSyySzz2) * (Sxx2Syy2Szz2Syz2Szy2 - SyzSzymSyySzz2)
-                    + (-(SxzpSzx) * (SyzmSzy) + (SxymSyx) * (SxxmSyy - Szz))
-                            * (-(SxzmSzx) * (SyzpSzy) + (SxymSyx) * (SxxmSyy + Szz))
-                    + (-(SxzpSzx) * (SyzpSzy) - (SxypSyx) * (SxxpSyy - Szz))
-                            * (-(SxzmSzx) * (SyzmSzy) - (SxypSyx) * (SxxpSyy + Szz))
-                    + (+(SxypSyx) * (SyzpSzy) + (SxzpSzx) * (SxxmSyy + Szz))
-                            * (-(SxymSyx) * (SyzmSzy) + (SxzpSzx) * (SxxpSyy + Szz))
-                    + (+(SxypSyx) * (SyzmSzy) + (SxzmSzx) * (SxxmSyy - Szz))
-                            * (-(SxymSyx) * (SyzpSzy) + (SxzmSzx) * (SxxpSyy - Szz));
-
-            int i;
-            for (i = 1; i < (max_iterations + 1); ++i) {
-                float oldg = mxEigenV;
-                float Y = 1f / mxEigenV;
-                float Y2 = Y * Y;
-                float delta = ((((Y * c0 + c1) * Y + c2) * Y2 + 1) / ((Y * c1 + 2 * c2) * Y2 * Y + 4));
-                mxEigenV -= delta;
-
-                if (IKMathUtils.abs(mxEigenV - oldg) < IKMathUtils.abs(eval_prec * mxEigenV))
-                    break;
-            }
-        }
-
-        rmsd = IKMathUtils.sqrt(IKMathUtils.abs(2.0f * (e0 - mxEigenV) / len));
-    }
-
     private IKQuaternion calcRotation() {
 
         // QCP doesn't handle single targets, so if we only have one point and one
@@ -469,11 +383,6 @@ public class IKQuaternionBasedCharacteristicPolynomial {
 
             return new IKQuaternion(q1 / min, q2 / min, q3 / min, q4 / min, true);
         }
-    }
-
-    public float getRmsd(IKVector3[] fixed, IKVector3[] moved) {
-        set(moved, fixed);
-        return getRmsd();
     }
 
     public IKVector3 moveToWeightedCenter(IKVector3[] toCenter, float[] weight, IKVector3 center) {
