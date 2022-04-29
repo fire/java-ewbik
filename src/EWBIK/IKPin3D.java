@@ -20,54 +20,11 @@ public class IKPin3D {
     int subTargetCount = 4;
     float depthFalloff = 0f;
 
-    public IKPin3D() {
-    }
-
     public IKPin3D(IKNode3D inNode3D, boolean enabled, IKBone3D bone) {
         this.isEnabled = enabled;
         this.node3D = inNode3D;
         this.forBone = bone;
         setTargetPriorities(IKPin3D.this.xPriority, IKPin3D.this.yPriority, IKPin3D.this.zPriority);
-    }
-
-    public IKPin3D(IKNode3D inNode3D, IKBone3D bone) {
-        this.node3D = inNode3D;
-        this.forBone = bone;
-        this.isEnabled = false;
-        setTargetPriorities(IKPin3D.this.xPriority, IKPin3D.this.yPriority, IKPin3D.this.zPriority);
-    }
-
-    public IKVector3 getLocation() {
-        return getLocation_();
-    }
-
-    public void translateTo(IKVector3 v) {
-        translateTo_(v);
-    }
-
-    public void translateBy(IKVector3 v) {
-        translateBy_(v);
-    }
-
-    /**
-     * rotate this pin about its X axis
-     **/
-    public void rotateAboutX(float radians) {
-        node3D.rotateAboutX(radians, true);
-    }
-
-    /**
-     * rotate this pin about its X axis
-     **/
-    public void rotateAboutY(float radians) {
-        node3D.rotateAboutY(radians, true);
-    }
-
-    /**
-     * rotate this pin about its X axis
-     **/
-    public void rotateAboutZ(float radians) {
-        node3D.rotateAboutZ(radians, true);
     }
 
     public IKNode3D getAxes() {
@@ -188,14 +145,6 @@ public class IKPin3D {
         this.forBone.parent_armature.rootwardlyUpdateFalloffCacheFrom(forBone);
     }
 
-    /**
-     * @return the number of bases an effector to this target will attempt to align
-     *         on.
-     */
-    public int getSubtargetCount() {
-        return subTargetCount;
-    }
-
     public byte getModeCode() {
         return modeCode;
     }
@@ -242,32 +191,6 @@ public class IKPin3D {
     }
 
     /**
-     * translates the pin to the location specified in Armature coordinates
-     * (in other words, relative to whatever coordinate frame the armature itself is
-     * specified in)
-     *
-     * @param location
-     */
-    public void translateToArmatureLocal_(IKVector3 location) {
-        IKNode3D armNode3D = this.forBone().parent_armature.localAxes().getParentAxes();
-        if (armNode3D == null) {
-            this.node3D.translateTo(location);
-        } else {
-            this.node3D.translateTo(armNode3D.getLocalOf(location));
-        }
-    }
-
-    /**
-     * translates the pin to the location specified in local coordinates
-     * (relative to any other Axes objects the pin may be parented to)
-     *
-     * @param location
-     */
-    public void translateBy_(IKVector3 location) {
-        this.node3D.translateByLocal(location);
-    }
-
-    /**
      * @return the pin locationin global coordinates
      */
     public IKVector3 getLocation_() {
@@ -281,18 +204,6 @@ public class IKPin3D {
     public void removalNotification() {
         for (IKPin3D cp : childPins) {
             cp.setParentPin(getParentPin());
-        }
-    }
-
-    public void solveIKForThisAndChildren() {
-
-        try {
-            for (IKPin3D childPin : childPins) {
-                childPin.solveIKForThisAndChildren();
-            }
-            this.forBone.solveIKFromHere();
-        } catch (Exception e) {
-            e.printStackTrace(System.out);
         }
     }
 
