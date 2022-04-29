@@ -24,11 +24,11 @@ sourceSets {
     main {
         java {
             srcDirs = [
-                'ewbik',
+                'src',
             ]
         }
         resources {
-            srcDirs = ['ewbik']
+            srcDirs = ['src']
         }
     }
 }
@@ -54,6 +54,6 @@ distributions {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(13)
+        languageVersion = JavaLanguageVersion.of(11)
     }    
 }

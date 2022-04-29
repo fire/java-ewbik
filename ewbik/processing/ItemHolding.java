@@ -1,44 +1,32 @@
 package processing;
 
-import ik.Bone;
-import ik.IKPin;
+import InverseKinematics.*;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import processing.event.MouseEvent;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-import ewbik.processing.singlePrecision.Kusudama;
 import processing.core.PConstants;
 
 class UI {
-    PApplet pa;
+    PApplet processingApplet;
     PGraphics display;
     PVector mouse = new PVector(0, 0, 0);
     PVector cameraPosition = new PVector(0, 0, 70);
     PVector lookAt = new PVector(0, 0, 0);
-    PVector up = new PVector(0, 1, 0);
-    float orthoHeight, orthoWidth;
+    static final PVector up = new PVector(0, 1, 0);
+    float orthographicHeight, orthographicWidth;
     private PGraphics currentDrawSurface;
 
     public UI(PApplet p) {
-        pa = p;
-        currentDrawSurface = pa.g;
-        display = pa.createGraphics(p.width, p.height, PConstants.P3D);
+        processingApplet = p;
+        currentDrawSurface = processingApplet.g;
+        display = processingApplet.createGraphics(p.width, p.height, PConstants.P3D);
         display.smooth(8);
         System.out.println(p.sketchPath());
-        Kusudama.kusudamaShader = pa.loadShader("kusudama.glsl",
+        Kusudama.kusudamaShader = processingApplet.loadShader("kusudama.glsl",
                 "kusudama_vert.glsl");
 
     }
@@ -56,10 +44,10 @@ class UI {
         pg.fill(0, 0, 0, 90);
         float boxW = pg.textWidth(instructionText);
         float boxH = (pg.textAscent() + pg.textDescent()) * (instructionText.split("\n").length);
-        pg.rect((-pa.width / 2f) + 40, (-pa.height / 2f) + 15, boxW + 45, boxH + 40);
+        pg.rect((-processingApplet.width / 2f) + 40, (-processingApplet.height / 2f) + 15, boxW + 45, boxH + 40);
         pg.fill(255, 255, 255, 255);
         pg.emissive(255, 255, 255);
-        pg.text(instructionText, (-pa.width / 2f) + 40f, -pa.height / 2f + 30f);
+        pg.text(instructionText, (-processingApplet.width / 2f) + 40f, -processingApplet.height / 2f + 30f);
 
     }
 
@@ -154,8 +142,8 @@ class UI {
 
     public PVector screenOf(PGraphics pg, PVector pt, float zoomScalar) {
         return new PVector(
-                (pg.screenX(pt.x, pt.y, pt.z) * zoomScalar) - orthoWidth / 2f,
-                (pg.screenY(pt.x, pt.y, pt.z) * zoomScalar) - orthoHeight / 2f);
+                (pg.screenX(pt.x, pt.y, pt.z) * zoomScalar) - orthographicWidth / 2f,
+                (pg.screenY(pt.x, pt.y, pt.z) * zoomScalar) - orthographicHeight / 2f);
     }
 
     public void drawScene(float zoomScalar, float drawSize,
@@ -169,20 +157,20 @@ class UI {
         drawPass(drawSize, additionalDraw, display, armature);
         display.endDraw();
 
-        currentDrawSurface = pa.g;
-        setCamera(pa.g, zoomScalar);
-        pa.background(169, 202, 239);
-        pa.imageMode(PConstants.CENTER);
-        pa.image(display, 0, 0, orthoWidth, orthoHeight);
-        pa.resetMatrix();
-        drawPins(pa.g, activePin, zoomScalar, drawSize, cubeEnabled, cubeNode3D);
-        pa.resetMatrix();
-        float cx = pa.width;
-        float cy = pa.height;
-        pa.ortho(-cx / 2f, cx / 2f, -cy / 2f, cy / 2f, -1000, 1000);
-        drawInstructions(pa.g, usageInstructions);
-        drawPins(pa.g, activePin, drawSize, zoomScalar, cubeEnabled, cubeNode3D);
-        drawInstructions(pa.g, usageInstructions);
+        currentDrawSurface = processingApplet.g;
+        setCamera(processingApplet.g, zoomScalar);
+        processingApplet.background(169, 202, 239);
+        processingApplet.imageMode(PConstants.CENTER);
+        processingApplet.image(display, 0, 0, orthographicWidth, orthographicHeight);
+        processingApplet.resetMatrix();
+        drawPins(processingApplet.g, activePin, zoomScalar, drawSize, cubeEnabled, cubeNode3D);
+        processingApplet.resetMatrix();
+        float cx = processingApplet.width;
+        float cy = processingApplet.height;
+        processingApplet.ortho(-cx / 2f, cx / 2f, -cy / 2f, cy / 2f, -1000, 1000);
+        drawInstructions(processingApplet.g, usageInstructions);
+        drawPins(processingApplet.g, activePin, drawSize, zoomScalar, cubeEnabled, cubeNode3D);
+        drawInstructions(processingApplet.g, usageInstructions);
 
     }
 
@@ -205,12 +193,12 @@ class UI {
 
     public void setCamera(PGraphics pg, float zoomScalar) {
         pg.clear();
-        orthoHeight = pa.height * zoomScalar;
-        orthoWidth = ((float) pa.width / (float) pa.height) * orthoHeight;
-        mouse.x = (pa.mouseX - (pa.width / 2f)) * (orthoWidth / pa.width);
-        mouse.y = (pa.mouseY - (pa.height / 2f)) * (orthoHeight / pa.height);
+        orthographicHeight = processingApplet.height * zoomScalar;
+        orthographicWidth = ((float) processingApplet.width / (float) processingApplet.height) * orthographicHeight;
+        mouse.x = (processingApplet.mouseX - (processingApplet.width / 2f)) * (orthographicWidth / processingApplet.width);
+        mouse.y = (processingApplet.mouseY - (processingApplet.height / 2f)) * (orthographicHeight / processingApplet.height);
         camera(cameraPosition, lookAt, up, pg);
-        pg.ortho(-orthoWidth / 2f, orthoWidth / 2f, -orthoHeight / 2f, orthoHeight / 2f, -1000, 1000);
+        pg.ortho(-orthographicWidth / 2f, orthographicWidth / 2f, -orthographicHeight / 2f, orthographicHeight / 2f, -1000, 1000);
     }
 
     /**
@@ -244,7 +232,7 @@ public class ItemHolding extends PApplet {
 
     public void setup() {
         ui = new UI(this);
-        loadedArmature = ewbik.processing.IO.LoadArmature("Humanoid_Holding_Item.json");
+        loadedArmature = Skeleton3D.LoadArmature("Humanoid_Holding_Item.json");
         worldNode3D = loadedArmature.localAxes().getParentAxes();
         if (worldNode3D == null) {
             worldNode3D = new Node3D();
@@ -295,12 +283,12 @@ public class ItemHolding extends PApplet {
                 + "\n HIT THE L KEY TO LOAD THE CURRENT ARMATURE CONFIGURATION.";
         // Decrease the numerator to increase the zoom.
         zoomScalar = 200f / height;
-        ui.drawScene(zoomScalar, 12f, () -> drawHoldCube(), loadedArmature, additionalInstructions, activePin,
+        ui.drawScene(zoomScalar, 12f, () -> drawHeldCube(), loadedArmature, additionalInstructions, activePin,
                 cubeNode3D,
                 cubeMode);
     }
 
-    public void drawHoldCube() {
+    public void drawHeldCube() {
         PGraphics currentDisplay = ui.getCurrentDrawSurface();
         if (ui.display == currentDisplay) {
             currentDisplay.fill(60, 60, 60);
@@ -347,10 +335,10 @@ public class ItemHolding extends PApplet {
             cubeMode = !cubeMode;
         } else if (key == 's') {
             println("Saving");
-            ewbik.data.EWBIKSaver newSaver = new ewbik.data.EWBIKSaver();
+            SaveManager.EWBIKSaver newSaver = new SaveManager.EWBIKSaver();
             newSaver.saveArmature(loadedArmature, "Humanoid_Holding_Item.json");
         } else if (key == 'l') {
-            loadedArmature = ewbik.processing.IO.LoadArmature("Humanoid_Holding_Item.json");
+            loadedArmature = Skeleton3D.LoadArmature("Humanoid_Holding_Item.json");
             loadedArmature.updateBonechains();
             loadedArmature.IKSolver(loadedArmature.getRootBone(), 0.5f, 20, 1);
 
@@ -360,10 +348,10 @@ public class ItemHolding extends PApplet {
 
     public void updatePinList() {
         pins.clear();
-        recursivelyAddToPinnedList(pins, loadedArmature.getRootBone());
+        recursiveAddToPinnedList(pins, loadedArmature.getRootBone());
     }
 
-    public void recursivelyAddToPinnedList(ArrayList<IKPin> pins, Bone descendedFrom) {
+    public void recursiveAddToPinnedList(ArrayList<IKPin> pins, Bone descendedFrom) {
         @SuppressWarnings("unchecked")
         ArrayList<Bone> pinnedChildren = (ArrayList<Bone>) descendedFrom.getMostImmediatelyPinnedDescendants();
         for (Bone b : pinnedChildren) {
@@ -373,7 +361,7 @@ public class ItemHolding extends PApplet {
         for (Bone b : pinnedChildren) {
             ArrayList<Bone> children = b.getChildren();
             for (Bone b2 : children) {
-                recursivelyAddToPinnedList(pins, b2);
+                recursiveAddToPinnedList(pins, b2);
             }
         }
     }
