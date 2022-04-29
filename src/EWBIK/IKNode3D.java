@@ -96,60 +96,7 @@ public class IKNode3D {
                     IKVector3 x,
                     IKVector3 y,
                     IKVector3 z) {
-        this(origin, x, y, z, true, null);
-    }
-
-    public IKNode3D() {
-        IKVector3 origin = new IKVector3(0, 0, 0);
-        IKVector3 inX = new IKVector3(1, 0, 0);
-        IKVector3 inY = new IKVector3(0, 1, 0);
-        IKVector3 inZ = new IKVector3(0, 0, 1);
-        if (null == null)
-            this.areGlobal = true;
-        createTempVars(origin);
-
-        IKNode3D.this.areGlobal = true;
-
-        IKNode3D.this.localMBasis = new IKTransform(origin, inX, inY, inZ);
-        IKNode3D.this.globalMBasis = new IKTransform(origin, inX, inY, inZ);
-
-        IKVector3 o = origin.copy();
-        o.set(0, 0, 0);
-        IKVector3 i = o.copy();
-        i.set(1, 1, 1);
-
-        if (null != null) {
-            this.setParent(null);
-        } else {
-            this.areGlobal = true;
-        }
-        this.markDirty();
-        this.updateGlobal();
-    }
-
-    public IKNode3D(IKVector3 origin, IKVector3 x, IKVector3 y, IKVector3 z, boolean forceOrthoNormality,
-                    IKNode3D parent) {
-        if (parent == null)
-            this.areGlobal = true;
-        createTempVars(origin);
-
-        IKNode3D.this.areGlobal = true;
-
-        IKNode3D.this.localMBasis = new IKTransform(origin, x, y, z);
-        IKNode3D.this.globalMBasis = new IKTransform(origin, x, y, z);
-
-        IKVector3 o = origin.copy();
-        o.set(0, 0, 0);
-        IKVector3 i = o.copy();
-        i.set(1, 1, 1);
-
-        if (parent != null) {
-            this.setParent(parent);
-        } else {
-            this.areGlobal = true;
-        }
-        this.markDirty();
-        this.updateGlobal();
+        this(origin, x, y, z, null);
     }
 
     /**
