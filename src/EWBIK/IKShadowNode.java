@@ -36,11 +36,7 @@ public class IKShadowNode {
     public ArrayList<IKBone3D> bonechainList = new ArrayList<IKBone3D>();
     public int distanceToRoot = 0;
     public int chainLength = 0;
-    public IKNode3D debugTipNode3D;
-    public IKNode3D debugTargetNode3D;
     ShadowBone[] pinnedBones;
-    boolean includeInIK = true;
-    int pinDepth = 1;
     IKVector3[] localizedTargetHeadings;
     IKVector3[] localizedTipHeadings;
     float[] weights;
@@ -48,7 +44,6 @@ public class IKShadowNode {
     private boolean basePinned = false;
     private boolean tipPinned = false;
     private boolean processed = false;
-    private boolean simAligned = false;
 
     public IKShadowNode(IKBone3D rootBone) {
         bonechainRoot = armatureRootBone(rootBone);
@@ -242,24 +237,6 @@ public class IKShadowNode {
             currentBone = currentBone.getParent();
 
         }
-    }
-
-    public ArrayList<IKBone3D> getStrandFromTip(IKBone3D pinnedBone) {
-        ArrayList<IKBone3D> result = new ArrayList<IKBone3D>();
-
-        if (pinnedBone.isPinned()) {
-            result.add(pinnedBone);
-            IKBone3D currBone = pinnedBone.getParent();
-            while (currBone != null && currBone.getParent() != null) {
-                result.add(currBone);
-                if (currBone.getParent().isPinned()) {
-                    break;
-                }
-                currBone = currBone.getParent();
-            }
-        }
-
-        return result;
     }
 
     public void updatePinnedDescendants() {
@@ -646,31 +623,11 @@ public class IKShadowNode {
             for (IKBone3D bc : b.getChildren()) {
                 recursivelyAlignBonesToSimAxesFrom(bc);
             }
-            chain.simAligned = false;
             chain.processed = false;
         } else {
             int debug = 0;
         }
 
-    }
-
-    /**
-     * populates the given arraylist with the rootmost unprocessed chains of this
-     * segmented armature
-     * and its descendants up until their pinned tips.
-     *
-     * @param segments
-     */
-    public void getRootMostUnprocessedChains(ArrayList<IKShadowNode> segments) {
-        if (!this.processed) {
-            segments.add(this);
-        } else {
-            if (this.tipPinned)
-                return;
-            for (IKShadowNode c : bonechainChild) {
-                c.getRootMostUnprocessedChains(segments);
-            }
-        }
     }
 
     public void setProcessed(boolean b) {

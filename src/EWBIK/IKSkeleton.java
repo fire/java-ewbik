@@ -27,7 +27,6 @@ public class IKSkeleton {
     public IKNode3D localNode3D;
     public HashMap<IKBone3D, IKShadowNode> boneSegmentMap = new HashMap<IKBone3D, IKShadowNode>();
     public IKShadowNode shadowNode3D;
-    public float IKSolverStability = 0f;
     public int defaultStabilizingPassCount = 1;
     protected IKNode3D tempWorkingNode3D;
     protected ArrayList<IKBone3D> bones = new ArrayList<IKBone3D>();
@@ -40,15 +39,7 @@ public class IKSkeleton {
     IKNode3D fauxParent;
     boolean debug = true;
     IKBone3D lastDebugBone = null;
-    // debug code -- use to set a minimum distance an effector must move
-    // in order to trigger a chain iteration
-    float debugMag = 5f;
-    IKVector3 lastEffectorPos = new IKVector3();
     boolean monitorPerformance = false;
-    private boolean abilityBiasing = false;
-
-    public IKSkeleton() {
-    }
 
     public IKSkeleton(String name) {
 
@@ -84,32 +75,10 @@ public class IKSkeleton {
     }
 
     /**
-     * @param name the name of the bone object you wish to retrieve
-     * @return the bone object corresponding to this name
-     */
-    public IKBone3D getBoneName(String name) {
-        return boneNameMap.get(name);
-    }
-
-    /**
      * @return a reference to the Axes serving as this Armature's coordinate system.
      */
     public IKNode3D localAxes() {
         return this.localNode3D;
-    }
-
-    /**
-     * Set the inputBone as this Armature's Root Bone.
-     *
-     * @param inputBone
-     * @return
-     */
-    public IKBone3D createRootBone(IKBone3D inputBone) {
-        this.rootBone = inputBone;
-        this.shadowNode3D = new IKShadowNode(rootBone);
-        fauxParent = rootBone.localAxes().getGlobalCopy();
-
-        return rootBone;
     }
 
     private IKBone3D createRootBone(IKVector3 tipHeading, IKVector3 rollHeading, String boneName,
@@ -119,39 +88,6 @@ public class IKSkeleton {
         fauxParent = rootBone.localAxes().getGlobalCopy();
 
         return rootBone;
-    }
-
-    /**
-     * The default maximum number of radians a bone is allowed to rotate per solver
-     * iteration.
-     * The lower this value, the more natural the pose results. However, this will
-     * the number of iterations
-     * the solver requires to converge.
-     * <p>
-     * !!THIS IS AN EXPENSIVE OPERATION.
-     * This updates the entire armature's cache of precomputed quadrance angles.
-     * The cache makes things faster in general, but if you need to dynamically
-     * change the dampening during a call to IKSolver, use
-     * the IKSolver(bone, dampening, iterations, stabilizationPasses) function,
-     * which clamps rotations on the fly.
-     *
-     * @param damp
-     */
-    public void setDefaultDampening(float damp) {
-        this.dampening = IKMathUtils.min(IKMathUtils.PI * 3f,
-                IKMathUtils.max(IKMathUtils.abs(Float.MIN_VALUE), IKMathUtils.abs(damp)));
-        updateBonechains();
-    }
-
-    /**
-     * (warning, this function is untested)
-     *
-     * @return all bones belonging to this armature.
-     */
-    public ArrayList<IKBone3D> getBoneList() {
-        this.bones.clear();
-        rootBone.addDescendantsToArmature();
-        return bones;
     }
 
     /**
@@ -194,20 +130,6 @@ public class IKSkeleton {
             boneNameMap.remove(Bone);
             this.updateBonechains();
         }
-    }
-
-    /**
-     * @return the user specified name string for this armature.
-     */
-    public String getName() {
-        return this.name;
-    }
-
-    /**
-     * @param name A user specified name string for this armature.
-     */
-    public void setName(String newTag) {
-        this.name = newTag;
     }
 
     /**
@@ -449,57 +371,12 @@ public class IKSkeleton {
         }
     }
 
-    public boolean getAbilityBiasing() {
-        return abilityBiasing;
-    }
-
-    /**
-     * currently unused
-     *
-     * @param enabled
-     */
-    public void setAbilityBiasing(boolean enabled) {
-        abilityBiasing = enabled;
-    }
-
-    /**
-     * returns the rotation that would bring the right-handed orthonormal axes of a
-     * into alignment with b
-     *
-     * @param a
-     * @param b
-     * @return
-     */
-    public IKQuaternion getRotationBetween(IKNode3D a,
-                                           IKNode3D b) {
-        return new IKQuaternion(a.calculateX().heading(), a.calculateY().heading(), b.calculateX().heading(),
-                b.calculateY().heading());
-    }
-
     public int getDefaultIterations() {
         return IKIterations;
     }
 
-    /**
-     * The default number of iterations to run over this armature whenever
-     * IKSolver() is called.
-     * The higher this value, the more likely the Armature is to have converged on a
-     * solution when
-     * by the time it returns. However, it will take longer to return (linear cost)
-     *
-     * @param iter
-     */
-    public void setDefaultIterations(int iter) {
-        this.IKIterations = iter;
-        updateBonechains();
-    }
-
     public float getDampening() {
         return dampening;
-    }
-
-    public void setPerformanceMonitor(boolean state) {
-        monitorPerformance = state;
     }
 
     public class PerformanceStats {
