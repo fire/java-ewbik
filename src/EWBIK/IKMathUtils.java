@@ -99,24 +99,6 @@ public final class IKMathUtils {
         return value;
     }
 
-    /**
-     * Returns true if the value is zero (using the default tolerance as upper
-     * bound)
-     */
-    static public boolean isZero(double value) {
-        return Math.abs(value) <= DOUBLE_ROUNDING_ERROR;
-    }
-
-    /**
-     * Returns true if the value is zero.
-     *
-     * @param tolerance represent an upper bound below which the value is considered
-     *                  zero.
-     */
-    static public boolean isZero(double value, double tolerance) {
-        return Math.abs(value) <= tolerance;
-    }
-
     public static float pow(float val, float power) {
         return (float) Math.pow(val, power);
     }

@@ -30,12 +30,6 @@ public class IKLimitCone {
     public IKVector3 tangent_circle_center_previous_2;
     public float tangent_circle_radius_previous;
     public float tangent_circle_radius_previous_cos;
-    // softness of 0 means completely hard.
-    // any softness higher than 0f means that
-    // as the softness value is increased
-    // the is more penalized for moving
-    // further from the center of the channel
-    public float softness = 0f;
     /**
      * a triangle where the [1] is th tangentCircleNext_n, and [0] and [2]
      * are the points at which the tangent circle intersects this limitCone and the
@@ -44,14 +38,9 @@ public class IKLimitCone {
     public IKVector3[] first_triangle_next = new IKVector3[3];
     public IKVector3[] second_triangle_next = new IKVector3[3];
     IKVector3 control_point;
-    IKVector3 radialPoint;
     // radius stored as cosine to save on the acos call necessary for angleBetween.
     private float radius_cosine;
     private float radius;
-
-    // default constructor required for file loading to work
-    public IKLimitCone() {
-    }
 
     public IKLimitCone(IKVector3 location, float rad, IKKusudama attachedTo) {
         IKVector3 location1 = location;
@@ -115,75 +104,6 @@ public class IKLimitCone {
             result = closestCone(next, input);
         }
         return result;
-    }
-
-    /**
-     * Determines if a ray emanating from the origin to given point in local space
-     * lies withing the path from this cone to the next cone. This function relies
-     * on
-     * an optimization trick for a performance boost, but the trick ruins everything
-     * if the input isn't normalized. So it is ABSOLUTELY VITAL
-     * that @param input have unit length in order for this function to work
-     * correctly.
-     *
-     * @param next
-     * @param input
-     * @return
-     */
-    public boolean determineIfInBounds(IKLimitCone next, IKVector3 input) {
-
-        /**
-         * Procedure : Check if input is contained in this cone, or the next cone
-         * if it is, then we're finished and in bounds. otherwise,
-         * check if the point is contained within the tangent radii,
-         * if it is, then we're out of bounds and finished, otherwise
-         * in the tangent triangles while still remaining outside of the tangent radii
-         * if it is, then we're finished and in bounds. otherwise, we're out of bounds.
-         */
-
-        if (control_point.dot(input) >= radius_cosine || next.control_point.dot(input) >= next.radius_cosine) {
-            return true;
-        } else {
-            boolean inTan1Rad = tangent_circle_center_next_1.dot(input) > tangent_circle_radius_next_cos;
-            if (inTan1Rad)
-                return false;
-            boolean inTan2Rad = tangent_circle_center_next_2.dot(input) > tangent_circle_radius_next_cos;
-            if (inTan2Rad)
-                return false;
-
-            /*
-             * if we reach this point in the code, we are either on the path between two
-             * limitCones, or on the path extending out from between them
-             * but outside of their radii.
-             * To determine which , we take the cross product of each control point with
-             * each tangent center.
-             * The direction of each of the resultant vectors will represent the normal of a
-             * plane.
-             * Each of these four planes define part of a boundary which determines if our
-             * point is in bounds.
-             * If the dot product of our point with the normal of any of these planes is
-             * negative, we must be out
-             * of bounds.
-             *
-             * Older version of this code relied on a triangle intersection algorithm here,
-             * which I think is slightly less efficient on average
-             * as it didn't allow for early termination. .
-             */
-
-            // Vector3 planeNormal = controlPoint.crossCopy(tangentCircleCenterNext1);
-            IKVector3 c1xc2 = control_point.crossCopy(next.control_point);
-            float c1c2fir = input.dot(c1xc2);
-
-            if (c1c2fir < 0.0) {
-                IKVector3 c1xt1 = control_point.crossCopy(tangent_circle_center_next_1);
-                IKVector3 t1xc2 = tangent_circle_center_next_1.crossCopy(next.control_point);
-                return input.dot(c1xt1) > 0 && input.dot(t1xc2) > 0;
-            } else {
-                IKVector3 t2xc1 = tangent_circle_center_next_2.crossCopy(control_point);
-                IKVector3 c2xt2 = next.control_point.crossCopy(tangent_circle_center_next_2);
-                return input.dot(t2xc1) > 0 && input.dot(c2xt2) > 0;
-            }
-        }
     }
 
     public IKVector3 closestCone(IKLimitCone next, IKVector3 input) {
@@ -439,10 +359,6 @@ public class IKLimitCone {
 
     public float getRadius_cosine() {
         return this.radius_cosine;
-    }
-
-    public IKKusudama getParent_kusudama() {
-        return parent_kusudama;
     }
 
 }

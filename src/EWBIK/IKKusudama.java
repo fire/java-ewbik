@@ -67,12 +67,7 @@ public class IKKusudama {
     int cone_count;
     IKRay3D bone_ray = new IKRay3D(new IKVector3(), new IKVector3());
     IKRay3D constrained_ray = new IKRay3D(new IKVector3(), new IKVector3());
-    float unit_hyper_area = 2 * IKMathUtils.pow(IKMathUtils.PI, 2);
-    float unit_area = 4 * IKMathUtils.PI;
     float rotational_freedom = 1f;
-
-    public IKKusudama() {
-    }
 
     /**
      * Kusudamas are a sequential collection of reach cones, forming a path by their
