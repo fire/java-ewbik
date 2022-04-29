@@ -173,13 +173,13 @@ public class IKKusudama {
 
         int idx = 0;
         for (IKLimitCone lc : getLimitCones()) {
-            IKVector3 controlPoint = lc.getControlPoint();
-            IKVector3 leftTangent = lc.tangentCircleCenterNext1;
-            IKVector3 rightTangent = lc.tangentCircleCenterNext2;
+            IKVector3 controlPoint = lc.getControl_point();
+            IKVector3 leftTangent = lc.tangent_circle_center_next_1;
+            IKVector3 rightTangent = lc.tangent_circle_center_next_2;
             leftTangent = leftTangent.normalize();
             controlPoint = controlPoint.normalize();
             rightTangent = rightTangent.normalize();
-            float tanRan = (float) lc.tangentCircleRadiusNext;
+            float tanRan = (float) lc.tangent_circle_radius_next;
             float controlRan = (float) lc.getRadius();
             cone_sequence[idx] = controlPoint.x;
             cone_sequence[idx + 1] = controlPoint.y;
@@ -250,11 +250,11 @@ public class IKKusudama {
 
         ArrayList<IKVector3> directions = new ArrayList<>();
         if (getLimitCones().size() == 1) {
-            directions.add((limitCones.get(0).getControlPoint()).copy());
+            directions.add((limitCones.get(0).getControl_point()).copy());
         } else {
             for (int i = 0; i < getLimitCones().size() - 1; i++) {
-                IKVector3 thisC = getLimitCones().get(i).getControlPoint().copy();
-                IKVector3 nextC = getLimitCones().get(i + 1).getControlPoint().copy();
+                IKVector3 thisC = getLimitCones().get(i).getControl_point().copy();
+                IKVector3 nextC = getLimitCones().get(i + 1).getControl_point().copy();
                 IKQuaternion thisToNext = new IKQuaternion(thisC, nextC);
                 IKQuaternion halfThisToNext = new IKQuaternion(thisToNext.getAxis(), thisToNext.getAngle() / 2f);
 
@@ -284,9 +284,9 @@ public class IKKusudama {
         limiting_node_3d.rotateBy(oldYtoNewY);
 
         for (IKLimitCone lc : getLimitCones()) {
-            originalLimitingNode3D.setToGlobalOf(lc.getControlPoint(), lc.getControlPoint());
-            limiting_node_3d.setToLocalOf(lc.getControlPoint(), lc.getControlPoint());
-            lc.getControlPoint().normalize();
+            originalLimitingNode3D.setToGlobalOf(lc.getControl_point(), lc.getControl_point());
+            limiting_node_3d.setToLocalOf(lc.getControl_point(), lc.getControl_point());
+            lc.getControl_point().normalize();
         }
 
         this.updateTangentRadii();
@@ -585,15 +585,15 @@ public class IKKusudama {
                 return point;
             }
         } else if (constrain_orientation) {
-            float pointdot = point.dot(limitCones.get(0).getControlPoint());
-            float radcos = limitCones.get(0).getRadiusCosine();
+            float pointdot = point.dot(limitCones.get(0).getControl_point());
+            float radcos = limitCones.get(0).getRadius_cosine();
             if (pointdot > radcos) {
                 inBounds[0] = 1;
                 return inPoint;
             } else {
-                IKVector3 axis = limitCones.get(0).getControlPoint().crossCopy(point);
+                IKVector3 axis = limitCones.get(0).getControl_point().crossCopy(point);
                 IKQuaternion toLimit = new IKQuaternion(axis, limitCones.get(0).getRadius());
-                IKVector3 newPoint = toLimit.applyToCopy(limitCones.get(0).getControlPoint());
+                IKVector3 newPoint = toLimit.applyToCopy(limitCones.get(0).getControl_point());
                 return newPoint;
             }
         } else {
@@ -610,7 +610,7 @@ public class IKKusudama {
         IKVector3 result = (IKVector3) point.copy();
 
         if (limitCones.size() == 1) {
-            result.set(limitCones.get(0).getControlPoint());
+            result.set(limitCones.get(0).getControl_point());
         } else {
             for (int i = 0; i < limitCones.size() - 1; i++) {
                 IKLimitCone nextCone = limitCones.get(i + 1);
