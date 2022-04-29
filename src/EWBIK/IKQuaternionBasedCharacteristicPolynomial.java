@@ -193,11 +193,11 @@ public class IKQuaternionBasedCharacteristicPolynomial {
      * upper bound of the most positive root of the key matrix.
      * http://theobald.brandeis.edu/qcp/qcprot.c
      *
-     * @param coords1
-     * @param coords2
+     * @param coordinates1
+     * @param coordinates2
      * @return
      */
-    private void innerProduct(IKVector3[] coords1, IKVector3[] coords2) {
+    private void innerProduct(IKVector3[] coordinates1, IKVector3[] coordinates2) {
         float x1, x2, y1, y2, z1, z2;
         float g1 = 0f, g2 = 0f;
 
@@ -212,16 +212,16 @@ public class IKQuaternionBasedCharacteristicPolynomial {
         Szz = 0;
 
         if (weight != null) {
-            for (int i = 0; i < coords1.length; i++) {
-                x1 = weight[i] * coords1[i].x;
-                y1 = weight[i] * coords1[i].y;
-                z1 = weight[i] * coords1[i].z;
+            for (int i = 0; i < coordinates1.length; i++) {
+                x1 = weight[i] * coordinates1[i].x;
+                y1 = weight[i] * coordinates1[i].y;
+                z1 = weight[i] * coordinates1[i].z;
 
-                g1 += x1 * coords1[i].x + y1 * coords1[i].y + z1 * coords1[i].z;
+                g1 += x1 * coordinates1[i].x + y1 * coordinates1[i].y + z1 * coordinates1[i].z;
 
-                x2 = coords2[i].x;
-                y2 = coords2[i].y;
-                z2 = coords2[i].z;
+                x2 = coordinates2[i].x;
+                y2 = coordinates2[i].y;
+                z2 = coordinates2[i].z;
 
                 g2 += weight[i] * (x2 * x2 + y2 * y2 + z2 * z2);
 
@@ -238,21 +238,21 @@ public class IKQuaternionBasedCharacteristicPolynomial {
                 Szz += (z1 * z2);
             }
         } else {
-            for (int i = 0; i < coords1.length; i++) {
-                g1 += coords1[i].x * coords1[i].x + coords1[i].y * coords1[i].y + coords1[i].z * coords1[i].z;
-                g2 += coords2[i].x * coords2[i].x + coords2[i].y * coords2[i].y + coords2[i].z * coords2[i].z;
+            for (int i = 0; i < coordinates1.length; i++) {
+                g1 += coordinates1[i].x * coordinates1[i].x + coordinates1[i].y * coordinates1[i].y + coordinates1[i].z * coordinates1[i].z;
+                g2 += coordinates2[i].x * coordinates2[i].x + coordinates2[i].y * coordinates2[i].y + coordinates2[i].z * coordinates2[i].z;
 
-                Sxx += coords1[i].x * coords2[i].x;
-                Sxy += coords1[i].x * coords2[i].y;
-                Sxz += coords1[i].x * coords2[i].z;
+                Sxx += coordinates1[i].x * coordinates2[i].x;
+                Sxy += coordinates1[i].x * coordinates2[i].y;
+                Sxz += coordinates1[i].x * coordinates2[i].z;
 
-                Syx += coords1[i].y * coords2[i].x;
-                Syy += coords1[i].y * coords2[i].y;
-                Syz += coords1[i].y * coords2[i].z;
+                Syx += coordinates1[i].y * coordinates2[i].x;
+                Syy += coordinates1[i].y * coordinates2[i].y;
+                Syz += coordinates1[i].y * coordinates2[i].z;
 
-                Szx += coords1[i].z * coords2[i].x;
-                Szy += coords1[i].z * coords2[i].y;
-                Szz += coords1[i].z * coords2[i].z;
+                Szx += coordinates1[i].z * coordinates2[i].x;
+                Szy += coordinates1[i].z * coordinates2[i].y;
+                Szz += coordinates1[i].z * coordinates2[i].z;
             }
         }
 
