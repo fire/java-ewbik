@@ -62,7 +62,7 @@ public class IKBone3D implements Comparable<IKBone3D> {
         this.last_rotation = new IKQuaternion();
         if (par != null) {
             if (inputTag == null || inputTag == "") {
-                this.tag = Integer.toString(System.identityHashCode(this));
+                this.tag = "IKBone3D";
             } else
                 this.tag = inputTag;
             this.bone_height = inputBoneHeight;
