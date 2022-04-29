@@ -246,12 +246,6 @@ public class IKBone3D implements Comparable<IKBone3D> {
         return this.parent;
     }
 
-    public void snapToConstraints() {
-        if (constraints != null) {
-            constraints.snapToLimits();
-        }
-    }
-
     /**
      * Called whenever this bone's orientation has changed due to an Inverse
      * Kinematics computation.
