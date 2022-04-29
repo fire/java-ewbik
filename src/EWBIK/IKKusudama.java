@@ -373,7 +373,7 @@ public class IKKusudama {
         if (attachedTo() != null && attachedTo().parent_armature != null) {
             IKShadowNode s = attachedTo().parent_armature.boneSegmentMap.get(this.attachedTo());
             if (s != null) {
-                IKShadowNode.ShadowBone wb = s.simulatedBones.get(this.attachedTo());
+                IKShadowBone wb = s.simulatedBones.get(this.attachedTo());
                 if (wb != null) {
                     wb.updateCosDampening();
                 }
