@@ -23,7 +23,6 @@ package EWBIK;
  * @author Eron Gjoni
  */
 public class IKRay3D {
-    public static final int X = 0, Y = 1, Z = 2;
     protected IKVector3 p1;
     protected IKVector3 p2;
     protected IKVector3 workingVector;
@@ -104,10 +103,6 @@ public class IKRay3D {
 
     public IKRay3D copy() {
         return new IKRay3D(this.p1, this.p2);
-    }
-
-    public IKRay3D getRayScaledTo(float scalar) {
-        return new IKRay3D(p1, this.getScaledTo(scalar));
     }
 
     public IKRay3D getRayScaledBy(float scalar) {
