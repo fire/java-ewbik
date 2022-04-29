@@ -64,13 +64,6 @@ public class IKBasis {
     }
 
     /**
-     * creates an identity rotation
-     */
-    public IKBasis() {
-        this(0.0f, 0.0f, 0.0f, 1.0f, false);
-    }
-
-    /**
      * assumes no noralization required
      **/
     public IKBasis(float x, float y, float z, float w) {
@@ -124,177 +117,6 @@ public class IKBasis {
         x = coeff * axis.x;
         y = coeff * axis.y;
         z = coeff * axis.z;
-    }
-
-    /**
-     * Build a rotation from a 3X3 given as a 1f array with 9 elements,
-     * or 4x4 matrix given as a 1f array with 16 elements.
-     * This constructor will detect the appropriate case based on the length
-     * of the input array.
-     * Input array should be in column major order, so, for a 3x3 matrix, the
-     * indices correspond as follows: <br/>
-     * 0, 3, 6 <br/>
-     * 1, 4, 7 <br/>
-     * 2, 5, 8 <br/>
-     * <p>
-     * And for a 4x4 matrix the indices are:
-     * <br/>
-     * 0, 4, 8, 12 <br/>
-     * 1, 5, 9, 13 <br/>
-     * 2, 6, 10, 14 <br/>
-     * 3, 7, 11, 15 <br/>
-     *
-     *
-     * <p>
-     * Rotation matrices are orthogonal matrices, i.e. unit matrices
-     * (which are matrices for which m.m<sup>T</sup> = I) with real
-     * coefficients. The module of the determinant of unit matrices is
-     * 1, among the orthogonal 3X3 matrices, only the ones having a
-     * positive determinant (+1) are rotation matrices.
-     * </p>
-     * <p>
-     * When a rotation is defined by a matrix with truncated values
-     * (typically when it is extracted from a technical sheet where only
-     * four to five significant digits are available), the matrix is not
-     * orthogonal anymore. This constructor handles this case
-     * transparently by using a copy of the given matrix and applying a
-     * correction to the copy in order to perfect its orthogonality. If
-     * the Frobenius norm of the correction needed is above the given
-     * threshold, then the matrix is considered to be too far from a
-     * true rotation matrix and an exception is thrown.
-     * <p>
-     *
-     * @param m         rotation matrix
-     * @param is4x4     set to true if passing in a 4x4 matrix.
-     * @param threshold convergence threshold for the iterative
-     *                  orthogonality correction (convergence is reached when the
-     *                  difference between two steps of the Frobenius norm of the
-     *                  correction is below this threshold)
-     * @throws IKMathUtils.NotARotationMatrixException if the matrix is not a 3X3
-     *                                               matrix, or if it cannot be
-     *                                               transformed
-     *                                               into an orthogonal matrix
-     *                                               with the given threshold, or if
-     *                                               the
-     *                                               determinant of the resulting
-     *                                               orthogonal matrix is negative
-     */
-    public IKBasis(float[] m, float threshold) {
-        // dimension check
-        if ((m.length != 9 || m.length != 16)) {
-            this.w = 1.0f;
-            this.x = 0.0f;
-            this.y = 0.0f;
-            this.z = 0.0f;
-            return;
-        }
-
-        float[][] im = new float[3][3];
-        if (m.length == 9) {
-            im[0][0] = m[0];
-            im[0][1] = m[0];
-            im[0][2] = m[0];
-            im[0][0] = m[0];
-            im[0][1] = m[0];
-            im[0][2] = m[0];
-            im[0][0] = m[0];
-            im[0][1] = m[0];
-            im[0][2] = m[0];
-        }
-
-        // compute a "close" orthogonal matrix
-        float[][] ort = orthogonalizeMatrix(im, threshold);
-
-        // check the sign of the determinant
-        float det = ort[0][0] * (ort[1][1] * ort[2][2] - ort[2][1] * ort[1][2]) -
-                ort[1][0] * (ort[0][1] * ort[2][2] - ort[2][1] * ort[0][2]) +
-                ort[2][0] * (ort[0][1] * ort[1][2] - ort[1][1] * ort[0][2]);
-        if (det < 0.0f) {
-            this.w = 1.0f;
-            this.x = 0.0f;
-            this.y = 0.0f;
-            this.z = 0.0f;
-            return;
-        }
-
-        float[] quat = mat2quat(ort);
-        w = quat[0];
-        x = quat[1];
-        y = quat[2];
-        z = quat[3];
-    }
-
-    /**
-     * Build a rotation from a 3X3 matrix.
-     * <p>
-     * Rotation matrices are orthogonal matrices, i.e. unit matrices
-     * (which are matrices for which m.m<sup>T</sup> = I) with real
-     * coefficients. The module of the determinant of unit matrices is
-     * 1, among the orthogonal 3X3 matrices, only the ones having a
-     * positive determinant (+1) are rotation matrices.
-     * </p>
-     * <p>
-     * When a rotation is defined by a matrix with truncated values
-     * (typically when it is extracted from a technical sheet where only
-     * four to five significant digits are available), the matrix is not
-     * orthogonal anymore. This constructor handles this case
-     * transparently by using a copy of the given matrix and applying a
-     * correction to the copy in order to perfect its orthogonality. If
-     * the Frobenius norm of the correction needed is above the given
-     * threshold, then the matrix is considered to be too far from a
-     * true rotation matrix and an exception is thrown.
-     * <p>
-     *
-     * @param m         rotation matrix
-     * @param threshold convergence threshold for the iterative
-     *                  orthogonality correction (convergence is reached when the
-     *                  difference between two steps of the Frobenius norm of the
-     *                  correction is below this threshold)
-     * @throws IKMathUtils.NotARotationMatrixException if the matrix is not a 3X3
-     *                                               matrix, or if it cannot be
-     *                                               transformed
-     *                                               into an orthogonal matrix
-     *                                               with the given threshold, or if
-     *                                               the
-     *                                               determinant of the resulting
-     *                                               orthogonal matrix is negative
-     */
-    public IKBasis(float[][] m, float threshold) {
-
-        // dimension check
-        if ((m.length != 3) || (m[0].length != 3) ||
-                (m[1].length != 3) || (m[2].length != 3)) {
-            w = 1.0f;
-            x = 0.0f;
-            y = 0.0f;
-            z = 0.0f;
-            return;
-        }
-
-        // compute a "close" orthogonal matrix
-        float[][] ort = orthogonalizeMatrix(m, threshold);
-
-        // check the sign of the determinant
-        float det = ort[0][0] * (ort[1][1] * ort[2][2] - ort[2][1] * ort[1][2]) -
-                ort[1][0] * (ort[0][1] * ort[2][2] - ort[2][1] * ort[0][2]) +
-                ort[2][0] * (ort[0][1] * ort[1][2] - ort[1][1] * ort[0][2]);
-        if (det < 0.0f) {
-            w = 1.0f;
-            x = 0.0f;
-            y = 0.0f;
-            z = 0.0f;
-            return;
-        }
-
-        float[] quat = mat2quat(ort);
-        w = quat[0];
-        x = quat[1];
-        y = quat[2];
-        z = quat[3];
-        if (Float.isNaN(w) || Float.isNaN(x) || Float.isNaN(y) || Float.isNaN(z)
-                || !(Float.isFinite(w) && Float.isFinite(x) && Float.isFinite(y) && Float.isFinite(z))) {
-            System.out.println("errror");
-        }
     }
 
     /**
@@ -588,69 +410,6 @@ public class IKBasis {
         }
     }
 
-    /**
-     * Convert an orthogonal rotation matrix to a quaternion.
-     *
-     * @param ort orthogonal rotation matrix
-     * @return quaternion corresponding to the matrix
-     */
-    private static float[] mat2quat(final float[][] ort) {
-
-        final float[] quat = new float[4];
-
-        // There are different ways to compute the quaternions elements
-        // from the matrix. They all involve computing one element from
-        // the diagonal of the matrix, and computing the three other ones
-        // using a formula involving a division by the first element,
-        // which unfortunately can be zero. Since the norm of the
-        // quaternion is 1, we know at least one element has an absolute
-        // value greater or equal to 0.5f, so it is always possible to
-        // select the right formula and avoid division by zero and even
-        // numerical inaccuracy. Checking the elements in turn and using
-        // the first one greater than 0.45 is safe (this leads to a simple
-        // test since qi = 0.45 implies 4 qi^2 - 1 = -0.19)
-        float s = ort[0][0] + ort[1][1] + ort[2][2];
-        if (s > -0.19) {
-            // compute q0 and deduce q1, q2 and q3
-            quat[0] = 0.5f * IKMathUtils.sqrt(s + 1.0f);
-            float inv = 0.25f / quat[0];
-            quat[1] = inv * (ort[1][2] - ort[2][1]);
-            quat[2] = inv * (ort[2][0] - ort[0][2]);
-            quat[3] = inv * (ort[0][1] - ort[1][0]);
-        } else {
-            s = ort[0][0] - ort[1][1] - ort[2][2];
-            if (s > -0.19) {
-                // compute q1 and deduce q0, q2 and q3
-                quat[1] = 0.5f * IKMathUtils.sqrt(s + 1.0f);
-                float inv = 0.25f / quat[1];
-                quat[0] = inv * (ort[1][2] - ort[2][1]);
-                quat[2] = inv * (ort[0][1] + ort[1][0]);
-                quat[3] = inv * (ort[0][2] + ort[2][0]);
-            } else {
-                s = ort[1][1] - ort[0][0] - ort[2][2];
-                if (s > -0.19) {
-                    // compute q2 and deduce q0, q1 and q3
-                    quat[2] = 0.5f * IKMathUtils.sqrt(s + 1.0f);
-                    float inv = 0.25f / quat[2];
-                    quat[0] = inv * (ort[2][0] - ort[0][2]);
-                    quat[1] = inv * (ort[0][1] + ort[1][0]);
-                    quat[3] = inv * (ort[2][1] + ort[1][2]);
-                } else {
-                    // compute q3 and deduce q0, q1 and q2
-                    s = ort[2][2] - ort[0][0] - ort[1][1];
-                    quat[3] = 0.5f * IKMathUtils.sqrt(s + 1.0f);
-                    float inv = 0.25f / quat[3];
-                    quat[0] = inv * (ort[0][1] - ort[1][0]);
-                    quat[1] = inv * (ort[0][2] + ort[2][0]);
-                    quat[2] = inv * (ort[2][1] + ort[1][2]);
-                }
-            }
-        }
-
-        return quat;
-
-    }
-
     public static IKBasis multiply(final IKBasis q1, final IKBasis q2) {
         // Components of the first quaternion.
         final float q1a = q1.getW();
@@ -671,77 +430,6 @@ public class IKBasis {
         final float z = q1a * q2f + q1b * q2c - q1c * q2b + q1f * q2a;
 
         return new IKBasis(x, y, z, w);
-    }
-
-    /**
-     * Computes the dot-product of two quaternions.
-     *
-     * @param q1 Quaternionf.
-     * @param q2 Quaternionf.
-     * @return the dot product of {@code q1} and {@code q2}.
-     */
-    public static float dotProduct(final IKBasis q1,
-            final IKBasis q2) {
-        return q1.getW() * q2.getW() +
-                q1.getX() * q2.getX() +
-                q1.getY() * q2.getY() +
-                q1.getZ() * q2.getZ();
-    }
-
-    /**
-     * Compute the <i>distance</i> between two rotations.
-     * <p>
-     * The <i>distance</i> is intended here as a way to check if two
-     * rotations are almost similar (i.e. they transform vectors the same way)
-     * or very different. It is mathematically defined as the angle of
-     * the rotation r that prepended to one of the rotations gives the other
-     * one:
-     * </p>
-     *
-     * <pre>
-     *        r<sub>1</sub>(r) = r<sub>2</sub>
-     * </pre>
-     * <p>
-     * This distance is an angle between 0 and &pi;. Its value is the smallest
-     * possible upper bound of the angle in radians between r<sub>1</sub>(v)
-     * and r<sub>2</sub>(v) for all possible vectors v. This upper bound is
-     * reached for some v. The distance is equal to 0 if and only if the two
-     * rotations are identical.
-     * </p>
-     * <p>
-     * Comparing two rotations should always be done using this value rather
-     * than for example comparing the components of the quaternions. It is much
-     * more stable, and has a geometric meaning. Also comparing quaternions
-     * components is error prone since for example quaternions (0.36, 0.48, -0.48,
-     * -0.64)
-     * and (-0.36, -0.48, 0.48, 0.64) represent exactly the same rotation despite
-     * their components are different (they are exact opposites).
-     * </p>
-     *
-     * @param r1 first rotation
-     * @param r2 second rotation
-     * @return <i>distance</i> between r1 and r2
-     */
-    public static float distance(IKBasis r1, IKBasis r2) {
-        return r1.applyInverseTo(r2).getAngle();
-    }
-
-    /**
-     * Modify this rotation to have the specified cos(angle/2) representation,
-     * without changing the axis.
-     *
-     * @param angle
-     */
-    public void setQuadranceAngle(float cosHalfAngle) {
-        float squaredSine = x * x + y * y + z * z;
-        if (squaredSine != 0) {
-            float inverseCoeff = IKMathUtils.sqrt(((1 - (cosHalfAngle * cosHalfAngle)) / squaredSine));
-            // inverseCoeff = cosHalfAngle < 0 ? -inverseCoeff : inverseCoeff;
-            w = w < 0 ? -cosHalfAngle : cosHalfAngle;
-            x = inverseCoeff * x;
-            y = inverseCoeff * y;
-            z = inverseCoeff * z;
-        }
     }
 
     public void clampToAngle(float angle) {
@@ -768,19 +456,6 @@ public class IKBasis {
      */
     public IKBasis copy() {
         return new IKBasis(getX(), getY(), getZ(), getW());
-    }
-
-    /**
-     * Revert a rotation.
-     * Build a rotation which reverse the effect of another
-     * rotation. This means that if r(u) = v, then r.revert(v) = u. The
-     * instance is not changed.
-     *
-     * @return a new rotation whose effect is the reverse of the effect
-     *         of the instance
-     */
-    public IKBasis revert() {
-        return new IKBasis(x, y, z, -w, false);
     }
 
     /**
@@ -847,40 +522,6 @@ public class IKBasis {
     }
 
     /**
-     * modify this rotation to have the specified axis,
-     * without changing the angle.
-     *
-     * @param angle
-     * @throws Exception
-     */
-    public void setAxis(IKVector3 newAxis) throws Exception {
-
-        float angle = this.getAngle();
-        float norm = newAxis.mag();
-        if (norm == 0) {
-            try {
-                throw new Exception("Zero Norm for Rotation Axis");
-            } catch (IKMathUtils.MathIllegalArgumentException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace(System.out);
-            }
-        }
-
-        float halfAngle = -0.5f * angle;
-        float coeff = IKMathUtils.sin(halfAngle) / norm;
-
-        w = IKMathUtils.cos(halfAngle);
-        x = coeff * newAxis.x;
-        y = coeff * newAxis.y;
-        z = coeff * newAxis.z;
-
-        if (Float.isNaN(w) || Float.isNaN(x) || Float.isNaN(y) || Float.isNaN(z)
-                || !(Float.isFinite(w) && Float.isFinite(x) && Float.isFinite(y) && Float.isFinite(z))) {
-            System.out.println("errror");
-        }
-    }
-
-    /**
      * Get the normalized axis of the rotation.
      *
      * @return normalized axis of the rotation
@@ -898,20 +539,6 @@ public class IKBasis {
         }
         float inverse = -1 / IKMathUtils.sqrt(squaredSine);
         v.set(x * inverse, y * inverse, z * inverse);
-    }
-
-    public IKBasis getInverse() {
-        final float squareNorm = w * w + x * x + y * y + z * z;
-        if (squareNorm < IKMathUtils.SAFE_MIN_DOUBLE) {
-            try {
-                throw new Exception("Zero Norm");
-            } catch (Exception e) {
-                e.printStackTrace(System.out);
-            }
-        }
-
-        return new IKBasis(-x / squareNorm, -y / squareNorm, -z / squareNorm, w / squareNorm
-        );
     }
 
     /**
@@ -1263,132 +890,6 @@ public class IKBasis {
     }
 
     /**
-     * Get an array representing the 3X3 matrix corresponding to this rotation
-     * instance
-     * Indices are in column major order. In other words
-     * <br/>
-     * 0, 3, 6 <br/>
-     * 1, 4, 7 <br/>
-     * 2, 5, 8 <br/>
-     *
-     * @return the matrix corresponding to the instance
-     */
-    public float[] getMatrix3Val() {
-
-        // create the matrix
-        float[] values = new float[9];
-        setToMatrix3Val(values);
-        return values;
-    }
-
-    /**
-     * set input to the 3X3 matrix corresponding to the instance
-     * Indices are in column major order. In other words
-     * <br/>
-     * 0, 3, 6 <br/>
-     * 1, 4, 7 <br/>
-     * 2, 5, 8 <br/>
-     *
-     * @return the matrix corresponding to the instance
-     */
-    public void setToMatrix3Val(float[] storeIn) {
-
-        // products
-        float q0q0 = w * w;
-        float q0q1 = w * x;
-        float q0q2 = w * y;
-        float q0q3 = w * z;
-        float q1q1 = x * x;
-        float q1q2 = x * y;
-        float q1q3 = x * z;
-        float q2q2 = y * y;
-        float q2q3 = y * z;
-        float q3q3 = z * z;
-
-        // create the matrix
-        storeIn[0] = 2.0f * (q0q0 + q1q1) - 1.0f;
-        storeIn[1] = 2.0f * (q1q2 - q0q3);
-        storeIn[2] = 2.0f * (q1q3 + q0q2);
-
-        storeIn[3] = 2.0f * (q1q2 + q0q3);
-        storeIn[4] = 2.0f * (q0q0 + q2q2) - 1.0f;
-        storeIn[5] = 2.0f * (q2q3 - q0q1);
-
-        storeIn[6] = 2.0f * (q1q3 - q0q2);
-        storeIn[7] = 2.0f * (q2q3 + q0q1);
-        storeIn[8] = 2.0f * (q0q0 + q3q3) - 1.0f;
-
-    }
-
-    /**
-     * Get an array representing the 4X4 matrix corresponding to this rotation
-     * instance.
-     * Indices are in column major order. In other words
-     * <br/>
-     * 0, 4, 8, 12 <br/>
-     * 1, 5, 9, 13 <br/>
-     * 2, 6, 10, 14 <br/>
-     * 3, 7, 11, 15 <br/>
-     */
-    public float[] toMatrix4Val() {
-        float[] result = new float[16];
-        return toMatrix4Val(result, false);
-    }
-
-    /**
-     * Get an array representing the 4X4 matrix corresponding to this rotation
-     * instance.
-     * Indices are in column major order. In other words
-     * <br/>
-     * 0, 4, 8, 12 <br/>
-     * 1, 5, 9, 13 <br/>
-     * 2, 6, 10, 14 <br/>
-     * 3, 7, 11, 15 <br/>
-     *
-     * @param storeIn the array to storevalues in.
-     * @param zeroOut if true, will zero out any elements in the matrix not
-     *                corresponding to this rotation.
-     */
-    public float[] toMatrix4Val(float[] storeIn, boolean zeroOut) {
-        float q0q0 = w * w;
-        float q0q1 = w * x;
-        float q0q2 = w * y;
-        float q0q3 = w * z;
-        float q1q1 = x * x;
-        float q1q2 = x * y;
-        float q1q3 = x * z;
-        float q2q2 = y * y;
-        float q2q3 = y * z;
-        float q3q3 = z * z;
-
-        // create the matrix
-        storeIn[0] = 2.0f * (q0q0 + q1q1) - 1.0f;
-        storeIn[1] = 2.0f * (q1q2 - q0q3);
-        storeIn[2] = 2.0f * (q1q3 + q0q2);
-
-        storeIn[4] = 2.0f * (q1q2 + q0q3);
-        storeIn[5] = 2.0f * (q0q0 + q2q2) - 1.0f;
-        storeIn[6] = 2.0f * (q2q3 - q0q1);
-
-        storeIn[8] = 2.0f * (q1q3 - q0q2);
-        storeIn[9] = 2.0f * (q2q3 + q0q1);
-        storeIn[10] = 2.0f * (q0q0 + q3q3) - 1.0f;
-        storeIn[15] = 1.0f;
-
-        if (zeroOut) {
-            storeIn[3] = 0.0f;
-            storeIn[7] = 0.0f;
-            storeIn[11] = 0.0f;
-            storeIn[12] = 0.0f;
-            storeIn[13] = 0.0f;
-            storeIn[14] = 0.0f;
-
-        }
-
-        return storeIn;
-    }
-
-    /**
      * Apply the rotation to a vector.
      *
      * @param u vector to apply the rotation to
@@ -1417,26 +918,6 @@ public class IKBasis {
     public IKBasis multiply(final float alpha) {
         return new IKBasis(alpha * x, alpha * y, alpha * z, alpha * w
         );
-    }
-
-    /**
-     * Returns the Hamilton product of the instance by a quaternion.
-     *
-     * @param q Quaternionf.
-     * @return the product of this instance with {@code q}, in that order.
-     */
-    public IKBasis multiply(final IKBasis q) {
-        return multiply(this, q);
-    }
-
-    /**
-     * Computes the dot-product of the instance by a quaternion.
-     *
-     * @param q Quaternionf.
-     * @return the dot product of this instance and {@code q}.
-     */
-    public float dotProduct(final IKBasis q) {
-        return dotProduct(this, q);
     }
 
     /**
@@ -1484,28 +965,6 @@ public class IKBasis {
     }
 
     /**
-     * Apply the inverse of the rotation to a vector stored in an array.
-     *
-     * @param in  an array with three items which stores vector to rotate
-     * @param out an array with three items to put result to (it can be the same
-     *            array as in)
-     */
-    public void applyInverseTo(final float[] in, final float[] out) {
-
-        final float x = in[0];
-        final float y = in[1];
-        final float z = in[2];
-
-        final float s = this.x * x + this.y * y + this.z * z;
-        final float m0 = -w;
-
-        out[0] = 2 * (m0 * (x * m0 - (this.y * z - this.z * y)) + s * this.x) - x;
-        out[1] = 2 * (m0 * (y * m0 - (this.z * x - this.x * z)) + s * this.y) - y;
-        out[2] = 2 * (m0 * (z * m0 - (this.x * y - this.y * x)) + s * this.z) - z;
-
-    }
-
-    /**
      * Apply the instance to another rotation.
      * Applying the instance to a rotation is computing the composition
      * in an order compliant with the following rule : let u be any
@@ -1518,68 +977,6 @@ public class IKBasis {
      */
     public IKBasis applyTo(IKBasis r) {
         return new IKBasis(r.x * w + r.w * x + (r.y * z - r.z * y), r.y * w + r.w * y + (r.z * x - r.x * z), r.z * w + r.w * z + (r.x * y - r.y * x), r.w * w - (r.x * x + r.y * y + r.z * z),
-                false);
-    }
-
-    /**
-     * Apply the inverse of the instance to another rotation.
-     * Applying the inverse of the instance to a rotation is computing
-     * the composition in an order compliant with the following rule :
-     * let u be any vector and v its image by r (i.e. r.applyTo(u) = v),
-     * let w be the inverse image of v by the instance
-     * (i.e. applyInverseTo(v) = w), then w = comp.applyTo(u), where
-     * comp = applyInverseTo(r).
-     *
-     * @param r rotation to apply the rotation to
-     * @return a new rotation which is the composition of r by the inverse
-     *         of the instance
-     */
-    public IKBasis applyInverseTo(IKBasis r) {
-        return new IKBasis(-r.x * w + r.w * x + (r.y * z - r.z * y), -r.y * w + r.w * y + (r.z * x - r.x * z), -r.z * w + r.w * z + (r.x * y - r.y * x), -r.w * w - (r.x * x + r.y * y + r.z * z),
-                false);
-    }
-
-    /**
-     * Apply the instance to another rotation. Store the result in the specified
-     * rotation
-     * Applying the instance to a rotation is computing the composition
-     * in an order compliant with the following rule : let u be any
-     * vector and v its image by r (i.e. r.applyTo(u) = v), let w be the image
-     * of v by the instance (i.e. applyTo(v) = w), then w = comp.applyTo(u),
-     * where comp = applyTo(r).
-     *
-     * @param r      rotation to apply the rotation to
-     * @param output the rotation to store the result in
-     * @return a new rotation which is the composition of r by the instance
-     */
-    public void applyTo(IKBasis r, IKBasis output) {
-        output.set(r.w * w - (r.x * x + r.y * y + r.z * z),
-                r.x * w + r.w * x + (r.y * z - r.z * y),
-                r.y * w + r.w * y + (r.z * x - r.x * z),
-                r.z * w + r.w * z + (r.x * y - r.y * x),
-                false);
-    }
-
-    /**
-     * Apply the inverse of the instance to another rotation. Store the result in
-     * the specified rotation
-     * Applying the inverse of the instance to a rotation is computing
-     * the composition in an order compliant with the following rule :
-     * let u be any vector and v its image by r (i.e. r.applyTo(u) = v),
-     * let w be the inverse image of v by the instance
-     * (i.e. applyInverseTo(v) = w), then w = comp.applyTo(u), where
-     * comp = applyInverseTo(r).
-     *
-     * @param r      rotation to apply the rotation to
-     * @param output the rotation to store the result in
-     * @return a new rotation which is the composition of r by the inverse
-     *         of the instance
-     */
-    public void applyInverseTo(IKBasis r, IKBasis output) {
-        output.set(-r.w * w - (r.x * x + r.y * y + r.z * z),
-                -r.x * w + r.w * x + (r.y * z - r.z * y),
-                -r.y * w + r.w * y + (r.z * x - r.x * z),
-                -r.z * w + r.w * z + (r.x * y - r.y * x),
                 false);
     }
 
@@ -1609,40 +1006,6 @@ public class IKBasis {
         x *= inv;
         y *= inv;
         z *= inv;
-    }
-
-    /**
-     * Computes the norm of the quaternion.
-     *
-     * @return the norm.
-     */
-    public float len() {
-        return IKMathUtils.sqrt(w * w +
-                x * x +
-                y * y +
-                z * z);
-    }
-
-    /**
-     * Computes the normalized quaternion (the versor of the instance).
-     * The norm of the quaternion must not be zero.
-     *
-     * @return a normalized quaternion.
-     * @throws IKMathUtils.ZeroException if the norm of the quaternion is zero.
-     */
-    public IKBasis normalize() {
-        final float norm = len();
-
-        if (norm < IKMathUtils.SAFE_MIN_DOUBLE) {
-            try {
-                throw new Exception("Zero Norm");
-            } catch (Exception e) {
-                e.printStackTrace(System.out);
-            }
-        }
-
-        return new IKBasis(x / norm, y / norm, z / norm, w / norm
-        );
     }
 
     public void set(IKVector3 u, IKVector3 v) {
@@ -1697,104 +1060,6 @@ public class IKBasis {
         x = coeff * axis.x;
         y = coeff * axis.y;
         z = coeff * axis.z;
-    }
-
-    /**
-     * Perfect orthogonality on a 3X3 matrix.
-     *
-     * @param m         initial matrix (not exactly orthogonal)
-     * @param threshold convergence threshold for the iterative
-     *                  orthogonality correction (convergence is reached when the
-     *                  difference between two steps of the Frobenius norm of the
-     *                  correction is below this threshold)
-     * @return an orthogonal matrix close to m
-     */
-    private float[][] orthogonalizeMatrix(float[][] m, float threshold) {
-        float[] m0 = m[0];
-        float[] m1 = m[1];
-        float[] m2 = m[2];
-        float x00 = m0[0];
-        float x01 = m0[1];
-        float x02 = m0[2];
-        float x10 = m1[0];
-        float x11 = m1[1];
-        float x12 = m1[2];
-        float x20 = m2[0];
-        float x21 = m2[1];
-        float x22 = m2[2];
-        float fn = 0;
-        float fn1;
-
-        float[][] o = new float[3][3];
-        float[] o0 = o[0];
-        float[] o1 = o[1];
-        float[] o2 = o[2];
-
-        // iterative correction: Xn+1 = Xn - 0.5f * (Xn.Mt.Xn - M)
-        int i = 0;
-        while (++i < 11) {
-
-            // Mt.Xn
-            float mx00 = m0[0] * x00 + m1[0] * x10 + m2[0] * x20;
-            float mx10 = m0[1] * x00 + m1[1] * x10 + m2[1] * x20;
-            float mx20 = m0[2] * x00 + m1[2] * x10 + m2[2] * x20;
-            float mx01 = m0[0] * x01 + m1[0] * x11 + m2[0] * x21;
-            float mx11 = m0[1] * x01 + m1[1] * x11 + m2[1] * x21;
-            float mx21 = m0[2] * x01 + m1[2] * x11 + m2[2] * x21;
-            float mx02 = m0[0] * x02 + m1[0] * x12 + m2[0] * x22;
-            float mx12 = m0[1] * x02 + m1[1] * x12 + m2[1] * x22;
-            float mx22 = m0[2] * x02 + m1[2] * x12 + m2[2] * x22;
-
-            // Xn+1
-            o0[0] = x00 - 0.5f * (x00 * mx00 + x01 * mx10 + x02 * mx20 - m0[0]);
-            o0[1] = x01 - 0.5f * (x00 * mx01 + x01 * mx11 + x02 * mx21 - m0[1]);
-            o0[2] = x02 - 0.5f * (x00 * mx02 + x01 * mx12 + x02 * mx22 - m0[2]);
-            o1[0] = x10 - 0.5f * (x10 * mx00 + x11 * mx10 + x12 * mx20 - m1[0]);
-            o1[1] = x11 - 0.5f * (x10 * mx01 + x11 * mx11 + x12 * mx21 - m1[1]);
-            o1[2] = x12 - 0.5f * (x10 * mx02 + x11 * mx12 + x12 * mx22 - m1[2]);
-            o2[0] = x20 - 0.5f * (x20 * mx00 + x21 * mx10 + x22 * mx20 - m2[0]);
-            o2[1] = x21 - 0.5f * (x20 * mx01 + x21 * mx11 + x22 * mx21 - m2[1]);
-            o2[2] = x22 - 0.5f * (x20 * mx02 + x21 * mx12 + x22 * mx22 - m2[2]);
-
-            // correction on each elements
-            float corr00 = o0[0] - m0[0];
-            float corr01 = o0[1] - m0[1];
-            float corr02 = o0[2] - m0[2];
-            float corr10 = o1[0] - m1[0];
-            float corr11 = o1[1] - m1[1];
-            float corr12 = o1[2] - m1[2];
-            float corr20 = o2[0] - m2[0];
-            float corr21 = o2[1] - m2[1];
-            float corr22 = o2[2] - m2[2];
-
-            // Frobenius norm of the correction
-            fn1 = corr00 * corr00 + corr01 * corr01 + corr02 * corr02 +
-                    corr10 * corr10 + corr11 * corr11 + corr12 * corr12 +
-                    corr20 * corr20 + corr21 * corr21 + corr22 * corr22;
-
-            // convergence test
-            if (IKMathUtils.abs(fn1 - fn) <= threshold) {
-                return o;
-            }
-
-            // prepare next iteration
-            x00 = o0[0];
-            x01 = o0[1];
-            x02 = o0[2];
-            x10 = o1[0];
-            x11 = o1[1];
-            x12 = o1[2];
-            x20 = o2[0];
-            x21 = o2[1];
-            x22 = o2[2];
-            fn = fn1;
-        }
-        IKBasis returnMatrix = new IKBasis(0.0f, 0.0f, 0.0f, 1.0f, false);
-        return new float[][]{returnMatrix.getMatrix3Val()};
-    }
-
-    public boolean equalTo(IKBasis m) {
-        return distance(this, m) < IKMathUtils.DOUBLE_ROUNDING_ERROR;
     }
 
     public String toString() {
