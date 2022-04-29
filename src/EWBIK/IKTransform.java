@@ -110,8 +110,8 @@ public class IKTransform {
         IKVector3 z_identity = zBase.copy();
         IKVector3 origin = new IKVector3(0, 0, 0);
 
-        IKVector3[] from = { origin, x_identity, y_identity, z_identity };
-        IKVector3[] to = { origin.copy(), xHeading, yHeading, zHeading };
+        IKVector3[] from = {origin, x_identity, y_identity, z_identity};
+        IKVector3[] to = {origin.copy(), xHeading, yHeading, zHeading};
         IKQuaternionBasedCharacteristicPolynomial alignHeads = new IKQuaternionBasedCharacteristicPolynomial(IKMathUtils.FLOAT_ROUNDING_ERROR,
                 IKMathUtils.FLOAT_ROUNDING_ERROR);
         alignHeads.setMaxIterations(50);
@@ -224,7 +224,7 @@ public class IKTransform {
 
     /**
      * @return a precomputed inverse of the rotation represented by this basis
-     *         object.
+     * object.
      */
     public IKQuaternion getInverseRotation() {
         return this.inverseRotation;

@@ -203,7 +203,7 @@ public class IKKusudama {
 
     /**
      * @return the limitingAxes of this Kusudama (these are just its parentBone's
-     *         majorRotationAxes)
+     * majorRotationAxes)
      */
     @SuppressWarnings("unchecked")
     public IKNode3D limitingAxes() {
@@ -347,9 +347,9 @@ public class IKKusudama {
 
     /**
      * @return A value between (ideally between 0 and 1) dictating
-     *         how much the bone to which this kusudama belongs
-     *         prefers to be away from the edges of the kusudama
-     *         if it can.
+     * how much the bone to which this kusudama belongs
+     * prefers to be away from the edges of the kusudama
+     * if it can.
      */
     public float getPainfullness() {
         return painfullness;
@@ -382,7 +382,7 @@ public class IKKusudama {
     }
 
     public boolean isInLimits_(IKVector3 globalPoint) {
-        float[] inBounds = { 1f };
+        float[] inBounds = {1f};
         IKVector3 inLimits = this.pointInLimits(limiting_node_3d.getLocalOf(globalPoint), inBounds);
         return inBounds[0] > 0f;
     }
@@ -395,7 +395,7 @@ public class IKKusudama {
      */
     public void setAxesToOrientationSnap(IKNode3D toSet,
                                          IKNode3D limitingNode3D, float cosHalfAngleDampen) {
-        float[] inBounds = { 1f };
+        float[] inBounds = {1f};
         limitingNode3D.updateGlobal();
         bone_ray.p1().set(limitingNode3D.calculatePosition());
         bone_ray.p2().set(toSet.calculateY().p2());
@@ -413,7 +413,7 @@ public class IKKusudama {
 
     public boolean isInOrientationLimits(IKNode3D globalNode3D,
                                          IKNode3D limitingNode3D) {
-        float[] inBounds = { 1f };
+        float[] inBounds = {1f};
         IKVector3 inLimits = this.pointInLimits(limitingNode3D.getLocalOf(globalNode3D.calculateY().p2()), inBounds);
         return inBounds[0] != -1l;
     }
@@ -448,7 +448,7 @@ public class IKKusudama {
      * @param toSet
      * @param limitingNode3D
      * @return radians of twist required to snap bone into twist limits (0 if bone
-     *         is already in twist limits)
+     * is already in twist limits)
      */
     public float snapToTwistLimits(IKNode3D toSet,
                                    IKNode3D limitingNode3D) {
@@ -552,7 +552,7 @@ public class IKKusudama {
      *                the point is outside of the boundary, but does not signify
      *                anything about how far from the boundary the point is.
      * @return the original point, if it's in limits, or the closest point which is
-     *         in limits.
+     * in limits.
      */
     public IKVector3 pointInLimits(IKVector3 inPoint, float[] inBounds) {
 
@@ -784,15 +784,15 @@ public class IKKusudama {
 
     /**
      * @return a measure of the rotational freedom afforded by this constraint.
-     *         with 0 meaning no rotational freedom (the bone is essentially
-     *         stationary in relation to its parent)
-     *         and 1 meaning full rotational freedom (the bone is completely
-     *         unconstrained).
-     *         <p>
-     *         This should be computed as ratio between orientations a bone can be
-     *         in and orientations
-     *         a bone cannot be in as defined by its representation as a point on
-     *         the surface of a hypersphere.
+     * with 0 meaning no rotational freedom (the bone is essentially
+     * stationary in relation to its parent)
+     * and 1 meaning full rotational freedom (the bone is completely
+     * unconstrained).
+     * <p>
+     * This should be computed as ratio between orientations a bone can be
+     * in and orientations
+     * a bone cannot be in as defined by its representation as a point on
+     * the surface of a hypersphere.
      */
     public float getRotational_freedom() {
 

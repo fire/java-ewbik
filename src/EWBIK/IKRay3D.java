@@ -117,15 +117,15 @@ public class IKRay3D {
     /*
      * public Vector3 intercepts2D(sgRay r) {
      * Vector3 result = new Vector3();
-     * 
+     *
      * float a1 = p2.y - p1.y;
      * float b1 = p1.x - p2.x;
      * float c1 = a1*p1.x + b1*p1.y;
-     * 
+     *
      * float a2 = r.p2.y - r.p1.y;
      * float b2 = r.p1.x - r.p2.y;
      * float c2 = a2* + b2* r.p1.y;
-     * 
+     *
      * float det = a1*b2 - a2*b1;
      * if(det == 0){
      * // Lines are parallel
@@ -155,7 +155,7 @@ public class IKRay3D {
 
     /*
      * public Vector3 closestPointToSegment3DStrict(sgRay r) {
-     * 
+     *
      * }
      */
 
@@ -164,7 +164,7 @@ public class IKRay3D {
      * @param tb the second vertex of a triangle on the plane
      * @param tc the third vertex of a triangle on the plane
      * @return the point where this ray intersects the plane specified by the
-     *         triangle ta,tb,tc.
+     * triangle ta,tb,tc.
      */
     public IKVector3 intersectsPlane(IKVector3 ta, IKVector3 tb, IKVector3 tc) {
         float[] uvw = new float[3];
@@ -238,17 +238,17 @@ public class IKRay3D {
 
     /*
      * Find where this ray intersects a sphere
-     * 
+     *
      * @param Vector3 the center of the sphere to test against.
-     * 
+     *
      * @param radius radius of the sphere
-     * 
+     *
      * @param S1 reference to variable in which the first intersection will be
      * placed
-     * 
+     *
      * @param S2 reference to variable in which the second intersection will be
      * placed
-     * 
+     *
      * @return number of intersections found;
      */
     public int intersectsSphere(IKVector3 sphereCenter, float radius, IKVector3 S1, IKVector3 S2) {
@@ -262,15 +262,15 @@ public class IKRay3D {
 
     /*
      * Find where this ray intersects a sphere
-     * 
+     *
      * @param radius radius of the sphere
-     * 
+     *
      * @param S1 reference to variable in which the first intersection will be
      * placed
-     * 
+     *
      * @param S2 reference to variable in which the second intersection will be
      * placed
-     * 
+     *
      * @return number of intersections found;
      */
     public int intersectsSphere(IKVector3 rp1, IKVector3 rp2, float radius, IKVector3 S1, IKVector3 S2) {

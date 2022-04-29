@@ -25,9 +25,9 @@ SOFTWARE.
 package EWBIK;
 
 public class IKQuaternion {
-    public IKBasis rotation;
     private final float[] workingInput = new float[3];
     private final float[] workingOutput = new float[3];
+    public IKBasis rotation;
 
     public IKQuaternion() {
         this.rotation = new IKBasis(
@@ -37,15 +37,6 @@ public class IKQuaternion {
 
     public IKQuaternion(IKBasis r) {
         this.rotation = new IKBasis(r.getX(), r.getY(), r.getZ(), r.getW());
-    }
-
-    public IKQuaternion(IKRotationOrder order,
-                        float alpha1, float alpha2, float alpha3) {
-        rotation = new IKBasis(order, alpha1, alpha2, alpha3);
-    }
-
-    public IKQuaternion(IKVector3 v1, IKVector3 v2, IKVector3 u1, IKVector3 u2) {
-        rotation = new IKBasis(v1, v2, u1, u2);
     }
 
     public IKQuaternion(IKVector3 axis, float angle) {
@@ -194,10 +185,10 @@ public class IKQuaternion {
      * @param axisZ the Z component of the normalized axis for which to get the
      *              swing and twist rotation
      * @return an Array of Quaternion objects. With the first element representing
-     *         the
-     *         swing, and the second representing the twist
+     * the
+     * swing, and the second representing the twist
      * @see <a href=
-     *      "http://www.euclideanspace.com/maths/geometry/rotations/for/decomposition">calculation</a>
+     * "http://www.euclideanspace.com/maths/geometry/rotations/for/decomposition">calculation</a>
      */
     public IKQuaternion[] getSwingTwist(IKVector3 axis) {
         IKQuaternion twistRot = new IKQuaternion(
@@ -220,10 +211,6 @@ public class IKQuaternion {
 
     public String toString() {
         return rotation.toString();
-    }
-
-    public float[] getAngles(IKRotationOrder order) {
-        return rotation.getAngles(order);
     }
 
     public void clampToAngle(float angle) {

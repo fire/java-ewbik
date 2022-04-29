@@ -478,7 +478,7 @@ public class IKShadowNode {
     /**
      * @param chainMember
      * @return returns the segment chain (pinned or unpinned, doesn't matter) to
-     *         which the inputBone belongs.
+     * which the inputBone belongs.
      */
     public IKShadowNode getChainFor(IKBone3D chainMember) {
         IKShadowNode result = null;
@@ -518,7 +518,7 @@ public class IKShadowNode {
      * chain whose base is pinned.
      *
      * @return returns the first chain encountered with a pinned base. Or, null if
-     *         it reaches an unpinned armature root.
+     * it reaches an unpinned armature root.
      */
     public IKShadowNode getPinnedRootChainFromHere() {
 

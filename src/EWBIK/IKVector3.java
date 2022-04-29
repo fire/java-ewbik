@@ -52,21 +52,6 @@ public class IKVector3 {
     }
 
     /**
-     * @return a copy of this vector
-     */
-    public IKVector3 copy() {
-        return new IKVector3(this);
-    }
-
-    /**
-     * @return a copy of this Vector cast to a single precision analog.
-     */
-    public IKVector3 toVec3f() {
-        return new IKVector3(x, y, z);
-    }
-
-
-    /**
      * @return The dot product between the two vectors
      */
     public static float dot(float x1, float y1, float z1, float x2, float y2, float z2) {
@@ -109,6 +94,20 @@ public class IKVector3 {
                 v1.z - v2.z);
 
         return target;
+    }
+
+    /**
+     * @return a copy of this vector
+     */
+    public IKVector3 copy() {
+        return new IKVector3(this);
+    }
+
+    /**
+     * @return a copy of this Vector cast to a single precision analog.
+     */
+    public IKVector3 toVec3f() {
+        return new IKVector3(x, y, z);
     }
 
     /**

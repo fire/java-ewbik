@@ -2,6 +2,8 @@ package EWBIK;
 
 public class IKQuaternionBasedCharacteristicPolynomial {
 
+    private final IKVector3 targetCenter = new IKVector3();
+    private final IKVector3 movedCenter = new IKVector3();
     public IKVector3[] target;
     /**
      * Implementation of the Quaternionff-Based Characteristic Polynomial algorithm
@@ -87,13 +89,8 @@ public class IKQuaternionBasedCharacteristicPolynomial {
     private float eval_prec = (float) 1E-11;
     private int max_iterations = 5;
     private IKVector3[] moved;
-
     private float[] weight;
     private float wsum;
-
-    private final IKVector3 targetCenter = new IKVector3();
-    private final IKVector3 movedCenter = new IKVector3();
-
     private float e0;
     private float rmsd = 0;
     private float Sxy, Sxz, Syx, Syz, Szx, Szy;
@@ -137,21 +134,6 @@ public class IKQuaternionBasedCharacteristicPolynomial {
      */
     public void setMaxIterations(int max) {
         max_iterations = max;
-    }
-
-    /**
-     * Sets the two input coordinate arrays. These input arrays must be of equal
-     * length. Input coordinates are not modified.
-     *
-     * @param x 3f points of reference coordinate set
-     * @param y 3f points of coordinate set for superposition
-     */
-    private void set(IKVector3[] target, IKVector3[] moved) {
-        this.moved = target;
-        this.target = moved;
-        rmsdCalculated = false;
-        transformationCalculated = false;
-        innerProductCalculated = false;
     }
 
     /**

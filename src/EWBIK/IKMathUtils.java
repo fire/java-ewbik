@@ -25,9 +25,9 @@ package EWBIK;
  */
 public final class IKMathUtils {
     static public final float FLOAT_ROUNDING_ERROR = 0.000001f; // 32 bits, 23 of which may hold the significand for a
-                                                                // precision of 6 digits
+    // precision of 6 digits
     static public final double DOUBLE_ROUNDING_ERROR = 0.000000000000001d; // 64, 52 of which represent the significand
-                                                                           // for a precision of 15 digits.
+    // for a precision of 15 digits.
     static public final float PI = (float) Math.PI;
     static public final float HALF_PI = (float) (Math.PI / 2d);
     /**
@@ -38,6 +38,20 @@ public final class IKMathUtils {
      * multiply by this to convert from degrees to radians
      */
     static public final float degreesToRadians = PI / 180f;
+    public static final double SAFE_MIN_DOUBLE;
+    public static final double EPSILON_DOUBLE;
+    public static final double SAFE_MIN_FLOAT;
+    public static final double EPSILON_FLOAT;
+    private static final long EXPONENT_OFFSET_DOUBLE = 1023l;
+    private static final long EXPONENT_OFFSET_FLOAT = 127;
+
+    static {
+        EPSILON_DOUBLE = Double.longBitsToDouble((EXPONENT_OFFSET_DOUBLE - 53l) << 52);
+        SAFE_MIN_DOUBLE = Double.longBitsToDouble((EXPONENT_OFFSET_DOUBLE - 1022l) << 52);
+
+        EPSILON_FLOAT = Double.longBitsToDouble((EXPONENT_OFFSET_FLOAT - 24l) << 23);
+        SAFE_MIN_FLOAT = Double.longBitsToDouble((EXPONENT_OFFSET_FLOAT - 126) << 23);
+    }
 
     /**
      * Returns the sine in radians from a lookup table.
@@ -138,22 +152,6 @@ public final class IKMathUtils {
     public static float min(float a, float b) {
         return a < b ? a : b;
     }
-
-    public static final double SAFE_MIN_DOUBLE;
-    public static final double EPSILON_DOUBLE;
-    public static final double SAFE_MIN_FLOAT;
-    public static final double EPSILON_FLOAT;
-    private static final long EXPONENT_OFFSET_DOUBLE = 1023l;
-    private static final long EXPONENT_OFFSET_FLOAT = 127;
-
-    static {
-        EPSILON_DOUBLE = Double.longBitsToDouble((EXPONENT_OFFSET_DOUBLE - 53l) << 52);
-        SAFE_MIN_DOUBLE = Double.longBitsToDouble((EXPONENT_OFFSET_DOUBLE - 1022l) << 52);
-
-        EPSILON_FLOAT = Double.longBitsToDouble((EXPONENT_OFFSET_FLOAT - 24l) << 23);
-        SAFE_MIN_FLOAT = Double.longBitsToDouble((EXPONENT_OFFSET_FLOAT - 126) << 23);
-    }
-
 
     public static class CardanEulerSingularityException extends Exception {
 

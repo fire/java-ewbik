@@ -110,8 +110,8 @@ public class IKBone3D implements Comparable<IKBone3D> {
             this.parent.addChild(this);
             this.updateAncestorCount();
         } else {
-           this.parent_armature = null;
-           this.parent = null;
+            this.parent_armature = null;
+            this.parent = null;
         }
     }
 

@@ -39,16 +39,17 @@ public class IKBasis {
      * components. This is <em>not</em> our convention. We put the scalar part
      * as the first component.
      * </p>
-     *  @param x                 first coordinate of the vectorial part of the
+     *
+     * @param x                  first coordinate of the vectorial part of the
      *                           quaternion
-     * @param y                 second coordinate of the vectorial part of the
+     * @param y                  second coordinate of the vectorial part of the
      *                           quaternion
-     * @param z                 third coordinate of the vectorial part of the
- *                           quaternion
-     * @param w                 scalar part of the quaternion
+     * @param z                  third coordinate of the vectorial part of the
+     *                           quaternion
+     * @param w                  scalar part of the quaternion
      * @param needsNormalization if true, the coordinates are considered
-*                           not to be normalized, a normalization preprocessing
-*                           step is performed
+     *                           not to be normalized, a normalization preprocessing
+     *                           step is performed
      */
     public IKBasis(float x, float y, float z, float w,
                    boolean needsNormalization) {
@@ -139,11 +140,11 @@ public class IKBasis {
      * @param v1 desired image of u1 by the rotation
      * @param v2 desired image of u2 by the rotation
      * @throws IKMathUtils.MathArithmeticException if the norm of one of the vectors
-     *                                           is zero,
-     *                                           or if one of the pair is
-     *                                           degenerated (i.e.
-     *                                           the vectors of the pair are
-     *                                           colinear)
+     *                                             is zero,
+     *                                             or if one of the pair is
+     *                                             degenerated (i.e.
+     *                                             the vectors of the pair are
+     *                                             colinear)
      */
     public IKBasis(IKVector3 u1, IKVector3 u2, IKVector3 v1, IKVector3 v2) {
 
@@ -328,7 +329,7 @@ public class IKBasis {
      * @param u origin vector
      * @param v desired image of u by the rotation
      * @throws IKMathUtils.MathArithmeticException if the norm of one of the vectors
-     *                                           is zero
+     *                                             is zero
      */
     public IKBasis(IKVector3 u, IKVector3 v) {
 
@@ -614,9 +615,9 @@ public class IKBasis {
      * @param order rotation order to use
      * @return an array of three angles, in the order specified by the set
      * @throws IKMathUtils.CardanEulerSingularityException if the rotation is
-     *                                                   singular with respect to
-     *                                                   the angles
-     *                                                   set specified
+     *                                                     singular with respect to
+     *                                                     the angles
+     *                                                     set specified
      */
     public float[] getAngles(IKRotationOrder order) {
 
@@ -637,7 +638,7 @@ public class IKBasis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[] {
+            return new float[]{
                     IKMathUtils.atan2(-(v1.y), v1.z),
                     IKMathUtils.asin(v2.z),
                     IKMathUtils.atan2(-(v2.y), v2.x)
@@ -659,7 +660,7 @@ public class IKBasis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[] {
+            return new float[]{
                     IKMathUtils.atan2(v1.z, v1.y),
                     -IKMathUtils.asin(v2.y),
                     IKMathUtils.atan2(v2.z, v2.x)
@@ -681,7 +682,7 @@ public class IKBasis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[] {
+            return new float[]{
                     IKMathUtils.atan2(v1.x, v1.z),
                     -IKMathUtils.asin(v2.z),
                     IKMathUtils.atan2(v2.x, v2.y)
@@ -703,7 +704,7 @@ public class IKBasis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[] {
+            return new float[]{
                     IKMathUtils.atan2(-(v1.z), v1.x),
                     IKMathUtils.asin(v2.x),
                     IKMathUtils.atan2(-(v2.z), v2.y)
@@ -725,7 +726,7 @@ public class IKBasis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[] {
+            return new float[]{
                     IKMathUtils.atan2(-(v1.x), v1.y),
                     IKMathUtils.asin(v2.y),
                     IKMathUtils.atan2(-(v2.x), v2.z)
@@ -747,7 +748,7 @@ public class IKBasis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[] {
+            return new float[]{
                     IKMathUtils.atan2(v1.y, v1.x),
                     -IKMathUtils.asin(v2.x),
                     IKMathUtils.atan2(v2.y, v2.z)
@@ -769,7 +770,7 @@ public class IKBasis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[] {
+            return new float[]{
                     IKMathUtils.atan2(v1.y, -v1.z),
                     IKMathUtils.acos(v2.x),
                     IKMathUtils.atan2(v2.y, v2.z)
@@ -791,7 +792,7 @@ public class IKBasis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[] {
+            return new float[]{
                     IKMathUtils.atan2(v1.z, v1.y),
                     IKMathUtils.acos(v2.x),
                     IKMathUtils.atan2(v2.z, -v2.y)
@@ -813,7 +814,7 @@ public class IKBasis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[] {
+            return new float[]{
                     IKMathUtils.atan2(v1.x, v1.z),
                     IKMathUtils.acos(v2.y),
                     IKMathUtils.atan2(v2.x, -v2.z)
@@ -835,7 +836,7 @@ public class IKBasis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[] {
+            return new float[]{
                     IKMathUtils.atan2(v1.z, -v1.x),
                     IKMathUtils.acos(v2.y),
                     IKMathUtils.atan2(v2.z, v2.x)
@@ -857,7 +858,7 @@ public class IKBasis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[] {
+            return new float[]{
                     IKMathUtils.atan2(v1.x, -v1.y),
                     IKMathUtils.acos(v2.z),
                     IKMathUtils.atan2(v2.x, v2.y)
@@ -879,7 +880,7 @@ public class IKBasis {
                     e.printStackTrace(System.out);
                 }
             }
-            return new float[] {
+            return new float[]{
                     IKMathUtils.atan2(v1.y, v1.x),
                     IKMathUtils.acos(v2.z),
                     IKMathUtils.atan2(v2.y, -v2.x)
@@ -988,7 +989,7 @@ public class IKBasis {
     }
 
     public void set(float q0, float q1, float q2, float q3,
-            boolean needsNormalization) {
+                    boolean needsNormalization) {
 
         this.w = q0;
         this.x = q1;

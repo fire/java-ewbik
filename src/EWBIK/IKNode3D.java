@@ -18,7 +18,6 @@ package EWBIK;/*
                    */
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.function.Consumer;
@@ -168,7 +167,7 @@ public class IKNode3D {
      * direction and magnitude
      *
      * @return a ray / segment representing this Axes global x basis position and
-     *         direction and magnitude
+     * direction and magnitude
      */
     public IKRay3D calculateX() {
         this.updateGlobal();
@@ -180,7 +179,7 @@ public class IKNode3D {
      * direction and magnitude
      *
      * @return a ray / segment representing this Axes global y basis position and
-     *         direction and magnitude
+     * direction and magnitude
      */
     public IKRay3D calculateY() {
         this.updateGlobal();
@@ -192,7 +191,7 @@ public class IKNode3D {
      * direction and magnitude
      *
      * @return a ray / segment representing this Axes global z basis position and
-     *         direction and magnitude
+     * direction and magnitude
      */
     public IKRay3D calculateZ() {
         this.updateGlobal();
@@ -374,13 +373,6 @@ public class IKNode3D {
         this.getGlobalMBasis().setToLocalOf(in, out);
     }
 
-    public void translateByLocal(IKVector3 translate) {
-        this.updateGlobal();
-        getLocalMBasis().translateBy(translate);
-        this.markDirty();
-
-    }
-
     public void translateByGlobal(IKVector3 translate) {
         if (this.getParentAxes() != null) {
             this.updateGlobal();
@@ -405,24 +397,10 @@ public class IKNode3D {
 
     }
 
-    public void rotateAboutX(float angle, boolean orthonormalized) {
-        this.updateGlobal();
-        IKQuaternion xRot = new IKQuaternion(getGlobalMBasis().getXHeading(), angle);
-        this.rotateBy(xRot);
-        this.markDirty();
-    }
-
     public void rotateAboutY(float angle, boolean orthonormalized) {
         this.updateGlobal();
         IKQuaternion yRot = new IKQuaternion(getGlobalMBasis().getYHeading(), angle);
         this.rotateBy(yRot);
-        this.markDirty();
-    }
-
-    public void rotateAboutZ(float angle, boolean orthonormalized) {
-        this.updateGlobal();
-        IKQuaternion zRot = new IKQuaternion(getGlobalMBasis().getZHeading(), angle);
-        this.rotateBy(zRot);
         this.markDirty();
     }
 
@@ -610,7 +588,7 @@ public class IKNode3D {
     /**
      * custom Weakreference extension for garbage collection
      */
-    public class DependencyReference<E> extends WeakReference<E> {
+    public static class DependencyReference<E> extends WeakReference<E> {
         public DependencyReference(E referent) {
             super(referent);
         }
