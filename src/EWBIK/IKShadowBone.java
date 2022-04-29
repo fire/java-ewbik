@@ -18,9 +18,9 @@ public class IKShadowBone {
         forBone = toSimulate;
         simLocalNode3D = forBone.localAxes().getGlobalCopy();
         simConstraintNode3D = forBone.getMajorRotationAxes().getGlobalCopy();
-        float predamp = 1f - forBone.getStiffness();
+        float predampening = 1f - forBone.getStiffness();
         float defaultDampening = forBone.parent_armature.getDampening();
-        float dampening = forBone.getParent() == null ? IKMathUtils.PI : predamp * defaultDampening;
+        float dampening = forBone.getParent() == null ? IKMathUtils.PI : predampening * defaultDampening;
         cosHalfDampen = IKMathUtils.cos(dampening / 2f);
         IKKusudama k = forBone.getConstraint();
         if (k != null && k.getPainfullness() != 0f) {
@@ -32,9 +32,9 @@ public class IKShadowBone {
     }
 
     public void updateCosDampening() {
-        float predamp = 1f - forBone.getStiffness();
+        float predampening = 1f - forBone.getStiffness();
         float defaultDampening = forBone.parent_armature.getDampening();
-        float dampening = forBone.getParent() == null ? IKMathUtils.PI : predamp * defaultDampening;
+        float dampening = forBone.getParent() == null ? IKMathUtils.PI : predampening * defaultDampening;
         cosHalfDampen = IKMathUtils.cos(dampening / 2f);
         IKKusudama k = forBone.getConstraint();
         if (k != null && k.getPainfullness() != 0f) {
@@ -46,9 +46,9 @@ public class IKShadowBone {
     }
 
     public void populateReturnDampeningIterationArray(IKKusudama k) {
-        float predamp = 1f - forBone.getStiffness();
+        float predampening = 1f - forBone.getStiffness();
         float defaultDampening = forBone.parent_armature.getDampening();
-        float dampening = forBone.getParent() == null ? IKMathUtils.PI : predamp * defaultDampening;
+        float dampening = forBone.getParent() == null ? IKMathUtils.PI : predampening * defaultDampening;
         float iterations = forBone.parent_armature.getDefaultIterations();
         float returnfullness = k.getPainfullness();
         float falloff = 0.2f;
