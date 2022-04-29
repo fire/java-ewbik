@@ -114,31 +114,6 @@ public class IKRay3D {
         return new IKRay3D(p1, this.getMultipledBy(scalar));
     }
 
-    /*
-     * public Vector3 intercepts2D(sgRay r) {
-     * Vector3 result = new Vector3();
-     *
-     * float a1 = p2.y - p1.y;
-     * float b1 = p1.x - p2.x;
-     * float c1 = a1*p1.x + b1*p1.y;
-     *
-     * float a2 = r.p2.y - r.p1.y;
-     * float b2 = r.p1.x - r.p2.y;
-     * float c2 = a2* + b2* r.p1.y;
-     *
-     * float det = a1*b2 - a2*b1;
-     * if(det == 0){
-     * // Lines are parallel
-     * return null;
-     * }
-     * else {
-     * result.x = (b2*c1 - b1*c2)/det;
-     * result.y = (a1*c2 - a2*c1)/det;
-     * }
-     * return result;
-     * }
-     */
-
     /**
      * sets the values of the given vector to where the
      * tip of this Ray would be if the ray were inverted
@@ -152,12 +127,6 @@ public class IKRay3D {
         vec.z = (p1.z - p2.z) + p1.z;
         return vec;
     }
-
-    /*
-     * public Vector3 closestPointToSegment3DStrict(sgRay r) {
-     *
-     * }
-     */
 
     /**
      * @param ta the first vertex of a triangle on the plane
