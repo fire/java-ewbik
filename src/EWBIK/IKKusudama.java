@@ -30,7 +30,7 @@ public class IKKusudama {
 
     public static final float TAU = IKMathUtils.PI * 2;
     public static final float PI = IKMathUtils.PI;
-    protected IKNode3D limitingNode3D;
+    protected IKNode3D limiting_node_3d;
     protected float painfullness;
     /**
      * An array containing all of the Kusudama's LimitCones. The kusudama is
@@ -47,29 +47,29 @@ public class IKKusudama {
      * equivalent to the
      * limitingAxes Z axis.
      */
-    protected float minAxialAngle = IKMathUtils.PI;
+    protected float minimal_axial_angle = IKMathUtils.PI;
     /**
      * Defined as some Angle in radians about the limitingAxes Y axis, 0 being
      * equivalent to the
      * minAxialAngle
      */
     protected float range = IKMathUtils.PI * 3;
-    protected boolean orientationallyConstrained = false;
-    protected boolean axiallyConstrained = false;
+    protected boolean constrain_orientation = false;
+    protected boolean constrain_axis = false;
     // for IK solvers. Defines the weight ratio between the unconstrained IK solved
     // orientation and the constrained orientation for this bone
     // per iteration. This should help stabilize solutions somewhat by allowing for
     // soft constraint violations.
     protected Float strength = 1f;
-    protected IKBone3D attachedTo;
+    protected IKBone3D attached_to;
 
-    float[] coneSequence;
-    int coneCount;
-    IKRay3D boneRay = new IKRay3D(new IKVector3(), new IKVector3());
-    IKRay3D constrainedRay = new IKRay3D(new IKVector3(), new IKVector3());
-    float unitHyperArea = 2 * IKMathUtils.pow(IKMathUtils.PI, 2);
-    float unitArea = 4 * IKMathUtils.PI;
-    float rotationalFreedom = 1f;
+    float[] cone_sequence;
+    int cone_count;
+    IKRay3D bone_ray = new IKRay3D(new IKVector3(), new IKVector3());
+    IKRay3D constrained_ray = new IKRay3D(new IKVector3(), new IKVector3());
+    float unit_hyper_area = 2 * IKMathUtils.pow(IKMathUtils.PI, 2);
+    float unit_area = 4 * IKMathUtils.PI;
+    float rotational_freedom = 1f;
 
     public IKKusudama() {
     }
@@ -95,9 +95,9 @@ public class IKKusudama {
      * @param forBone the bone this kusudama will be attached to.
      */
     public IKKusudama(IKBone3D forBone) {
-        this.attachedTo = forBone;
-        this.limitingNode3D = forBone.getMajorRotationAxes();
-        this.attachedTo.addConstraint(this);
+        this.attached_to = forBone;
+        this.limiting_node_3d = forBone.getMajorRotationAxes();
+        this.attached_to.addConstraint(this);
         this.enable();
     }
 
@@ -165,10 +165,10 @@ public class IKKusudama {
 
     protected void updateShaderTexture() {
 
-        if (coneSequence == null || coneSequence.length != getLimitCones().size() * 12
-                || coneCount != getLimitCones().size()) {
-            coneSequence = new float[getLimitCones().size() * 12];
-            coneCount = getLimitCones().size();
+        if (cone_sequence == null || cone_sequence.length != getLimitCones().size() * 12
+                || cone_count != getLimitCones().size()) {
+            cone_sequence = new float[getLimitCones().size() * 12];
+            cone_count = getLimitCones().size();
         }
 
         int idx = 0;
@@ -181,20 +181,20 @@ public class IKKusudama {
             rightTangent = rightTangent.normalize();
             float tanRan = (float) lc.tangentCircleRadiusNext;
             float controlRan = (float) lc.getRadius();
-            coneSequence[idx] = controlPoint.x;
-            coneSequence[idx + 1] = controlPoint.y;
-            coneSequence[idx + 2] = controlPoint.z;
-            coneSequence[idx + 3] = controlRan;
+            cone_sequence[idx] = controlPoint.x;
+            cone_sequence[idx + 1] = controlPoint.y;
+            cone_sequence[idx + 2] = controlPoint.z;
+            cone_sequence[idx + 3] = controlRan;
             idx += 4;
-            coneSequence[idx] = leftTangent.x;
-            coneSequence[idx + 1] = leftTangent.y;
-            coneSequence[idx + 2] = leftTangent.z;
-            coneSequence[idx + 3] = tanRan;
+            cone_sequence[idx] = leftTangent.x;
+            cone_sequence[idx + 1] = leftTangent.y;
+            cone_sequence[idx + 2] = leftTangent.z;
+            cone_sequence[idx + 3] = tanRan;
             idx += 4;
-            coneSequence[idx] = rightTangent.x;
-            coneSequence[idx + 1] = rightTangent.y;
-            coneSequence[idx + 2] = rightTangent.z;
-            coneSequence[idx + 3] = tanRan;
+            cone_sequence[idx] = rightTangent.x;
+            cone_sequence[idx + 1] = rightTangent.y;
+            cone_sequence[idx + 2] = rightTangent.z;
+            cone_sequence[idx + 3] = tanRan;
             idx += 4;
         }
 
@@ -207,7 +207,7 @@ public class IKKusudama {
      */
     @SuppressWarnings("unchecked")
     public IKNode3D limitingAxes() {
-        return limitingNode3D;
+        return limiting_node_3d;
     }
 
     public void updateTangentRadii() {
@@ -246,7 +246,7 @@ public class IKKusudama {
      * constraint.
      */
     public void optimizeLimitingAxes() {
-        IKNode3D originalLimitingNode3D = limitingNode3D.getGlobalCopy();
+        IKNode3D originalLimitingNode3D = limiting_node_3d.getGlobalCopy();
 
         ArrayList<IKVector3> directions = new ArrayList<>();
         if (getLimitCones().size() == 1) {
@@ -279,13 +279,13 @@ public class IKKusudama {
 
         IKRay3D newYRay = new IKRay3D(new IKVector3(0, 0, 0), newY);
 
-        IKQuaternion oldYtoNewY = new IKQuaternion(limitingNode3D.calculateY().heading(),
+        IKQuaternion oldYtoNewY = new IKQuaternion(limiting_node_3d.calculateY().heading(),
                 originalLimitingNode3D.getGlobalOf(newYRay).heading());
-        limitingNode3D.rotateBy(oldYtoNewY);
+        limiting_node_3d.rotateBy(oldYtoNewY);
 
         for (IKLimitCone lc : getLimitCones()) {
             originalLimitingNode3D.setToGlobalOf(lc.getControlPoint(), lc.getControlPoint());
-            limitingNode3D.setToLocalOf(lc.getControlPoint(), lc.getControlPoint());
+            limiting_node_3d.setToLocalOf(lc.getControlPoint(), lc.getControlPoint());
             lc.getControlPoint().normalize();
         }
 
@@ -297,11 +297,11 @@ public class IKKusudama {
      * orientational and axial limits.
      */
     public void snapToLimits() {
-        if (orientationallyConstrained) {
-            setAxesToOrientationSnap(attachedTo().localAxes(), limitingNode3D, 0);
+        if (constrain_orientation) {
+            setAxesToOrientationSnap(attachedTo().localAxes(), limiting_node_3d, 0);
         }
-        if (axiallyConstrained) {
-            snapToTwistLimits(attachedTo().localAxes(), limitingNode3D);
+        if (constrain_axis) {
+            snapToTwistLimits(attachedTo().localAxes(), limiting_node_3d);
         }
     }
 
@@ -314,10 +314,10 @@ public class IKKusudama {
     public void setAxesToSnapped(IKNode3D toSet,
                                  IKNode3D limitingNode3D, float cosHalfAngleDampen) {
         if (limitingNode3D != null) {
-            if (orientationallyConstrained) {
+            if (constrain_orientation) {
                 setAxesToOrientationSnap(toSet, limitingNode3D, cosHalfAngleDampen);
             }
-            if (axiallyConstrained) {
+            if (constrain_axis) {
                 snapToTwistLimits(toSet, limitingNode3D);
             }
         }
@@ -327,7 +327,7 @@ public class IKKusudama {
                                       IKNode3D limitingNode3D, float cosHalfReturnfullness,
                                       float angleReturnfullness) {
         if (limitingNode3D != null && painfullness > 0f) {
-            if (orientationallyConstrained) {
+            if (constrain_orientation) {
                 IKVector3 origin = toSet.calculatePosition();
                 IKVector3 inPoint = toSet.calculateY().p2().copy();
                 IKVector3 pathPoint = pointOnPathSequence(inPoint, limitingNode3D);
@@ -337,7 +337,7 @@ public class IKKusudama {
                 toClamp.clampToQuadranceAngle(cosHalfReturnfullness);
                 toSet.rotateBy(toClamp);
             }
-            if (axiallyConstrained) {
+            if (constrain_axis) {
                 float angleToTwistMid = angleToTwistCenter(toSet, limitingNode3D);
                 float clampedAngle = IKMathUtils.clamp(angleToTwistMid, -angleReturnfullness, angleReturnfullness);
                 toSet.rotateAboutY(clampedAngle, false);
@@ -383,7 +383,7 @@ public class IKKusudama {
 
     public boolean isInLimits_(IKVector3 globalPoint) {
         float[] inBounds = { 1f };
-        IKVector3 inLimits = this.pointInLimits(limitingNode3D.getLocalOf(globalPoint), inBounds);
+        IKVector3 inLimits = this.pointInLimits(limiting_node_3d.getLocalOf(globalPoint), inBounds);
         return inBounds[0] > 0f;
     }
 
@@ -397,15 +397,15 @@ public class IKKusudama {
                                          IKNode3D limitingNode3D, float cosHalfAngleDampen) {
         float[] inBounds = { 1f };
         limitingNode3D.updateGlobal();
-        boneRay.p1().set(limitingNode3D.calculatePosition());
-        boneRay.p2().set(toSet.calculateY().p2());
+        bone_ray.p1().set(limitingNode3D.calculatePosition());
+        bone_ray.p2().set(toSet.calculateY().p2());
         IKVector3 bonetip = limitingNode3D.getLocalOf(toSet.calculateY().p2());
         IKVector3 inLimits = this.pointInLimits(bonetip, inBounds);
 
         if (inBounds[0] == -1 && inLimits != null) {
-            constrainedRay.p1().set(boneRay.p1());
-            constrainedRay.p2().set(limitingNode3D.getGlobalOf(inLimits));
-            IKQuaternion rectifiedRot = new IKQuaternion(boneRay.heading(), constrainedRay.heading());
+            constrained_ray.p1().set(bone_ray.p1());
+            constrained_ray.p2().set(limitingNode3D.getGlobalOf(inLimits));
+            IKQuaternion rectifiedRot = new IKQuaternion(bone_ray.heading(), constrained_ray.heading());
             toSet.rotateBy(rectifiedRot);
             toSet.updateGlobal();
         }
@@ -439,7 +439,7 @@ public class IKKusudama {
      *                 considered valid.
      */
     public void setAxialLimits(float minAngle, float inRange) {
-        minAxialAngle = minAngle;
+        minimal_axial_angle = minAngle;
         range = toTau(inRange);
         constraintUpdateNotification();
     }
@@ -453,7 +453,7 @@ public class IKKusudama {
     public float snapToTwistLimits(IKNode3D toSet,
                                    IKNode3D limitingNode3D) {
 
-        if (!axiallyConstrained)
+        if (!constrain_axis)
             return 0f;
 
         IKQuaternion alignRot = limitingNode3D.getGlobalMBasis().getInverseRotation()
@@ -483,7 +483,7 @@ public class IKKusudama {
     public float angleToTwistCenter(IKNode3D toSet,
                                     IKNode3D limitingNode3D) {
 
-        if (!axiallyConstrained)
+        if (!constrain_axis)
             return 0f;
 
         IKQuaternion alignRot = limitingNode3D.getGlobalMBasis().getInverseRotation()
@@ -563,7 +563,7 @@ public class IKKusudama {
 
         IKVector3 closestCollisionPoint = null;
         float closestCos = -2f;
-        if (limitCones.size() > 1 && this.orientationallyConstrained) {
+        if (limitCones.size() > 1 && this.constrain_orientation) {
             for (int i = 0; i < limitCones.size() - 1; i++) {
                 IKVector3 collisionPoint = inPoint.copy();
                 collisionPoint.set(0, 0, 0);
@@ -584,7 +584,7 @@ public class IKKusudama {
             } else {
                 return point;
             }
-        } else if (orientationallyConstrained) {
+        } else if (constrain_orientation) {
             float pointdot = point.dot(limitCones.get(0).getControlPoint());
             float radcos = limitCones.get(0).getRadiusCosine();
             if (pointdot > radcos) {
@@ -627,7 +627,7 @@ public class IKKusudama {
     }
 
     public IKBone3D attachedTo() {
-        return this.attachedTo;
+        return this.attached_to;
     }
 
     /**
@@ -720,7 +720,7 @@ public class IKKusudama {
      * @return the lower bound on the axial constraint
      */
     public float minAxialAngle() {
-        return minAxialAngle;
+        return minimal_axial_angle;
     }
 
     public float maxAxialAngle() {
@@ -733,53 +733,53 @@ public class IKKusudama {
      * @return
      */
     public float absoluteMaxAxialAngle() {
-        return signedAngleDifference(range + minAxialAngle, IKMathUtils.PI * 2f);
+        return signedAngleDifference(range + minimal_axial_angle, IKMathUtils.PI * 2f);
     }
 
-    public boolean isAxiallyConstrained() {
-        return axiallyConstrained;
+    public boolean isConstrain_axis() {
+        return constrain_axis;
     }
 
-    public boolean isOrientationallyConstrained() {
-        return orientationallyConstrained;
+    public boolean isConstrain_orientation() {
+        return constrain_orientation;
     }
 
     public void disableOrientationalLimits() {
-        this.orientationallyConstrained = false;
+        this.constrain_orientation = false;
     }
 
     public void enableOrientationalLimits() {
-        this.orientationallyConstrained = true;
+        this.constrain_orientation = true;
     }
 
     public void toggleOrientationalLimits() {
-        this.orientationallyConstrained = !this.orientationallyConstrained;
+        this.constrain_orientation = !this.constrain_orientation;
     }
 
     public void disableAxialLimits() {
-        this.axiallyConstrained = false;
+        this.constrain_axis = false;
     }
 
     public void enableAxialLimits() {
-        this.axiallyConstrained = true;
+        this.constrain_axis = true;
     }
 
     public void toggleAxialLimits() {
-        axiallyConstrained = !axiallyConstrained;
+        constrain_axis = !constrain_axis;
     }
 
     public boolean isEnabled() {
-        return axiallyConstrained || orientationallyConstrained;
+        return constrain_axis || constrain_orientation;
     }
 
     public void disable() {
-        this.axiallyConstrained = false;
-        this.orientationallyConstrained = false;
+        this.constrain_axis = false;
+        this.constrain_orientation = false;
     }
 
     public void enable() {
-        this.axiallyConstrained = true;
-        this.orientationallyConstrained = true;
+        this.constrain_axis = true;
+        this.constrain_orientation = true;
     }
 
     /**
@@ -794,22 +794,22 @@ public class IKKusudama {
      *         a bone cannot be in as defined by its representation as a point on
      *         the surface of a hypersphere.
      */
-    public float getRotationalFreedom() {
+    public float getRotational_freedom() {
 
         // computation cached from updateRotationalFreedom
         // feel free to override that method if you want your own more correct result.
         // please contribute back a better solution if you write one.
-        return rotationalFreedom;
+        return rotational_freedom;
     }
 
     protected void updateRotationalFreedom() {
-        float axialConstrainedHyperArea = isAxiallyConstrained() ? (range / TAU) : 1f;
+        float axialConstrainedHyperArea = isConstrain_axis() ? (range / TAU) : 1f;
         float totalLimitConeSurfaceAreaRatio = 0f;
         for (IKLimitCone l : limitCones) {
             totalLimitConeSurfaceAreaRatio += (l.getRadius() * 2f) / TAU;
         }
-        rotationalFreedom = axialConstrainedHyperArea
-                * (isOrientationallyConstrained() ? IKMathUtils.min(totalLimitConeSurfaceAreaRatio, 1f) : 1f);
+        rotational_freedom = axialConstrainedHyperArea
+                * (isConstrain_orientation() ? IKMathUtils.min(totalLimitConeSurfaceAreaRatio, 1f) : 1f);
     }
 
     /**
@@ -824,12 +824,12 @@ public class IKKusudama {
      * @param forBone the bone to which to attach this Kusudama.
      */
     public void attachTo(IKBone3D forBone) {
-        this.attachedTo = forBone;
-        if (this.limitingNode3D == null)
-            this.limitingNode3D = forBone.getMajorRotationAxes();
+        this.attached_to = forBone;
+        if (this.limiting_node_3d == null)
+            this.limiting_node_3d = forBone.getMajorRotationAxes();
         else {
-            forBone.setFrameofRotation(this.limitingNode3D);
-            this.limitingNode3D = forBone.getMajorRotationAxes();
+            forBone.setFrameofRotation(this.limiting_node_3d);
+            this.limiting_node_3d = forBone.getMajorRotationAxes();
         }
     }
 
