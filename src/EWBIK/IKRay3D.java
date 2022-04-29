@@ -30,7 +30,8 @@ public class IKRay3D {
     IKVector3 tta, ttb, ttc;
     IKVector3 I, u, v, n, dir, w0;
     IKVector3 m, at, bt, ct, pt;
-    IKVector3 bc, ca, ac;
+    IKVector3 bc;
+    IKVector3 ca;
 
     public IKRay3D(IKVector3 p1, IKVector3 p2) {
         this.workingVector = p1.copy();
