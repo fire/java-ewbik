@@ -112,8 +112,8 @@ public class IKTransform {
 
         IKVector3[] from = {origin, x_identity, y_identity, z_identity};
         IKVector3[] to = {origin.copy(), xHeading, yHeading, zHeading};
-        IKQuaternionBasedCharacteristicPolynomial alignHeads = new IKQuaternionBasedCharacteristicPolynomial(IKMathUtils.FLOAT_ROUNDING_ERROR,
-                IKMathUtils.FLOAT_ROUNDING_ERROR);
+        IKQuaternionBasedCharacteristicPolynomial alignHeads = new IKQuaternionBasedCharacteristicPolynomial(IKMathUtils.FLOAT_ROUNDING_ERROR
+        );
         alignHeads.setMaxIterations(50);
         IKQuaternion rotation = alignHeads.weightedSuperpose(from, to, null, false);
         return rotation;

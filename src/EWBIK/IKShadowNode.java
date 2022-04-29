@@ -313,7 +313,7 @@ public class IKShadowNode {
         upateTipHeadings(localizedTipHeadings, thisBoneNode3D);
 
         float bestRMSD = 0f;
-        IKQuaternionBasedCharacteristicPolynomial qcpConvergenceCheck = new IKQuaternionBasedCharacteristicPolynomial(IKMathUtils.FLOAT_ROUNDING_ERROR, IKMathUtils.FLOAT_ROUNDING_ERROR);
+        IKQuaternionBasedCharacteristicPolynomial qcpConvergenceCheck = new IKQuaternionBasedCharacteristicPolynomial(IKMathUtils.FLOAT_ROUNDING_ERROR);
         float newRMSD = 999999f;
 
         if (stabilizationPasses > 0)

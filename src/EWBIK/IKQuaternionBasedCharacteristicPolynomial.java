@@ -85,35 +85,27 @@ public class IKQuaternionBasedCharacteristicPolynomial {
      * @author Eron Gjoni (adopted to EWB IK)
      */
 
-    private float evec_prec = (float) 1E-6;
-    private float eval_prec = (float) 1E-11;
-    private int max_iterations = 5;
+    private float evec_prec;
     private IKVector3[] moved;
     private float[] weight;
     private float wsum;
     private float e0;
-    private float rmsd = 0;
     private float Sxy, Sxz, Syx, Syz, Szx, Szy;
     private float SxxpSyy, Szz, mxEigenV, SyzmSzy, SxzmSzx, SxymSyx;
     private float SxxmSyy, SxypSyx, SxzpSzx;
     private float Syy, Sxx, SyzpSzy;
-    private boolean rmsdCalculated = false;
     private boolean transformationCalculated = false;
     private boolean innerProductCalculated = false;
-    private int length;
 
     /**
      * Constructor with option to set the precision values.
-     *
-     * @param centered  true if the point arrays are centered at the origin
+     *  @param centered  true if the point arrays are centered at the origin
      *                  (faster),
      *                  false otherwise
      * @param evec_prec required eigenvector precision
-     * @param eval_prec required eigenvalue precision
      */
-    public IKQuaternionBasedCharacteristicPolynomial(float evec_prec, float eval_prec) {
+    public IKQuaternionBasedCharacteristicPolynomial(float evec_prec) {
         this.evec_prec = evec_prec;
-        this.eval_prec = eval_prec;
     }
 
     public static void translate(IKVector3 trans, IKVector3[] x) {
@@ -133,7 +125,6 @@ public class IKQuaternionBasedCharacteristicPolynomial {
      * @param max
      */
     public void setMaxIterations(int max) {
-        max_iterations = max;
     }
 
     /**
@@ -148,7 +139,7 @@ public class IKQuaternionBasedCharacteristicPolynomial {
         this.target = target;
         this.moved = moved;
         this.weight = weight;
-        rmsdCalculated = false;
+        boolean rmsdCalculated = false;
         transformationCalculated = false;
         innerProductCalculated = false;
 
