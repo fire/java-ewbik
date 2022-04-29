@@ -50,7 +50,7 @@ public class IKBone3D implements Comparable<IKBone3D> {
      * @throws NullParentForBoneException
      */
     public IKBone3D(IKBone3D par, // parent bone
-                    IKVector3 tipHeading, // the orienational heading of this bone (global vs relative coords specified in
+                    IKVector3 tipHeading, // the orientation heading of this bone (global vs relative coords specified in
                     // coordinateType)
                     IKVector3 rollHeading, // axial rotation heading of the bone (it's z-axis)
                     String inputTag, // some user specified name for the bone, if desired
@@ -359,34 +359,13 @@ public class IKBone3D implements Comparable<IKBone3D> {
     }
 
     /**
-     * Enables an existing pin for this BoneExample. Or creates a pin for this bone
-     * at the bone's tip.
-     */
-    public void enablePin() {
-        if (pin == null) {
-            IKNode3D pinNode3D = this.localAxes().getGlobalCopy();
-            pinNode3D.setParent(this.parent_armature.localAxes().getParentAxes());
-            pin = createAndReturnPinOnAxes(pinNode3D);
-        }
-        pin.enable();
-        free_children.clear();
-        for (IKBone3D child : getChildren()) {
-            if (child.pin != null && !child.pin.isEnabled()) {
-                addFreeChild(child);
-            }
-        }
-        notifyAncestorsOfPin(false);
-        this.updateSegmentedArmature();
-    }
-
-    /**
      * Creates a pin for this bone
      *
      * @param pinTo the position of the pin in the coordinateFrame of the
      *              parentArmature.
      */
 
-    public void enablePin_(IKVector3 pinTo) {
+    public void enablePin(IKVector3 pinTo) {
         if (pin == null) {
             IKNode3D pinNode3D = this.localAxes().getGlobalCopy();
             pinNode3D.setParent(this.parent_armature.localAxes().getParentAxes());
@@ -412,17 +391,6 @@ public class IKBone3D implements Comparable<IKBone3D> {
 
     }
 
-    /**
-     * Creates / enables a pin if there no pin is active, disables the pin if it is
-     * active.
-     */
-    public void togglePin() {
-        if (this.pin == null)
-            this.enablePin();
-        this.pin.toggle();
-        updateSegmentedArmature();
-    }
-
     public ArrayList<IKBone3D> returnChildrenWithPinnedDescendants() {
         ArrayList<IKBone3D> childrenWithPinned = new ArrayList<IKBone3D>();
         for (IKBone3D c : getChildren()) {
@@ -430,12 +398,6 @@ public class IKBone3D implements Comparable<IKBone3D> {
                 childrenWithPinned.add(c);
         }
         return childrenWithPinned;
-    }
-
-    public ArrayList<IKBone3D> getMostImmediatelyPinnedDescendants() {
-        ArrayList<IKBone3D> mostImmediatePinnedDescendants = new ArrayList<IKBone3D>();
-        this.addSelfIfPinned(mostImmediatePinnedDescendants);
-        return mostImmediatePinnedDescendants;
     }
 
     public IKNode3D getPinnedAxes() {
@@ -480,78 +442,12 @@ public class IKBone3D implements Comparable<IKBone3D> {
         }
     }
 
-    public void removeFromEffectored(IKBone3D Bone) {
-        int effectoredIndex = effected_children.indexOf(Bone);
-        if (effectoredIndex != -1)
-            effected_children.remove(effectoredIndex);
-
-        if (free_children.contains(Bone)) {
-        } else {
-            addFreeChild(Bone);
-        }
-        if (this.parent != null && this.effected_children.size() == 0 && this.pin != null && this.pin.isEnabled()) {
-            parent.removeFromEffectored(this);
-        }
-    }
-
-    public IKBone3D getPinnedRootBone() {
-        IKBone3D rootBone = this;
-        while (rootBone.parent != null && !rootBone.parent.pin.isEnabled()) {
-            rootBone = rootBone.parent;
-        }
-        return rootBone;
-    }
-
-    public void updateSegmentedArmature() {
-        this.parent_armature.updateBonechains();
-    }
-
     public String getTag() {
         return this.tag;
     }
 
     public IKVector3 getTip_() {
         return local_node_3d.calculateY().getScaledTo(bone_height);
-    }
-
-    /**
-     * removes this BoneExample and any of its children from the armature.
-     */
-    public void deleteBone() {
-        ArrayList<IKBone3D> bones = new ArrayList<>();
-        IKBone3D root = parent_armature.getRootBone();
-        root.hasChild(bones, this);
-        for (IKBone3D p : bones) {
-            System.out.println("removing from" + p);
-            p.removeFromEffectored(this);
-            for (IKBone3D ab : this.effected_children) {
-                p.removeFromEffectored(ab);
-            }
-            p.getChildren().remove(this);
-            p.free_children.remove(this);
-        }
-        this.parent_armature.removeFromBoneList(this);
-    }
-
-    /* adds this bone to the arrayList if inputBone is among its children */
-    private void hasChild(ArrayList<IKBone3D> list, IKBone3D query) {
-        if (getChildren().contains(query))
-            list.add(this);
-        for (IKBone3D c : getChildren()) {
-            c.hasChild(list, query);
-        }
-    }
-
-    public float getBone_height() {
-        return this.bone_height;
-    }
-
-    public void setBone_height(float inBoneHeight) {
-        this.bone_height = inBoneHeight;
-        for (IKBone3D child : this.getChildren()) {
-            child.localAxes().translateTo(this.getTip_());
-            child.major_rotation_node_3d.translateTo(this.getTip_());
-        }
     }
 
     public boolean hasPinnedDescendant() {
@@ -572,16 +468,6 @@ public class IKBone3D implements Comparable<IKBone3D> {
 
     public boolean getIKOrientationLock() {
         return this.orientation_lock;
-    }
-
-    /**
-     * if set to true, the IK system will not rotate this bone
-     * as it solves the IK chain.
-     *
-     * @param val
-     */
-    public void setIKOrientationLock(boolean val) {
-        this.orientation_lock = val;
     }
 
     public void addChild(IKBone3D bone) {
