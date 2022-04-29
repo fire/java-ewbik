@@ -174,7 +174,7 @@ public class IKShadowNode {
                     innerWeightArray.add(subTargetWeight);
                     innerWeightArray.add(subTargetWeight);
                 }
-                pinSequence.add(pin.forBone().parentArmature.boneSegmentMap.get(pin.forBone()).simulatedBones
+                pinSequence.add(pin.forBone().parent_armature.boneSegmentMap.get(pin.forBone()).simulatedBones
                         .get(pin.forBone()));
             }
             float thisFalloff = pin == null ? 1f : pin.getDepthFalloff();
@@ -196,7 +196,7 @@ public class IKShadowNode {
             rootStrand = rootStrand.bonechainParent;
         }
         recursivelyEnsureAxesHeirarchyFor(rootStrand.bonechainRoot,
-                rootStrand.bonechainRoot.parentArmature.localAxes());
+                rootStrand.bonechainRoot.parent_armature.localAxes());
     }
 
     private void recursivelyEnsureAxesHeirarchyFor(IKBone3D b, IKNode3D parentTo) {
@@ -359,7 +359,7 @@ public class IKShadowNode {
 
                 if (bestRMSD >= newRMSD) {
                     if (sb.springy) {
-                        if (dampening != -1 || totalIterations != sb.forBone.parentArmature.getDefaultIterations()) {
+                        if (dampening != -1 || totalIterations != sb.forBone.parent_armature.getDefaultIterations()) {
                             float returnfullness = sb.forBone.getConstraint().getPainfullness();
                             float dampenedAngle = sb.forBone.getStiffness() * dampening * returnfullness;
                             float totaliterationssq = totalIterations * totalIterations;
@@ -634,7 +634,7 @@ public class IKShadowNode {
      * @param b bone to start from
      */
     public void recursivelyAlignBonesToSimAxesFrom(IKBone3D b) {
-        IKShadowNode chain = b.parentArmature.boneSegmentMap.get(b); // getChainFor(b);
+        IKShadowNode chain = b.parent_armature.boneSegmentMap.get(b); // getChainFor(b);
         if (chain != null) {
             ShadowBone sb = chain.simulatedBones.get(b);
             IKNode3D simulatedLocalNode3D = sb.simLocalNode3D;
@@ -701,7 +701,7 @@ public class IKShadowNode {
             simLocalNode3D = forBone.localAxes().getGlobalCopy();
             simConstraintNode3D = forBone.getMajorRotationAxes().getGlobalCopy();
             float predamp = 1f - forBone.getStiffness();
-            float defaultDampening = forBone.parentArmature.getDampening();
+            float defaultDampening = forBone.parent_armature.getDampening();
             float dampening = forBone.getParent() == null ? IKMathUtils.PI : predamp * defaultDampening;
             cosHalfDampen = IKMathUtils.cos(dampening / 2f);
             IKKusudama k = forBone.getConstraint();
@@ -715,7 +715,7 @@ public class IKShadowNode {
 
         public void updateCosDampening() {
             float predamp = 1f - forBone.getStiffness();
-            float defaultDampening = forBone.parentArmature.getDampening();
+            float defaultDampening = forBone.parent_armature.getDampening();
             float dampening = forBone.getParent() == null ? IKMathUtils.PI : predamp * defaultDampening;
             cosHalfDampen = IKMathUtils.cos(dampening / 2f);
             IKKusudama k = forBone.getConstraint();
@@ -729,9 +729,9 @@ public class IKShadowNode {
 
         public void populateReturnDampeningIterationArray(IKKusudama k) {
             float predamp = 1f - forBone.getStiffness();
-            float defaultDampening = forBone.parentArmature.getDampening();
+            float defaultDampening = forBone.parent_armature.getDampening();
             float dampening = forBone.getParent() == null ? IKMathUtils.PI : predamp * defaultDampening;
-            float iterations = forBone.parentArmature.getDefaultIterations();
+            float iterations = forBone.parent_armature.getDefaultIterations();
             float returnfullness = k.getPainfullness();
             float falloff = 0.2f;
             halfReturnfullnessDampened = new float[(int) iterations];

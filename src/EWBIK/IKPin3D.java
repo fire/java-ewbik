@@ -135,7 +135,7 @@ public class IKPin3D {
      */
     public void setDepthFalloff(float depth) {
         this.depthFalloff = depth;
-        this.forBone.parentArmature.rootwardlyUpdateFalloffCacheFrom(forBone);
+        this.forBone.parent_armature.rootwardlyUpdateFalloffCacheFrom(forBone);
     }
 
     /**
@@ -185,7 +185,7 @@ public class IKPin3D {
         this.xPriority = xPriority;
         this.yPriority = yPriority;
         this.zPriority = zPriority;
-        this.forBone.parentArmature.rootwardlyUpdateFalloffCacheFrom(forBone);
+        this.forBone.parent_armature.rootwardlyUpdateFalloffCacheFrom(forBone);
     }
 
     /**
@@ -249,7 +249,7 @@ public class IKPin3D {
      * @param location
      */
     public void translateToArmatureLocal_(IKVector3 location) {
-        IKNode3D armNode3D = this.forBone().parentArmature.localAxes().getParentAxes();
+        IKNode3D armNode3D = this.forBone().parent_armature.localAxes().getParentAxes();
         if (armNode3D == null) {
             this.node3D.translateTo(location);
         } else {
@@ -360,6 +360,6 @@ public class IKPin3D {
      */
     public void setPinWeight(float weight) {
         this.pinWeight = weight;
-        this.forBone.parentArmature.rootwardlyUpdateFalloffCacheFrom(forBone);
+        this.forBone.parent_armature.rootwardlyUpdateFalloffCacheFrom(forBone);
     }
 }

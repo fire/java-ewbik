@@ -22,26 +22,26 @@ package EWBIK;
 import java.util.ArrayList;
 
 public class IKBone3D implements Comparable<IKBone3D> {
-    public static boolean drawKusudamas = false;
-    public IKSkeleton parentArmature;
+    public static boolean draw_kusudamas = false;
+    public IKSkeleton parent_armature;
     public IKKusudama constraints;
-    public int ancestorCount = 0;
+    public int ancestor_count = 0;
     protected String tag;
-    protected IKQuaternion lastRotation;
-    protected IKNode3D previousOrientation;
-    protected IKNode3D localNode3D;
-    protected IKNode3D majorRotationNode3D;
-    protected float boneHeight;
+    protected IKQuaternion last_rotation;
+    protected IKNode3D previous_orientation;
+    protected IKNode3D local_node_3d;
+    protected IKNode3D major_rotation_node_3d;
+    protected float bone_height;
     protected IKBone3D parent;
     protected ArrayList<IKBone3D> children = new ArrayList<>();
-    protected ArrayList<IKBone3D> freeChildren = new ArrayList<>();
-    protected ArrayList<IKBone3D> effectoredChildren = new ArrayList<>();
+    protected ArrayList<IKBone3D> free_children = new ArrayList<>();
+    protected ArrayList<IKBone3D> effected_children = new ArrayList<>();
     protected IKPin3D pin = null;
-    protected boolean orientationLock = false;
-    protected float stiffnessScalar = 0f;
+    protected boolean orientation_lock = false;
+    protected float stiffness_scalar = 0f;
 
     public IKBone3D() {
-        this.lastRotation = new IKQuaternion();
+        this.last_rotation = new IKQuaternion();
     }
 
     /**
@@ -64,13 +64,13 @@ public class IKBone3D implements Comparable<IKBone3D> {
         IKVector3 tipHeading1 = tipHeading;
         IKVector3 rollHeading1 = rollHeading;
 
-        this.lastRotation = new IKQuaternion();
+        this.last_rotation = new IKQuaternion();
         if (par != null) {
             if (inputTag == null || inputTag == "") {
                 this.tag = Integer.toString(System.identityHashCode(this));
             } else
                 this.tag = inputTag;
-            this.boneHeight = inputBoneHeight;
+            this.bone_height = inputBoneHeight;
 
             IKRay3D tipHeadingRay = new IKRay3D(par.getTip_(), tipHeading1);
             IKRay3D rollHeadingRay = new IKRay3D(par.getTip_(), rollHeading1);
@@ -99,23 +99,23 @@ public class IKBone3D implements Comparable<IKBone3D> {
             tempRoll.normalize();
 
             this.parent = par;
-            this.parentArmature = this.parent.parentArmature;
-            IKBone3D.this.parentArmature.addToBoneList(this);
+            this.parent_armature = this.parent.parent_armature;
+            IKBone3D.this.parent_armature.addToBoneList(this);
 
             IKBone3D.this.generateAxes(IKBone3D.this.parent.getTip_(), tempX, tempTip, tempRoll);
-            IKBone3D.this.localNode3D.setParent(IKBone3D.this.parent.localNode3D);
+            IKBone3D.this.local_node_3d.setParent(IKBone3D.this.parent.local_node_3d);
 
-            IKBone3D.this.previousOrientation = IKBone3D.this.localNode3D.attachedCopy();
+            IKBone3D.this.previous_orientation = IKBone3D.this.local_node_3d.attachedCopy();
 
-            IKBone3D.this.majorRotationNode3D = IKBone3D.this.parent.localAxes().getGlobalCopy();
-            IKBone3D.this.majorRotationNode3D.translateTo(IKBone3D.this.parent.getTip_());
-            IKBone3D.this.majorRotationNode3D.setParent(IKBone3D.this.parent.localNode3D);
+            IKBone3D.this.major_rotation_node_3d = IKBone3D.this.parent.localAxes().getGlobalCopy();
+            IKBone3D.this.major_rotation_node_3d.translateTo(IKBone3D.this.parent.getTip_());
+            IKBone3D.this.major_rotation_node_3d.setParent(IKBone3D.this.parent.local_node_3d);
 
             this.parent.addFreeChild(this);
             this.parent.addChild(this);
             this.updateAncestorCount();
         } else {
-           this.parentArmature = null;
+           this.parent_armature = null;
            this.parent = null;
         }
     }
@@ -138,7 +138,7 @@ public class IKBone3D implements Comparable<IKBone3D> {
             float inputBoneHeight,
             frameType coordinateType) {
 
-        this.lastRotation = new IKQuaternion();
+        this.last_rotation = new IKQuaternion();
         if (parArma != null) {
             if (inputTag == null || inputTag == "") {
                 this.tag = Integer.toString(System.identityHashCode(this));
@@ -170,20 +170,20 @@ public class IKBone3D implements Comparable<IKBone3D> {
             tempTip.normalize();
             tempRoll.normalize();
 
-            this.parentArmature = parArma;
-            parentArmature.addToBoneList(this);
+            this.parent_armature = parArma;
+            parent_armature.addToBoneList(this);
 
-            generateAxes(parentArmature.localNode3D.calculatePosition(), tempX, tempTip, tempRoll);
-            localNode3D.setParent(parentArmature.localNode3D);
-            previousOrientation = localNode3D.attachedCopy();
+            generateAxes(parent_armature.localNode3D.calculatePosition(), tempX, tempTip, tempRoll);
+            local_node_3d.setParent(parent_armature.localNode3D);
+            previous_orientation = local_node_3d.attachedCopy();
 
-            majorRotationNode3D = parentArmature.localAxes().getGlobalCopy();
-            majorRotationNode3D.setParent(parentArmature.localAxes());
+            major_rotation_node_3d = parent_armature.localAxes().getGlobalCopy();
+            major_rotation_node_3d.setParent(parent_armature.localAxes());
 
-            this.boneHeight = inputBoneHeight;
+            this.bone_height = inputBoneHeight;
             this.updateAncestorCount();
         } else {
-            parentArmature = null;
+            parent_armature = null;
             parent = null;
         }
 
@@ -221,32 +221,32 @@ public class IKBone3D implements Comparable<IKBone3D> {
                     float inputBoneHeight // bone length
     ) {
 
-        this.lastRotation = new IKQuaternion();
+        this.last_rotation = new IKQuaternion();
         if (par != null) {
             if (inputTag == null || inputTag == "") {
                 this.tag = Integer.toString(System.identityHashCode(this));
             } else {
                 this.tag = inputTag;
             }
-            this.boneHeight = inputBoneHeight;
+            this.bone_height = inputBoneHeight;
 
             IKNode3D tempNode3D = par.localAxes().getGlobalCopy();
             IKQuaternion newRot = new IKQuaternion(IKRotationOrder.XZY, xAngle, yAngle, zAngle);
             tempNode3D.rotateBy(newRot);
 
             this.parent = par;
-            this.parentArmature = this.parent.parentArmature;
-            IKBone3D.this.parentArmature.addToBoneList(this);
+            this.parent_armature = this.parent.parent_armature;
+            IKBone3D.this.parent_armature.addToBoneList(this);
 
             IKBone3D.this.generateAxes(IKBone3D.this.parent.getTip_(), tempNode3D.calculateX().heading(),
                     tempNode3D.calculateY().heading(),
                     tempNode3D.calculateZ().heading());
-            IKBone3D.this.localNode3D.setParent(IKBone3D.this.parent.localNode3D);
-            IKBone3D.this.previousOrientation = IKBone3D.this.localNode3D.attachedCopy();
+            IKBone3D.this.local_node_3d.setParent(IKBone3D.this.parent.local_node_3d);
+            IKBone3D.this.previous_orientation = IKBone3D.this.local_node_3d.attachedCopy();
 
-            IKBone3D.this.majorRotationNode3D = IKBone3D.this.parent.localAxes().getGlobalCopy();
-            IKBone3D.this.majorRotationNode3D.translateTo(IKBone3D.this.parent.getTip_());
-            IKBone3D.this.majorRotationNode3D.setParent(IKBone3D.this.parent.localNode3D);
+            IKBone3D.this.major_rotation_node_3d = IKBone3D.this.parent.localAxes().getGlobalCopy();
+            IKBone3D.this.major_rotation_node_3d.translateTo(IKBone3D.this.parent.getTip_());
+            IKBone3D.this.major_rotation_node_3d.setParent(IKBone3D.this.parent.local_node_3d);
 
             this.parent.addFreeChild(this);
             this.parent.addChild(this);
@@ -258,32 +258,32 @@ public class IKBone3D implements Comparable<IKBone3D> {
                     String inputTag, // some user specified name for the bone, if desired
                     float inputBoneHeight // bone length
     ) {
-        this.lastRotation = new IKQuaternion();
+        this.last_rotation = new IKQuaternion();
         if (par != null) {
             if (inputTag == null || inputTag == "") {
                 this.tag = Integer.toString(System.identityHashCode(this));
             } else {
                 this.tag = inputTag;
             }
-            this.boneHeight = inputBoneHeight;
+            this.bone_height = inputBoneHeight;
 
             IKNode3D tempNode3D = par.localAxes().getGlobalCopy();
             IKQuaternion newRot = new IKQuaternion();
             tempNode3D.rotateBy(newRot);
 
             this.parent = par;
-            this.parentArmature = this.parent.parentArmature;
-            IKBone3D.this.parentArmature.addToBoneList(this);
+            this.parent_armature = this.parent.parent_armature;
+            IKBone3D.this.parent_armature.addToBoneList(this);
 
             IKBone3D.this.generateAxes(IKBone3D.this.parent.getTip_(), tempNode3D.calculateX().heading(),
                     tempNode3D.calculateY().heading(),
                     tempNode3D.calculateZ().heading());
-            IKBone3D.this.localNode3D.setParent(IKBone3D.this.parent.localNode3D);
-            IKBone3D.this.previousOrientation = IKBone3D.this.localNode3D.attachedCopy();
+            IKBone3D.this.local_node_3d.setParent(IKBone3D.this.parent.local_node_3d);
+            IKBone3D.this.previous_orientation = IKBone3D.this.local_node_3d.attachedCopy();
 
-            IKBone3D.this.majorRotationNode3D = IKBone3D.this.parent.localAxes().getGlobalCopy();
-            IKBone3D.this.majorRotationNode3D.translateTo(IKBone3D.this.parent.getTip_());
-            IKBone3D.this.majorRotationNode3D.setParent(IKBone3D.this.parent.localNode3D);
+            IKBone3D.this.major_rotation_node_3d = IKBone3D.this.parent.localAxes().getGlobalCopy();
+            IKBone3D.this.major_rotation_node_3d.translateTo(IKBone3D.this.parent.getTip_());
+            IKBone3D.this.major_rotation_node_3d.setParent(IKBone3D.this.parent.local_node_3d);
 
             this.parent.addFreeChild(this);
             this.parent.addChild(this);
@@ -291,12 +291,12 @@ public class IKBone3D implements Comparable<IKBone3D> {
         }
     }
 
-    public static void setDrawKusudamas(boolean draw) {
-        drawKusudamas = draw;
+    public static void setDraw_kusudamas(boolean draw) {
+        draw_kusudamas = draw;
     }
 
     protected void generateAxes(IKVector3 origin, IKVector3 x, IKVector3 y, IKVector3 z) {
-        this.localNode3D = new IKNode3D(origin, x, y, z);
+        this.local_node_3d = new IKNode3D(origin, x, y, z);
     }
 
     public IKVector3 getBase() {
@@ -395,7 +395,7 @@ public class IKBone3D implements Comparable<IKBone3D> {
      * Get the Axes associated with this bone.
      */
     public IKNode3D localAxes() {
-        return this.localNode3D;
+        return this.local_node_3d;
     }
 
     /**
@@ -407,7 +407,7 @@ public class IKBone3D implements Comparable<IKBone3D> {
      */
     @SuppressWarnings("unchecked")
     public IKNode3D getMajorRotationAxes() {
-        return this.majorRotationNode3D;
+        return this.major_rotation_node_3d;
     }
 
     @SuppressWarnings("unchecked")
@@ -426,7 +426,7 @@ public class IKBone3D implements Comparable<IKBone3D> {
             countedAncestors++;
             currentBone = currentBone.parent;
         }
-        setAncestorCount(countedAncestors);
+        setAncestor_count(countedAncestors);
     }
 
     /**
@@ -436,10 +436,10 @@ public class IKBone3D implements Comparable<IKBone3D> {
      *
      * @param count
      */
-    private void setAncestorCount(int count) {
-        this.ancestorCount = count;
+    private void setAncestor_count(int count) {
+        this.ancestor_count = count;
         for (IKBone3D b : this.children) {
-            b.setAncestorCount(this.ancestorCount + 1);
+            b.setAncestor_count(this.ancestor_count + 1);
         }
     }
 
@@ -454,7 +454,7 @@ public class IKBone3D implements Comparable<IKBone3D> {
     }
 
     public void solveIKFromHere() {
-        this.parentArmature.IKSolver(this);
+        this.parent_armature.IKSolver(this);
     }
 
     public void snapToConstraints() {
@@ -553,8 +553,8 @@ public class IKBone3D implements Comparable<IKBone3D> {
      *         And allows you to treat rotation in a wide variety of conventions.
      */
     public IKQuaternion getRotation() {
-        return (new IKQuaternion(this.majorRotationNode3D.calculateX().heading(),
-                this.majorRotationNode3D.calculateY().heading(),
+        return (new IKQuaternion(this.major_rotation_node_3d.calculateX().heading(),
+                this.major_rotation_node_3d.calculateY().heading(),
                 this.localAxes().calculateX().heading(), this.localAxes().calculateY().heading()));
     }
 
@@ -565,7 +565,7 @@ public class IKBone3D implements Comparable<IKBone3D> {
      */
 
     public IKQuaternion getRotationFromPrevious() {
-        return lastRotation;
+        return last_rotation;
     }
 
     /**
@@ -573,8 +573,8 @@ public class IKBone3D implements Comparable<IKBone3D> {
      *         relative to
      *         its parent.
      */
-    public IKNode3D getPreviousOrientation() {
-        return previousOrientation;
+    public IKNode3D getPrevious_orientation() {
+        return previous_orientation;
     }
 
     /**
@@ -584,10 +584,10 @@ public class IKBone3D implements Comparable<IKBone3D> {
      * @param rot
      */
     public void rotateBy(IKQuaternion rot) {
-        this.previousOrientation.alignLocalsTo(localNode3D);
-        this.localNode3D.rotateBy(rot);
+        this.previous_orientation.alignLocalsTo(local_node_3d);
+        this.local_node_3d.rotateBy(rot);
 
-        this.lastRotation.set(rot);
+        this.last_rotation.set(rot);
     }
 
     /**
@@ -632,12 +632,12 @@ public class IKBone3D implements Comparable<IKBone3D> {
      *                       when rotating the bone
      */
     public void rotAboutFrameX(float amt, boolean obeyConstraints) {
-        previousOrientation.alignLocalsTo(localNode3D);
+        previous_orientation.alignLocalsTo(local_node_3d);
 
-        IKQuaternion xRot = new IKQuaternion(majorRotationNode3D.calculateX().heading(), amt);
-        localNode3D.rotateBy(xRot);
+        IKQuaternion xRot = new IKQuaternion(major_rotation_node_3d.calculateX().heading(), amt);
+        local_node_3d.rotateBy(xRot);
 
-        lastRotation.set(xRot);
+        last_rotation.set(xRot);
 
         if (obeyConstraints)
             this.snapToConstraints();
@@ -651,12 +651,12 @@ public class IKBone3D implements Comparable<IKBone3D> {
      *                       when rotating the bone
      */
     public void rotAboutFrameY(float amt, boolean obeyConstraints) {
-        previousOrientation.alignLocalsTo(localNode3D);
+        previous_orientation.alignLocalsTo(local_node_3d);
 
-        IKQuaternion yRot = new IKQuaternion(majorRotationNode3D.calculateY().heading(), amt);
-        localNode3D.rotateBy(yRot);
+        IKQuaternion yRot = new IKQuaternion(major_rotation_node_3d.calculateY().heading(), amt);
+        local_node_3d.rotateBy(yRot);
 
-        lastRotation.set(yRot);
+        last_rotation.set(yRot);
 
         if (obeyConstraints)
             this.snapToConstraints();
@@ -670,12 +670,12 @@ public class IKBone3D implements Comparable<IKBone3D> {
      *                       when rotating the bone
      */
     public void rotAboutFrameZ(float amt, boolean obeyConstraints) {
-        previousOrientation.alignLocalsTo(localNode3D);
+        previous_orientation.alignLocalsTo(local_node_3d);
 
-        IKQuaternion zRot = new IKQuaternion(majorRotationNode3D.calculateZ().heading(), amt);
-        localNode3D.rotateBy(zRot);
+        IKQuaternion zRot = new IKQuaternion(major_rotation_node_3d.calculateZ().heading(), amt);
+        local_node_3d.rotateBy(zRot);
 
-        lastRotation.set(zRot);
+        last_rotation.set(zRot);
 
         if (obeyConstraints)
             this.snapToConstraints();
@@ -689,7 +689,7 @@ public class IKBone3D implements Comparable<IKBone3D> {
      *                the bone
      */
     public void rotateAxially(float amt, boolean obeyConstraints) {
-        localNode3D.rotateAboutY(amt, true);
+        local_node_3d.rotateAboutY(amt, true);
 
         if (obeyConstraints)
             this.snapToConstraints();
@@ -744,9 +744,9 @@ public class IKBone3D implements Comparable<IKBone3D> {
      *                                 start wishing you could change this.
      */
     public void setFrameofRotation(IKNode3D rotationFrameCoordinates) {
-        majorRotationNode3D.alignLocalsTo(rotationFrameCoordinates);
+        major_rotation_node_3d.alignLocalsTo(rotationFrameCoordinates);
         if (parent != null) {
-            majorRotationNode3D.translateTo(parent.getTip_());
+            major_rotation_node_3d.translateTo(parent.getTip_());
         }
     }
 
@@ -757,7 +757,7 @@ public class IKBone3D implements Comparable<IKBone3D> {
      */
     public void disablePin() {
         pin.disable();
-        if (this.effectoredChildren.size() == 0) {
+        if (this.effected_children.size() == 0) {
             notifyAncestorsOfUnpin();
         }
         this.updateSegmentedArmature();
@@ -770,7 +770,7 @@ public class IKBone3D implements Comparable<IKBone3D> {
      */
     public void removePin() {
         pin.disable();
-        if (this.effectoredChildren.size() == 0) {
+        if (this.effected_children.size() == 0) {
             notifyAncestorsOfUnpin();
         }
         pin.removalNotification();
@@ -784,11 +784,11 @@ public class IKBone3D implements Comparable<IKBone3D> {
     public void enablePin() {
         if (pin == null) {
             IKNode3D pinNode3D = this.localAxes().getGlobalCopy();
-            pinNode3D.setParent(this.parentArmature.localAxes().getParentAxes());
+            pinNode3D.setParent(this.parent_armature.localAxes().getParentAxes());
             pin = createAndReturnPinOnAxes(pinNode3D);
         }
         pin.enable();
-        freeChildren.clear();
+        free_children.clear();
         for (IKBone3D child : getChildren()) {
             if (child.pin != null && !child.pin.isEnabled()) {
                 addFreeChild(child);
@@ -808,13 +808,13 @@ public class IKBone3D implements Comparable<IKBone3D> {
     public void enablePin_(IKVector3 pinTo) {
         if (pin == null) {
             IKNode3D pinNode3D = this.localAxes().getGlobalCopy();
-            pinNode3D.setParent(this.parentArmature.localAxes().getParentAxes());
+            pinNode3D.setParent(this.parent_armature.localAxes().getParentAxes());
             pinNode3D.translateTo(pinTo);
             pin = createAndReturnPinOnAxes(pinNode3D);
         } else
             pin.translateTo_(pinTo);
         pin.enable();
-        freeChildren.clear();
+        free_children.clear();
         for (IKBone3D child : getChildren()) {
             if (!child.pin.isEnabled()) {
                 addFreeChild(child);
@@ -878,7 +878,7 @@ public class IKBone3D implements Comparable<IKBone3D> {
             parent.addToEffectored(this);
         }
         if (updateSegments)
-            parentArmature.updateBonechains();
+            parent_armature.updateBonechains();
     }
 
     public void notifyAncestorsOfPin() {
@@ -889,17 +889,17 @@ public class IKBone3D implements Comparable<IKBone3D> {
         if (this.parent != null) {
             parent.removeFromEffectored(this);
         }
-        parentArmature.updateBonechains();
+        parent_armature.updateBonechains();
     }
 
     public void addToEffectored(IKBone3D Bone) {
-        int freeIndex = freeChildren.indexOf(Bone);
+        int freeIndex = free_children.indexOf(Bone);
         if (freeIndex != -1)
-            freeChildren.remove(freeIndex);
+            free_children.remove(freeIndex);
 
-        if (effectoredChildren.contains(Bone)) {
+        if (effected_children.contains(Bone)) {
         } else {
-            effectoredChildren.add(Bone);
+            effected_children.add(Bone);
         }
         if (this.parent != null) {
             parent.addToEffectored(this);
@@ -907,15 +907,15 @@ public class IKBone3D implements Comparable<IKBone3D> {
     }
 
     public void removeFromEffectored(IKBone3D Bone) {
-        int effectoredIndex = effectoredChildren.indexOf(Bone);
+        int effectoredIndex = effected_children.indexOf(Bone);
         if (effectoredIndex != -1)
-            effectoredChildren.remove(effectoredIndex);
+            effected_children.remove(effectoredIndex);
 
-        if (freeChildren.contains(Bone)) {
+        if (free_children.contains(Bone)) {
         } else {
             addFreeChild(Bone);
         }
-        if (this.parent != null && this.effectoredChildren.size() == 0 && this.pin != null && this.pin.isEnabled()) {
+        if (this.parent != null && this.effected_children.size() == 0 && this.pin != null && this.pin.isEnabled()) {
             parent.removeFromEffectored(this);
         }
     }
@@ -929,7 +929,7 @@ public class IKBone3D implements Comparable<IKBone3D> {
     }
 
     public void updateSegmentedArmature() {
-        this.parentArmature.updateBonechains();
+        this.parent_armature.updateBonechains();
     }
 
     public String getTag() {
@@ -937,16 +937,16 @@ public class IKBone3D implements Comparable<IKBone3D> {
     }
 
     public void setTag(String newTag) {
-        parentArmature.setBoneName(this, this.tag, newTag);
+        parent_armature.setBoneName(this, this.tag, newTag);
         this.tag = newTag;
     }
 
     public IKVector3 getBase_() {
-        return localNode3D.calculatePosition().copy();
+        return local_node_3d.calculatePosition().copy();
     }
 
     public IKVector3 getTip_() {
-        return localNode3D.calculateY().getScaledTo(boneHeight);
+        return local_node_3d.calculateY().getScaledTo(bone_height);
     }
 
     /**
@@ -954,18 +954,18 @@ public class IKBone3D implements Comparable<IKBone3D> {
      */
     public void deleteBone() {
         ArrayList<IKBone3D> bones = new ArrayList<>();
-        IKBone3D root = parentArmature.getRootBone();
+        IKBone3D root = parent_armature.getRootBone();
         root.hasChild(bones, this);
         for (IKBone3D p : bones) {
             System.out.println("removing from" + p);
             p.removeFromEffectored(this);
-            for (IKBone3D ab : this.effectoredChildren) {
+            for (IKBone3D ab : this.effected_children) {
                 p.removeFromEffectored(ab);
             }
             p.getChildren().remove(this);
-            p.freeChildren.remove(this);
+            p.free_children.remove(this);
         }
-        this.parentArmature.removeFromBoneList(this);
+        this.parent_armature.removeFromBoneList(this);
     }
 
     /* adds this bone to the arrayList if inputBone is among its children */
@@ -977,15 +977,15 @@ public class IKBone3D implements Comparable<IKBone3D> {
         }
     }
 
-    public float getBoneHeight() {
-        return this.boneHeight;
+    public float getBone_height() {
+        return this.bone_height;
     }
 
-    public void setBoneHeight(float inBoneHeight) {
-        this.boneHeight = inBoneHeight;
+    public void setBone_height(float inBoneHeight) {
+        this.bone_height = inBoneHeight;
         for (IKBone3D child : this.getChildren()) {
             child.localAxes().translateTo(this.getTip_());
-            child.majorRotationNode3D.translateTo(this.getTip_());
+            child.major_rotation_node_3d.translateTo(this.getTip_());
         }
     }
 
@@ -1006,7 +1006,7 @@ public class IKBone3D implements Comparable<IKBone3D> {
     }
 
     public boolean getIKOrientationLock() {
-        return this.orientationLock;
+        return this.orientation_lock;
     }
 
     /**
@@ -1016,7 +1016,7 @@ public class IKBone3D implements Comparable<IKBone3D> {
      * @param val
      */
     public void setIKOrientationLock(boolean val) {
-        this.orientationLock = val;
+        this.orientation_lock = val;
     }
 
     public void addChild(IKBone3D bone) {
@@ -1026,22 +1026,22 @@ public class IKBone3D implements Comparable<IKBone3D> {
     }
 
     public void addFreeChild(IKBone3D bone) {
-        if (this.freeChildren.indexOf(bone) == -1) {
-            freeChildren.add(bone);
+        if (this.free_children.indexOf(bone) == -1) {
+            free_children.add(bone);
         }
-        parentArmature.updateBonechains();
+        parent_armature.updateBonechains();
     }
 
     public void addEffectoredChild(IKBone3D bone) {
-        if (this.effectoredChildren.indexOf(bone) == -1) {
-            this.effectoredChildren.add(bone);
+        if (this.effected_children.indexOf(bone) == -1) {
+            this.effected_children.add(bone);
         }
 
     }
 
     public void addDescendantsToArmature() {
         for (IKBone3D b : getChildren()) {
-            parentArmature.addToBoneList(b);
+            parent_armature.addToBoneList(b);
             b.addDescendantsToArmature();
         }
     }
@@ -1058,7 +1058,7 @@ public class IKBone3D implements Comparable<IKBone3D> {
      * @return a value between 1 and 0.
      */
     public float getStiffness() {
-        return stiffnessScalar;
+        return stiffness_scalar;
     }
 
     /**
@@ -1071,9 +1071,9 @@ public class IKBone3D implements Comparable<IKBone3D> {
      * to rotate this bone at all.
      */
     public void setStiffness(float stiffness) {
-        stiffnessScalar = stiffness;
-        if (parentArmature != null) {
-            IKShadowNode s = parentArmature.boneSegmentMap.get(this);
+        stiffness_scalar = stiffness;
+        if (parent_armature != null) {
+            IKShadowNode s = parent_armature.boneSegmentMap.get(this);
             if (s != null) {
                 IKShadowNode.ShadowBone wb = s.simulatedBones.get(this);
                 if (wb != null) {
@@ -1085,7 +1085,7 @@ public class IKBone3D implements Comparable<IKBone3D> {
 
     @Override
     public int compareTo(IKBone3D i) {
-        return this.ancestorCount - i.ancestorCount;
+        return this.ancestor_count - i.ancestor_count;
     }
 
     public String toString() {

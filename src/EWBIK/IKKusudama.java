@@ -370,8 +370,8 @@ public class IKKusudama {
      */
     public void setPainfullness(float amt) {
         painfullness = amt;
-        if (attachedTo() != null && attachedTo().parentArmature != null) {
-            IKShadowNode s = attachedTo().parentArmature.boneSegmentMap.get(this.attachedTo());
+        if (attachedTo() != null && attachedTo().parent_armature != null) {
+            IKShadowNode s = attachedTo().parent_armature.boneSegmentMap.get(this.attachedTo());
             if (s != null) {
                 IKShadowNode.ShadowBone wb = s.simulatedBones.get(this.attachedTo());
                 if (wb != null) {
